@@ -1,0 +1,38 @@
+﻿1. Generate random number between -9,223,372,036,854,775,808 and -1,000
+   for testing purposes and store in cookie value
+   
+For unit tests, expire in 1 minute
+for interactive tests, expire in 8 hours   
+   
+HttpCookie testSession = new HttpCookie("TestSession");  
+testSession["Id"] = GetTestSessionId.ToString();  
+testSession.Expires.Add(new TimeSpan(0, 1, 0));  //expires in one minute
+Response.Cookies.Add(testSession);  
+
+Note for HttpClient, you must retrieve Cookie from response and -add Cookie as Header 
+
+
+	public static long GetTestSessionId(){
+		RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
+		var byteArray = new byte[8];
+		provider.GetBytes(byteArray);		
+		return (long)(BitConverter.ToUInt64(byteArray, 0)/2);
+	}
+	
+	public static long Encode(long id, long sessionId){
+
+		return id + -1000*(long)(sessionId/1000);		
+	}
+
+	public static long Decode(long id) => id % 1000;
+	
+	
+2. Use ActionFilter to create IdRewriterFilter,
+   which rewrites replaces Id variables with Encoded values on the way in
+   
+   IdRewriterFilter replaces Id variables with Decoded values on the way out
+	(note, this should be a simple find and replace "Id":__________
+
+
+
+see https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/filters?view=aspnetcore-3.1#ifilterfactory-implemented-on-an-attribute
