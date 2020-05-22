@@ -4,12 +4,15 @@ using System.Text;
 using System.Text.Json;
 
 namespace EDennis.AspNet.Base {
-    public abstract class CrudEntity {
+    public abstract class CrudEntity : IEndpoint {
 
         public int Id { get; set; }
         public Guid SysId { get; set; } = CombGuid.Create();
         public string SysUser { get; set; }
         public SysStatus SysStatus { get; set; }
+
+        public virtual string GetIdEndpoint() => $"{GetType().Name}/{Id}";
+        public virtual string GetSysIdEndpoint() => $"{GetType().Name}/{SysId}";
 
 
         /// <summary>

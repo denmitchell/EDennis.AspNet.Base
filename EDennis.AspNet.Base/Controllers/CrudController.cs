@@ -47,7 +47,7 @@ namespace EDennis.AspNet.Base {
 
 
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public virtual IActionResult GetById([FromRoute] int id) {
             var qry = _dbContext.Set<TEntity>().Where(x => x.Id == id);
             AdjustQuery(ref qry);
@@ -60,9 +60,36 @@ namespace EDennis.AspNet.Base {
         }
 
 
-        [HttpGet("async/{id}")]
+        [HttpGet("async/{id:int}")]
         public virtual async Task<IActionResult> GetByIdAsync([FromRoute] int id) {
             var qry = _dbContext.Set<TEntity>().Where(x => x.Id == id);
+            AdjustQuery(ref qry);
+            var entity = (await qry.ToListAsync()).FirstOrDefault();
+
+            if (entity == null)
+                return NotFound();
+            else
+                return Ok(entity);
+        }
+
+
+
+        [HttpGet("{sysId:guid}")]
+        public virtual IActionResult GetById([FromRoute] Guid sysId) {
+            var qry = _dbContext.Set<TEntity>().Where(x => x.SysId == sysId);
+            AdjustQuery(ref qry);
+            var entity = qry.FirstOrDefault();
+
+            if (entity == null)
+                return NotFound();
+            else
+                return Ok(entity);
+        }
+
+
+        [HttpGet("async/{sysId:guid}")]
+        public virtual async Task<IActionResult> GetByIdAsync([FromRoute] Guid sysId) {
+            var qry = _dbContext.Set<TEntity>().Where(x => x.SysId == sysId);
             AdjustQuery(ref qry);
             var entity = (await qry.ToListAsync()).FirstOrDefault();
 
