@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Security.Cryptography.X509Certificates;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
+using System;
+using System.Linq;
+using System.Net;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace EDennis.AspNet.Base {
     [Route("api/[controller]")]
@@ -33,7 +30,7 @@ namespace EDennis.AspNet.Base {
         #endregion
 
 
-        public CrudController(DbContextProvider<TContext> provider) : base(provider) {
+        public CrudController(TContext context) : base(context) {
             _sysUser = HttpContext.User.Claims
                 .OrderByDescending(c => c.Type)
                 .FirstOrDefault(c => c.Type == "name"

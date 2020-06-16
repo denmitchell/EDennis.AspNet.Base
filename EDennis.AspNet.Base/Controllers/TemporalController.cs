@@ -13,7 +13,7 @@ namespace EDennis.AspNet.Base {
         where TEntity : TemporalEntity
         where THistoryEntity : TemporalEntity {
 
-        public TemporalController(DbContextProvider<TContext> provider) : base(provider) {
+        public TemporalController(TContext context) : base(context) {
         }
 
         protected override void BeforeUpdate(TEntity input) {

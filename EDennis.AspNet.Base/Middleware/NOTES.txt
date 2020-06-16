@@ -1,4 +1,2 @@
 ﻿For mock client/user middleware, see 
     https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-3.1#mock-authentication
-
-With TransactionScope, DbContextProvider may not be needed

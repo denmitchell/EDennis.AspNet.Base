@@ -18,8 +18,8 @@ namespace EDennis.AspNet.Base {
 
         protected readonly TContext _dbContext;
 
-        public QueryController(DbContextProvider<TContext> provider) {
-            _dbContext = provider.DbContext;
+        public QueryController(TContext context) {
+            _dbContext = context;
         }
 
 
