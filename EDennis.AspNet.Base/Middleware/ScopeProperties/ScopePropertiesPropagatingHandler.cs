@@ -11,11 +11,9 @@ namespace EDennis.AspNet.Base.Handlers {
     public class ScopePropertiesPropagatingHandler: HttpClientHandler {
 
         private readonly ScopeProperties _scopeProperties;
-        private readonly ScopePropertiesOptions _options;
 
-        public ScopePropertiesPropagatingHandler(ScopeProperties scopeProperties, IOptionsMonitor<ScopePropertiesOptions> options) {
+        public ScopePropertiesPropagatingHandler(ScopeProperties scopeProperties) {
             _scopeProperties = scopeProperties;
-            _options = options.CurrentValue;
             CookieContainer = new CookieContainer();
         }
 
@@ -26,10 +24,6 @@ namespace EDennis.AspNet.Base.Handlers {
 
             if (_scopeProperties.TryGetValue("Authorization", out string authorization))
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer",authorization.ToString().Replace("Bearer ", ""));
-                CookieContainer.Add(new Cookie("TransactionScope", transactionScope));
-
-            if (_scopeProperties.TryGetValue("X-User", out string user))
-                request.Headers.Add("X-User", user);
 
             return await base.SendAsync(request, cancellationToken);
             
