@@ -4,19 +4,17 @@ using System.Text;
 using System.Text.Json;
 
 namespace EDennis.AspNet.Base {
-    public abstract class CrudEntity : IEndpoint {
+    public abstract class CrudEntity {
 
         public int Id { get; set; }
-        public Guid SysId { get; set; } = CombGuid.Create();
         public string SysUser { get; set; }
         public SysStatus SysStatus { get; set; }
 
         public virtual string GetIdEndpoint() => $"{GetType().Name}/{Id}";
-        public virtual string GetSysIdEndpoint() => $"{GetType().Name}/{SysId}";
 
 
         /// <summary>
-        /// By default, use reflection to update an object.  If performance
+        /// By default, use reflection to update an object.  If performance is
         /// unacceptable, this method can be overwritten with an implementation
         /// that doesn't use reflection.
         /// </summary>
