@@ -1,0 +1,101 @@
+﻿{
+  "home": {
+    "issuer": "https://localhost:44355",
+    "jwks_uri": "https://localhost:44355/.well-known/openid-configuration/jwks",
+    "authorization_endpoint": "https://localhost:44355/connect/authorize",
+    "token_endpoint": "https://localhost:44355/connect/token",
+    "userinfo_endpoint": "https://localhost:44355/connect/userinfo",
+    "end_session_endpoint": "https://localhost:44355/connect/endsession",
+    "check_session_iframe": "https://localhost:44355/connect/checksession",
+    "revocation_endpoint": "https://localhost:44355/connect/revocation",
+    "introspection_endpoint": "https://localhost:44355/connect/introspect",
+    "device_authorization_endpoint": "https://localhost:44355/connect/deviceauthorization",
+    "frontchannel_logout_supported": true,
+    "frontchannel_logout_session_supported": true,
+    "backchannel_logout_supported": true,
+    "backchannel_logout_session_supported": true,
+    "scopes_supported": [
+      "openid",
+      "profile",
+      "email",
+      "user_scope",
+      "role",
+      "name",
+      "Hr.RepoApi.*",
+      "Hr.RepoApi.Person.*",
+      "IdentityServer.*",
+      "SampleApi.*",
+      "offline_access"
+    ],
+    "claims_supported": [
+      "sub",
+      "name",
+      "family_name",
+      "given_name",
+      "middle_name",
+      "nickname",
+      "preferred_username",
+      "profile",
+      "picture",
+      "website",
+      "gender",
+      "birthdate",
+      "zoneinfo",
+      "locale",
+      "updated_at",
+      "email",
+      "email_verified",
+      "user_scope",
+      "role"
+    ],
+    "grant_types_supported": [
+      "authorization_code",
+      "client_credentials",
+      "refresh_token",
+      "implicit",
+      "password",
+      "urn:ietf:params:oauth:grant-type:device_code"
+    ],
+    "response_types_supported": [
+      "code",
+      "token",
+      "id_token",
+      "id_token token",
+      "code id_token",
+      "code token",
+      "code id_token token"
+    ],
+    "response_modes_supported": [
+      "form_post",
+      "query",
+      "fragment"
+    ],
+    "token_endpoint_auth_methods_supported": [
+      "client_secret_basic",
+      "client_secret_post"
+    ],
+    "id_token_signing_alg_values_supported": [
+      "RS256"
+    ],
+    "subject_types_supported": [
+      "public"
+    ],
+    "code_challenge_methods_supported": [
+      "plain",
+      "S256"
+    ],
+    "request_parameter_supported": true
+  },
+  "jkws": {
+    "keys": [
+      {
+        "kty": "RSA",
+        "use": "sig",
+        "kid": "fLXcTGWg4NY2xjwtcaoAvA",
+        "e": "AQAB",
+        "n": "u41LYHO-2ou9SbIzQ6ZsP-pz_DQlsI8E2dt-SCOCiQ8vMFRxXSmpCsx8yjCS8oEmq0t5l8ZgV939Qp9Q622BoGdT7yYOt2HdDl-JrxkXCdGIM6l7Xa-3mIyr3YXw1qeqPWUxQcmQxT6tKh-aYBN_xIKc8TGMNbwSgTC7_oO1w3ndBdGCDTjz3-nuQQYfICLVRXVnAmkrwWD3unNR2ylQJSUseBlRRnbj4gY5hVlpRBqneU4Kp-2czwPM73K9fjiMmZjeuMXyrmXo9qJS7sAugsHs1fjzhi3f17G9YtkdiP75hLNKOy-XTeuG0jNtBcCG7uaxJJeeJRLoMcmF72tE8Q",
+        "alg": "RS256"
+      }
+    ]
+  }
+}

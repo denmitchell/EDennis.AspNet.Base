@@ -1,0 +1,19 @@
+﻿{
+  "profiles": {
+    "No Seed": {
+      "commandName": "Project",
+      "applicationUrl": "https://localhost:5000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "Seed": {
+      "commandName": "Project",
+      "commandLineArgs": "/seed",
+      "applicationUrl": "https://localhost:5000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
