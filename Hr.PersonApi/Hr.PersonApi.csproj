@@ -5,11 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EDennis.AspNet.Base\EDennis.AspNet.Base.csproj" />
+    <Compile Remove="Models\SampleData\**" />
+    <Content Remove="Models\SampleData\**" />
+    <EmbeddedResource Remove="Models\SampleData\**" />
+    <None Remove="Models\SampleData\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\SampleData\" />
+    <ProjectReference Include="..\EDennis.AspNet.Base\EDennis.AspNet.Base.csproj" />
   </ItemGroup>
 
 
