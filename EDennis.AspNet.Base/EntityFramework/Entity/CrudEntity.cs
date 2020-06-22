@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
@@ -6,11 +8,8 @@ using System.Text.Json;
 namespace EDennis.AspNet.Base {
     public abstract class CrudEntity {
 
-        public int Id { get; set; }
         public string SysUser { get; set; }
         public SysStatus SysStatus { get; set; }
-
-        public virtual string GetIdEndpoint() => $"{GetType().Name}/{Id}";
 
 
         /// <summary>

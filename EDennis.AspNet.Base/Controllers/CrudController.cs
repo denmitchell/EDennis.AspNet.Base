@@ -1,18 +1,22 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Net;
+using System.Reflection.Metadata.Ecma335;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace EDennis.AspNet.Base {
     [Route("api/[controller]")]
     [ApiController]
-    public class CrudController<TContext, TEntity> : QueryController<TContext,TEntity>
+    public class CrudController<TContext, TEntity> : QueryController<TContext, TEntity>
         where TContext : DbContext
-        where TEntity: CrudEntity {
+        where TEntity : CrudEntity {
 
         protected readonly string _sysUser;
 
@@ -27,7 +31,63 @@ namespace EDennis.AspNet.Base {
         public virtual void DoPatch(JsonElement input, TEntity existing) => existing.Patch(input);
         public virtual void DoDelete(TEntity existing) => _dbContext.Remove(existing);
 
+       // public virtual object[] KeyValues(string pathParameter) => new string[] { pathParameter }; // pathParameter.Split('~');
+
+       // public virtual object[] KeyValues(TEntity input) {
+       //     var type = typeof(TEntity);
+       //     return new object[] { type.GetProperty("Id").GetValue(input) };
+       // }
+
         #endregion
+
+        delegate object[] KeyValuesDelegate(string pathParameter);
+        KeyValuesDelegate KeyValues;
+
+        delegate object[] KeyValuesInputDelegate(TEntity input);
+        KeyValuesInputDelegate KeyValuesInput;
+
+        public virtual string KeyTemplate { get; private set; }
+
+        public IQueryable<TEntity> Find(string pathParameter)
+            => _dbContext.Set<TEntity>().Where(string.Format(KeyTemplate, KeyValues(pathParameter)));
+
+        public IQueryable<TEntity> Find(TEntity input)
+            => _dbContext.Set<TEntity>().Where(string.Format(KeyTemplate, KeyValues(input)));
+
+
+        public static IReadOnlyList<IProperty> Keys { get; set; }
+        private static readonly Type[] _quotedTypes = {
+            typeof(string), typeof(TimeSpan), typeof(TimeSpan?), typeof(DateTime), typeof(DateTime?), typeof(DateTimeOffset), typeof(DateTimeOffset?)
+        };
+
+        public void GetKeys() {
+            var entityType = _dbContext.Model.GetEntityTypes().FirstOrDefault(e => e.ClrType == typeof(TEntity));
+            var pk = entityType.FindPrimaryKey();
+            Keys = pk.Properties;
+            var clauses = new List<string>();
+            for(int i = 0; i < Keys.Count; i++) {
+                var key = Keys[i];
+                if (_quotedTypes.Contains(key.ClrType))
+                    clauses.Add($"{key.Name} eq \"{{{i}}}\"");
+                else
+                    clauses.Add($"{key.Name} eq {{{i}}}");
+            }
+            KeyTemplate = string.Join(" and ", clauses);
+            KeyValues = (p) => p.Split('~'); 
+            KeyValuesInput = (input) => {
+                var type = typeof(TEntity);
+                for (int i = 0; i < Keys.Count; i++) {
+                    var key = Keys[i];
+                    if (_quotedTypes.Contains(key.ClrType))
+                        clauses.Add($"{key.Name} eq \"{type.GetProperty(key.Name).GetValue(input)}\"");
+                    else
+                        clauses.Add($"{Keys[i].Name} eq {{{i}}}");
+                }
+            }
+
+
+        }
+
 
 
         public CrudController(TContext context) : base(context) {
@@ -44,9 +104,9 @@ namespace EDennis.AspNet.Base {
 
 
 
-        [HttpGet("{id:int}")]
-        public virtual IActionResult GetById([FromRoute] int id) {
-            var qry = _dbContext.Set<TEntity>().Where(x => x.Id == id);
+        [HttpGet("{key:alpha}")]
+        public virtual IActionResult GetById([FromRoute] string key) {
+            var qry = Find(key);
             AdjustQuery(ref qry);
             var entity = qry.FirstOrDefault();
 
@@ -57,9 +117,9 @@ namespace EDennis.AspNet.Base {
         }
 
 
-        [HttpGet("async/{id:int}")]
-        public virtual async Task<IActionResult> GetByIdAsync([FromRoute] int id) {
-            var qry = _dbContext.Set<TEntity>().Where(x => x.Id == id);
+        [HttpGet("async/{key:alpha}")]
+        public virtual async Task<IActionResult> GetByIdAsync([FromRoute] string key) {
+            var qry = Find(key);
             AdjustQuery(ref qry);
             var entity = (await qry.ToListAsync()).FirstOrDefault();
 
@@ -71,30 +131,6 @@ namespace EDennis.AspNet.Base {
 
 
 
-        [HttpGet("{sysId:guid}")]
-        public virtual IActionResult GetById([FromRoute] Guid sysId) {
-            var qry = _dbContext.Set<TEntity>().Where(x => x.SysId == sysId);
-            AdjustQuery(ref qry);
-            var entity = qry.FirstOrDefault();
-
-            if (entity == null)
-                return NotFound();
-            else
-                return Ok(entity);
-        }
-
-
-        [HttpGet("async/{sysId:guid}")]
-        public virtual async Task<IActionResult> GetByIdAsync([FromRoute] Guid sysId) {
-            var qry = _dbContext.Set<TEntity>().Where(x => x.SysId == sysId);
-            AdjustQuery(ref qry);
-            var entity = (await qry.ToListAsync()).FirstOrDefault();
-
-            if (entity == null)
-                return NotFound();
-            else
-                return Ok(entity);
-        }
 
 
         [HttpPost]
@@ -107,8 +143,9 @@ namespace EDennis.AspNet.Base {
                 _dbContext.SaveChanges();
                 return Ok(input);
             } catch (DbUpdateException) {
-                if (_dbContext.Find<TEntity>(input.Id) != null) {
-                    ModelState.AddModelError("", $"A {typeof(TEntity).Name} instance with the specified id {input.Id} already exists");
+                var key = JsonSerializer.Serialize(KeyValues(input));
+                if (Find(input) != null) {
+                    ModelState.AddModelError("", $"A {typeof(TEntity).Name} instance with the specified key {key} already exists");
                     return Conflict(ModelState);
                 } else {
                     throw;
@@ -116,7 +153,6 @@ namespace EDennis.AspNet.Base {
             } catch (Exception) {
                 throw;
             }
-            //return CreatedAtAction("GetById", new { id = entity.Id }, entity);
         }
 
         [HttpPost("async")]
@@ -128,8 +164,9 @@ namespace EDennis.AspNet.Base {
                 await _dbContext.SaveChangesAsync();
                 return Ok(input);
             } catch (DbUpdateException) {
-                if (await _dbContext.FindAsync<TEntity>(input.Id) != null) {
-                    ModelState.AddModelError("", $"A {typeof(TEntity).Name} instance with the specified id {input.Id} already exists");
+                if (Find(input) != null) {
+                    var ids = JsonSerializer.Serialize(KeyValues(input));
+                    ModelState.AddModelError("", $"A {typeof(TEntity).Name} instance with the specified id {ids} already exists");
                     return Conflict(ModelState);
                 } else {
                     throw;
@@ -137,20 +174,14 @@ namespace EDennis.AspNet.Base {
             } catch (Exception) {
                 throw;
             }
-            //return CreatedAtAction("GetById", new { id = entity.Id }, entity);
         }
 
 
-        [HttpPut("{id}")]
-        public virtual IActionResult Update([FromBody] TEntity input, [FromRoute] int id) {
-
-            if (input.Id != id) {
-                ModelState.AddModelError("", $"The path parameter id ({id}) does not match the provided object's id ({input.Id})");
-                return BadRequest(ModelState);
-            }
+        [HttpPut("{key:alpha}")]
+        public virtual IActionResult Update([FromRoute] string key, [FromBody] TEntity input) {
 
             //retrieve the existing entity
-            var existing = _dbContext.Find<TEntity>(input.Id);
+            var existing = Find(key).FirstOrDefault();
 
             //check NotFound, Gone (deleted), Locked
             if (NotFoundGoneLocked(existing, out IActionResult result))
@@ -163,31 +194,23 @@ namespace EDennis.AspNet.Base {
             try {
                 _dbContext.SaveChanges();
                 return Ok(existing);
-            } catch (DbUpdateConcurrencyException ex) {
-                if (_dbContext.Find<TEntity>(input.Id) != null) {
-                    ModelState.AddModelError("", $"A {typeof(TEntity).Name} instance with the specified id {input.Id} cannot be found");
-                    return NotFound(ModelState);
-                } else {
-                    ModelState.AddModelError("", ex.Message);
-                    return Conflict(ModelState);
-                }
+            } catch (DbUpdateConcurrencyException ex2) {
+                ModelState.AddModelError("", ex2.Message);
+                return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
+            } catch (DbUpdateException ex1) {
+                ModelState.AddModelError("", ex1.InnerException.Message);
+                return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
             } catch (Exception) {
                 throw;
             }
-            //return NoContent();
         }
 
 
-        [HttpPut("async/{id}")]
-        public virtual async Task<IActionResult> UpdateAsync([FromBody] TEntity input, [FromRoute] int id) {
-
-            if (input.Id != id) {
-                ModelState.AddModelError("", $"The path parameter id ({id}) does not match the provided object's id ({input.Id})");
-                return BadRequest(ModelState);
-            }
+        [HttpPut("async/{key:alpha}")]
+        public virtual async Task<IActionResult> UpdateAsync([FromRoute] string key, [FromBody] TEntity input) {
 
             //retrieve the existing entity
-            var existing = await _dbContext.FindAsync<TEntity>(input.Id);
+            var existing = Find(key).FirstOrDefault();
 
             //check NotFound, Gone (deleted), Locked
             if (NotFoundGoneLocked(existing, out IActionResult result))
@@ -200,29 +223,26 @@ namespace EDennis.AspNet.Base {
             try {
                 await _dbContext.SaveChangesAsync();
                 return Ok(existing);
-            } catch (DbUpdateConcurrencyException ex) {
-                if (_dbContext.Find<TEntity>(input.Id) != null) {
-                    ModelState.AddModelError("", $"A {typeof(TEntity).Name} instance with the specified id {input.Id} cannot be found");
-                    return NotFound(ModelState);
-                } else {
-                    ModelState.AddModelError("", ex.Message);
-                    return Conflict(ModelState);
-                }
+            } catch (DbUpdateConcurrencyException ex2) {
+                ModelState.AddModelError("", ex2.Message);
+                return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
+            } catch (DbUpdateException ex1) {
+                ModelState.AddModelError("", ex1.InnerException.Message);
+                return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
             } catch (Exception) {
                 throw;
             }
-            //return NoContent();
         }
 
 
-        [HttpPatch("{id}")]
-        public virtual IActionResult Patch(JsonElement input, [FromRoute] int id) {
+        [HttpPatch("{key:alpha}")]
+        public virtual IActionResult Patch([FromRoute] string key, JsonElement input) {
 
             if (input.ValueKind != JsonValueKind.Object)
                 return new ObjectResult($"Cannot update {typeof(TEntity).Name} with {input.GetRawText().Substring(0, 200) + "..."}") { StatusCode = (int)HttpStatusCode.UnprocessableEntity };
 
             //retrieve the existing entity
-            var existing = _dbContext.Find<TEntity>(id);
+            var existing = Find(key).FirstOrDefault();
 
             //check NotFound, Gone (deleted), Locked
             if (NotFoundGoneLocked(existing, out IActionResult result))
@@ -235,29 +255,27 @@ namespace EDennis.AspNet.Base {
             try {
                 _dbContext.SaveChanges();
                 return Ok(existing);
-            } catch (DbUpdateConcurrencyException ex) {
-                if (_dbContext.Find<TEntity>(id) != null) {
-                    ModelState.AddModelError("", $"A {typeof(TEntity).Name} instance with the specified id {id} cannot be found");
-                    return NotFound(ModelState);
-                } else {
-                    ModelState.AddModelError("", ex.Message);
-                    return Conflict(ModelState);
-                }
-            } catch (Exception) {
-                throw;
+            } catch (DbUpdateConcurrencyException ex2) {
+                ModelState.AddModelError("", ex2.Message);
+                return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
+            } catch (DbUpdateException ex1) {
+                ModelState.AddModelError("", ex1.InnerException.Message);
+                return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
+            } catch (Exception ex) {
+                ModelState.AddModelError("", ex.Message);
+                return Conflict(ModelState);
             }
-            //return NoContent();
         }
 
 
-        [HttpPatch("async/{id}")]
-        public virtual async Task<IActionResult> PatchAsync(JsonElement input, [FromRoute] int id) {
+        [HttpPatch("async/{key}")]
+        public virtual async Task<IActionResult> PatchAsync([FromRoute] string key, JsonElement input) {
 
             if (input.ValueKind != JsonValueKind.Object)
                 return new ObjectResult($"Cannot update {typeof(TEntity).Name} with {input.GetRawText().Substring(0, 200) + "..."}") { StatusCode = (int)HttpStatusCode.UnprocessableEntity };
 
             //retrieve the existing entity
-            var existing = await _dbContext.FindAsync<TEntity>(id);
+            var existing = await _dbContext.FindAsync<TEntity>(key);
 
             //check NotFound, Gone (deleted), Locked
             if (NotFoundGoneLocked(existing, out IActionResult result))
@@ -270,24 +288,22 @@ namespace EDennis.AspNet.Base {
             try {
                 await _dbContext.SaveChangesAsync();
                 return Ok(existing);
-            } catch (DbUpdateConcurrencyException ex) {
-                if (_dbContext.Find<TEntity>(id) != null) {
-                    ModelState.AddModelError("", $"A {typeof(TEntity).Name} instance with the specified id {id} cannot be found");
-                    return NotFound(ModelState);
-                } else {
-                    ModelState.AddModelError("", ex.Message);
-                    return Conflict(ModelState);
-                }
-            } catch (Exception) {
-                throw;
+            } catch (DbUpdateConcurrencyException ex2) {
+                ModelState.AddModelError("", ex2.Message);
+                return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
+            } catch (DbUpdateException ex1) {
+                ModelState.AddModelError("", ex1.InnerException.Message);
+                return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
+            } catch (Exception ex) {
+                ModelState.AddModelError("", ex.Message);
+                return Conflict(ModelState);
             }
-            //return NoContent();
         }
 
-        [HttpDelete("{id}")]
-        public virtual IActionResult Delete([FromRoute] int id) {
+        [HttpDelete("{key:alpha}")]
+        public virtual IActionResult Delete([FromRoute] string key) {
 
-            var existing = _dbContext.Find<TEntity>(id);
+            var existing = Find(key).FirstOrDefault();
 
             //check NotFound, Gone (deleted), Locked
             if (NotFoundGoneLocked(existing, out IActionResult result))
@@ -299,10 +315,10 @@ namespace EDennis.AspNet.Base {
             try {
                 _dbContext.SaveChanges();
             } catch (DbUpdateConcurrencyException ex2) {
-                ModelState.AddModelError("",$"Delete of { typeof(TEntity).Name }({id}) created concurrency conflict: {ex2.InnerException.Message}");
+                ModelState.AddModelError("",$"Delete of { typeof(TEntity).Name }({key}) created concurrency conflict: {ex2.InnerException.Message}");
                 return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
             } catch (DbUpdateException ex1) {
-                ModelState.AddModelError("", $"Could not delete { typeof(TEntity).Name }({id}): {ex1.InnerException.Message}");
+                ModelState.AddModelError("", $"Could not delete { typeof(TEntity).Name }({key}): {ex1.InnerException.Message}");
                 return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
             }
 
@@ -310,9 +326,9 @@ namespace EDennis.AspNet.Base {
         }
 
 
-        [HttpDelete("async/{id}")]
-        public async virtual Task<IActionResult> DeleteAsync([FromRoute] int id) {
-            var existing = await _dbContext.FindAsync<TEntity>(id);
+        [HttpDelete("async/{key:alpha}")]
+        public async virtual Task<IActionResult> DeleteAsync([FromRoute] string key) {
+            var existing = await _dbContext.FindAsync<TEntity>(key);
 
             //check NotFound, Gone (deleted), Locked
             if (NotFoundGoneLocked(existing, out IActionResult result))
@@ -324,10 +340,10 @@ namespace EDennis.AspNet.Base {
             try {
                 await _dbContext.SaveChangesAsync();
             } catch (DbUpdateConcurrencyException ex2) {
-                ModelState.AddModelError("", $"Delete of { typeof(TEntity).Name }({id}) created concurrency conflict: {ex2.InnerException.Message}");
+                ModelState.AddModelError("", $"Delete of { typeof(TEntity).Name }({key}) created concurrency conflict: {ex2.InnerException.Message}");
                 return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
             } catch (DbUpdateException ex1) {
-                ModelState.AddModelError("", $"Could not delete { typeof(TEntity).Name }({id}): {ex1.InnerException.Message}");
+                ModelState.AddModelError("", $"Could not delete { typeof(TEntity).Name }({key}): {ex1.InnerException.Message}");
                 return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
             }
 
