@@ -1,7 +1,6 @@
 ﻿using EDennis.AspNet.Base.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Linq;
 
 namespace EDennis.AspNet.Base {
 
@@ -30,6 +29,13 @@ namespace EDennis.AspNet.Base {
         public static ModelBuilder ConfigureTemporalEntity<TEntity>(this ModelBuilder modelBuilder)
             where TEntity : TemporalEntity {
 
+            var tableName = typeof(TEntity).Name;
+
+            modelBuilder.HasSequence<int>($"seq{tableName}", opt => {
+                opt.StartsAt(1)
+                .IncrementsBy(1);
+            });
+
             modelBuilder.Entity<TEntity>(e => {
                 e.ConfigureTable();
                 e.ConfigureSysStatus();
@@ -52,9 +58,9 @@ namespace EDennis.AspNet.Base {
             var tableName = typeof(TEntity).Name;
 
             e.ToTable(tableName)
-             .HasKey(p => p.Id);
+             .HasKey("Id");
 
-            e.Property(p => p.Id)
+            e.Property("Id")
              .HasDefaultValueSql($"next value for seq{tableName}");
 
             return e;

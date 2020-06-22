@@ -48,7 +48,7 @@ namespace EDennis.AspNet.Base.EntityFramework {
 
             //create the options builder from the configuration data
             _config = BuildConfiguration();
-            var cxnString = _config[$"ConnectionStrings:{typeof(TContext).Name}"];
+            var cxnString = _config[$"DbContexts:{typeof(TContext).Name}"];
             var optionsBuilder = new DbContextOptionsBuilder<TContext>();
             optionsBuilder
                 .UseSqlServer(cxnString)

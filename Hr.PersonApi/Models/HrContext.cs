@@ -14,8 +14,16 @@ namespace Hr.PersonApi.Models {
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
 
             modelBuilder.ConfigureTemporalEntity<Person>()
-                .ConfigureTemporalEntity<Address>()
-                .ConfigureTemporalEntity<State>();
+                .ConfigureTemporalEntity<Address>();
+
+            modelBuilder.Entity<State>(e => {
+                e.ToTable("State")
+                 .ConfigureSysStatus()
+                 .ConfigureSysStart()
+                 .ConfigureSysEnd()
+                 .HasKey(p=>p.Code);
+            });
+                
 
         }
     }

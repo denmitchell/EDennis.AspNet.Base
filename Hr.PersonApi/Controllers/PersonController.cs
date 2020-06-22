@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using EDennis.AspNet.Base;
+using Hr.PersonApi.Models;
 
 namespace Hr.PersonApi.Controllers {
-    public class PersonController {
+    public class PersonController : CrudController<HrContext, Person> {
+        public PersonController(HrContext context) : base(context) {
+        }
     }
 }

@@ -6,6 +6,8 @@ namespace Hr.PersonApi.Models {
     public class AddressHistory : Address { }
     public class Address : TemporalEntity {
 
+        public int Id { get; set; }
+
         [StringLength(100, ErrorMessage = "Street address must not exceed 100 characters.")]
         public string StreetAddress { get; set; }
 

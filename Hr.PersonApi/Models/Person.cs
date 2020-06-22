@@ -7,6 +7,8 @@ namespace Hr.PersonApi.Models {
     public class PersonHistory : Person { }
     public class Person : TemporalEntity {
 
+        public int Id { get; set; }
+
         [StringLength(40, ErrorMessage = "First name must not exceed 40 characters.")]
         public string FirstName { get; set; }
 

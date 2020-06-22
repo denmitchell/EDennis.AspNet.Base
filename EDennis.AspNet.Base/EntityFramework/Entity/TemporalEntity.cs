@@ -6,7 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace EDennis.AspNet.Base.Models {
-    public class TemporalEntity : CrudEntity {
+    public abstract class TemporalEntity : CrudEntity {
 
         public DateTime SysStart { get; set; } = DateTime.Now;
         public DateTime SysEnd { get; set; } = DateTime.MaxValue;

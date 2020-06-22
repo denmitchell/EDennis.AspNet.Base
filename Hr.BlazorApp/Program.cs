@@ -22,7 +22,6 @@ namespace Hr.BlazorApp {
 
             builder.Services.AddTransient<CustomAuthorizationMessageHandler>();
 
-
             foreach (var api in apis) {
                 builder.Services.AddHttpClient(api.Key, client => {
                     client.BaseAddress = new Uri(api.Value);
