@@ -7,11 +7,19 @@ using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using DevExtreme.AspNet.Data;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace EDennis.AspNet.Base {
+
+    /// <summary>
+    /// A base controller with flexible read operations, 
+    /// supporting Dynamic Linq and DevExtreme DataSourceLoader
+    /// </summary>
+    /// <typeparam name="TContext">A DbContext subclass</typeparam>
+    /// <typeparam name="TEntity">A model class</typeparam>
     [Route("api/[controller]")]
     [ApiController]
     public class QueryController<TContext, TEntity> : ControllerBase 
@@ -27,12 +35,16 @@ namespace EDennis.AspNet.Base {
         }
 
 
+        /// <summary>
+        /// Called before queries are executed.  This method can perform
+        /// pre-processing of a query (e.g., filtering).
+        /// </summary>
+        /// <param name="query"></param>
         public virtual void AdjustQuery(ref IQueryable<TEntity> query) { }
 
 
-
         /// <summary>
-        /// Get from DevExtreme DataSourceLoader query string
+        /// Gets a DevExtreme LoadResult from a DataSourceLoader query string
         /// </summary>
         /// <param name="loadOptions"></param>
         /// <returns></returns>
@@ -78,7 +90,7 @@ namespace EDennis.AspNet.Base {
 
 
         /// <summary>
-        /// Asynchronously get from DevExtreme DataSourceLoader query string
+        /// Asynchronously gets a DevExtreme LoadResult from a DataSourceLoader query string
         /// </summary>
         /// <param name="loadOptions"></param>
         /// <returns></returns>
@@ -105,7 +117,7 @@ namespace EDennis.AspNet.Base {
 
 
         /// <summary>
-        /// Get by Dynamic Linq Expression
+        /// Gets a dynamic list result using a Dynamic Linq Expression
         /// https://github.com/StefH/System.Linq.Dynamic.Core
         /// https://github.com/StefH/System.Linq.Dynamic.Core/wiki/Dynamic-Expressions
         /// </summary>
@@ -157,7 +169,7 @@ namespace EDennis.AspNet.Base {
 
 
         /// <summary>
-        /// Get by Dynamic Linq Expression
+        /// Asynchronously gets a dynamic list result using a Dynamic Linq Expression
         /// https://github.com/StefH/System.Linq.Dynamic.Core
         /// https://github.com/StefH/System.Linq.Dynamic.Core/wiki/Dynamic-Expressions
         /// </summary>
@@ -207,6 +219,39 @@ namespace EDennis.AspNet.Base {
 
 
 
+
+        /// <summary>
+        /// Get results with OData query string
+        /// </summary>
+        /// <returns></returns>
+        [EnableQuery]
+        [ODataQueryFilter]
+        [HttpGet("odata")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Used for API parameter discovery")]
+        public IEnumerable<TEntity> GetWithOData(
+                [FromQuery] string select,
+                [FromQuery] string orderBy,
+                [FromQuery] string filter,
+                [FromQuery] string expand,
+                [FromQuery] int skip,
+                [FromQuery] int top
+            ) {
+            return GetQuery();
+        }
+
+
+
+
+        /// <summary>
+        /// Builds a dynamic linq query
+        /// </summary>
+        /// <param name="where">string Where expression</param>
+        /// <param name="orderBy">string OrderBy expression (with support for descending)</param>
+        /// <param name="skip">int number of records to skip</param>
+        /// <param name="take">int number of records to return</param>
+        /// <param name="totalRecords">the total number of records across all pages</param>
+        /// <param name="pagedResult">paging metadata</param>
+        /// <returns></returns>
         private IQueryable<TEntity> BuildLinqQuery(string where, string orderBy, int? skip, int? take, int? totalRecords, out DynamicLinqResult<TEntity> pagedResult) {
 
             var qry  = GetQuery();
@@ -242,7 +287,17 @@ namespace EDennis.AspNet.Base {
         }
 
 
-
+        /// <summary>
+        /// Builds a dynamic linq query
+        /// </summary>
+        /// <param name="where">string Where expression</param>
+        /// <param name="orderBy">string OrderBy expression (with support for descending)</param>
+        /// <param name="select">string Select expression</param>
+        /// <param name="skip">int number of records to skip</param>
+        /// <param name="take">int number of records to return</param>
+        /// <param name="totalRecords">the total number of records across all pages</param>
+        /// <param name="pagedResult">paging metadata</param>
+        /// <returns></returns>
         private IQueryable BuildLinqQuery(string select, string where, string orderBy, int? skip, int? take, int? totalRecords, out DynamicLinqResult pagedResult) {
 
             IQueryable<TEntity> qry = BuildLinqQuery(where, orderBy, skip, take, totalRecords, out DynamicLinqResult<TEntity> pagedResultInner);
@@ -261,7 +316,11 @@ namespace EDennis.AspNet.Base {
         }
 
 
-
+        /// <summary>
+        /// Returns an AsNoTracking IQueryable, but
+        /// also applies AdjustQuery
+        /// </summary>
+        /// <returns></returns>
         private IQueryable<TEntity> GetQuery(){
             var qry = _dbContext
                 .Set<TEntity>()
@@ -272,6 +331,11 @@ namespace EDennis.AspNet.Base {
         }
 
 
+        /// <summary>
+        /// Creates the State argument for using Logger.BeginScope(State)
+        /// </summary>
+        /// <param name="parameters">a dynamic object with key-value pairs</param>
+        /// <returns></returns>
         protected KeyValuePair<string,object>[] GetLoggerScope(dynamic parameters) {
 
             var scope = new List<KeyValuePair<string, object>>();

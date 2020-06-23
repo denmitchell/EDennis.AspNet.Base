@@ -1,24 +1,31 @@
 ﻿using EDennis.AspNet.Base.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
+using System.Linq.Expressions;
 
 namespace EDennis.AspNet.Base {
 
+    /// <summary>
+    /// Extensions to simplify configuration of entities in the DbContext class
+    /// </summary>
     public static class ModelBuilderExtensions {
 
 
-        public static ModelBuilder ConfigureCrudEntity<TEntity>(this ModelBuilder modelBuilder)
+        /// <summary>
+        /// Configures a CrudEntity using an Entity Framework ModelBuilder
+        /// </summary>
+        /// <typeparam name="TEntity">the entity's class</typeparam>
+        /// <param name="modelBuilder">Entity Framework ModelBuilder</param>
+        /// <param name="keyExpression">Primary key lambda</param>
+        /// <param name="useSequence">Whether to configure a (SQL Server) sequence</param>
+        /// <returns></returns>
+        public static ModelBuilder ConfigureCrudEntity<TEntity>(this ModelBuilder modelBuilder,
+            Expression<Func<TEntity, object>> keyExpression, bool useSequence = true)
             where TEntity : CrudEntity {
 
-            var tableName = typeof(TEntity).Name;
-
-            modelBuilder.HasSequence<int>($"seq{tableName}", opt => {
-                opt.StartsAt(1)
-                .IncrementsBy(1);
-            });
-
             modelBuilder.Entity<TEntity>(e => {
-                e.ConfigureTable();
+                e.ConfigureTable(modelBuilder, keyExpression, useSequence);
                 e.ConfigureSysStatus();
             });
 
@@ -26,18 +33,27 @@ namespace EDennis.AspNet.Base {
         }
 
 
-        public static ModelBuilder ConfigureTemporalEntity<TEntity>(this ModelBuilder modelBuilder)
+        /// <summary>
+        /// Configures a TemporalEntity using an Entity Framework ModelBuilder
+        /// </summary>
+        /// <typeparam name="TEntity">the entity's class</typeparam>
+        /// <param name="modelBuilder">Entity Framework ModelBuilder</param>
+        /// <param name="keyExpression">Primary key lambda</param>
+        /// <param name="useSequence">Whether to configure a (SQL Server) sequence</param>
+        /// <param name="isSqlServerTemporal">Whether to provision System-Versioned tables in SQL Server.
+        /// NOTE: this requires replacing the SqlServerMigrationsSqlGenerator service
+        /// with MigrationsExtensionsSqlGenerator from EDennis.MigrationsExtensions</param>
+        /// <returns></returns>
+        public static ModelBuilder ConfigureTemporalEntity<TEntity>(this ModelBuilder modelBuilder,                 
+                Expression<Func<TEntity,object>> keyExpression, bool useSequence = true,
+                bool isSqlServerTemporal = true)
             where TEntity : TemporalEntity {
 
-            var tableName = typeof(TEntity).Name;
-
-            modelBuilder.HasSequence<int>($"seq{tableName}", opt => {
-                opt.StartsAt(1)
-                .IncrementsBy(1);
-            });
 
             modelBuilder.Entity<TEntity>(e => {
-                e.ConfigureTable();
+                if (isSqlServerTemporal)
+                    e.HasAnnotation("SystemVersioned", true);
+                e.ConfigureTable(modelBuilder, keyExpression, useSequence);
                 e.ConfigureSysStatus();
                 e.ConfigureSysStart();
                 e.ConfigureSysEnd();
@@ -52,21 +68,45 @@ namespace EDennis.AspNet.Base {
 
     public static class EntityTypeBuilderExtensions {
 
-        public static EntityTypeBuilder<TEntity> ConfigureTable<TEntity>(this EntityTypeBuilder<TEntity> e)
+        /// <summary>
+        /// Configures a table from an Entity
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="e">The entity</param>
+        /// <param name="modelBuilder">Entity Framework ModelBuilder</param>
+        /// <param name="keyExpression">Primary key lambda</param>
+        /// <param name="useSequence">Whether to configure a (SQL Server) sequence</param>
+        /// <returns></returns>
+        public static EntityTypeBuilder<TEntity> ConfigureTable<TEntity>(this EntityTypeBuilder<TEntity> e, 
+            ModelBuilder modelBuilder, 
+            Expression<Func<TEntity, object>> keyExpression, bool useSequence = true )
+            
             where TEntity : CrudEntity {
 
             var tableName = typeof(TEntity).Name;
 
             e.ToTable(tableName)
-             .HasKey("Id");
+             .HasKey(keyExpression);
 
-            e.Property("Id")
-             .HasDefaultValueSql($"next value for seq{tableName}");
+            if (useSequence) {
+                modelBuilder.HasSequence<int>($"seq{tableName}", opt => {
+                    opt.StartsAt(1)
+                    .IncrementsBy(1);
+                });
+                e.Property(keyExpression)
+                 .HasDefaultValueSql($"next value for seq{tableName}");
+            }
 
             return e;
         }
 
 
+        /// <summary>
+        /// Configures SysStatus using a TINYINT database type
+        /// </summary>
+        /// <typeparam name="TEntity">the entity type</typeparam>
+        /// <param name="e">the entity type builder</param>
+        /// <returns></returns>
         public static EntityTypeBuilder<TEntity> ConfigureSysStatus<TEntity>(this EntityTypeBuilder<TEntity> e)
             where TEntity : CrudEntity {
 
@@ -76,6 +116,12 @@ namespace EDennis.AspNet.Base {
             return e;
         }
 
+        /// <summary>
+        /// Configures SysStart using a DATETIME2 database type
+        /// </summary>
+        /// <typeparam name="TEntity">the entity type</typeparam>
+        /// <param name="e">the entity type builder</param>
+        /// <returns></returns>
         public static EntityTypeBuilder<TEntity> ConfigureSysStart<TEntity>(this EntityTypeBuilder<TEntity> e)
             where TEntity : TemporalEntity {
 
@@ -86,6 +132,12 @@ namespace EDennis.AspNet.Base {
             return e;
         }
 
+        /// <summary>
+        /// Configures SysEnd using a DATETIME2 database type
+        /// </summary>
+        /// <typeparam name="TEntity">the entity type</typeparam>
+        /// <param name="e">the entity type builder</param>
+        /// <returns></returns>
         public static EntityTypeBuilder<TEntity> ConfigureSysEnd<TEntity>(this EntityTypeBuilder<TEntity> e)
             where TEntity : TemporalEntity {
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Hr.PersonApi.Models;
+using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -25,6 +26,9 @@ namespace Hr.PersonApi {
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
             services.AddControllers();
+
+            services.AddOData();
+
             var cxnString = Configuration["DbContexts:HrContext"];
 
             services.AddDbContext<HrContext>(options => {
@@ -60,6 +64,7 @@ namespace Hr.PersonApi {
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => {
+                endpoints.Select().Filter(); //odata support
                 endpoints.MapControllers();
             });
         }

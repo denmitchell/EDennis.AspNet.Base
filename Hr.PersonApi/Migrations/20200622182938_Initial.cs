@@ -85,8 +85,7 @@ namespace Hr.PersonApi.Migrations
                 column: "PersonId");
 
             migrationBuilder.SaveMappings();
-            migrationBuilder.CreateSqlServerTemporalTables();
-            //migrationBuilder.Sql(File.ReadAllText("MigrationsInserts\\Initial.sql"));
+            migrationBuilder.Sql(File.ReadAllText("MigrationsInserts\\Initial.sql"));
 
         }
 
