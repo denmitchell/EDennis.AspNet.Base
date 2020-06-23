@@ -65,6 +65,8 @@ namespace Hr.PersonApi.Migrations
                     b.HasIndex("PersonId");
 
                     b.ToTable("Address");
+
+                    b.HasAnnotation("SystemVersioned", true);
                 });
 
             modelBuilder.Entity("Hr.PersonApi.Models.Person", b =>
@@ -102,6 +104,8 @@ namespace Hr.PersonApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Person");
+
+                    b.HasAnnotation("SystemVersioned", true);
                 });
 
             modelBuilder.Entity("Hr.PersonApi.Models.State", b =>
@@ -129,6 +133,8 @@ namespace Hr.PersonApi.Migrations
                     b.HasKey("Code");
 
                     b.ToTable("State");
+
+                    b.HasAnnotation("SystemVersioned", true);
                 });
 
             modelBuilder.Entity("Hr.PersonApi.Models.Address", b =>
@@ -136,7 +142,7 @@ namespace Hr.PersonApi.Migrations
                     b.HasOne("Hr.PersonApi.Models.Person", "Person")
                         .WithMany("Addresses")
                         .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

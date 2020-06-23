@@ -18,7 +18,15 @@ namespace Hr.PersonApi.Models {
             modelBuilder
                 .ConfigureTemporalEntity<Person>(p => p.Id, true, true)
                 .ConfigureTemporalEntity<Address>(a => a.Id, true, true)
-                .ConfigureTemporalEntity<State>(s => s.Code, false, true);                
+                .ConfigureTemporalEntity<State>(s => s.Code, false, true);
+
+            modelBuilder.Entity<Address>(a =>
+                a.HasOne(a=>a.Person)
+                .WithMany(p=>p.Addresses)
+                .HasForeignKey(a=>a.PersonId)
+                .OnDelete(DeleteBehavior.ClientCascade)
+            );
+
         }
     }
 }

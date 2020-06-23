@@ -3,16 +3,16 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using System.IO;
 using EDennis.MigrationsExtensions;
 
+
 namespace Hr.PersonApi.Migrations
 {
     public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-
             migrationBuilder.CreateMaintenanceProcedures();
             migrationBuilder.CreateTestJsonTableSupport();
-            
+
             migrationBuilder.CreateSequence<int>(
                 name: "seqAddress");
 
@@ -76,7 +76,7 @@ namespace Hr.PersonApi.Migrations
                         column: x => x.PersonId,
                         principalTable: "Person",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

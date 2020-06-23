@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hr.PersonApi.Migrations
 {
     [DbContext(typeof(HrContext))]
-    [Migration("20200622182938_Initial")]
+    [Migration("20200623200621_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,6 +67,8 @@ namespace Hr.PersonApi.Migrations
                     b.HasIndex("PersonId");
 
                     b.ToTable("Address");
+
+                    b.HasAnnotation("SystemVersioned", true);
                 });
 
             modelBuilder.Entity("Hr.PersonApi.Models.Person", b =>
@@ -104,6 +106,8 @@ namespace Hr.PersonApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Person");
+
+                    b.HasAnnotation("SystemVersioned", true);
                 });
 
             modelBuilder.Entity("Hr.PersonApi.Models.State", b =>
@@ -131,6 +135,8 @@ namespace Hr.PersonApi.Migrations
                     b.HasKey("Code");
 
                     b.ToTable("State");
+
+                    b.HasAnnotation("SystemVersioned", true);
                 });
 
             modelBuilder.Entity("Hr.PersonApi.Models.Address", b =>
@@ -138,7 +144,7 @@ namespace Hr.PersonApi.Migrations
                     b.HasOne("Hr.PersonApi.Models.Person", "Person")
                         .WithMany("Addresses")
                         .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618
