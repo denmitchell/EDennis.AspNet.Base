@@ -1,8 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 using System.Text.Json;
 
 namespace EDennis.AspNet.Base {
@@ -77,6 +73,10 @@ namespace EDennis.AspNet.Base {
                 return JsonSerializer.Deserialize(value.GetRawText(), type);
         }
 
+
+        public override string ToString() {
+            return JsonSerializer.Serialize(this);
+        }
 
     }
 }

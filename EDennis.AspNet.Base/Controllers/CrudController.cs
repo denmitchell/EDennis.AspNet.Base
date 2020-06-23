@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using System;
-using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Net;
@@ -13,14 +11,16 @@ using System.Threading.Tasks;
 namespace EDennis.AspNet.Base {
     [Route("api/[controller]")]
     [ApiController]
-    public class CrudController<TContext, TEntity> : QueryController<TContext, TEntity>
+    public abstract class CrudController<TContext, TEntity> : QueryController<TContext, TEntity>
         where TContext : DbContext
         where TEntity : CrudEntity {
 
         protected readonly string _sysUser;
 
 
+
         #region Overrideable Methods
+        public abstract IQueryable<TEntity> Find(string pathParameter);
 
         protected virtual void BeforeUpdate(TEntity existing) { }
         protected virtual void BeforeDelete(TEntity existing) { }
@@ -30,65 +30,11 @@ namespace EDennis.AspNet.Base {
         public virtual void DoPatch(JsonElement input, TEntity existing) => existing.Patch(input);
         public virtual void DoDelete(TEntity existing) => _dbContext.Remove(existing);
 
-        public KeyValuesDelegate KeyValues = (p) => p.Split('~');
 
         #endregion
 
-        public delegate object[] KeyValuesDelegate(string pathParameter);
 
-        delegate object[] KeyValuesInputDelegate(TEntity input);
-        KeyValuesInputDelegate KeyValuesInput;
-
-        public virtual string KeyTemplate { get; private set; }
-
-        public IQueryable<TEntity> Find(string pathParameter)
-            => _dbContext.Set<TEntity>().Where(string.Format(KeyTemplate, KeyValues(pathParameter)));
-
-        public IQueryable<TEntity> Find(TEntity input)
-            => _dbContext.Set<TEntity>().Where(string.Format(KeyTemplate, KeyValuesInput(input)));
-
-
-        private static IReadOnlyList<IProperty> Keys { get; set; }
-        private static readonly Type[] _quotedTypes = {
-            typeof(string), typeof(TimeSpan), typeof(TimeSpan?), typeof(DateTime), typeof(DateTime?), typeof(DateTimeOffset), typeof(DateTimeOffset?)
-        };
-
-        private void Initialize() {
-            var entityType = _dbContext.Model.GetEntityTypes().FirstOrDefault(e => e.ClrType == typeof(TEntity));
-            var pk = entityType.FindPrimaryKey();
-            Keys = pk.Properties;
-            var clauses = new List<string>();
-            
-            for(int i = 0; i < Keys.Count; i++) {
-                var key = Keys[i];
-                if (_quotedTypes.Contains(key.ClrType))
-                    clauses.Add($"{key.Name} eq \"{{{i}}}\"");
-                else
-                    clauses.Add($"{key.Name} eq {{{i}}}");
-            }
-            
-            KeyTemplate = string.Join(" and ", clauses);
-            
-            KeyValues = (p) => p.Split('~');
-
-            KeyValuesInput = (input) => {
-                var type = typeof(TEntity);
-                var values = new List<object>();
-                for (int i = 0; i < Keys.Count; i++) {
-                    var key = Keys[i];
-                    values.Add(type.GetProperty(Keys[i].Name).GetValue(input));
-                }
-                return values.ToArray();
-            };
-
-
-        }
-
-
-
-        public CrudController(TContext context) : base(context) {
-            if (KeyTemplate == null)
-                Initialize();
+        public CrudController(TContext context, ILogger<QueryController<TContext,TEntity>> logger) : base(context, logger) {
 
             _sysUser = HttpContext.User.Claims
                 .OrderByDescending(c => c.Type)
@@ -141,16 +87,11 @@ namespace EDennis.AspNet.Base {
             try {
                 _dbContext.SaveChanges();
                 return Ok(input);
-            } catch (DbUpdateException) {
-                var key = JsonSerializer.Serialize(KeyValuesInput(input));
-                if (Find(input) != null) {
-                    ModelState.AddModelError("", $"A {typeof(TEntity).Name} instance with the specified key {key} already exists");
+            } catch (DbUpdateException ex) {
+                using (_logger.BeginScope(GetLoggerScope(input)))
+                    _logger.LogError(ex.Message);
+                ModelState.AddModelError("", $"An instance of {typeof(TEntity).Name} could not be created with values: {input}");
                     return Conflict(ModelState);
-                } else {
-                    throw;
-                }
-            } catch (Exception) {
-                throw;
             }
         }
 
@@ -162,16 +103,11 @@ namespace EDennis.AspNet.Base {
             try {
                 await _dbContext.SaveChangesAsync();
                 return Ok(input);
-            } catch (DbUpdateException) {
-                if (Find(input) != null) {
-                    var ids = JsonSerializer.Serialize(KeyValuesInput(input));
-                    ModelState.AddModelError("", $"A {typeof(TEntity).Name} instance with the specified id {ids} already exists");
-                    return Conflict(ModelState);
-                } else {
-                    throw;
-                }
-            } catch (Exception) {
-                throw;
+            } catch (DbUpdateException ex) {
+                using (_logger.BeginScope(GetLoggerScope(input)))
+                    _logger.LogError(ex.Message);
+                ModelState.AddModelError("", $"An instance of {typeof(TEntity).Name} could not be created with values: {input}");
+                return Conflict(ModelState);
             }
         }
 
@@ -194,13 +130,15 @@ namespace EDennis.AspNet.Base {
                 _dbContext.SaveChanges();
                 return Ok(existing);
             } catch (DbUpdateConcurrencyException ex2) {
+                using (_logger.BeginScope(GetLoggerScope(input)))
+                    _logger.LogError(ex2.Message);
                 ModelState.AddModelError("", ex2.Message);
                 return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
             } catch (DbUpdateException ex1) {
+                using (_logger.BeginScope(GetLoggerScope(input)))
+                    _logger.LogError(ex1.Message);
                 ModelState.AddModelError("", ex1.InnerException.Message);
                 return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
-            } catch (Exception) {
-                throw;
             }
         }
 
@@ -223,13 +161,15 @@ namespace EDennis.AspNet.Base {
                 await _dbContext.SaveChangesAsync();
                 return Ok(existing);
             } catch (DbUpdateConcurrencyException ex2) {
+                using (_logger.BeginScope(GetLoggerScope(input)))
+                    _logger.LogError(ex2.Message);
                 ModelState.AddModelError("", ex2.Message);
                 return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
             } catch (DbUpdateException ex1) {
+                using (_logger.BeginScope(GetLoggerScope(input)))
+                    _logger.LogError(ex1.Message);
                 ModelState.AddModelError("", ex1.InnerException.Message);
                 return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
-            } catch (Exception) {
-                throw;
             }
         }
 
@@ -255,19 +195,20 @@ namespace EDennis.AspNet.Base {
                 _dbContext.SaveChanges();
                 return Ok(existing);
             } catch (DbUpdateConcurrencyException ex2) {
+                using (_logger.BeginScope(GetLoggerScope(input)))
+                    _logger.LogError(ex2.Message);
                 ModelState.AddModelError("", ex2.Message);
                 return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
             } catch (DbUpdateException ex1) {
+                using (_logger.BeginScope(GetLoggerScope(input)))
+                    _logger.LogError(ex1.Message);
                 ModelState.AddModelError("", ex1.InnerException.Message);
                 return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
-            } catch (Exception ex) {
-                ModelState.AddModelError("", ex.Message);
-                return Conflict(ModelState);
             }
         }
 
 
-        [HttpPatch("async/{key}")]
+        [HttpPatch("async/{key:alpha}")]
         public virtual async Task<IActionResult> PatchAsync([FromRoute] string key, JsonElement input) {
 
             if (input.ValueKind != JsonValueKind.Object)
@@ -288,14 +229,15 @@ namespace EDennis.AspNet.Base {
                 await _dbContext.SaveChangesAsync();
                 return Ok(existing);
             } catch (DbUpdateConcurrencyException ex2) {
+                using (_logger.BeginScope(GetLoggerScope(input)))
+                    _logger.LogError(ex2.Message);
                 ModelState.AddModelError("", ex2.Message);
                 return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
             } catch (DbUpdateException ex1) {
+                using (_logger.BeginScope(GetLoggerScope(input)))
+                    _logger.LogError(ex1.Message);
                 ModelState.AddModelError("", ex1.InnerException.Message);
                 return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
-            } catch (Exception ex) {
-                ModelState.AddModelError("", ex.Message);
-                return Conflict(ModelState);
             }
         }
 
@@ -314,9 +256,13 @@ namespace EDennis.AspNet.Base {
             try {
                 _dbContext.SaveChanges();
             } catch (DbUpdateConcurrencyException ex2) {
+                using (_logger.BeginScope(GetLoggerScope(new { key })))
+                    _logger.LogError(ex2.Message);
                 ModelState.AddModelError("",$"Delete of { typeof(TEntity).Name }({key}) created concurrency conflict: {ex2.InnerException.Message}");
                 return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
             } catch (DbUpdateException ex1) {
+                using (_logger.BeginScope(GetLoggerScope(new { key })))
+                    _logger.LogError(ex1.Message);
                 ModelState.AddModelError("", $"Could not delete { typeof(TEntity).Name }({key}): {ex1.InnerException.Message}");
                 return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
             }
@@ -339,9 +285,13 @@ namespace EDennis.AspNet.Base {
             try {
                 await _dbContext.SaveChangesAsync();
             } catch (DbUpdateConcurrencyException ex2) {
+                using (_logger.BeginScope(GetLoggerScope(new { key })))
+                    _logger.LogError(ex2.Message);
                 ModelState.AddModelError("", $"Delete of { typeof(TEntity).Name }({key}) created concurrency conflict: {ex2.InnerException.Message}");
                 return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
             } catch (DbUpdateException ex1) {
+                using (_logger.BeginScope(GetLoggerScope(new { key })))
+                    _logger.LogError(ex1.Message);
                 ModelState.AddModelError("", $"Could not delete { typeof(TEntity).Name }({key}): {ex1.InnerException.Message}");
                 return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
             }
@@ -356,18 +306,22 @@ namespace EDennis.AspNet.Base {
             if (entity != null && entity.SysStatus != SysStatus.Deleted && entity.SysStatus != SysStatus.Locked)
                 return false;
 
-            var keyValues = JsonSerializer.Serialize(KeyValuesInput(entity));
-
             if (entity == null) {
-                ModelState.AddModelError("", $"A {entity.GetType().Name} record with Id = {keyValues} could not be found.");
+                using (_logger.BeginScope(GetLoggerScope(entity)))
+                    _logger.LogWarning("{Entity} record could not be found", entity.GetType().Name);
+                ModelState.AddModelError("", $"The {entity.GetType().Name} record could not be found: {entity}");
                 result = NotFound(ModelState);
                 return true;
             } else if (entity.SysStatus == SysStatus.Deleted) {
-                ModelState.AddModelError("", $"A {entity.GetType().Name} record with Id = {keyValues} was deleted.");
+                using (_logger.BeginScope(GetLoggerScope(entity)))
+                    _logger.LogWarning("{Entity} record was deleted", entity.GetType().Name);
+                ModelState.AddModelError("", $"The {entity.GetType().Name} record was deleted: {entity}");
                 result = new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Gone };
                 return true;
             } else if (entity.SysStatus == SysStatus.Locked) {
-                ModelState.AddModelError("", $"The {entity.GetType().Name} record with Id = {keyValues} is locked.");
+                using (_logger.BeginScope(GetLoggerScope(entity)))
+                    _logger.LogWarning("{Entity} record is locked", entity.GetType().Name);
+                ModelState.AddModelError("", $"The {entity.GetType().Name} record is locked: {entity}");
                 result = new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Locked };
                 return true;
             } else

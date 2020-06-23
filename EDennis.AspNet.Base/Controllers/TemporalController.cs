@@ -1,6 +1,7 @@
 ﻿using EDennis.AspNet.Base.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
@@ -8,13 +9,13 @@ namespace EDennis.AspNet.Base {
 
     [Route("api/[controller]")]
     [ApiController]
-    public class TemporalController<TContext, TEntity, THistoryEntity> : CrudController<TContext, TEntity>
+    public abstract class TemporalController<TContext, TEntity, THistoryEntity> : CrudController<TContext, TEntity>
         where TContext : DbContext
         where TEntity : TemporalEntity
         where THistoryEntity : TemporalEntity {
 
-        public TemporalController(TContext context) : base(context) {
-        }
+        public TemporalController(TContext context, ILogger<QueryController<TContext,TEntity>> logger) 
+            : base(context, logger) { }
 
         protected override void BeforeUpdate(TEntity input) {
             var now = DateTime.Now;

@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Dynamic.Core.Exceptions;
+using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using DevExtreme.AspNet.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Extensions.Logging;
 
 namespace EDennis.AspNet.Base {
     [Route("api/[controller]")]
@@ -17,9 +19,11 @@ namespace EDennis.AspNet.Base {
         where TEntity : class {
 
         protected readonly TContext _dbContext;
+        protected ILogger _logger;
 
-        public QueryController(TContext context) {
+        public QueryController(TContext context, ILogger<QueryController<TContext,TEntity>> logger) {
             _dbContext = context;
+            _logger = logger;
         }
 
 
@@ -49,13 +53,18 @@ namespace EDennis.AspNet.Base {
                     select, sort, filter, skip, take, totalSummary,
                     group, groupSummary);
             } catch (ArgumentException ex) {
+
+                using (_logger.BeginScope(GetLoggerScope(new { select, sort, filter, skip, take, totalSummary, group, groupSummary })))
+                    _logger.LogError(ex.Message);
                 ModelState.AddModelError("", ex.Message);
                 return new BadRequestObjectResult(ModelState);
             }
             try {
                 var result = DataSourceLoader.Load(GetQuery(), loadOptions);
                 return Ok(result);
-            } catch (ArgumentOutOfRangeException) {
+            } catch (ArgumentOutOfRangeException ex) {
+                using (_logger.BeginScope(GetLoggerScope(new { select, sort, filter, skip, take, totalSummary, group, groupSummary })))
+                    _logger.LogError(ex.Message);
                 var obj =
                     new {
                         Exception = "Failed executing DevExtreme load expression",
@@ -137,6 +146,8 @@ namespace EDennis.AspNet.Base {
                     return new ContentResult { Content = json, ContentType = "application/json" };
                 }
             } catch (ParseException ex) {
+                using (_logger.BeginScope(GetLoggerScope(new { where, orderBy, select, skip, take, totalRecords })))
+                    _logger.LogError(ex.Message);
                 ModelState.AddModelError("", ex.Message);
                 return new BadRequestObjectResult(ModelState);
             }
@@ -186,6 +197,8 @@ namespace EDennis.AspNet.Base {
                     return new ContentResult { Content = json, ContentType = "application/json" };
                 }
             } catch (ParseException ex) {
+                using (_logger.BeginScope(GetLoggerScope(new { where, orderBy, select, skip, take, totalRecords })))
+                    _logger.LogError(ex.Message);
                 ModelState.AddModelError("", ex.Message);
                 return new BadRequestObjectResult(ModelState);
             }
@@ -256,6 +269,17 @@ namespace EDennis.AspNet.Base {
 
             AdjustQuery(ref qry);
             return qry;
+        }
+
+
+        protected KeyValuePair<string,object>[] GetLoggerScope(dynamic parameters) {
+
+            var scope = new List<KeyValuePair<string, object>>();
+
+            foreach (PropertyInfo prop in parameters.GetType().Properties)
+                scope.Add(KeyValuePair.Create(prop.Name, prop.GetValue(parameters)));
+
+            return scope.ToArray();
         }
 
 
