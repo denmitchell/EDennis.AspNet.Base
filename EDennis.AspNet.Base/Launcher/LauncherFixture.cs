@@ -23,7 +23,7 @@ namespace EDennis.AspNet.Base.Launcher {
             string ewhAllSuspendName = Guid.NewGuid().ToString();
             var args = new string[] { $"ewhAllSuspend={ewhAllSuspendName}" };
             ewh = new NamedEventWaitHandle(false, EventResetMode.ManualReset, ewhAllSuspendName);
-            new TLauncher().Launch(args,NullLogger.Instance,false,false);
+            new TLauncher().Launch(args,false,false);
         }
 
         /// <summary>

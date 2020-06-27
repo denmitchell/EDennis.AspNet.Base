@@ -18,7 +18,7 @@ using System.Security.Claims;
 
 namespace EDennis.AspNetIdentityServer {
     public class Program {
-        public static int Main(string[] args) {
+        public static void Main(string[] args) {
 
             //Debugger.Launch();
 
@@ -47,9 +47,6 @@ namespace EDennis.AspNetIdentityServer {
             } catch (Exception ex) {
                 Log.Fatal(ex, "Host terminated unexpectedly.");
             }
-
-            return 0;
-
 
 
         }

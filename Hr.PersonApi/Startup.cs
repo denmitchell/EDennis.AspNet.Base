@@ -1,31 +1,45 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using EDennis.AspNet.Base;
 using Hr.PersonApi.Models;
 using Microsoft.AspNet.OData.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using System.Linq;
 
 namespace Hr.PersonApi {
     public class Startup {
-        public Startup(IConfiguration configuration) {
+        public Startup(IConfiguration configuration, IWebHostEnvironment env) {
             Configuration = configuration;
+            HostingEnvironment = env;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment HostingEnvironment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
-            services.AddControllers();
+            services.AddControllers(options=> {
+                options.Conventions.Add(new DefaultAuthorizationPolicyConvention(
+                    HostingEnvironment.ApplicationName, Configuration));
+            });
+
+            var oidcOptions = new OidcOptions();
+            Configuration.GetSection("Security:OidcOptions").Bind(oidcOptions);
+
+            //add an AuthorizationPolicyProvider which generates default
+            //policies upon first access to any controller action
+            services.AddSingleton<IAuthorizationPolicyProvider>(factory => {
+                var logger = factory.GetRequiredService<ILogger<DefaultPoliciesAuthorizationPolicyProvider>>();
+                return new DefaultPoliciesAuthorizationPolicyProvider(
+                        Configuration, oidcOptions, logger);
+
+                });
 
             services.AddOData();
 

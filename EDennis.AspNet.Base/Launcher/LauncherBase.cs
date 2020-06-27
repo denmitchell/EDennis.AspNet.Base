@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -37,12 +38,14 @@ namespace EDennis.AspNet.Base.Launcher {
         /// <param name="launchBrowser">true if the browser should be launched for any web app whose
         /// targeted launch profile has a launchUrl</param>
         /// <param name="blockWithConsole">set to true if this is an interactive (non-xunit) session</param>
-        public abstract void Launch(string[] args, ILogger logger, bool launchBrowser = false, bool blockWithConsole = false);
+        public abstract void Launch(string[] args, bool launchBrowser = false, bool blockWithConsole = false);
 
         /// <summary>
         /// How long to try to connect to any given web app.
         /// </summary>
         public const int PING_TIMEOUT = 10000;
+
+        private ILogger _logger;
 
 
         /// <summary>
@@ -58,7 +61,7 @@ namespace EDennis.AspNet.Base.Launcher {
         /// <param name="blockWithConsole">set to true if this is an interactive (non-xunit) session</param>
         /// <param name="programMains">A parameter array of Program.Main methods to invoke</param>
         /// <returns></returns>
-        public Dictionary<string, Launchable> Launch(string[] args, ILogger logger, bool blockWithConsole,
+        public Dictionary<string, Launchable> Launch(string[] args, bool blockWithConsole,
                 params Action<string[]>[] programMains) {
 
             //get the project name, directory, and .csproj file path associated with this Launcher class
@@ -73,9 +76,11 @@ namespace EDennis.AspNet.Base.Launcher {
             //and store in a dictionary, keyed by the project name
             var launchables = InitializeLaunchables(args, programMains, dirs);
 
+            CreateConsoleLogger();
+
             //iterate over all the launchables, Launching each one
             foreach (var launchable in launchables) {
-                Launch(launchable, blockWithConsole, logger);
+                Launch(launchable, blockWithConsole);
 
                 //NOTE: the following does not seem to be needed
                 //Wait for the current server to be ready before moving on to the next server.
@@ -108,14 +113,14 @@ namespace EDennis.AspNet.Base.Launcher {
         /// <param name="blockWithConsole">whether to block the threads from completing interactively 
         /// (or via NamedEventWaitHandle)</param>
         /// <param name="logger">An ILogger to use for logging launch progress</param>
-        private static void Launch(KeyValuePair<string, Launchable> launchable, bool blockWithConsole, ILogger logger) {
+        private void Launch(KeyValuePair<string, Launchable> launchable, bool blockWithConsole) {
 
             GetLaunchProfile(launchable);
             GetCommandLineArgs(launchable);
 
             Task.Run(() => {
                 launchable.Value.ProgramMain(launchable.Value.LaunchProfile.Args);
-                Ping(launchable, logger);
+                Ping(launchable);
                 if (!blockWithConsole)
                     launchable.Value.AllSuspendEvent.WaitOne();
             });
@@ -126,8 +131,7 @@ namespace EDennis.AspNet.Base.Launcher {
         /// Checks to see if a given web app can be reached via TCP.
         /// </summary>
         /// <param name="launchable"></param>
-        /// <param name="logger"></param>
-        private static void Ping(KeyValuePair<string, Launchable> launchable, ILogger logger) {
+        private void Ping(KeyValuePair<string, Launchable> launchable) {
 
             var httpsUrl = launchable.Value.LaunchProfile.ApplicationUrls.Single(u => u.Scheme == "https");
 
@@ -141,11 +145,11 @@ namespace EDennis.AspNet.Base.Launcher {
                         using var tcp = new TcpClient(httpsUrl.Host, httpsUrl.Port);
                         var connected = tcp.Connected;
                         //launchable.Value.ReadyEvent.Set();
-                        logger.LogInformation($"Successfully pinged {launchable.Key} @ https://{httpsUrl.Host}:{httpsUrl.Port}");
+                        _logger.LogInformation($"Successfully pinged {launchable.Key} @ https://{httpsUrl.Host}:{httpsUrl.Port}");
                         return;
                     } catch (Exception ex) {
                         if (!ex.Message.Contains("No connection could be made because the target machine actively refused it")) {
-                            logger.LogError(ex, ex.Message);
+                            _logger.LogError(ex, ex.Message);
                             throw ex;
                         } else
                             Thread.Sleep(1000);
@@ -154,7 +158,7 @@ namespace EDennis.AspNet.Base.Launcher {
                 }
 
                 var ex1 = new Exception($"Cannot ping {launchable.Key} @ https://{httpsUrl.Host}:{httpsUrl.Port}");
-                logger.LogError(ex1.Message);
+                _logger.LogError(ex1.Message);
                 throw ex1;
 
             });
@@ -420,6 +424,13 @@ namespace EDennis.AspNet.Base.Launcher {
         }
 
 
+        private void CreateConsoleLogger() {
+            var services = new ServiceCollection();
+            services.AddLogging(configure => configure.AddConsole());
+
+            var serviceProvider = services.BuildServiceProvider();
+            var _logger = serviceProvider.GetService<ILogger<LauncherBase>>();
+        }
 
     }
 }

@@ -6,6 +6,6 @@ namespace EDennis.AspNet.Base.Launcher {
     /// Entry-point for the Launcher.
     /// </summary>
     public interface ILauncher {
-        void Launch(string[] args, ILogger logger, bool launchBrowser = false, bool blockWithConsole = false);
+        void Launch(string[] args, bool launchBrowser = false, bool blockWithConsole = false);
     }
 }

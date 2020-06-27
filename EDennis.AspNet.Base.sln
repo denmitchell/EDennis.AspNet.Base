@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.AspNetIdentityServe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hr.BlazorApp", "Hr.BlazorApp\Hr.BlazorApp.csproj", "{C376E26C-872C-4EDB-9512-65254F4D1606}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hr.PersonApi", "Hr.PersonApi\Hr.PersonApi.csproj", "{19FB3625-450B-452E-8186-6FACB8044087}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hr.PersonApi", "Hr.PersonApi\Hr.PersonApi.csproj", "{19FB3625-450B-452E-8186-6FACB8044087}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Admin.UserApi", "Admin.UserApi\Admin.UserApi.csproj", "{5FE76F87-CFAF-4D29-AD82-9ED919FDF10C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Admin.UserApi", "Admin.UserApi\Admin.UserApi.csproj", "{5FE76F87-CFAF-4D29-AD82-9ED919FDF10C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hr.Launcher", "Hr.Launcher\Hr.Launcher.csproj", "{70185762-1C23-488A-BF32-767724B035B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{5FE76F87-CFAF-4D29-AD82-9ED919FDF10C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FE76F87-CFAF-4D29-AD82-9ED919FDF10C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FE76F87-CFAF-4D29-AD82-9ED919FDF10C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70185762-1C23-488A-BF32-767724B035B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70185762-1C23-488A-BF32-767724B035B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70185762-1C23-488A-BF32-767724B035B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70185762-1C23-488A-BF32-767724B035B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
