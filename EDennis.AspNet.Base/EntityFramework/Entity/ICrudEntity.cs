@@ -6,7 +6,6 @@ namespace EDennis.AspNet.Base {
         string SysUser { get; set; }
 
         void Patch(JsonElement jsonElement);
-        string ToString();
         void Update(object updated);
     }
 }

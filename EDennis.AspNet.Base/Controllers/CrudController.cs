@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Net;
@@ -17,6 +19,19 @@ namespace EDennis.AspNet.Base {
 
         protected readonly string _sysUser;
 
+
+        public void SetSysUser(TEntity entity) {
+                var sysUser = HttpContext.User.Claims
+                    .OrderByDescending(c => c.Type)
+                    .FirstOrDefault(c => c.Type == "name"
+                        || c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+                        || c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/email"
+                        || c.Type == "email"
+                        || c.Type == "client_id")
+                    ?.Value;
+
+            entity.SysUser = sysUser;
+        }
 
 
         #region Overrideable Methods
@@ -44,7 +59,7 @@ namespace EDennis.AspNet.Base {
                     || c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/email"
                     || c.Type == "email"
                     || c.Type == "client_id")
-                .Value;
+                ?.Value;
         }
 
 
@@ -82,7 +97,7 @@ namespace EDennis.AspNet.Base {
         [HttpPost]
         public virtual IActionResult Create([FromBody] TEntity input) {
 
-            input.SysUser = _sysUser;
+            SetSysUser(input);
             BeforeCreate(input);
             DoCreate(input);
 
@@ -100,7 +115,7 @@ namespace EDennis.AspNet.Base {
         [HttpPost("async")]
         public virtual async Task<IActionResult> CreateAsync([FromBody] TEntity input) {
 
-            input.SysUser = _sysUser;
+            SetSysUser(input);
             BeforeCreate(input);
             DoCreate(input);
 
@@ -128,7 +143,7 @@ namespace EDennis.AspNet.Base {
 
             BeforeUpdate(existing);
             DoUpdate(input, existing);
-            existing.SysUser = _sysUser;
+            SetSysUser(existing);
 
             try {
                 _dbContext.SaveChanges();
@@ -159,7 +174,7 @@ namespace EDennis.AspNet.Base {
 
             BeforeUpdate(existing);
             DoUpdate(input, existing);
-            existing.SysUser = _sysUser;
+            SetSysUser(existing);
 
             try {
                 await _dbContext.SaveChangesAsync();
@@ -193,7 +208,7 @@ namespace EDennis.AspNet.Base {
 
             BeforeUpdate(existing);
             DoPatch(input, existing);
-            existing.SysUser = _sysUser; //must be after, when a patch
+            SetSysUser(existing);//must be after, when a patch
 
             try {
                 _dbContext.SaveChanges();
@@ -227,7 +242,7 @@ namespace EDennis.AspNet.Base {
 
             BeforeUpdate(existing);
             DoPatch(input, existing);
-            existing.SysUser = _sysUser; //must be after, when a patch
+            SetSysUser(existing);//must be after, when a patch
 
             try {
                 await _dbContext.SaveChangesAsync();
