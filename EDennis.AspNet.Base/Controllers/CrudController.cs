@@ -13,7 +13,7 @@ namespace EDennis.AspNet.Base {
     [ApiController]
     public abstract class CrudController<TContext, TEntity> : QueryController<TContext, TEntity>
         where TContext : DbContext
-        where TEntity : CrudEntity {
+        where TEntity : class, ICrudEntity {
 
         protected readonly string _sysUser;
 
@@ -22,6 +22,7 @@ namespace EDennis.AspNet.Base {
         #region Overrideable Methods
         public abstract IQueryable<TEntity> Find(string pathParameter);
 
+        protected virtual void BeforeCreate(TEntity input) { }
         protected virtual void BeforeUpdate(TEntity existing) { }
         protected virtual void BeforeDelete(TEntity existing) { }
 
@@ -82,6 +83,7 @@ namespace EDennis.AspNet.Base {
         public virtual IActionResult Create([FromBody] TEntity input) {
 
             input.SysUser = _sysUser;
+            BeforeCreate(input);
             DoCreate(input);
 
             try {
@@ -97,7 +99,9 @@ namespace EDennis.AspNet.Base {
 
         [HttpPost("async")]
         public virtual async Task<IActionResult> CreateAsync([FromBody] TEntity input) {
+
             input.SysUser = _sysUser;
+            BeforeCreate(input);
             DoCreate(input);
 
             try {

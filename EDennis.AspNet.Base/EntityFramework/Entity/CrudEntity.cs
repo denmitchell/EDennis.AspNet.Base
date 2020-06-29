@@ -2,7 +2,7 @@
 using System.Text.Json;
 
 namespace EDennis.AspNet.Base {
-    public abstract class CrudEntity {
+    public abstract class CrudEntity : ICrudEntity {
 
         public string SysUser { get; set; }
         public SysStatus SysStatus { get; set; }
@@ -68,7 +68,7 @@ namespace EDennis.AspNet.Base {
             else if (type == typeof(TimeSpan) || type == typeof(TimeSpan?))
                 return TimeSpan.Parse(value.GetString());
             else if (type == typeof(string))
-                return TimeSpan.Parse(value.GetString());
+                return value.GetString();
             else
                 return JsonSerializer.Deserialize(value.GetRawText(), type);
         }
