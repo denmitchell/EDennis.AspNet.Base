@@ -31,15 +31,6 @@ namespace EDennis.AspNetIdentityServer {
             services.AddDbContext<AspNetIdentityDbContext>(options =>
                 options.UseSqlServer(cxnAspNetIdentity));
 
-            //services.AddDefaultIdentity<AspNetIdentityUser>(options => {
-            //    options.SignIn.RequireConfirmedAccount = true;
-            //    options.ClaimsIdentity.RoleClaimType = "role";
-            //    options.ClaimsIdentity.UserIdClaimType = "sub";
-            //    options.ClaimsIdentity.UserNameClaimType = "name";
-            //})
-            //   .AddRoles<IdentityRole>()
-            //   .AddEntityFrameworkStores<AspNetIdentityDbContext>();
-
 
             services.AddIdentity<AspNetIdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                            .AddEntityFrameworkStores<AspNetIdentityDbContext>()
