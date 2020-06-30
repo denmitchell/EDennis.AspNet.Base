@@ -1,4 +1,4 @@
-﻿using Hr.BlazorApp.Data.Models;
+﻿using Hr.App.Data.Models;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
 
 
-namespace Hr.BlazorApp.Data.Services {
+namespace Hr.App.Data.Services {
     public class PersonServiceMock : IPersonService {
 
         private static readonly ConcurrentDictionary<int, Person> _persons =

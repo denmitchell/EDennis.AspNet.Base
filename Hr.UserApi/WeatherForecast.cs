@@ -1,6 +1,6 @@
 using System;
 
-namespace Admin.UserApi {
+namespace Hr.UserApi {
     public class WeatherForecast {
         public DateTime Date { get; set; }
 

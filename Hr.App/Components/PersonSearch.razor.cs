@@ -1,12 +1,12 @@
-﻿using Hr.BlazorApp.Data.Models;
-using Hr.BlazorApp.Data.Services;
+﻿using Hr.App.Data.Models;
+using Hr.App.Data.Services;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 
-namespace Hr.BlazorApp.Components {
+namespace Hr.App.Components {
 
 
     public partial class PersonSearchBase : ComponentBase {

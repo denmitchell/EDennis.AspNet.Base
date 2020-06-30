@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Admin.UserApi.Models {
+namespace Hr.UserApi.Models {
     public class Role {
         public string Id { get; set; }
         public string Name { get; set; }

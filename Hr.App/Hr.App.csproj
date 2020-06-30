@@ -20,7 +20,11 @@
 		<PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="6.6.0" />
 		<PackageReference Include="System.Net.Http.Json" Version="3.2.1" />
 		<PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
-		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.20" />
+		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.1.5" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\EDennis.AspNet.Base\EDennis.AspNet.Base.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

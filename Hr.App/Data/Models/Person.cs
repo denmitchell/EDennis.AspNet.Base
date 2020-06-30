@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Hr.BlazorApp.Data.Models {
+namespace Hr.App.Data.Models {
     public class Person /*: IHasIntegerId, IHasSysUser*/ {
 
         [Key]

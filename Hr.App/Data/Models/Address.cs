@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Hr.BlazorApp.Data.Models {
+namespace Hr.App.Data.Models {
     public class Address /*: IHasIntegerId, IHasSysUser*/ {
         [Key]
         public int Id { get; set; }

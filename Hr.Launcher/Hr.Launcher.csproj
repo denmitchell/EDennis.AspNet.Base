@@ -9,6 +9,7 @@
     <ProjectReference Include="..\EDennis.AspNet.Base\EDennis.AspNet.Base.csproj" />
     <ProjectReference Include="..\EDennis.AspNetIdentityServer\EDennis.AspNetIdentityServer.csproj" />
     <ProjectReference Include="..\Hr.PersonApi\Hr.PersonApi.csproj" />
+    <ProjectReference Include="..\Hr.UserApi\Hr.UserApi.csproj" />
   </ItemGroup>
 
 </Project>

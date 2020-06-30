@@ -1,4 +1,4 @@
-﻿namespace Hr.BlazorApp.Components {
+﻿namespace Hr.App.Components {
 
 
     public class PersonSearchParameters {

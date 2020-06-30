@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Hr.BlazorApp.Data.Models {
+namespace Hr.App.Data.Models {
     public class DateOfBirthRangeAttribute : RangeAttribute {
         public DateOfBirthRangeAttribute()
           : base(typeof(DateTime),

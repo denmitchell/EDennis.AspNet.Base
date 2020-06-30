@@ -1,12 +1,12 @@
-﻿using Hr.BlazorApp.Data.Models;
-using Hr.BlazorApp.Data.Services;
+﻿using Hr.App.Data.Models;
+using Hr.App.Data.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 
-namespace Hr.BlazorApp.Components {
+namespace Hr.App.Components {
 
     /// <summary>
     /// Modeled after Gill Cleeran's Pluralsight course, 

@@ -1,4 +1,4 @@
-﻿namespace Admin.UserApi.Models {
+﻿namespace Hr.UserApi.Models {
     public class UserClaim {
         public int Id { get; set; }
         public string UserId { get; set; }

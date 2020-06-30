@@ -1,10 +1,10 @@
-﻿using Hr.BlazorApp.Data.Models;
-using Hr.BlazorApp.Data.Services;
+﻿using Hr.App.Data.Models;
+using Hr.App.Data.Services;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Hr.BlazorApp.Components {
+namespace Hr.App.Components {
     public partial class AddressListBase: ComponentBase {
 
         [Parameter] public int PersonId { get; set; }

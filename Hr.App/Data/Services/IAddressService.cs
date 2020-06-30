@@ -1,10 +1,10 @@
-﻿using Hr.BlazorApp.Data.Models;
+﻿using Hr.App.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Hr.BlazorApp.Data.Services {
+namespace Hr.App.Data.Services {
     public interface IAddressService {
         Task<Address> GetAsync(int id);
         Task<IEnumerable<Address>> GetForPersonAsync(int personId);

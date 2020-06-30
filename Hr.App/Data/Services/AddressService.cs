@@ -1,11 +1,11 @@
-﻿using Hr.BlazorApp.Data.ApiClients;
-using Hr.BlazorApp.Data.Models;
+﻿using Hr.App.Data.ApiClients;
+using Hr.App.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Hr.BlazorApp.Data.Services {
+namespace Hr.App.Data.Services {
     public class AddressService : IAddressService {
 
 

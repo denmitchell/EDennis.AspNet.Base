@@ -1,11 +1,11 @@
-﻿using Hr.BlazorApp.Data.Models;
-using Hr.BlazorApp.Data.Services;
+﻿using Hr.App.Data.Models;
+using Hr.App.Data.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.JSInterop;
 using System.Threading.Tasks;
 
-namespace Hr.BlazorApp.Components {
+namespace Hr.App.Components {
     public class PersonDetailBase : ComponentBase {
         [Inject] public IPersonService PersonService { get; set; }
         [Inject] public NavigationManager NavigationManager { get; set; }

@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Hr.BlazorApp.Components {
+namespace Hr.App.Components {
     public class PagerBase : ComponentBase {
 
         public const int DEFAULT_PAGE_SIZE = 10;
