@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System;
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 
 namespace Hr.UserApi.Controllers {
     [Route("api/[controller]")]
@@ -17,14 +18,54 @@ namespace Hr.UserApi.Controllers {
     public class UserController : ControllerBase {
 
         private readonly UserManager<AspNetIdentityUser> _userManager;
+        private readonly AspNetIdentityDbContext _dbContext;
 
-        public UserController(UserManager<AspNetIdentityUser> userManager) {
+        public UserController(UserManager<AspNetIdentityUser> userManager,
+            AspNetIdentityDbContext dbContext) {
             _userManager = userManager;
-
+            _dbContext = dbContext;
         }
 
         public static Regex idPattern = new Regex("[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}");
         public static Regex lpPattern = new Regex("(?:\\(\\s*loginProvider\\s*=\\s*'?)([^,']+)(?:'?\\s*,\\s*providerKey\\s*=\\s*'?)([^)']+)(?:'?\\s*\\))");
+
+        //roleName = {appName}|{role}|{orgName} where default({orgName}) = "*"
+
+        [HttpGet]
+        public async Task<IActionResult> GetAsync([FromQuery] string appName = null, [FromQuery] string orgName = null,
+            [FromQuery] int? pageNumber = 1, [FromQuery] int? pageSize = 100) {
+
+            var skip = (pageNumber ?? 1 - 1) * pageSize ?? 100;
+            var take = pageSize ?? 100;
+
+            if (appName == null && orgName == null) {
+                var users = _dbContext.Users.Skip(skip).Take(take)
+                    .Include(u=>u.;
+            }
+
+            var x = from u in _dbContext.Users 
+                    join ur in _dbContext.UserRoles
+                        on u.Id equals ur.UserId
+                    join ur.
+
+            var user = await FindAsync(pathParameter);
+            if (user == null)
+                return NotFound();
+            else {
+                var currentRoles = await _userManager.GetRolesAsync(user);
+                var currentClaims = await _userManager.GetClaimsAsync(user);
+                var userEditModel = new UserEditModel {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    Roles = currentRoles,
+                    Claims = currentClaims
+                };
+
+                return Ok(userEditModel);
+
+            }
+        }
 
 
         [HttpGet("{pathParameter:alpha}")]

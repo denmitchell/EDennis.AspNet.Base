@@ -5,6 +5,14 @@
 		<UserSecretsId>aspnet-EDennis.AspNetIdentityServer-4476C026-5F74-492F-94A9-D787599811B4</UserSecretsId>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <None Remove="Data\temp.sql" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Data\temp.sql" />
+	</ItemGroup>
+
 
 	<ItemGroup>
 		<PackageReference Include="IdentityServer4" Version="4.0.0" />
