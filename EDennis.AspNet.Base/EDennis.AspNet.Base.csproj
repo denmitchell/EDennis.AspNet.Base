@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.35" />
     <PackageReference Include="DevExtreme.AspNet.Data" Version="2.6.1" />
     <PackageReference Include="EDennis.MigrationsExtensions" Version="3.9.0" />
     <PackageReference Include="IdentityServer4" Version="4.0.0" />
