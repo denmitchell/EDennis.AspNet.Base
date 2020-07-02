@@ -23,93 +23,49 @@ namespace EDennis.AspNetIdentityServer {
         public static IEnumerable<ApiResource> Apis =>
             new List<ApiResource>
             {
-                new ApiResource("Api1", "Api1", new List<string>() { "role" })
+                new ApiResource("Hr.PersonApi", "Hr.PersonApi", new List<string>() { "role" })
                 {
                     //ApiSecrets = { new Secret("secret".Sha256()) },
-                    UserClaims = { "Name","Email","role","user_scope" }, 
+                    UserClaims = { "Name", "Email", "role", "user_scope" }, 
                     Scopes = {
-                        "Api1.*.Get*", "Api1.*.Edit*", "Api1.*.Delete*"
-                    }
-                },
-                new ApiResource("Api2", "Api2", new List<string>() { "role" })
-                {
-                    //ApiSecrets = { new Secret("secret".Sha256()) },
-                    UserClaims = { "Name","Email","role","user_scope" },
-                    Scopes = {
-                        "Api2.*.Get*", "Api2.*.Edit*", "Api2.*.Delete*"
+                        "Hr.PersonApi.*"
                     }
                 }
             };
 
+
+
         public static IEnumerable<Client> Clients =>
             new List<Client>
             {
-                // machine to machine client
+                // NOTE: Give client broad permissions to API.
+                //       Ensure that the APIs use Default Policies and user_scope 
+                //         (or other user-based policies) to authorize access to 
+                //         specific controllers/actions
                 new Client
                 {
-                    ClientId = "client",
-                    ClientSecrets = { new Secret("secret".Sha256()) },
-
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    // scopes that client has access to
-                    AllowedScopes = { "Api1" }
-                },
-                // interactive ASP.NET Core MVC client
-                new Client
-                {
-                    ClientId = "MvcApp",
+                    ClientId = "Hr.PersonApi1",
                     ClientSecrets = { new Secret("secret".Sha256()) },
 
                     AllowedGrantTypes = GrantTypes.Code,
                     RequireConsent = false,
                     RequirePkce = true,
 
-                    AccessTokenType = AccessTokenType.Reference,
+                    AllowedCorsOrigins = new string[] {"https://localhost:44338" },
 
                     // where to redirect to after login
-                    RedirectUris = { "https://localhost:5002/signin-oidc" },
+                    RedirectUris = { "https://localhost:44338/authentication/login-callback" },
 
                     // where to redirect to after logout
-                    PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
+                    PostLogoutRedirectUris = { "https://localhost:44338/authentication/logout-callback" },
+
 
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "Api1", "Api1.*.Get*", "Api1.*.Edit*", "Api1.*.Delete*",
-                        "roles"
-                    },
-
-                    AllowOfflineAccess = true,
-                    ClientClaimsPrefix = ""
-                },
-                new Client
-                {
-                    ClientId = "BlazorApp3",
-                    RequireClientSecret = false,
-                    //ClientSecrets = { new Secret("secret".Sha256()) },
-
-                    AllowedGrantTypes = GrantTypes.Code,
-                    RequireConsent = false,
-                    RequirePkce = true,
-
-                    //AccessTokenType = AccessTokenType.Reference,
-
-                    AllowedCorsOrigins = new string[] {"https://localhost:44390" },
-
-                    // where to redirect to after login
-                    RedirectUris = { "https://localhost:44390/authentication/login-callback" },
-
-                    // where to redirect to after logout
-                    PostLogoutRedirectUris = { "https://localhost:44390/authentication/logout-callback" },
-
-                    AllowedScopes = new List<string>
-                    {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        "Api1", "Api1.*.Get*", "Api1.*.Edit*", "Api1.*.Delete*",
-                        "Api2", "Api2.*.Get*", "Api2.*.Edit*", "Api2.*.Delete*",
-                        "roles"
+                        "roles",
+                        "Hr.PersonApi1.*"
                     },
 
                     AllowOfflineAccess = true,

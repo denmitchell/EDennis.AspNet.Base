@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Reflection;
 
 namespace EDennis.AspNetIdentityServer {
@@ -57,6 +58,7 @@ namespace EDennis.AspNetIdentityServer {
                 .AddDeveloperSigningCredential()
                 .AddAspNetIdentity<AspNetIdentityUser>()
                 .AddProfileService<UserClientClaimsProfileService<AspNetIdentityDbContext, AspNetIdentityUser>>(); ;
+
 
             //replace Identity Server's ProfileService with a profile service that determines
             //which claims to retrieve for a user/client as configured in the database

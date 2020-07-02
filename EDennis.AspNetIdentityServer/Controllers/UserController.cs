@@ -2,16 +2,19 @@
 using EDennis.AspNet.Base.EntityFramework.Entity;
 using EDennis.AspNetIdentityServer.Data;
 using EDennis.AspNetIdentityServer.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Hr.UserApi.Controllers {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase {
@@ -30,8 +33,15 @@ namespace Hr.UserApi.Controllers {
 
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAsync([FromQuery] string appName = null, [FromQuery] string orgName = null,
             [FromQuery] int? pageNumber = 1, [FromQuery] int? pageSize = 100) {
+
+            //var claims = HttpContext.User.Claims.Select(c => new Claim(c.Type.ToLower(), c.Value.ToLower()));
+
+            //if(claims.Contains(new Claim("role","orgadmin"))
+            //    && claims.Contains(new Claim("organization",orgName.ToLower())))
+
 
             var skip = (pageNumber ?? 1 - 1) * pageSize ?? 100;
             var take = pageSize ?? 100;

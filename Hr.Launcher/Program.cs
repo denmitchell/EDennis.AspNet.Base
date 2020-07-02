@@ -29,8 +29,7 @@ namespace Hr.Launcher {
         public override void Launch(string[] args, bool launchBrowser = false, bool blockWithConsole = false) {
             var launchables = Launch(args, blockWithConsole,
                     IS.Program.Main, 
-                    PApi.Program.Main, 
-                    UApi.Program.Main
+                    PApi.Program.Main 
                 );
 
             if (launchBrowser == true)
