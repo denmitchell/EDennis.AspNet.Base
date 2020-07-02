@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using EDennis.AspNet.Base.EntityFramework.Entity;
 
 namespace Hr.UserApi.Controllers {
     [Route("api/[controller]")]
@@ -29,7 +30,6 @@ namespace Hr.UserApi.Controllers {
         public static Regex idPattern = new Regex("[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}");
         public static Regex lpPattern = new Regex("(?:\\(\\s*loginProvider\\s*=\\s*'?)([^,']+)(?:'?\\s*,\\s*providerKey\\s*=\\s*'?)([^)']+)(?:'?\\s*\\))");
 
-        //roleName = {appName}|{role}|{orgName} where default({orgName}) = "*"
 
         [HttpGet]
         public async Task<IActionResult> GetAsync([FromQuery] string appName = null, [FromQuery] string orgName = null,
@@ -38,33 +38,32 @@ namespace Hr.UserApi.Controllers {
             var skip = (pageNumber ?? 1 - 1) * pageSize ?? 100;
             var take = pageSize ?? 100;
 
+            string sql = "";
+
+            var parameters = new Dictionary<string, object> {
+                {"@skip", skip },
+                {"@take", take }
+            };
+
             if (appName == null && orgName == null) {
-                var users = _dbContext.Users.Skip(skip).Take(take)
-                    .Include(u=>u.;
+                sql = QRY_SQL_USER;
+            } else if (appName != null && orgName != null) {
+                sql = QRY_SQL_USER_ORG_APP;
+                parameters.Add("@appName", appName);
+                parameters.Add("@orgName", orgName);
+            } else if (orgName != null) {
+                sql = QRY_SQL_USER_ORG;
+                parameters.Add("@orgName", orgName);
+            } else if (appName != null) {
+                sql = QRY_SQL_USER_APP;
+                parameters.Add("@appName", appName);
             }
 
-            var x = from u in _dbContext.Users 
-                    join ur in _dbContext.UserRoles
-                        on u.Id equals ur.UserId
-                    join ur.
+            var json = await _dbContext.GetFromJsonSqlAsync(sql, parameters);
+            var users = JsonSerializer.Deserialize<List<UserEditModel>>(json);
 
-            var user = await FindAsync(pathParameter);
-            if (user == null)
-                return NotFound();
-            else {
-                var currentRoles = await _userManager.GetRolesAsync(user);
-                var currentClaims = await _userManager.GetClaimsAsync(user);
-                var userEditModel = new UserEditModel {
-                    Id = user.Id,
-                    UserName = user.UserName,
-                    Email = user.Email,
-                    Roles = currentRoles,
-                    Claims = currentClaims
-                };
+            return Ok(users);
 
-                return Ok(userEditModel);
-
-            }
         }
 
 
@@ -243,117 +242,144 @@ namespace Hr.UserApi.Controllers {
         }
 
 
+        private const string QRY_SQL_USER = @"
+WITH u as (
+  SELECT * 
+    FROM AspNetUsers u 
+    ORDER BY UserName 
+    OFFSET @skip ROWS 
+    FETCH NEXT @take ROWS ONLY
+)
+SELECT Users.Id, Users.UserName, Users.Email,
+	JSON_QUERY('[' 
+		+ STUFF((SELECT ',' + char(34) + r.Name + char(34)
+		FROM AspNetRoles r
+		INNER JOIN AspNetUserRoles ur
+			ON ur.RoleId = r.Id
+		WHERE Users.Id = ur.UserId
+		FOR XML PATH('')),1,1,'') + ']' ) as Roles,
+	(
+		SELECT uc.ClaimType, uc.ClaimValue
+		FROM AspNetUserClaims uc
+		WHERE Users.Id = uc.UserId
+		FOR JSON PATH
+	) as Claims
+	FROM u Users 
+	FOR JSON PATH
+";
+
         private const string QRY_SQL_USER_ORG = @"
 WITH u as (
   SELECT * 
-    FROM AspNetUser u 
+    FROM AspNetUsers u 
     WHERE 
       EXISTS (
         SELECT 0 
           FROM AspNetUserClaims uc
-          WHERE uc.ClaimValue = '{org}'
+          WHERE uc.ClaimValue = @orgName
             AND uc.ClaimType = 'Organization'
-            AND u.Id = ur.UserId
+            AND u.Id = uc.UserId
       )
     ORDER BY UserName 
-    OFFSET {skip} ROWS 
-    FETCH NEXT {take} ROWS ONLY
+    OFFSET @skip ROWS 
+    FETCH NEXT @take ROWS ONLY
 )
-  SELECT User.Id, User.UserName, User.Email,
-    (
-      SELECT r.Name
-        FROM AspNetRoles r
-        INNER JOIN AspNetUserRoles ur
-          ON ur.RoleId = r.Id
-        WHERE Users.Id = ur.UserId
-        FOR JSON PATH
-    ) as Roles,
-    (
-      SELECT uc.ClaimType, uc.ClaimName
-        FROM AspNetUserClaims uc
-        WHERE Users.Id = uc.UserId
-        FOR JSON PATH
-    ) as Claims
-    FROM u Users 
-    FOR JSON PATH
+SELECT Users.Id, Users.UserName, Users.Email,
+	JSON_QUERY('[' 
+		+ STUFF((SELECT ',' + char(34) + r.Name + char(34)
+		FROM AspNetRoles r
+		INNER JOIN AspNetUserRoles ur
+			ON ur.RoleId = r.Id
+		WHERE Users.Id = ur.UserId
+		FOR XML PATH('')),1,1,'') + ']' ) as Roles,
+	(
+		SELECT uc.ClaimType, uc.ClaimValue
+		FROM AspNetUserClaims uc
+		WHERE Users.Id = uc.UserId
+		FOR JSON PATH
+	) as Claims
+	FROM u Users 
+	FOR JSON PATH
 ";
 
         private const string QRY_SQL_USER_APP = @"
 WITH u as (
   SELECT * 
-    FROM AspNetUser u
+    FROM AspNetUsers u 
     WHERE 
       EXISTS (
         SELECT 0 
           FROM AspNetRoles r
           INNER JOIN AspNetUserRoles ur
             ON r.Id = ur.RoleId
-          WHERE r.Name Like '{app}%'
+          WHERE r.Name Like @appName + '%'
             AND u.Id = ur.UserId
       )
     ORDER BY UserName 
-    OFFSET {skip} ROWS 
-    FETCH NEXT {take} ROWS ONLY
+    OFFSET @skip ROWS 
+    FETCH NEXT @take ROWS ONLY
 )
-  SELECT User.Id, User.UserName, User.Email,
-    (
-      SELECT r.Name
-        FROM AspNetRoles r
-        INNER JOIN AspNetUserRoles ur
-          ON ur.RoleId = r.Id
-        WHERE Users.Id = ur.UserId
-          AND r.Name Like '{app}%'
-        FOR JSON PATH
-    ) as Roles,
-    (
-      SELECT uc.ClaimType, uc.ClaimName
-        FROM AspNetUserClaims uc
-        WHERE Users.Id = uc.UserId
-        FOR JSON PATH
-    ) as Claims
-    FROM u Users 
-    FOR JSON PATH
+SELECT Users.Id, Users.UserName, Users.Email,
+	JSON_QUERY('[' 
+		+ STUFF((SELECT ',' + char(34) + r.Name + char(34)
+		FROM AspNetRoles r
+		INNER JOIN AspNetUserRoles ur
+			ON ur.RoleId = r.Id
+		WHERE Users.Id = ur.UserId
+			and r.Name Like @appName + '%'
+		FOR XML PATH('')),1,1,'') + ']' ) as Roles,
+	(
+		SELECT uc.ClaimType, uc.ClaimValue
+		FROM AspNetUserClaims uc
+		WHERE Users.Id = uc.UserId
+		FOR JSON PATH
+	) as Claims
+	FROM u Users 
+	FOR JSON PATH
 ";
 
-        private const string QRY_SQL_USER_ORG = @"
-SELECT * 
-  FROM AspNetUser u
-  WHERE 
-    EXISTS (
-      SELECT 0 
-        FROM AspNetUserClaims uc
-        WHERE uc.ClaimValue = '{org}'
-          AND uc.ClaimType = 'Organization'
-          AND u.Id = ur.UserId
-    )
-  ORDER BY UserName 
-  OFFSET {skip} ROWS 
-  FETCH NEXT {take} ROWS ONLY
-";
-
-        private const string QRY_SQL_USER_APP_ORG = @"
-SELECT * 
-  FROM AspNetUser u
-  WHERE 
-    EXISTS (
-      SELECT 0 
-        FROM AspNetRoles r
-        INNER JOIN AspNetUserRoles ur
-          ON r.Id = ur.RoleId
-        WHERE r.Name Like '{app}%'
-          AND u.Id = ur.UserId
-    )
-    AND
-    EXISTS (
-      SELECT 0 
-        FROM AspNetUserClaims uc
-        WHERE uc.ClaimValue = '{org}'
-          AND uc.ClaimType = 'Organization'
-          AND u.Id = ur.UserId
-    )
-  ORDER BY UserName 
-  OFFSET {skip} ROWS 
-  FETCH NEXT {take} ROWS ONLY
+        private const string QRY_SQL_USER_ORG_APP = @"
+WITH u as (
+  SELECT * 
+    FROM AspNetUsers u 
+    WHERE 
+      EXISTS (
+        SELECT 0 
+          FROM AspNetUserClaims uc
+          WHERE uc.ClaimValue = @orgName
+            AND uc.ClaimType = 'Organization'
+            AND u.Id = uc.UserId
+      )
+      AND
+      EXISTS (
+        SELECT 0 
+          FROM AspNetRoles r
+          INNER JOIN AspNetUserRoles ur
+            ON r.Id = ur.RoleId
+          WHERE r.Name Like @appName + '%'
+            AND u.Id = ur.UserId
+      )
+    ORDER BY UserName 
+    OFFSET @skip ROWS 
+    FETCH NEXT @take ROWS ONLY
+)
+SELECT Users.Id, Users.UserName, Users.Email,
+	JSON_QUERY('[' 
+		+ STUFF((SELECT ',' + char(34) + r.Name + char(34)
+		FROM AspNetRoles r
+		INNER JOIN AspNetUserRoles ur
+			ON ur.RoleId = r.Id
+		WHERE Users.Id = ur.UserId
+            AND r.Name Like @appName + '%'
+		FOR XML PATH('')),1,1,'') + ']' ) as Roles,
+	(
+		SELECT uc.ClaimType, uc.ClaimValue
+		FROM AspNetUserClaims uc
+		WHERE Users.Id = uc.UserId
+		FOR JSON PATH
+	) as Claims
+	FROM u Users 
+	FOR JSON PATH
 ";
 
     }
