@@ -1,7 +1,9 @@
 ﻿using EDennis.AspNet.Base;
+using EDennis.AspNetIdentityServer.Data;
 using EDennis.AspNetIdentityServer.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,14 +14,38 @@ using System.Threading.Tasks;
 namespace EDennis.AspNetIdentityServer.Controllers {
     public class RoleController : ControllerBase {
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly AspNetIdentityDbContext _dbContext;
 
-        public RoleController(RoleManager<IdentityRole> roleManager) {
+        public RoleController(RoleManager<IdentityRole> roleManager,
+            AspNetIdentityDbContext dbContext) {
             _roleManager = roleManager;
-
+            _dbContext = dbContext;
         }
 
         public static Regex idPattern = new Regex("[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}");
 
+
+        public async Task<ActionResult> GetAsync([FromQuery] string appName = null,
+            [FromQuery] int? pageNumber = 1, [FromQuery] int? pageSize = 100
+            ) {
+
+            var skip = (pageNumber ?? 1 - 1) * pageSize ?? 100;
+            var take = pageSize ?? 100;
+
+            if(appName == null) {
+                ModelState.AddModelError("", "The required query parameter appName was missing.");
+                return BadRequest(ModelState);
+            }
+
+            var qry = _dbContext.Set<IdentityRole>()
+                .Where(r => r.Name.StartsWith(appName))
+                .Skip(skip)
+                .Take(take);
+
+            var result = await qry.ToListAsync();
+
+            return Ok(result);
+        }
 
 
 

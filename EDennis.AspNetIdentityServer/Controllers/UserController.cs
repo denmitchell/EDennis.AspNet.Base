@@ -1,17 +1,15 @@
 ﻿using EDennis.AspNet.Base;
+using EDennis.AspNet.Base.EntityFramework.Entity;
 using EDennis.AspNetIdentityServer.Data;
 using EDennis.AspNetIdentityServer.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Linq;
 using Microsoft.AspNetCore.Identity;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
-using Microsoft.EntityFrameworkCore;
-using EDennis.AspNet.Base.EntityFramework.Entity;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Hr.UserApi.Controllers {
     [Route("api/[controller]")]
