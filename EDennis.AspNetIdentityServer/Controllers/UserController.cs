@@ -242,5 +242,119 @@ namespace Hr.UserApi.Controllers {
                 return await _userManager.FindByNameAsync(pathParameter);
         }
 
+
+        private const string QRY_SQL_USER_ORG = @"
+WITH u as (
+  SELECT * 
+    FROM AspNetUser u 
+    WHERE 
+      EXISTS (
+        SELECT 0 
+          FROM AspNetUserClaims uc
+          WHERE uc.ClaimValue = '{org}'
+            AND uc.ClaimType = 'Organization'
+            AND u.Id = ur.UserId
+      )
+    ORDER BY UserName 
+    OFFSET {skip} ROWS 
+    FETCH NEXT {take} ROWS ONLY
+)
+  SELECT User.Id, User.UserName, User.Email,
+    (
+      SELECT r.Name
+        FROM AspNetRoles r
+        INNER JOIN AspNetUserRoles ur
+          ON ur.RoleId = r.Id
+        WHERE Users.Id = ur.UserId
+        FOR JSON PATH
+    ) as Roles,
+    (
+      SELECT uc.ClaimType, uc.ClaimName
+        FROM AspNetUserClaims uc
+        WHERE Users.Id = uc.UserId
+        FOR JSON PATH
+    ) as Claims
+    FROM u Users 
+    FOR JSON PATH
+";
+
+        private const string QRY_SQL_USER_APP = @"
+WITH u as (
+  SELECT * 
+    FROM AspNetUser u
+    WHERE 
+      EXISTS (
+        SELECT 0 
+          FROM AspNetRoles r
+          INNER JOIN AspNetUserRoles ur
+            ON r.Id = ur.RoleId
+          WHERE r.Name Like '{app}%'
+            AND u.Id = ur.UserId
+      )
+    ORDER BY UserName 
+    OFFSET {skip} ROWS 
+    FETCH NEXT {take} ROWS ONLY
+)
+  SELECT User.Id, User.UserName, User.Email,
+    (
+      SELECT r.Name
+        FROM AspNetRoles r
+        INNER JOIN AspNetUserRoles ur
+          ON ur.RoleId = r.Id
+        WHERE Users.Id = ur.UserId
+          AND r.Name Like '{app}%'
+        FOR JSON PATH
+    ) as Roles,
+    (
+      SELECT uc.ClaimType, uc.ClaimName
+        FROM AspNetUserClaims uc
+        WHERE Users.Id = uc.UserId
+        FOR JSON PATH
+    ) as Claims
+    FROM u Users 
+    FOR JSON PATH
+";
+
+        private const string QRY_SQL_USER_ORG = @"
+SELECT * 
+  FROM AspNetUser u
+  WHERE 
+    EXISTS (
+      SELECT 0 
+        FROM AspNetUserClaims uc
+        WHERE uc.ClaimValue = '{org}'
+          AND uc.ClaimType = 'Organization'
+          AND u.Id = ur.UserId
+    )
+  ORDER BY UserName 
+  OFFSET {skip} ROWS 
+  FETCH NEXT {take} ROWS ONLY
+";
+
+        private const string QRY_SQL_USER_APP_ORG = @"
+SELECT * 
+  FROM AspNetUser u
+  WHERE 
+    EXISTS (
+      SELECT 0 
+        FROM AspNetRoles r
+        INNER JOIN AspNetUserRoles ur
+          ON r.Id = ur.RoleId
+        WHERE r.Name Like '{app}%'
+          AND u.Id = ur.UserId
+    )
+    AND
+    EXISTS (
+      SELECT 0 
+        FROM AspNetUserClaims uc
+        WHERE uc.ClaimValue = '{org}'
+          AND uc.ClaimType = 'Organization'
+          AND u.Id = ur.UserId
+    )
+  ORDER BY UserName 
+  OFFSET {skip} ROWS 
+  FETCH NEXT {take} ROWS ONLY
+";
+
     }
 }
