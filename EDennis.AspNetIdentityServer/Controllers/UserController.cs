@@ -19,10 +19,10 @@ namespace Hr.UserApi.Controllers {
     [ApiController]
     public class UserController : ControllerBase {
 
-        private readonly UserManager<AspNetIdentityUser> _userManager;
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly AspNetIdentityDbContext _dbContext;
 
-        public UserController(UserManager<AspNetIdentityUser> userManager,
+        public UserController(UserManager<IdentityUser> userManager,
             AspNetIdentityDbContext dbContext) {
             _userManager = userManager;
             _dbContext = dbContext;
@@ -103,7 +103,7 @@ namespace Hr.UserApi.Controllers {
             userEditModel.Id ??= Guid.NewGuid().ToString();
             userEditModel.UserName ??= userEditModel.Email;
 
-            var user = new AspNetIdentityUser {
+            var user = new IdentityUser {
                 Id = userEditModel.Id,
                 Email = userEditModel.Email,
                 NormalizedEmail = userEditModel.Email.ToUpper(),
@@ -217,7 +217,7 @@ namespace Hr.UserApi.Controllers {
         }
 
 
-        private async Task<IEnumerable<IdentityResult>> UpdateRolesAndClaimsAsync(AspNetIdentityUser user,
+        private async Task<IEnumerable<IdentityResult>> UpdateRolesAndClaimsAsync(IdentityUser user,
             UserEditModel userEditModel, bool hasRoles, bool hasClaims) {
 
             List<IdentityResult> results = new List<IdentityResult>();
@@ -240,7 +240,7 @@ namespace Hr.UserApi.Controllers {
         }
 
 
-        private async Task<AspNetIdentityUser> FindAsync(string pathParameter) {
+        private async Task<IdentityUser> FindAsync(string pathParameter) {
             if (pathParameter.Contains("@"))
                 return await _userManager.FindByEmailAsync(pathParameter);
             else if (idPattern.IsMatch(pathParameter))

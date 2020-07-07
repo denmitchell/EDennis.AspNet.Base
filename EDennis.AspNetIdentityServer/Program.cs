@@ -162,11 +162,11 @@ namespace EDennis.AspNetIdentityServer {
 
 
                 //use the user manager to create test users
-                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AspNetIdentityUser>>();
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-                var moe = new AspNetIdentityUser { UserName = "Moe@stooges.org", Email="moe@stooges.org", EmailConfirmed = true};
-                var larry = new AspNetIdentityUser { UserName = "Larry@stooges.org", Email = "larry@stooges.org", EmailConfirmed = true };
-                var curly = new AspNetIdentityUser { UserName = "Curly@stooges.org", Email = "curly@stooges.org", EmailConfirmed = true };
+                var moe = new IdentityUser { UserName = "Moe@stooges.org", Email="moe@stooges.org", EmailConfirmed = true};
+                var larry = new IdentityUser { UserName = "Larry@stooges.org", Email = "larry@stooges.org", EmailConfirmed = true };
+                var curly = new IdentityUser { UserName = "Curly@stooges.org", Email = "curly@stooges.org", EmailConfirmed = true };
 
                 userManager.CreateAsync(moe, "P@ssword1").Wait();
                 userManager.CreateAsync(larry, "P@ssword1").Wait();

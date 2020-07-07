@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace EDennis.AspNetIdentityServer.Data {
-    public class AspNetIdentityDbContext : IdentityDbContext<AspNetIdentityUser> {
-        public DbSet<AspNetOrg> Orgs { get; set; }
+    public class AspNetIdentityDbContext : IdentityDbContext<IdentityUser> {
+        public DbSet<IdentityDomain> Domains { get; set; }
         public AspNetIdentityDbContext(DbContextOptions<AspNetIdentityDbContext> options)
             : base(options) {         
         }
@@ -13,8 +13,8 @@ namespace EDennis.AspNetIdentityServer.Data {
         protected override void OnModelCreating(ModelBuilder builder) {
             base.OnModelCreating(builder);
 
-            builder.Entity<AspNetOrg>(e => {
-                e.ToTable("AspNetOrg")
+            builder.Entity<IdentityDomain>(e => {
+                e.ToTable("AspNetDomains")
                 .HasKey(e => e.Id);
             });
 

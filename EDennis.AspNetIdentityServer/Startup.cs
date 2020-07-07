@@ -33,7 +33,7 @@ namespace EDennis.AspNetIdentityServer {
                 options.UseSqlServer(cxnAspNetIdentity));
 
 
-            services.AddIdentity<AspNetIdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                            .AddEntityFrameworkStores<AspNetIdentityDbContext>()
                            .AddDefaultTokenProviders();
 
@@ -56,13 +56,13 @@ namespace EDennis.AspNetIdentityServer {
                         sql => sql.MigrationsAssembly(migrationsAssembly));
                 })
                 .AddDeveloperSigningCredential()
-                .AddAspNetIdentity<AspNetIdentityUser>()
-                .AddProfileService<UserClientClaimsProfileService<AspNetIdentityDbContext, AspNetIdentityUser>>(); ;
+                .AddAspNetIdentity<IdentityUser>()
+                .AddProfileService<UserClientClaimsProfileService<AspNetIdentityDbContext, IdentityUser>>(); ;
 
 
             //replace Identity Server's ProfileService with a profile service that determines
             //which claims to retrieve for a user/client as configured in the database
-            services.Replace(ServiceDescriptor.Transient<IProfileService, UserClientClaimsProfileService<AspNetIdentityDbContext, AspNetIdentityUser>> ());
+            services.Replace(ServiceDescriptor.Transient<IProfileService, UserClientClaimsProfileService<AspNetIdentityDbContext, IdentityUser>> ());
 
             services.AddOidcLogging(Configuration);
 
