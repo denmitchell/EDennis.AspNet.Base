@@ -29,6 +29,9 @@ namespace EDennis.AspNetIdentityServer {
                     UserClaims = { "Name", "Email", "role", "user_scope" }, 
                     Scopes = {
                         "Hr.PersonApi.*"
+                    },
+                    Properties = {
+                        { "ApplicationName", "Hr.PersonApi" }
                     }
                 }
             };

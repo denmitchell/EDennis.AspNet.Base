@@ -8,8 +8,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EDennis.AspNet.Base.Security.AspNetIdentity {
-    public class DomainUserManager<TUser> : UserManager<TUser> 
+namespace EDennis.AspNet.Base.Security {
+
+    /// <summary>
+    /// A repository class for maintaining instances of DomainUser (which inherits from IdentityUser).
+    /// NOTE: This class is one of the "Domain Identity" classes (DomainUserManager, 
+    /// DomainRoleManager, DomainUser, DomainRole, IdentityApplication, and IdentityOrganization),
+    /// which supports centralized management of user security across different applications and
+    /// organizations. This is not a multi-tenant architecture, but an architecture that allows
+    /// user management across applications and allows user management to be delegated 
+    /// to organization admins.
+    /// </summary>
+    /// <typeparam name="TUser">DomainUser or subclass</typeparam>
+    public class DomainUserManager<TUser> : AspNetUserManager<TUser> 
         where TUser: DomainUser, new() {
         public DomainUserManager(IUserStore<TUser> store, IOptions<IdentityOptions> optionsAccessor, 
             IPasswordHasher<TUser> passwordHasher, IEnumerable<IUserValidator<TUser>> userValidators, 
@@ -18,6 +29,54 @@ namespace EDennis.AspNet.Base.Security.AspNetIdentity {
             IServiceProvider services, ILogger<UserManager<TUser>> logger) 
             : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger) {
         }
+
+        public virtual async Task<IEnumerable<TRole>> GetRolesAsync<TRole>(TUser user, string applicationName)
+            where TRole : DomainRole {
+
+            if (!(Store is UserStore<TUser> store))
+                throw new Exception("Cannot use DomainUserManager.GetRolesAsync(TUser user, string applicationName) without Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore<TUser> where TUser : DomainUser.");
+
+            var qry = store.Context.Set<TRole>()
+                .FromSqlInterpolated($@"
+select r.* 
+  from AspNetRoles r
+  inner join AspNetUserRoles ur
+    on r.Id = ur.RoleId
+  inner join AspNetUsers u
+    on u.Id = ur.UserId
+  inner join AspNetApplications a
+    on a.Id = r.ApplicationId
+  where a.Name = {applicationName}
+    and a.Id = {user.Id}
+            ").AsNoTracking();
+
+            return await qry.ToListAsync();
+        }
+
+
+        public virtual async Task<IEnumerable<TRole>> GetRolesAsync<TRole>(TUser user, string[] applicationNames)
+            where TRole : DomainRole {
+
+            if (!(Store is UserStore<TUser> store))
+                throw new Exception("Cannot use DomainUserManager.GetRolesAsync(TUser user, string applicationName) without Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore<TUser> where TUser : DomainUser.");
+
+            var qry = store.Context.Set<TRole>()
+                .FromSqlInterpolated($@"
+select r.* 
+  from AspNetRoles r
+  inner join AspNetUserRoles ur
+    on r.Id = ur.RoleId
+  inner join AspNetUsers u
+    on u.Id = ur.UserId
+  inner join AspNetApplications a
+    on a.Id = r.ApplicationId
+  where a.Name In({string.Join(',',applicationNames.Select(a=>$"'{a}'"))})
+    and a.Id = {user.Id}
+            ").AsNoTracking();
+
+            return await qry.ToListAsync();
+        }
+
 
         public virtual async Task<IEnumerable<TUser>> GetUsersForOrganizationAsync(int organizationId, int pageNumber = 1, int pageSize = 100) {
             if(!SupportsQueryableUsers)

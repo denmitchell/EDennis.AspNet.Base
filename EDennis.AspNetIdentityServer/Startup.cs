@@ -57,12 +57,12 @@ namespace EDennis.AspNetIdentityServer {
                 })
                 .AddDeveloperSigningCredential()
                 .AddAspNetIdentity<IdentityUser>()
-                .AddProfileService<UserClientClaimsProfileService<AspNetIdentityDbContext, IdentityUser>>(); ;
+                .AddProfileService<DomainIdentityProfileService<AspNetIdentityDbContext, IdentityUser>>(); ;
 
 
             //replace Identity Server's ProfileService with a profile service that determines
             //which claims to retrieve for a user/client as configured in the database
-            services.Replace(ServiceDescriptor.Transient<IProfileService, UserClientClaimsProfileService<AspNetIdentityDbContext, IdentityUser>> ());
+            services.Replace(ServiceDescriptor.Transient<IProfileService, DomainIdentityProfileService<AspNetIdentityDbContext, IdentityUser>> ());
 
             services.AddOidcLogging(Configuration);
 

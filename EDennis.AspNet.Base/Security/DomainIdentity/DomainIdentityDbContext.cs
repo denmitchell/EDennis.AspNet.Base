@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace EDennis.AspNet.Base.Security.AspNetIdentity {
+namespace EDennis.AspNet.Base.Security {
     public class DomainIdentityDbContext<TUser,TRole> : IdentityDbContext<TUser,TRole,string> 
         where TUser : DomainUser
         where TRole : DomainRole {
