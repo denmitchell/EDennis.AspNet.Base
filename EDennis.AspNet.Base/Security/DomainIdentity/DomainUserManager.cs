@@ -20,8 +20,10 @@ namespace EDennis.AspNet.Base.Security {
     /// to organization admins.
     /// </summary>
     /// <typeparam name="TUser">DomainUser or subclass</typeparam>
-    public class DomainUserManager<TUser> : AspNetUserManager<TUser> 
-        where TUser: DomainUser, new() {
+    public class DomainUserManager<TUser,TRole,TContext> : UserManager<TUser> 
+        where TUser: DomainUser, new()
+        where TRole: DomainRole
+        where TContext: DomainIdentityDbContext<TUser,TRole> {
         public DomainUserManager(IUserStore<TUser> store, IOptions<IdentityOptions> optionsAccessor, 
             IPasswordHasher<TUser> passwordHasher, IEnumerable<IUserValidator<TUser>> userValidators, 
             IEnumerable<IPasswordValidator<TUser>> passwordValidators, 
@@ -30,10 +32,8 @@ namespace EDennis.AspNet.Base.Security {
             : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger) {
         }
 
-        public virtual async Task<IEnumerable<TRole>> GetRolesAsync<TRole>(TUser user, string applicationName)
-            where TRole : DomainRole {
-
-            if (!(Store is UserStore<TUser> store))
+        public virtual async Task<IEnumerable<TRole>> GetRolesAsync(TUser user, string applicationName) {
+            if (!(Store is UserStore<TUser,TRole,TContext,Guid> store))
                 throw new Exception("Cannot use DomainUserManager.GetRolesAsync(TUser user, string applicationName) without Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore<TUser> where TUser : DomainUser.");
 
             var qry = store.Context.Set<TRole>()
@@ -46,18 +46,16 @@ select r.*
     on u.Id = ur.UserId
   inner join AspNetApplications a
     on a.Id = r.ApplicationId
-  where a.Name = {applicationName}
-    and a.Id = {user.Id}
+  where u.Id = {user.Id}
+    and a.Name = {applicationName}
             ").AsNoTracking();
 
             return await qry.ToListAsync();
         }
 
 
-        public virtual async Task<IEnumerable<TRole>> GetRolesAsync<TRole>(TUser user, string[] applicationNames)
-            where TRole : DomainRole {
-
-            if (!(Store is UserStore<TUser> store))
+        public virtual async Task<IEnumerable<TRole>> GetRolesAsync(TUser user, Guid applicationId) {
+            if (!(Store is UserStore<TUser, TRole, TContext, Guid> store))
                 throw new Exception("Cannot use DomainUserManager.GetRolesAsync(TUser user, string applicationName) without Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore<TUser> where TUser : DomainUser.");
 
             var qry = store.Context.Set<TRole>()
@@ -66,19 +64,27 @@ select r.*
   from AspNetRoles r
   inner join AspNetUserRoles ur
     on r.Id = ur.RoleId
-  inner join AspNetUsers u
-    on u.Id = ur.UserId
-  inner join AspNetApplications a
-    on a.Id = r.ApplicationId
-  where a.Name In({string.Join(',',applicationNames.Select(a=>$"'{a}'"))})
-    and a.Id = {user.Id}
+  where ur.UserId = {user.Id} 
+    and a.Id = {applicationId}
             ").AsNoTracking();
 
             return await qry.ToListAsync();
         }
 
 
-        public virtual async Task<IEnumerable<TUser>> GetUsersForOrganizationAsync(int organizationId, int pageNumber = 1, int pageSize = 100) {
+        public virtual async Task<IEnumerable<TUser>> GetUsersForOrganizationAsync(Guid organizationId) {
+            if (!SupportsQueryableUsers)
+                throw new Exception("Cannot use DomainUserManager.GetUsersForOrganizationAsync(int organizationId, int pageNumber, int pageSize) without Queryable Users.");
+
+            var qry = Users
+                .AsNoTracking()
+                .Where(u => u.OrganizationId == organizationId);
+
+            return await qry.ToListAsync();
+
+        }
+
+        public virtual async Task<IEnumerable<TUser>> GetUsersForOrganizationAsync(Guid organizationId, int pageNumber = 1, int pageSize = 100) {
             if(!SupportsQueryableUsers)
                 throw new Exception("Cannot use DomainUserManager.GetUsersForOrganizationAsync(int organizationId, int pageNumber, int pageSize) without Queryable Users.");
 
@@ -97,7 +103,7 @@ select r.*
         public virtual async Task<IEnumerable<TUser>> GetUsersForOrganizationAsync(string organizationName) {
 
 
-            if (!(Store is UserStore<TUser> store))
+            if (!(Store is UserStore<TUser, TRole, TContext, Guid> store))
                 throw new Exception("Cannot use DomainUserManager.GetUsersForOrganizationAsync(string organizationName) without Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore<TUser> where TUser : DomainUser.");
 
             var qry = store.Context.Set<TUser>()
@@ -117,7 +123,7 @@ select u.*
 
             var (skip, take) = ((pageNumber - 1) * pageSize, pageSize);
 
-            if (!(Store is UserStore<TUser> store))
+            if (!(Store is UserStore<TUser, TRole, TContext, Guid> store))
                 throw new Exception("Cannot use DomainUserManager.GetUsersForOrganizationAsync(string organizationName, int pageNumber, int pageSize) without Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore<TUser> where TUser : DomainUser.");
 
             if(!store.Context.Database.ProviderName.Contains("SqlServer") && !store.Context.Database.ProviderName.Contains("Oracle"))
@@ -140,7 +146,7 @@ select u.*
 
         public virtual async Task<IEnumerable<TUser>> GetUsersForApplicationAsync(string applicationName) {
 
-            if (!(Store is UserStore<TUser> store))
+            if (!(Store is UserStore<TUser, TRole, TContext, Guid> store))
                 throw new Exception("Cannot use DomainUserManager.GetUsersForApplicationAsync(string applicationName) without Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore<TUser> where TUser : DomainUser.");
 
             var qry = store.Context.Set<TUser>()
@@ -168,7 +174,7 @@ select u.*
 
             var (skip, take) = ((pageNumber - 1) * pageSize, pageSize);
 
-            if (!(Store is UserStore<TUser> store))
+            if (!(Store is UserStore<TUser, TRole, TContext, Guid> store))
                 throw new Exception("Cannot use DomainUserManager.GetUsersForApplicationAsync(string applicationName, int pageNumber, int pageSize) without Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore<TUser> where TUser : DomainUser.");
 
             if (!store.Context.Database.ProviderName.Contains("SqlServer") && !store.Context.Database.ProviderName.Contains("Oracle"))
@@ -196,10 +202,10 @@ select u.*
         }
 
 
-        public virtual async Task<IEnumerable<TUser>> GetUsersForApplicationAsync(int applicationId) {
+        public virtual async Task<IEnumerable<TUser>> GetUsersForApplicationAsync(Guid applicationId) {
 
-            if (!(Store is UserStore<TUser> store))
-                throw new Exception("Cannot use DomainUserManager.GetUsersForApplicationAsync(int applicationId) without Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore<TUser> where TUser : DomainUser.");
+            if (!(Store is UserStore<TUser, TRole, TContext, Guid> store))
+                throw new Exception("Cannot use DomainUserManager.GetUsersForApplicationAsync(Guid applicationId) without Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore<TUser> where TUser : DomainUser.");
 
             var qry = store.Context.Set<TUser>()
                 .FromSqlInterpolated($@"
@@ -220,11 +226,11 @@ select u.*
 
 
 
-        public virtual async Task<IEnumerable<TUser>> GetUsersForApplicationAsync(int applicationId, int pageNumber, int pageSize) {
+        public virtual async Task<IEnumerable<TUser>> GetUsersForApplicationAsync(Guid applicationId, int pageNumber, int pageSize) {
 
             var (skip, take) = ((pageNumber - 1) * pageSize, pageSize);
 
-            if (!(Store is UserStore<TUser> store))
+            if (!(Store is UserStore<TUser, TRole, TContext, Guid> store))
                 throw new Exception("Cannot use DomainUserManager.GetUsersForApplicationAsync(int applicationId, int pageNumber, int pageSize) without Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore<TUser> where TUser : DomainUser.");
 
             if (!store.Context.Database.ProviderName.Contains("SqlServer") && !store.Context.Database.ProviderName.Contains("Oracle"))

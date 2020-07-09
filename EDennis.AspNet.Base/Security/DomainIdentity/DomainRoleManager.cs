@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Dapper;
+using EDennis.AspNet.Base.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -21,122 +24,80 @@ namespace EDennis.AspNet.Base.Security {
     /// to organization admins.
     /// </summary>
     /// <typeparam name="TRole">DomainRole or subclass</typeparam>
-    public class DomainRoleManager<TRole> : AspNetRoleManager<TRole>
-        where TRole : DomainRole {
+    public class DomainRoleManager<TUser,TRole,TContext> : RoleManager<TRole>
+        where TUser : DomainUser, new()
+        where TRole : DomainRole
+        where TContext : DomainIdentityDbContext<TUser, TRole> {
         public DomainRoleManager(IRoleStore<TRole> store, IEnumerable<IRoleValidator<TRole>> roleValidators, 
-            ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors, ILogger<RoleManager<TRole>> logger, 
-            IHttpContextAccessor contextAccessor) 
-            : base(store, roleValidators, keyNormalizer, errors, logger, contextAccessor) {
+            ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors, ILogger<RoleManager<TRole>> logger) 
+            : base(store, roleValidators, keyNormalizer, errors, logger) {
         }
 
         public override async Task<IdentityResult> CreateAsync(TRole role) {
-            await UpdateNameAsync(role);
-            return await base.CreateAsync(role);
-        }
 
-        public override async Task<IdentityResult> UpdateAsync(TRole role) {
-            await UpdateNameAsync(role);
-            return await base.UpdateAsync(role);
-        }
+            if (!(Store is RoleStore<TRole, TContext, Guid> store))
+                throw new Exception("Cannot use DomainRoleManager.CreateAsync without Microsoft.AspNetCore.Identity.EntityFrameworkCore.RoleStore<TRole> where TRole : DomainRole.");
 
+            var db = store.Context.Database;
+            var cxn = db.GetDbConnection();
+            var cmd = cxn.CreateCommand();
+            cmd.CommandText = "di.DomainRoleManager.Create";
+            cmd.CommandType = CommandType.StoredProcedure;
 
-        public override async Task<IdentityResult> SetRoleNameAsync(TRole role, string name) {
-            var components = name.Split('@');
-            if (components.Length == 1) {
-                role.ApplicationId = default;
-                role.OrganizationId = default;
-                role.RoleName = role.Name;
-                return await base.SetRoleNameAsync(role, name);
-            } else {
-                var result = await base.SetRoleNameAsync(role, name);
+            if (db.CurrentTransaction != null)
+                cmd.Transaction = db.CurrentTransaction.GetDbTransaction();
+            
+            cmd.Parameters.Add(role.Id == default ? CombGuid.Create() : role.Id);
+            cmd.Parameters.Add(role.ApplicationId);
+            cmd.Parameters.Add(role.OrganizationId);
+            cmd.Parameters.Add(role.Title);
 
-                if (!result.Succeeded)
-                    return result;
-
-                if (!(Store is RoleStore<TRole> store))
-                    throw new Exception("Cannot use DomainRoleManager.SetRoleNameAsync without Microsoft.AspNetCore.Identity.EntityFrameworkCore.RoleStore<TRole> where TRole : DomainRole.");
-
-                var db = store.Context.Database;
-
-                if (components.Length == 3)
-                    await db.ExecuteSqlInterpolatedAsync($@"
-update r 
-  set RoleName = {components[0]}, OrganizationId = o.Id, ApplicationId = a.Id
-  from AspNetRoles r
-  inner join AspNetOrganizations o
-    on o.Name = {components[1]}
-  inner join AspNetApplications a
-    on a.Name = {components[2]}
-  where r.Id = {role.Id}");
-
-                if (components.Length == 2)
-                    await db.ExecuteSqlInterpolatedAsync($@"
-update r 
-  set RoleName = {components[0]}, OrganizationId = o.Id, ApplicationId = a.Id
-  from AspNetRoles r
-  left outer join AspNetOrganizations o
-    on o.Name = {components[1]}
-  left outer join AspNetApplications a
-    on a.Name = {components[1]}
-  where r.Id = {role.Id}");
-
-            }
+            await cmd.ExecuteNonQueryAsync();
 
             return IdentityResult.Success;
         }
 
 
-        public virtual async Task UpdateNameAsync(TRole role) {
-            if (role.RoleName == null || (role.OrganizationId == default && role.ApplicationId == default))
-                return;
 
-            if (!(Store is RoleStore<TRole> store))
-                throw new Exception("Cannot use DomainRoleManager.UpdateNameAsync without Microsoft.AspNetCore.Identity.EntityFrameworkCore.RoleStore<TRole> where TRole : DomainRole.");
+        public override async Task<IdentityResult> UpdateAsync(TRole role) {
+            if (!(Store is RoleStore<TRole, TContext, Guid> store))
+                throw new Exception("Cannot use DomainRoleManager.CreateAsync without Microsoft.AspNetCore.Identity.EntityFrameworkCore.RoleStore<TRole> where TRole : DomainRole.");
 
             var db = store.Context.Database;
+            var cxn = db.GetDbConnection();
+            var cmd = cxn.CreateCommand();
+            cmd.CommandText = "di.DomainRoleManager.Update";
+            cmd.CommandType = CommandType.StoredProcedure;
 
-            //use UPDATE SQL to update the Role column from RoleName, OrganizationId, and ApplicationId
-            //this approach is taken because there are no navigation properties in AspNetIdentity due
-            //to the way that the generic classes are composed.
+            if (db.CurrentTransaction != null)
+                cmd.Transaction = db.CurrentTransaction.GetDbTransaction();
 
-            if (role.OrganizationId != default && role.ApplicationId != default)
-                await db.ExecuteSqlInterpolatedAsync( $@"
-update r 
-  set Name = r.RoleName + '@' + o.Name + '@' + a.Name 
-  from AspNetRoles r
-  inner join AspNetApplications a
-    on a.Id = r.ApplicationId
-  inner join AspNetOrganizations o
-    on o.Id = r.OrganizationId
-  where r.Id = {role.Id}");
-            
-            else if (role.OrganizationId != default)
-                await db.ExecuteSqlInterpolatedAsync($@"
-update r 
-  set Name = r.RoleName + '@' + o.Name 
-  from AspNetRoles r
-  inner join AspNetOrganizations o
-    on o.Id = r.OrganizationId
-  where r.Id = {role.Id}");
+            cmd.Parameters.Add(role.Id);
+            cmd.Parameters.Add(role.ApplicationId);
+            cmd.Parameters.Add(role.OrganizationId);
+            cmd.Parameters.Add(role.Title);
 
-            else
-                await db.ExecuteSqlInterpolatedAsync($@"
-update r 
-  set Name = r.RoleName + '@' + a.Name 
-  from AspNetRoles r
-  inner join AspNetApplications a
-    on a.Id = r.ApplicationId
-  where r.Id = {role.Id}");
+            await cmd.ExecuteNonQueryAsync();
 
+            return IdentityResult.Success;
+        }
+
+
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+        public override async Task<IdentityResult> SetRoleNameAsync(TRole role, string name) {
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+            return IdentityResult.Failed(new IdentityError() { 
+                Code =  "SetRoleNameAsync", 
+                Description="Invalid attempt to directly set Role.Name property.  Must instead set Role.RoleName and either Role.ApplicationId or Role.OrganizationId." 
+            });
         }
 
 
 
         public virtual async Task<IEnumerable<TRole>> GetRolesForApplicationAsync(string applicationName) {
 
-            
 
-            if (!(Store is RoleStore<TRole> store))
+            if (!(Store is RoleStore<TRole, TContext, Guid> store))
                 throw new Exception("Cannot use DomainRoleManager.GetRolesForApplicationAsync(string applicationName) without Microsoft.AspNetCore.Identity.EntityFrameworkCore.RoleStore<TRole> where TRole : DomainRole.");
 
 
@@ -153,7 +114,7 @@ select r.*
         }
 
 
-        public virtual async Task<IEnumerable<TRole>> GetRolesForApplicationAsync(int applicationId) {
+        public virtual async Task<IEnumerable<TRole>> GetRolesForApplicationAsync(Guid applicationId) {
 
             if(!SupportsQueryableRoles)
                 throw new Exception("Cannot use DomainRoleManager.GetRolesForApplicationAsync(int applicationId) without Queryable Roles.");
@@ -168,7 +129,7 @@ select r.*
 
         public virtual async Task<IEnumerable<TRole>> GetRolesForOrganizationAsync(string organizationName) {
 
-            if (!(Store is RoleStore<TRole> store))
+            if (!(Store is RoleStore<TRole, TContext, Guid> store))
                 throw new Exception("Cannot use DomainRoleManager.GetRolesForOrganizationAsync(string organizationName) without Microsoft.AspNetCore.Identity.EntityFrameworkCore.RoleStore<TRole> where TRole : DomainRole.");
 
             var qry = store.Context.Set<TRole>()
@@ -184,7 +145,7 @@ select r.*
         }
 
 
-        public virtual async Task<IEnumerable<TRole>> GetRolesForOrganizationAsync(int organizationId) {
+        public virtual async Task<IEnumerable<TRole>> GetRolesForOrganizationAsync(Guid organizationId) {
 
             if (!SupportsQueryableRoles)
                 throw new Exception("Cannot use DomainRoleManager.GetRolesForOrganizationAsync(int organizationId) without Queryable Roles.");
@@ -200,25 +161,25 @@ select r.*
 
         public virtual async Task<IEnumerable<Claim>> GetClaimsAsync(IEnumerable<TRole> roles) {
 
-            //simpler, but less efficient (multiple queries)
-            //var claims = new List<Claim>();
-            //foreach (var role in roles)
-            //    claims.AddRange(await GetClaimsAsync(role));
+            if (!(Store is RoleStore<TRole, TContext, Guid> store))
+                throw new Exception("Cannot use DomainRoleManager.GetClaimsAsync(IEnumerable<TRole> roles) without Microsoft.AspNetCore.Identity.EntityFrameworkCore.RoleStore<TRole> where TRole : DomainRole.");
 
-            if (!(Store is RoleStore<TRole> store))
-                throw new Exception("Cannot use DomainManager.GetClaimsAsync(IEnumerable<TRole> roles) without Microsoft.AspNetCore.Identity.EntityFrameworkCore.RoleStore<TRole> where TRole : DomainRole.");
+            if (!store.Context.Database.ProviderName.Contains("SqlServer"))
+                throw new Exception("Cannot use DomainRoleManager.GetClaimsAsync(IEnumerable<TRole> roles) without SqlServer provider");
 
-            var qry = store.Context.Set<IdentityRoleClaim<string>>()
-                .FromSqlInterpolated($@"
-select r.* 
-  from AspNetRoleClaims rc
-  inner join AspNetRoles r
-     on r.Id = rc.RoleId
-  where r.Name In({string.Join(',', roles.Select(r => $"'{r.Name}'"))})
-            ").AsNoTracking()
-            .Select(rc=>new Claim(rc.ClaimType,rc.ClaimValue));
+            var db = store.Context.Database;
+            var cxn = db.GetDbConnection();
+            var param = roles.Select(r => r.Name).ToStringTableTypeParameter();
 
-            return await qry.ToListAsync();
+
+            var results = await cxn.QueryAsync<ClaimModel>("exec di.DomainRoleManager.GetClaims",
+                param: new {
+                    RoleNames = roles.Select(r => r.Name).ToStringTableTypeParameter()
+                },
+                transaction: db.CurrentTransaction?.GetDbTransaction()
+                );
+
+            return results.Select(c=>new Claim(c.ClaimType,c.ClaimValue));
         }
     }
 

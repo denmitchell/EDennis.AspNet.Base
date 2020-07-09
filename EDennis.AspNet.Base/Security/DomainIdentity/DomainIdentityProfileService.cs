@@ -1,15 +1,15 @@
-﻿using EDennis.AspNet.Base.Security;
+﻿using EDennis.AspNet.Base.Extensions;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Dapper;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace EDennis.AspNet.Base.Security {
 
@@ -17,18 +17,17 @@ namespace EDennis.AspNet.Base.Security {
     /// Gets all roles prefixed by client_id, as well as
     /// all associated role claims and requested user claims.
     /// </summary>
-    public class DomainIdentityProfileService<TUser,TRole> : IProfileService 
+    public class DomainIdentityProfileService<TUser,TRole,TContext> : IProfileService 
         where TUser: DomainUser, new()
-        where TRole: DomainRole{
+        where TRole: DomainRole
+        where TContext: DomainIdentityDbContext<TUser,TRole> {
 
-        private readonly DomainUserManager<TUser> _domainUserManager;
-        private readonly DomainRoleManager<TRole> _domainRoleManager;
-        private readonly ILogger<DomainIdentityProfileService<TUser, TRole>> _logger;
+        private readonly DomainIdentityDbContext<TUser, TRole> _dbContext;
+        private readonly ILogger<DomainIdentityProfileService<TUser, TRole, TContext>> _logger;
 
-        public DomainIdentityProfileService(DomainUserManager<TUser> domainUserManager,
-            DomainRoleManager<TRole> domainRoleManager, ILogger<DomainIdentityProfileService<TUser,TRole>> logger) {
-            _domainUserManager = domainUserManager;
-            _domainRoleManager = domainRoleManager;
+        public DomainIdentityProfileService(DomainIdentityDbContext<TUser,TRole> dbContext,
+            ILogger<DomainIdentityProfileService<TUser,TRole,TContext>> logger) {
+            _dbContext = dbContext;
             _logger = logger;
         }
 
@@ -37,10 +36,12 @@ namespace EDennis.AspNet.Base.Security {
 
             //table-valued parameter @RequestedResourceApiScopes
             var requestedResourceApiScopes =
-                context.RequestedResources.Resources.ApiResources.Select(a => a.Name);
+                context.RequestedResources.Resources.ApiResources.Select(a => a.Name)
+                .ToStringTableTypeParameter();
 
             //table-valued parameter @RequestedUserClaimTypes
-            var requestedUserClaimTypes = context.RequestedClaimTypes;
+            var requestedUserClaimTypes = context.RequestedClaimTypes
+                .ToStringTableTypeParameter();
 
             //scalar-valued parameter @UserId
             var userId = context.Subject.GetSubjectId();
@@ -48,28 +49,24 @@ namespace EDennis.AspNet.Base.Security {
             //scalar-valued parameter @ClientId
             var clientId = context.Client.ClientId;
 
+            var db = _dbContext.Database;
 
+            if (!db.ProviderName.Contains("SqlServer"))
+                throw new Exception("Cannot use DomainIdentityProfileService.GetProfileDataAsync without SqlServer provider");
 
-            var apps =
-                context.RequestedResources.Resources.ApiResources
-                .Where(a => context.Client.AllowedScopes.Any(c => a.Scopes.Contains(c)))
-                .Select(a=>a.Properties.FirstOrDefault(a=>a.Key=="ApplicationName").Value
-                  ?? a.Name)
-                .ToArray();
+            var cxn = db.GetDbConnection();
 
-            var user = await _domainUserManager.GetUserAsync(context.Subject);
-            var userClaims = await _domainUserManager.GetClaimsAsync(user);
-            var roles = await _domainUserManager.GetRolesAsync<TRole>(user, apps);
-            var roleClaims = await _domainRoleManager.GetClaimsAsync(roles);
+            var results = await cxn.QueryAsync<ClaimModel>("exec di.DomainRoleManager.GetClaims",
+                param: new {
+                    UserId = userId,
+                    ClientId = clientId,
+                    RequestedResourceApiScopes = requestedResourceApiScopes,
+                    RequestedUserClaimTypes = requestedUserClaimTypes
+                },
+                transaction: db.CurrentTransaction?.GetDbTransaction()
+                );
 
-            context.IssuedClaims.AddRange(roles.Select(r=>new Claim(ClaimTypes.Role,r.RoleName)));
-            context.IssuedClaims.AddRange(roleClaims);
-
-            var requestedClaims = userClaims.Where(x => context.RequestedClaimTypes.Contains(x.Type,StringComparer.OrdinalIgnoreCase)).ToList();
-                
-            context.IssuedClaims.AddRange(requestedClaims);
-
-            return;
+            context.IssuedClaims.AddRange(results.Select(c => new Claim(c.ClaimType, c.ClaimValue)));
 
         }
 
@@ -85,7 +82,8 @@ namespace EDennis.AspNet.Base.Security {
             var sub = context.Subject?.GetSubjectId();
             if (sub == null) throw new Exception("No subject Id claim present");
 
-            await IsActiveAsync(context, sub);
+            var guid = Guid.Parse(sub);
+            await IsActiveAsync(context, guid);
         }
 
         /// <summary>
@@ -95,8 +93,8 @@ namespace EDennis.AspNet.Base.Security {
         /// <param name="context"></param>
         /// <param name="subjectId"></param>
         /// <returns></returns>
-        protected virtual async Task IsActiveAsync(IsActiveContext context, string subjectId) {
-            var user = await FindUserAsync(subjectId);
+        protected virtual async Task IsActiveAsync(IsActiveContext context, Guid userId) {
+            var user = await FindUserAsync(userId);
             if (user != null) {
                 await IsActiveAsync(context, user);
             } else {
@@ -131,10 +129,10 @@ namespace EDennis.AspNet.Base.Security {
         /// </summary>
         /// <param name="subjectId"></param>
         /// <returns></returns>
-        protected virtual async Task<TUser> FindUserAsync(string subjectId) {
-            var user = await _domainUserManager.FindByIdAsync(subjectId);
+        protected virtual async Task<TUser> FindUserAsync(Guid userId) {
+            var user = await _dbContext.Set<TUser>().FindAsync(userId);
             if (user == null) {
-                _logger?.LogWarning("No user found matching subject Id: {subjectId}", subjectId);
+                _logger?.LogWarning("No user found matching subject Id: {subjectId}", userId);
             }
 
             return user;

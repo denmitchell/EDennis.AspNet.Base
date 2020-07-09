@@ -1,4 +1,5 @@
 using EDennis.AspNet.Base;
+using EDennis.AspNet.Base.Security;
 using EDennis.AspNetIdentityServer.Data;
 using EDennis.AspNetIdentityServer.Models;
 using IdentityServer4.Services;
@@ -29,12 +30,12 @@ namespace EDennis.AspNetIdentityServer {
             //Debugger.Launch();
 
             string cxnAspNetIdentity = Configuration["DbContexts:AspNetIdentityDbContext:ConnectionString"];
-            services.AddDbContext<AspNetIdentityDbContext>(options =>
+            services.AddDbContext<DomainIdentityDbContext<DomainUser, DomainRole>>(options =>
                 options.UseSqlServer(cxnAspNetIdentity));
 
 
-            services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-                           .AddEntityFrameworkStores<AspNetIdentityDbContext>()
+            services.AddIdentity<DomainUser, DomainRole>(options => options.SignIn.RequireConfirmedAccount = true)
+                           .AddEntityFrameworkStores<DomainIdentityDbContext<DomainUser,DomainRole>>()
                            .AddDefaultTokenProviders();
 
             services.AddControllersWithViews();
@@ -56,13 +57,13 @@ namespace EDennis.AspNetIdentityServer {
                         sql => sql.MigrationsAssembly(migrationsAssembly));
                 })
                 .AddDeveloperSigningCredential()
-                .AddAspNetIdentity<IdentityUser>()
-                .AddProfileService<DomainIdentityProfileService<AspNetIdentityDbContext, IdentityUser>>(); ;
+                .AddAspNetIdentity<DomainUser>()
+                .AddProfileService<DomainIdentityProfileService<DomainUser,DomainRole, DomainIdentityDbContext<DomainUser,DomainRole>>>();
 
 
             //replace Identity Server's ProfileService with a profile service that determines
             //which claims to retrieve for a user/client as configured in the database
-            services.Replace(ServiceDescriptor.Transient<IProfileService, DomainIdentityProfileService<AspNetIdentityDbContext, IdentityUser>> ());
+            services.Replace(ServiceDescriptor.Transient<IProfileService, DomainIdentityProfileService<DomainUser, DomainRole, DomainIdentityDbContext<DomainUser, DomainRole>>>());
 
             services.AddOidcLogging(Configuration);
 

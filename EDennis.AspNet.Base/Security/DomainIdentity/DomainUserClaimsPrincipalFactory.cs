@@ -18,15 +18,17 @@ namespace EDennis.AspNet.Base.Security {
     /// </summary>
     /// <typeparam name="TUser">DomainUser or subclass</typeparam>
     /// <typeparam name="TRole">DomainRole or sublcass</typeparam>
-    public class DomainUserClaimsPrincipalFactory<TUser, TRole> : UserClaimsPrincipalFactory<TUser, TRole>
+    public class DomainUserClaimsPrincipalFactory<TUser, TRole, TContext> : UserClaimsPrincipalFactory<TUser, TRole>
         where TUser : DomainUser, new()
-        where TRole : DomainRole {
+        where TRole : DomainRole
+        where TContext : DomainIdentityDbContext<TUser,TRole> {
 
         private readonly string _applicationName;
-        private readonly DomainUserManager<TUser> _domainUserManager;
+        private readonly DomainUserManager<TUser,TRole,TContext> _domainUserManager;
 
-        public DomainUserClaimsPrincipalFactory(DomainUserManager<TUser> userManager, 
-            DomainRoleManager<TRole> roleManager,
+
+        public DomainUserClaimsPrincipalFactory(DomainUserManager<TUser,TRole,TContext> userManager, 
+            DomainRoleManager<TUser,TRole,TContext> roleManager,
             IOptions<IdentityOptions> options, IHostEnvironment env) : base(userManager, roleManager, options) {
             _applicationName = env.ApplicationName;
             _domainUserManager = userManager;
@@ -38,9 +40,9 @@ namespace EDennis.AspNet.Base.Security {
             var identity = await GenerateNonRoleClaimsAsync(user);
 
             //add role claims, but limit to current application
-            foreach (var role in await _domainUserManager.GetRolesAsync<TRole>(user, _applicationName)) {
+            foreach (var role in await _domainUserManager.GetRolesAsync(user, _applicationName)) {
                 //if Name property = Admin@CT.DDS.PRAT, then claim = "role", "Admin"
-                identity.AddClaim(new Claim(Options.ClaimsIdentity.RoleClaimType, role.RoleName));
+                identity.AddClaim(new Claim(Options.ClaimsIdentity.RoleClaimType, role.Title));
                 identity.AddClaims(await RoleManager.GetClaimsAsync(role));
             }
             
