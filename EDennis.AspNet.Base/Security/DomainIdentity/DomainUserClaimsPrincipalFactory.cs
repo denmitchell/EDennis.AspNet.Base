@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using IdentityModel;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using SQLitePCL;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -9,6 +13,7 @@ namespace EDennis.AspNet.Base.Security {
     /// <summary>
     /// A UserClaimsPrincipalFactory that limits role claims to those relevant to the current
     /// application.  
+    /// NOTE: This factory does not work in IdentityServer.  It only works in client applications.
     /// NOTE: This factory is used with the "Domain Identity" classes (DomainUserManager, 
     /// DomainRoleManager, DomainUser, DomainRole, IdentityApplication, and IdentityOrganization),
     /// which supports centralized management of user security across different applications and
@@ -26,18 +31,19 @@ namespace EDennis.AspNet.Base.Security {
         private readonly string _applicationName;
         private readonly DomainUserManager<TUser,TRole,TContext> _domainUserManager;
 
-
         public DomainUserClaimsPrincipalFactory(DomainUserManager<TUser,TRole,TContext> userManager, 
             DomainRoleManager<TUser,TRole,TContext> roleManager,
             IOptions<IdentityOptions> options, IHostEnvironment env) : base(userManager, roleManager, options) {
-            _applicationName = env.ApplicationName;
             _domainUserManager = userManager;
+            _applicationName = env.ApplicationName;
         }
 
         protected override async Task<ClaimsIdentity> GenerateClaimsAsync(TUser user) {
 
             //get new ClaimsIdentity with non-role claims first
             var identity = await GenerateNonRoleClaimsAsync(user);
+
+            var scopes = identity.Claims.Where(c => c.Type == "scope").Select(c => c.Value);
 
             //add role claims, but limit to current application
             foreach (var role in await _domainUserManager.GetRolesAsync(user, _applicationName)) {

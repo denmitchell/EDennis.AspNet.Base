@@ -1,5 +1,5 @@
 ﻿create or alter procedure di.DomainIdentityProfileService_GetProfileData(
-    @UserId varchar(450),
+    @UserId uniqueidentifier,
 	@ClientId int,
 	@RequestedResourceApiScopes StringTableType readonly,
 	@RequestedUserClaimTypes StringTableType readonly
