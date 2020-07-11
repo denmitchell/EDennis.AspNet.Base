@@ -56,7 +56,7 @@ namespace EDennis.AspNet.Base.Security {
 
             var cxn = db.GetDbConnection();
 
-            var results = await cxn.QueryAsync<ClaimModel>("exec di.DomainRoleManager.GetClaims",
+            var results = await cxn.QueryAsync<ClaimModel>("exec di.DomainIdentityProfileService_GetProfileData",
                 param: new {
                     UserId = userId,
                     ClientId = clientId,

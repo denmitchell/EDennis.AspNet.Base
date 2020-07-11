@@ -33,66 +33,6 @@ namespace EDennis.AspNet.Base.Security {
             : base(store, roleValidators, keyNormalizer, errors, logger) {
         }
 
-        public override async Task<IdentityResult> CreateAsync(TRole role) {
-
-            if (!(Store is RoleStore<TRole, TContext, Guid> store))
-                throw new Exception("Cannot use DomainRoleManager.CreateAsync without Microsoft.AspNetCore.Identity.EntityFrameworkCore.RoleStore<TRole> where TRole : DomainRole.");
-
-            var db = store.Context.Database;
-            var cxn = db.GetDbConnection();
-            var cmd = cxn.CreateCommand();
-            cmd.CommandText = "di.DomainRoleManager.Create";
-            cmd.CommandType = CommandType.StoredProcedure;
-
-            if (db.CurrentTransaction != null)
-                cmd.Transaction = db.CurrentTransaction.GetDbTransaction();
-            
-            cmd.Parameters.Add(role.Id == default ? CombGuid.Create() : role.Id);
-            cmd.Parameters.Add(role.ApplicationId);
-            cmd.Parameters.Add(role.OrganizationId);
-            cmd.Parameters.Add(role.Title);
-
-            await cmd.ExecuteNonQueryAsync();
-
-            return IdentityResult.Success;
-        }
-
-
-
-        public override async Task<IdentityResult> UpdateAsync(TRole role) {
-            if (!(Store is RoleStore<TRole, TContext, Guid> store))
-                throw new Exception("Cannot use DomainRoleManager.CreateAsync without Microsoft.AspNetCore.Identity.EntityFrameworkCore.RoleStore<TRole> where TRole : DomainRole.");
-
-            var db = store.Context.Database;
-            var cxn = db.GetDbConnection();
-            var cmd = cxn.CreateCommand();
-            cmd.CommandText = "di.DomainRoleManager.Update";
-            cmd.CommandType = CommandType.StoredProcedure;
-
-            if (db.CurrentTransaction != null)
-                cmd.Transaction = db.CurrentTransaction.GetDbTransaction();
-
-            cmd.Parameters.Add(role.Id);
-            cmd.Parameters.Add(role.ApplicationId);
-            cmd.Parameters.Add(role.OrganizationId);
-            cmd.Parameters.Add(role.Title);
-
-            await cmd.ExecuteNonQueryAsync();
-
-            return IdentityResult.Success;
-        }
-
-
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        public override async Task<IdentityResult> SetRoleNameAsync(TRole role, string name) {
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
-            return IdentityResult.Failed(new IdentityError() { 
-                Code =  "SetRoleNameAsync", 
-                Description="Invalid attempt to directly set Role.Name property.  Must instead set Role.RoleName and either Role.ApplicationId or Role.OrganizationId." 
-            });
-        }
-
-
 
         public virtual async Task<IEnumerable<TRole>> GetRolesForApplicationAsync(string applicationName) {
 
