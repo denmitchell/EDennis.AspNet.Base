@@ -1,21 +1,30 @@
-﻿using EDennis.AspNet.Base.Extensions;
-using IdentityServer4.Extensions;
+﻿using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Dapper;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace EDennis.AspNet.Base.Security {
 
     /// <summary>
     /// Gets all roles prefixed by client_id, as well as
     /// all associated role claims and requested user claims.
+    /// 
+    /// NOTE: this implementation depends upon maintenance of a 
+    /// UserClientClaims table, which associates a User.ID (GUID) and
+    /// ClientId (varchar) with a set of claims (JSON column).
+    /// After updating ApiResources, ApiClaims, ClientScopes,
+    /// AspNetUser, AspNetUserRoles, AspNetUserClaims, or AspNetRoles
+    /// execute stored procedure di.UpdateUserClientClaims
+    /// 
+    /// NOTE: when configuring an ApiResource, add UserClaims -- all
+    /// user claims that should be added to access token
     /// </summary>
     public class DomainIdentityProfileService<TUser,TRole,TContext> : IProfileService 
         where TUser: DomainUser, new()
@@ -31,43 +40,16 @@ namespace EDennis.AspNet.Base.Security {
             _logger = logger;
         }
 
-
+        
         public async Task GetProfileDataAsync(ProfileDataRequestContext context) {
 
-            //table-valued parameter @RequestedResourceApiScopes
-            var requestedResourceApiScopes =
-                context.RequestedResources.Resources.ApiResources.Select(a => a.Name)
-                .ToStringTableTypeParameter();
-
-            //table-valued parameter @RequestedUserClaimTypes
-            var requestedUserClaimTypes = context.RequestedClaimTypes
-                .ToStringTableTypeParameter();
-
-            //scalar-valued parameter @UserId
-            var userId = context.Subject.GetSubjectId();
-
-            //scalar-valued parameter @ClientId
+            var userId = Guid.Parse(context.Subject.GetSubjectId());
             var clientId = context.Client.ClientId;
 
-            var db = _dbContext.Database;
+            var claimsRec = await _dbContext.UserClientClaims.SingleAsync(x => x.UserId == userId && x.ClientId == clientId);
+            var claims = JsonSerializer.Deserialize<List<ClaimModel>>(claimsRec.Claims);
 
-            if (!db.ProviderName.Contains("SqlServer"))
-                throw new Exception("Cannot use DomainIdentityProfileService.GetProfileDataAsync without SqlServer provider");
-
-            var cxn = db.GetDbConnection();
-
-            var results = await cxn.QueryAsync<ClaimModel>("exec di.DomainIdentityProfileService_GetProfileData",
-                param: new {
-                    UserId = userId,
-                    ClientId = clientId,
-                    RequestedResourceApiScopes = requestedResourceApiScopes,
-                    RequestedUserClaimTypes = requestedUserClaimTypes
-                },
-                transaction: db.CurrentTransaction?.GetDbTransaction()
-                );
-
-            context.IssuedClaims.AddRange(results.Select(c => new Claim(c.ClaimType, c.ClaimValue)));
-
+            context.IssuedClaims.AddRange(claims.Select(c => new Claim(c.ClaimType, c.ClaimValue)));
         }
 
 
@@ -85,6 +67,7 @@ namespace EDennis.AspNet.Base.Security {
             var guid = Guid.Parse(sub);
             await IsActiveAsync(context, guid);
         }
+
 
         /// <summary>
         /// Determines if the subject is active.

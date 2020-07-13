@@ -37,11 +37,6 @@ namespace Hr.UserApi.Controllers {
         public async Task<IActionResult> GetAsync([FromQuery] string appName = null, [FromQuery] string orgName = null,
             [FromQuery] int? pageNumber = 1, [FromQuery] int? pageSize = 100) {
 
-            //var claims = HttpContext.User.Claims.Select(c => new Claim(c.Type.ToLower(), c.Value.ToLower()));
-
-            //if(claims.Contains(new Claim("role","orgadmin"))
-            //    && claims.Contains(new Claim("organization",orgName.ToLower())))
-
 
             var skip = (pageNumber ?? 1 - 1) * pageSize ?? 100;
             var take = pageSize ?? 100;

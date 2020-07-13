@@ -9,6 +9,7 @@ namespace EDennis.AspNet.Base.Security {
 
         public DbSet<IdentityApplication> Applications { get; set; }
         public DbSet<IdentityOrganization> Organizations { get; set; }
+        public DbSet<UserClientClaims> UserClientClaims { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder) {
             base.OnModelCreating(builder);
@@ -16,7 +17,7 @@ namespace EDennis.AspNet.Base.Security {
 
             builder.Entity<IdentityApplication>(e => {
                 e.ToTable("AspNetIdentityApplications")
-                .HasKey("Id");
+                .HasKey(p => p.Id);
 
                 e.Property(u => u.Id)
                 .HasDefaultValue(CombGuid.Create());
@@ -24,7 +25,7 @@ namespace EDennis.AspNet.Base.Security {
 
             builder.Entity<IdentityOrganization>(e => {
                 e.ToTable("AspNetIdentityOrganizations")
-                .HasKey("Id");
+                .HasKey(p => p.Id);
 
                 e.Property(u => u.Id)
                 .HasDefaultValue(CombGuid.Create());
@@ -38,6 +39,11 @@ namespace EDennis.AspNet.Base.Security {
             builder.Entity<DomainRole>(b => {
                 b.Property(u => u.Id)
                 .HasDefaultValue(CombGuid.Create());
+            });
+
+            builder.Entity<UserClientClaims>(e => {
+                e.ToTable("UserClientClaims")
+                .HasKey(p => new { p.UserId, p.ClientId });
             });
 
         }
