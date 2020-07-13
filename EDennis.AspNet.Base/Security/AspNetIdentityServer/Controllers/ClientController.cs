@@ -39,9 +39,10 @@ namespace EDennis.AspNet.Base.Security {
 
                     AllowedCorsOrigins = result.AllowedCorsOrigins.Select(o => o.Origin),
                     AllowedGrantTypes = result.AllowedGrantTypes.Select(g => g.GrantType),
-                    ClientSecrets = result.ClientSecrets.ToDictionary(s => s.Value, s => s.Expiration)
-
-                    UserClaimTypes = result.UserClaims.Select(c => c.Type)
+                    ClientSecrets = result.ClientSecrets.ToDictionary(s => s.Value, s => s.Expiration),
+                    RedirectUris = result.RedirectUris.Select(u=>u.RedirectUri),
+                    PostLogoutRedirectUris = result.PostLogoutRedirectUris.Select(u=>u.PostLogoutRedirectUri)
+                    //UserClaimTypes = result.UserClaims.Select(c => c.Type)
                 });
         }
 
