@@ -1,0 +1,81 @@
+﻿FULL OIDC FOR ALL APIS VS. PASS-THROUGH CLAIMS
+
+	FULL OIDC PROS
+		- No workarounds required for user claims (aside from profile service)
+		- Internal APIs aren't necessary (see below)
+		- More aligned with the industry approach
+		
+	PASS-THROUGH CLAIMS PROS
+		- Easier testing -- no user login or mock user login required for APIs
+		- API security is always handled in same way -- user claims are always pass-through claims
+		- API tokens for internal APIs can be much longer lived 
+		    -- no reason to expire them often because they are internal APIs only
+		- Can use other security for user login (not just OIDC).
+			-- For example:
+				--- User can login to a Web app using ASP.NET Identity only
+				--- In turn, the Web app can use client credentials flow to connect to an internal API
+						
+	Pros and Cons of Internal APIs
+		Pros
+			- External APIs don't directly communicate with internal resources
+			- Abstraction layer
+			- This is our existing architecture
+		Cons
+			- More code during development
+				-- Can be mitigated a little with base controllers
+			- More chatiness (network calls) during production
+			
+			
+How would Pass-Through Claims work?
+	In Configuration of host app, each API has
+		"Endpoint" : "https://localhost:12345"
+		"ClientId" : "CT.DDS.IndividualApi"
+		"ClientSecret": "secret"
+		"PassThroughClaims" : ["email","organization","(CT.DDS.IndividualApi)scope"]
+		OR "PassThroughClaims" : ["email","organization","(CT.DDS.IndividualApi)role"]
+			
+			NOTE: could pass role, instead of scope, but then either ...
+				- can't use default policies
+				- must resolve role to default policies pattern
+					in app via IClaimsTransformation (which could be just fine.)
+			
+	In the "host app", the pass-through claims can be qualified to prevent them
+		from being used by host app
+		
+	In SecureApiClients, need to add query parameters:
+		?ptc::email=moe@stooges.org
+		&ptc::organization=Oak Hill
+		&ptc::role=CT.DDS.IndividualApi*.* -- resolved from user role
+		OR
+		&ptc::role=Admin -- resolves to Default Policies via ClaimsTransformation
+
+	what about swagger?
+		would have to add the above query parameters to every endpoint
+			or hack the swagger UI to add the query parameters
+		or https://www.c-sharpcorner.com/article/add-custom-parameters-in-swagger-using-asp-net-core-3-1/
+		
+		
+	In internal APIs, need IClaimsTransformation 
+		to turn ptc:: query parameters into claims, 
+		but only when client has ... 
+			- "scope" claim that equals env.ApplicationName 
+			- "transform-ptc" claim 	
+		
+	Question: why not simply have client have all claims for all child APIs?
+		Because Host app's HttpClients don't have access to user info
+	
+		
+		e.g., ClaimType = (CT.DDS.IndividualApi)scope, email, organization
+
+	Profile service would have to get all of these claims
+		a user role could be resolved to default scopes for each child/internal APIs
+		
+
+Note:
+	There is nothing saying that a PWA can't have a single target API, which functions like a host app	
+		The PWA has OIDC to the host app
+		The host app has Client Credentials OAuth to the child APIs
+		
+	
+	
+	
