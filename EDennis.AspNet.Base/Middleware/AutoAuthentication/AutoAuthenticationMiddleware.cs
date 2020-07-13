@@ -1,5 +1,8 @@
 ﻿using IdentityModel.Client;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -300,4 +303,20 @@ namespace EDennis.AspNet.Base.Middleware {
 
 
     }
+
+    public static class IServiceCollectionExtensions_AutoAuthenticationMiddleware {
+        public static IServiceCollection AddAutoAuthentication(this IServiceCollection services, IConfiguration config) {
+            services.Configure<AutoAuthenticationOptions>(config.GetSection("Security:AutoAuthentication"));
+            return services;
+        }
+    }
+
+    public static class IApplicationBuilderExtensions_AutoAuthenticationMiddleware {
+        public static IApplicationBuilder UseAutoAuthentication(this IApplicationBuilder app) {
+            app.UseMiddleware<AutoAuthenticationMiddleware>();
+            return app;
+        }
+    }
+
+
 }

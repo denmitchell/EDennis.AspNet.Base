@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hr.Launcher", "Hr.Launcher\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hr.App", "Hr.App\Hr.App.csproj", "{2E516686-7EFE-4D0D-95B3-99C471108C41}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDennis.Samples.ColorApi", "EDennis.Samples.ColorApi\EDennis.Samples.ColorApi.csproj", "{8333618D-32B8-4D98-A14F-52B461F9FB29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{2E516686-7EFE-4D0D-95B3-99C471108C41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E516686-7EFE-4D0D-95B3-99C471108C41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E516686-7EFE-4D0D-95B3-99C471108C41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8333618D-32B8-4D98-A14F-52B461F9FB29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8333618D-32B8-4D98-A14F-52B461F9FB29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8333618D-32B8-4D98-A14F-52B461F9FB29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8333618D-32B8-4D98-A14F-52B461F9FB29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

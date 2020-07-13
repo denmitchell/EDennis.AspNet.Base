@@ -65,7 +65,7 @@ namespace EDennis.AspNet.Base {
 
 
 
-        [HttpGet("{key:alpha}")]
+        [HttpGet("{**key}")]
         public virtual IActionResult GetById([FromRoute] string key) {
             var qry = Find(key);
             AdjustQuery(ref qry);
@@ -78,7 +78,7 @@ namespace EDennis.AspNet.Base {
         }
 
 
-        [HttpGet("async/{key:alpha}")]
+        [HttpGet("async/{**key}")]
         public virtual async Task<IActionResult> GetByIdAsync([FromRoute] string key) {
             var qry = Find(key);
             AdjustQuery(ref qry);
@@ -131,7 +131,7 @@ namespace EDennis.AspNet.Base {
         }
 
 
-        [HttpPut("{key:alpha}")]
+        [HttpPut("{**key}")]
         public virtual IActionResult Update([FromRoute] string key, [FromBody] TEntity input) {
 
             //retrieve the existing entity
@@ -162,7 +162,7 @@ namespace EDennis.AspNet.Base {
         }
 
 
-        [HttpPut("async/{key:alpha}")]
+        [HttpPut("async/{**key}")]
         public virtual async Task<IActionResult> UpdateAsync([FromRoute] string key, [FromBody] TEntity input) {
 
             //retrieve the existing entity
@@ -193,7 +193,7 @@ namespace EDennis.AspNet.Base {
         }
 
 
-        [HttpPatch("{key:alpha}")]
+        [HttpPatch("{**key}")]
         public virtual IActionResult Patch([FromRoute] string key, JsonElement input) {
 
             if (input.ValueKind != JsonValueKind.Object)
@@ -227,7 +227,7 @@ namespace EDennis.AspNet.Base {
         }
 
 
-        [HttpPatch("async/{key:alpha}")]
+        [HttpPatch("async/{**key}")]
         public virtual async Task<IActionResult> PatchAsync([FromRoute] string key, JsonElement input) {
 
             if (input.ValueKind != JsonValueKind.Object)
@@ -260,7 +260,7 @@ namespace EDennis.AspNet.Base {
             }
         }
 
-        [HttpDelete("{key:alpha}")]
+        [HttpDelete("{**key}")]
         public virtual IActionResult Delete([FromRoute] string key) {
 
             var existing = Find(key).FirstOrDefault();
@@ -290,7 +290,7 @@ namespace EDennis.AspNet.Base {
         }
 
 
-        [HttpDelete("async/{key:alpha}")]
+        [HttpDelete("async/{**key}")]
         public async virtual Task<IActionResult> DeleteAsync([FromRoute] string key) {
             var existing = await _dbContext.FindAsync<TEntity>(key);
 

@@ -72,7 +72,7 @@ namespace EDennis.AspNetIdentityServer {
                     },
 
                     AllowOfflineAccess = true,
-                    ClientClaimsPrefix = ""
+                    ClientClaimsPrefix = "",
                 }
             };
     }

@@ -1,3 +1,4 @@
+using EDennis.AspNet.Base.Security;
 using EDennis.AspNetIdentityServer.Data;
 using EDennis.AspNetIdentityServer.Models;
 using IdentityModel;
@@ -101,7 +102,7 @@ namespace EDennis.AspNetIdentityServer {
             using var scope = host.Services.CreateScope();
             try {
 
-                var context = scope.ServiceProvider.GetService<AspNetIdentityDbContext>();
+                var context = scope.ServiceProvider.GetService<DomainIdentityDbContext<DomainUser,DomainRole>>();
 
                 //ensure db is migrated before seeding
                 context.Database.Migrate();
@@ -111,16 +112,16 @@ namespace EDennis.AspNetIdentityServer {
                     return;
 
 
-                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<DomainRole>>();
 
-                var admin = new IdentityRole { Name = "MvcApp.Admin" };
-                var user = new IdentityRole { Name = "MvcApp.User" };
-                var readOnly = new IdentityRole { Name = "MvcApp.Readonly" };
+                var admin = new DomainRole { Name = "MvcApp.Admin" };
+                var user = new DomainRole { Name = "MvcApp.User" };
+                var readOnly = new DomainRole { Name = "MvcApp.Readonly" };
 
 
-                var admin2 = new IdentityRole { Name = "BlazorApp3.Admin" };
-                var user2 = new IdentityRole { Name = "BlazorApp3.User" };
-                var readOnly2 = new IdentityRole { Name = "BlazorApp3.Readonly" };
+                var admin2 = new DomainRole { Name = "BlazorApp3.Admin" };
+                var user2 = new DomainRole { Name = "BlazorApp3.User" };
+                var readOnly2 = new DomainRole { Name = "BlazorApp3.Readonly" };
 
 
                 roleManager.CreateAsync(admin).Wait();
@@ -162,11 +163,11 @@ namespace EDennis.AspNetIdentityServer {
 
 
                 //use the user manager to create test users
-                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<DomainUser>>();
 
-                var moe = new IdentityUser { UserName = "Moe@stooges.org", Email="moe@stooges.org", EmailConfirmed = true};
-                var larry = new IdentityUser { UserName = "Larry@stooges.org", Email = "larry@stooges.org", EmailConfirmed = true };
-                var curly = new IdentityUser { UserName = "Curly@stooges.org", Email = "curly@stooges.org", EmailConfirmed = true };
+                var moe = new DomainUser { UserName = "Moe@stooges.org", Email="moe@stooges.org", EmailConfirmed = true};
+                var larry = new DomainUser { UserName = "Larry@stooges.org", Email = "larry@stooges.org", EmailConfirmed = true };
+                var curly = new DomainUser { UserName = "Curly@stooges.org", Email = "curly@stooges.org", EmailConfirmed = true };
 
                 userManager.CreateAsync(moe, "P@ssword1").Wait();
                 userManager.CreateAsync(larry, "P@ssword1").Wait();

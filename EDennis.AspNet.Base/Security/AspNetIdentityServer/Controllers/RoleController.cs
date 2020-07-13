@@ -1,6 +1,4 @@
-﻿using EDennis.AspNet.Base;
-using EDennis.AspNetIdentityServer.Data;
-using EDennis.AspNetIdentityServer.Models;
+﻿using EDennis.AspNetIdentityServer.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,13 +9,17 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace EDennis.AspNetIdentityServer.Controllers {
-    public class RoleController : ControllerBase {
-        private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly AspNetIdentityDbContext _dbContext;
+namespace EDennis.AspNet.Base.Security {
+    public class RoleController<TUser, TRole, TContext> : ControllerBase
+        where TUser : DomainUser, new()
+        where TRole : DomainRole, new()
+        where TContext : DomainIdentityDbContext<TUser, TRole> {
 
-        public RoleController(RoleManager<IdentityRole> roleManager,
-            AspNetIdentityDbContext dbContext) {
+        private readonly RoleManager<TRole> _roleManager;
+        private readonly TContext _dbContext;
+
+        public RoleController(RoleManager<TRole> roleManager,
+            TContext dbContext) {
             _roleManager = roleManager;
             _dbContext = dbContext;
         }
@@ -49,7 +51,7 @@ namespace EDennis.AspNetIdentityServer.Controllers {
 
 
 
-        [HttpGet("{pathParameter:alpha}")]
+        [HttpGet("{pathParameter}")]
         public async Task<IActionResult> GetAsync([FromRoute] string pathParameter) {
             var role = await FindAsync(pathParameter);
             if (role == null)
@@ -71,9 +73,10 @@ namespace EDennis.AspNetIdentityServer.Controllers {
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] RoleEditModel roleEditModel) {
 
-            roleEditModel.Id ??= Guid.NewGuid().ToString();
+            if(roleEditModel.Id == default)
+                roleEditModel.Id = Guid.NewGuid();
 
-            var role = new IdentityRole {
+            var role = new TRole {
                 Id = roleEditModel.Id,
                 Name = roleEditModel.Name,
                 NormalizedName = roleEditModel.Name.ToUpper()
@@ -97,7 +100,7 @@ namespace EDennis.AspNetIdentityServer.Controllers {
         }
 
 
-        [HttpPatch("{pathParameter:alpha}")]
+        [HttpPatch("{pathParameter}")]
         public async Task<IActionResult> PatchAsync([FromBody] JsonElement jsonElement, [FromRoute] string pathParameter) {
 
             var role = await FindAsync(pathParameter);
@@ -131,7 +134,7 @@ namespace EDennis.AspNetIdentityServer.Controllers {
         }
 
 
-        [HttpDelete("{pathParameter:alpha}")]
+        [HttpDelete("{pathParameter}")]
         public async Task<IActionResult> Delete([FromRoute] string pathParameter) {
             var role = await FindAsync(pathParameter);
             if (role == null)
@@ -147,7 +150,7 @@ namespace EDennis.AspNetIdentityServer.Controllers {
 
 
 
-        private async Task<IEnumerable<IdentityResult>> UpdateClaimsAsync(IdentityRole role,
+        private async Task<IEnumerable<IdentityResult>> UpdateClaimsAsync(TRole role,
             RoleEditModel roleEditModel, bool hasClaims) {
 
             List<IdentityResult> results = new List<IdentityResult>();
@@ -168,7 +171,7 @@ namespace EDennis.AspNetIdentityServer.Controllers {
 
 
 
-        private async Task<IdentityRole> FindAsync(string pathParameter) {
+        private async Task<TRole> FindAsync(string pathParameter) {
             if (idPattern.IsMatch(pathParameter))
                 return await _roleManager.FindByIdAsync(pathParameter);
             else

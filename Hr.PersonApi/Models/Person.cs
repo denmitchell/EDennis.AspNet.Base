@@ -1,4 +1,4 @@
-﻿using EDennis.AspNet.Base.Models;
+﻿using EDennis.AspNet.Base;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

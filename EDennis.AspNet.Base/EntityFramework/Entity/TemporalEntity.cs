@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json;
 
-namespace EDennis.AspNet.Base.Models {
+namespace EDennis.AspNet.Base {
     public abstract class TemporalEntity : CrudEntity {
 
         public DateTime SysStart { get; set; } = DateTime.Now;

@@ -1,4 +1,4 @@
-﻿using EDennis.AspNet.Base.Models;
+﻿using EDennis.AspNet.Base;
 
 namespace Hr.PersonApi.Models {
     public class State : TemporalEntity {

@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.ValueGeneration;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Concurrent;
@@ -13,13 +16,13 @@ namespace EDennis.AspNet.Base.Middleware {
 
         private readonly RequestDelegate _next;
         private readonly TransactionScopes _transactionScopes;
-        private IOptionsMonitor<TransactionScopeMiddlewareOptions> _options;
+        private IOptionsMonitor<TransactionScopeOptions> _options;
         private string[] _enabledForClaims;
 
         public const string COOKIE_KEY = "TransactionScope";
 
         public TransactionScopeMiddleware(RequestDelegate next, TransactionScopes transactionScopes,
-            IOptionsMonitor<TransactionScopeMiddlewareOptions> options) {
+            IOptionsMonitor<TransactionScopeOptions> options) {
             _next = next;
             _transactionScopes = transactionScopes;
             _options = options;
@@ -65,4 +68,22 @@ namespace EDennis.AspNet.Base.Middleware {
         }
 
     }
+
+
+    public static class IServiceCollectionExtensions_TransactionScopeMiddleware {
+        public static IServiceCollection AddTransactionScope(this IServiceCollection services, IConfiguration config) {
+            services.Configure<TransactionScopeOptions>(config.GetSection("TransactionScope"));
+            return services;
+        }
+    }
+
+    public static class IApplicationBuilderExtensions_TransactionScopeMiddleware {
+        public static IApplicationBuilder UseTransactionScope(this IApplicationBuilder app) {
+            app.UseMiddleware<TransactionScopeMiddleware>();
+            return app;
+        }
+    }
+
+
+
 }

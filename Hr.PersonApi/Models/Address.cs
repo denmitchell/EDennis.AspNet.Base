@@ -1,4 +1,4 @@
-﻿using EDennis.AspNet.Base.Models;
+﻿using EDennis.AspNet.Base;
 using System.ComponentModel.DataAnnotations;
 
 namespace Hr.PersonApi.Models {

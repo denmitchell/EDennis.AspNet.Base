@@ -1,6 +1,6 @@
 ﻿using EDennis.AspNet.Base;
 using EDennis.AspNet.Base.EntityFramework.Entity;
-using EDennis.AspNetIdentityServer.Data;
+using EDennis.AspNet.Base.Security;
 using EDennis.AspNetIdentityServer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -8,22 +8,25 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Hr.UserApi.Controllers {
-    [Authorize]
+namespace EDennis.AspNetBase.Security {
+
+    [Authorize(Policy = "AdministerIDP")]
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase {
+    public class UserController<TUser,TRole,TContext> : ControllerBase 
+        where TUser : DomainUser, new()
+        where TRole : DomainRole
+        where TContext : DomainIdentityDbContext<TUser,TRole>{
 
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly AspNetIdentityDbContext _dbContext;
+        private readonly UserManager<TUser> _userManager;
+        private readonly TContext _dbContext;
 
-        public UserController(UserManager<IdentityUser> userManager,
-            AspNetIdentityDbContext dbContext) {
+        public UserController(UserManager<TUser> userManager,
+            TContext dbContext) {
             _userManager = userManager;
             _dbContext = dbContext;
         }
@@ -33,7 +36,6 @@ namespace Hr.UserApi.Controllers {
 
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> GetAsync([FromQuery] string appName = null, [FromQuery] string orgName = null,
             [FromQuery] int? pageNumber = 1, [FromQuery] int? pageSize = 100) {
 
@@ -70,7 +72,7 @@ namespace Hr.UserApi.Controllers {
         }
 
 
-        [HttpGet("{pathParameter:alpha}")]
+        [HttpGet("{pathParameter}")]
         public async Task<IActionResult> GetAsync([FromRoute] string pathParameter) {
             var user = await FindAsync(pathParameter);
             if (user == null)
@@ -95,10 +97,12 @@ namespace Hr.UserApi.Controllers {
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] UserEditModel userEditModel) {
 
-            userEditModel.Id ??= Guid.NewGuid().ToString();
+            if(userEditModel.Id == default)
+                userEditModel.Id = Guid.NewGuid();
+
             userEditModel.UserName ??= userEditModel.Email;
 
-            var user = new IdentityUser {
+            var user = new TUser {
                 Id = userEditModel.Id,
                 Email = userEditModel.Email,
                 NormalizedEmail = userEditModel.Email.ToUpper(),
@@ -212,7 +216,7 @@ namespace Hr.UserApi.Controllers {
         }
 
 
-        private async Task<IEnumerable<IdentityResult>> UpdateRolesAndClaimsAsync(IdentityUser user,
+        private async Task<IEnumerable<IdentityResult>> UpdateRolesAndClaimsAsync(TUser user,
             UserEditModel userEditModel, bool hasRoles, bool hasClaims) {
 
             List<IdentityResult> results = new List<IdentityResult>();
@@ -235,7 +239,7 @@ namespace Hr.UserApi.Controllers {
         }
 
 
-        private async Task<IdentityUser> FindAsync(string pathParameter) {
+        private async Task<TUser> FindAsync(string pathParameter) {
             if (pathParameter.Contains("@"))
                 return await _userManager.FindByEmailAsync(pathParameter);
             else if (idPattern.IsMatch(pathParameter))
