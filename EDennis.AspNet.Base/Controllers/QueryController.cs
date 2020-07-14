@@ -40,6 +40,7 @@ namespace EDennis.AspNet.Base {
         /// pre-processing of a query (e.g., filtering).
         /// </summary>
         /// <param name="query"></param>
+        [NonAction]
         public virtual void AdjustQuery(ref IQueryable<TEntity> query) { }
 
 

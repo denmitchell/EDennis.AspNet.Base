@@ -20,31 +20,32 @@ namespace EDennis.AspNet.Base {
         protected readonly string _sysUser;
 
 
-        public void SetSysUser(TEntity entity) {
-                var sysUser = HttpContext.User.Claims
-                    .OrderByDescending(c => c.Type)
-                    .FirstOrDefault(c => c.Type == "name"
-                        || c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
-                        || c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/email"
-                        || c.Type == "email"
-                        || c.Type == "client_id")
-                    ?.Value;
-
-            entity.SysUser = sysUser;
+        [NonAction]
+        protected void SetSysUser(TEntity entity) {
+            entity.SysUser = _sysUser;
         }
 
 
         #region Overrideable Methods
+
+        [NonAction]
         public abstract IQueryable<TEntity> Find(string pathParameter);
 
+        [NonAction]
         protected virtual void BeforeCreate(TEntity input) { }
+        [NonAction]
         protected virtual void BeforeUpdate(TEntity existing) { }
+        [NonAction]
         protected virtual void BeforeDelete(TEntity existing) { }
 
-        public virtual void DoCreate(TEntity input) => _dbContext.Add(input);
-        public virtual void DoUpdate(TEntity input, TEntity existing) => existing.Update(input);
-        public virtual void DoPatch(JsonElement input, TEntity existing) => existing.Patch(input);
-        public virtual void DoDelete(TEntity existing) => _dbContext.Remove(existing);
+        [NonAction]
+        protected virtual void DoCreate(TEntity input) => _dbContext.Add(input);
+        [NonAction]
+        protected virtual void DoUpdate(TEntity input, TEntity existing) => existing.Update(input);
+        [NonAction]
+        protected virtual void DoPatch(JsonElement input, TEntity existing) => existing.Patch(input);
+        [NonAction]
+        protected virtual void DoDelete(TEntity existing) => _dbContext.Remove(existing);
 
 
         #endregion
@@ -194,7 +195,7 @@ namespace EDennis.AspNet.Base {
 
 
         [HttpPatch("{**key}")]
-        public virtual IActionResult Patch([FromRoute] string key, JsonElement input) {
+        public virtual IActionResult Patch([FromRoute] string key, [FromBody] JsonElement input) {
 
             if (input.ValueKind != JsonValueKind.Object)
                 return new ObjectResult($"Cannot update {typeof(TEntity).Name} with {input.GetRawText().Substring(0, 200) + "..."}") { StatusCode = (int)HttpStatusCode.UnprocessableEntity };
@@ -228,7 +229,7 @@ namespace EDennis.AspNet.Base {
 
 
         [HttpPatch("async/{**key}")]
-        public virtual async Task<IActionResult> PatchAsync([FromRoute] string key, JsonElement input) {
+        public virtual async Task<IActionResult> PatchAsync([FromRoute] string key, [FromBody] JsonElement input) {
 
             if (input.ValueKind != JsonValueKind.Object)
                 return new ObjectResult($"Cannot update {typeof(TEntity).Name} with {input.GetRawText().Substring(0, 200) + "..."}") { StatusCode = (int)HttpStatusCode.UnprocessableEntity };

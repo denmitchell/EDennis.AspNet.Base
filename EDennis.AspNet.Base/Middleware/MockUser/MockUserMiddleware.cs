@@ -26,6 +26,7 @@ namespace EDennis.AspNet.Base.Middleware {
                 || !_options.CurrentValue.Enabled)
                 await _next(context);
             else {
+                var claims = _options.CurrentValue.Claims.SelectMany(c=>new Claim(c.Key, c.Value))
                 context.User = new ClaimsPrincipal(
                     new ClaimsIdentity(
                         _options.CurrentValue.Claims.Select(c => new Claim(c.ClaimType, c.ClaimValue)),
@@ -55,3 +56,38 @@ namespace EDennis.AspNet.Base.Middleware {
 
 
 }
+
+/*
+using System;
+using System.Collections.Generic;
+using System.Text.Json;
+using System.Linq;
+					
+public class Program
+{
+	public static void Main()
+	{
+		var dict = new Dictionary<string,List<string>>();
+		dict.Add("Red",new List<string>{"Maroon","Burgundy","Pink","Red"});
+		dict.Add("Blue",new List<string>{"Navy","Indigo","Periwinkle","Blue"});
+		
+		var flattened = dict.Aggregate(new List<KeyValuePair<string,string>>(), 
+											  (list, entry) => list.Union(entry.Value.Aggregate(new List<KeyValuePair<string,string>>(), 
+																(values,value) => values.Union(new List<KeyValuePair<string,string>>() { KeyValuePair.Create(entry.Key,value) }).ToList())).ToList()
+									  );
+		
+		var flattened2 = dict.Flatten<string,List<string>,string>();
+		Console.WriteLine(JsonSerializer.Serialize(flattened2,new JsonSerializerOptions{WriteIndented=true}));
+	}
+}
+
+public static class DictionaryExtensionMethods {
+	public static IEnumerable<KeyValuePair<K,V>> Flatten<K,E,V> (this Dictionary<K,E> dict)
+	where E : IEnumerable<V> {
+		return dict.Aggregate(new List<KeyValuePair<K,V>>(), 
+											  (list, entry) => list.Union(entry.Value.Aggregate(new List<KeyValuePair<K,V>>(), 
+																(values,value) => values.Union(new List<KeyValuePair<K,V>>() { KeyValuePair.Create(entry.Key,value) }).ToList())).ToList());
+				
+	}
+}
+*/

@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 namespace EDennis.AspNet.Base.Middleware.MockUser {
     public class MockUserOptions {
         public bool Enabled { get; set; }
-        public IEnumerable<ClaimModel> Claims {get; set;}
+        public Dictionary<string,string[]> Claims {get; set;}
     }
 }

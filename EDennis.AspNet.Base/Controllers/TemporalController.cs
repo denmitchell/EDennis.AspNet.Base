@@ -16,6 +16,7 @@ namespace EDennis.AspNet.Base {
         public TemporalController(TContext context, ILogger<QueryController<TContext,TEntity>> logger) 
             : base(context, logger) { }
 
+        [NonAction]
         protected override void BeforeUpdate(TEntity input) {
             var now = DateTime.Now;
 
@@ -26,6 +27,7 @@ namespace EDennis.AspNet.Base {
         }
 
 
+        [NonAction]
         protected override void BeforeDelete(TEntity existing) {
             var now = DateTime.Now;
 

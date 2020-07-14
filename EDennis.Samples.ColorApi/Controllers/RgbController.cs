@@ -1,6 +1,7 @@
 ﻿using EDennis.AspNet.Base;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 
 namespace EDennis.Samples.ColorApi.Controllers {
@@ -9,7 +10,9 @@ namespace EDennis.Samples.ColorApi.Controllers {
     public class RgbController : TemporalController<ColorContext, Rgb, RgbHistory> {
 
         public RgbController(ColorContext context, ILogger<QueryController<ColorContext, Rgb>> logger) 
-            : base(context, logger) { }
+            : base(context, logger) {
+            logger.LogTrace("RgbController entered.");
+        }
 
         public override IQueryable<Rgb> Find(string pathParameter) {
             return _dbContext.Rgb.Where(r=>r.Id == int.Parse(pathParameter));
