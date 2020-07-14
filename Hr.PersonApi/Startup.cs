@@ -46,7 +46,7 @@ namespace Hr.PersonApi {
 */
             services.AddOData();
 
-            var cxnString = Configuration["DbContexts:HrContext"];
+            var cxnString = Configuration["ConnectionStrings:HrContext"];
 
             services.AddDbContext<HrContext>(options => {
                 options.UseSqlServer(cxnString);

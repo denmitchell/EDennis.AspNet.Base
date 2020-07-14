@@ -8,7 +8,7 @@ namespace Hr.PersonApi.Models {
     /// Facilitate database migrations by using a design time factory that references
     /// EDennis.MigrationsExtensions
     /// </summary>
-    public class HrContextDesignTimeFactory : MigrationsExtensionsDbContextDesignTimeFactory<HrContext> { }
+    public class HrContextDesignTimeFactory : SqlServerDbContextDesignTimeFactory<HrContext> { }
 
     public class HrContext : DbContext {
         public HrContext(DbContextOptions<HrContext> options) : base(options) { }

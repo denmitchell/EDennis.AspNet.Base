@@ -18,8 +18,10 @@ namespace EDennis.Samples.ColorApi {
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
             services.AddControllers();
+            
+            //System.Diagnostics.Debugger.Launch();
 
-            var cxnString = Configuration["DbContexts:ColorContext:ConnectionString"];
+            var cxnString = Configuration["ConnectionStrings:ColorContext"];
             services.AddDbContext<ColorContext>(options => {
                 options.UseSqlServer(cxnString);
             });

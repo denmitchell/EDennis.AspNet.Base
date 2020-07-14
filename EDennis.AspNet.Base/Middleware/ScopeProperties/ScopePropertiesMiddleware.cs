@@ -1,5 +1,4 @@
-﻿using EDennis.AspNet.Base.Models;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using System;

@@ -1,5 +1,4 @@
-﻿using EDennis.AspNet.Base.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Linq.Expressions;
@@ -111,7 +110,8 @@ namespace EDennis.AspNet.Base {
             where TEntity : CrudEntity {
 
             e.Property(d => d.SysStatus)
-              .HasColumnType("tinyint");
+              .HasColumnType("tinyint")
+              .HasDefaultValue(SysStatus.Normal);
 
             return e;
         }

@@ -1,10 +1,13 @@
 ﻿using System;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json;
 
 namespace EDennis.AspNet.Base {
     public abstract class CrudEntity : ICrudEntity {
 
         public string SysUser { get; set; }
+
         public SysStatus SysStatus { get; set; }
 
 

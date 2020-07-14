@@ -1,5 +1,5 @@
 ﻿using EDennis.MigrationsExtensions;
-using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -15,18 +15,23 @@ namespace EDennis.AspNet.Base.EntityFramework {
     /// either appsettings.json or appsettings.Development.json
     /// </summary>
     /// <typeparam name="TContext">The DbContextBase type</typeparam>
-    public class MigrationsExtensionsDbContextDesignTimeFactory<TContext>
-        : IDesignTimeDbContextFactory<TContext>
+    public class SqlServerDbContextDesignTimeFactory<TContext> 
+            : IDesignTimeDbContextFactory<TContext>
+
         where TContext : DbContext {
 
         //holds configuration data
         private IConfiguration _config;
 
-        /// <summary>
-        /// Overrideable method for building a relevant configuration
-        /// </summary>
-        /// <returns>Configuration object</returns>
-        public virtual IConfiguration BuildConfiguration() {
+        public virtual string ConnectionStringConfigurationKey { get; } = $"ConnectionStrings:{typeof(TContext).Name}";
+    
+
+
+    /// <summary>
+    /// Overrideable method for building a relevant configuration
+    /// </summary>
+    /// <returns>Configuration object</returns>
+    public virtual IConfiguration BuildConfiguration() {
             var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
             var builder = new ConfigurationBuilder();
             builder.AddJsonFile($"appsettings.json", true);
@@ -48,11 +53,14 @@ namespace EDennis.AspNet.Base.EntityFramework {
 
             //create the options builder from the configuration data
             _config = BuildConfiguration();
-            var cxnString = _config[$"DbContexts:{typeof(TContext).Name}"];
+            var cxnString = _config[ConnectionStringConfigurationKey];
+
+            if (cxnString == null)
+                throw new Exception($"Could not create DbContext using DbContextDesignTimeFactory. Either ensure that the connection string is defined at {ConnectionStringConfigurationKey} in Configuration or override the ConnectionStringConfigurationKey property.");
+
             var optionsBuilder = new DbContextOptionsBuilder<TContext>();
-            optionsBuilder
-                .UseSqlServer(cxnString)
-                .ReplaceService<IMigrationsSqlGenerator, MigrationsExtensionsSqlGenerator>(); ;
+            optionsBuilder.UseSqlServer(cxnString)
+                .ReplaceService<IMigrationsSqlGenerator,MigrationsExtensionsSqlGenerator>();
 
             //use reflection to create the context object
             TContext context = Activator.CreateInstance(typeof(TContext), new object[] { optionsBuilder.Options }) as TContext;

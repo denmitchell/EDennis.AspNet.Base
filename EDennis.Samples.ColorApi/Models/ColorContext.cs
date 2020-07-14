@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 
 namespace EDennis.Samples.ColorApi {
-    public class ColorDbContextDesignTimeFactory : MigrationsExtensionsDbContextDesignTimeFactory<ColorContext>{ }
+    public class ColorDbContextDesignTimeFactory : SqlServerDbContextDesignTimeFactory<ColorContext>{ }
 
 
     public class ColorContext : DbContext  {
