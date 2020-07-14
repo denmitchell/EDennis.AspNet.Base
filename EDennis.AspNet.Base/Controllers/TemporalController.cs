@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EDennis.AspNet.Base.EntityFramework;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,8 +14,9 @@ namespace EDennis.AspNet.Base {
         where TEntity : TemporalEntity
         where THistoryEntity : TemporalEntity {
 
-        public TemporalController(TContext context, ILogger<QueryController<TContext,TEntity>> logger) 
-            : base(context, logger) { }
+        public TemporalController(DbContextProvider<TContext> provider, 
+            ILogger<QueryController<TContext,TEntity>> logger) 
+            : base(provider, logger) { }
 
         [NonAction]
         protected override void BeforeUpdate(TEntity input) {

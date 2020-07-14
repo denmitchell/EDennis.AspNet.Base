@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using EDennis.AspNet.Base.EntityFramework;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ValueGeneration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -12,19 +15,20 @@ using System.Threading.Tasks;
 using System.Transactions;
 
 namespace EDennis.AspNet.Base.Middleware {
-    public class TransactionScopeMiddleware {
+    public class TransactionScopeMiddleware<TContext>
+        where TContext : DbContext {
 
         private readonly RequestDelegate _next;
-        private readonly TransactionScopes _transactionScopes;
+        private readonly IDbTransactionCache<TContext> _cache;
         private IOptionsMonitor<TransactionScopeOptions> _options;
         private string[] _enabledForClaims;
 
         public const string COOKIE_KEY = "TransactionScope";
 
-        public TransactionScopeMiddleware(RequestDelegate next, TransactionScopes transactionScopes,
+        public TransactionScopeMiddleware(RequestDelegate next, IDbTransactionCache<TContext> cache,
             IOptionsMonitor<TransactionScopeOptions> options) {
             _next = next;
-            _transactionScopes = transactionScopes;
+            _cache = cache;
             _options = options;
             UpdateEnabledForClaims(options.CurrentValue.EnabledForClaims);
             _options.OnChange(e => UpdateEnabledForClaims(e.EnabledForClaims));
@@ -38,14 +42,20 @@ namespace EDennis.AspNet.Base.Middleware {
                 var claims = context.User?.Claims;
                 if (claims != null && _enabledForClaims.Any(e => claims.Any(c => $"{c.Type}|{c.Value}" == e))) {
                     var cookieValue = GetOrAddCookie(context, out bool cookieAdded);
-                    using var scope = _transactionScopes.GetOrAdd(cookieValue,
-                            new TransactionScope(TransactionScopeOption.Required,
-                                new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }));
-                    await _next(context); // in transaction scope
+
+                    var dbContextProvider = context.RequestServices.GetRequiredService<DbContextProvider<TContext>>();
+                    _cache.ReplaceDbContext(Guid.Parse(cookieValue), dbContextProvider);
+
                     if (cookieAdded)
-                        context.Response.Cookies.Append(COOKIE_KEY, cookieValue);
+                        context.Response.OnStarting(state => {
+                            var httpContext = (HttpContext)state;
+                            httpContext.Response.Cookies.Append(COOKIE_KEY, cookieValue);
+                            return Task.CompletedTask;
+                        }, context);
+
+                    await _next(context);
                 } else
-                    await _next(context); // not in transaction scope
+                    await _next(context); 
             }
 
         }
@@ -78,8 +88,9 @@ namespace EDennis.AspNet.Base.Middleware {
     }
 
     public static class IApplicationBuilderExtensions_TransactionScopeMiddleware {
-        public static IApplicationBuilder UseTransactionScope(this IApplicationBuilder app) {
-            app.UseMiddleware<TransactionScopeMiddleware>();
+        public static IApplicationBuilder UseTransactionScope<TContext>(this IApplicationBuilder app)
+            where TContext: DbContext {
+            app.UseMiddleware<TransactionScopeMiddleware<TContext>>();
             return app;
         }
     }

@@ -1,3 +1,4 @@
+using EDennis.AspNet.Base.EntityFramework;
 using EDennis.AspNet.Base.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi.Writers;
 
 namespace EDennis.Samples.ColorApi {
     public class Startup {
@@ -22,11 +24,12 @@ namespace EDennis.Samples.ColorApi {
             //System.Diagnostics.Debugger.Launch();
 
             var cxnString = Configuration["ConnectionStrings:ColorContext"];
+            services.AddScoped<DbContextProvider<ColorContext>>();
             services.AddDbContext<ColorContext>(options => {
                 options.UseSqlServer(cxnString);
             });
 
-            services.AddSingleton(new TransactionScopes());
+            services.AddSingleton(new IDbTransactionCache<ColorContext>());
 
             services.AddMockUser(Configuration);
             services.AddTransactionScope(Configuration);
@@ -49,7 +52,7 @@ namespace EDennis.Samples.ColorApi {
 
             app.UseMockUser();
             app.UseAuthorization();
-            app.UseTransactionScope();
+            app.UseTransactionScope<ColorContext>();
             
 
             app.UseEndpoints(endpoints => {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using EDennis.AspNet.Base.EntityFramework;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -17,11 +18,19 @@ namespace EDennis.AspNet.Base {
         where TContext : DbContext
         where TEntity : class, ICrudEntity {
 
-        protected readonly string _sysUser;
+        protected string _sysUser;
 
 
         [NonAction]
         protected void SetSysUser(TEntity entity) {
+            _sysUser ??= HttpContext.User.Claims
+                .OrderByDescending(c => c.Type)
+                .FirstOrDefault(c => c.Type == "name"
+                    || c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+                    || c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/email"
+                    || c.Type == "email"
+                    || c.Type == "client_id")
+                ?.Value;
             entity.SysUser = _sysUser;
         }
 
@@ -51,16 +60,9 @@ namespace EDennis.AspNet.Base {
         #endregion
 
 
-        public CrudController(TContext context, ILogger<QueryController<TContext,TEntity>> logger) : base(context, logger) {
+        public CrudController(DbContextProvider<TContext> provider, 
+            ILogger<QueryController<TContext,TEntity>> logger) : base(provider, logger) {
 
-            _sysUser = HttpContext.User.Claims
-                .OrderByDescending(c => c.Type)
-                .FirstOrDefault(c => c.Type == "name"
-                    || c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
-                    || c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/email"
-                    || c.Type == "email"
-                    || c.Type == "client_id")
-                ?.Value;
         }
 
 

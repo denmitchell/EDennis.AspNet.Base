@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using DevExtreme.AspNet.Data;
+using EDennis.AspNet.Base.EntityFramework;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,8 +30,8 @@ namespace EDennis.AspNet.Base {
         protected readonly TContext _dbContext;
         protected ILogger _logger;
 
-        public QueryController(TContext context, ILogger<QueryController<TContext,TEntity>> logger) {
-            _dbContext = context;
+        public QueryController(DbContextProvider<TContext> provider, ILogger<QueryController<TContext,TEntity>> logger) {
+            _dbContext = provider.DbContext;
             _logger = logger;
         }
 
