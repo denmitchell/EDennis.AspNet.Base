@@ -6,7 +6,9 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Concurrent;
 using System.Data;
+using System.Data.Common;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace EDennis.AspNet.Base.Middleware {
 
@@ -33,6 +35,7 @@ namespace EDennis.AspNet.Base.Middleware {
 
             var context = (TContext)Activator.CreateInstance(typeof(TContext), new object[] { options });
             context.Database.AutoTransactionsEnabled = false;
+            context.Database.UseTransaction(trans as DbTransaction);
 
             provider.DbContext = context;
         }

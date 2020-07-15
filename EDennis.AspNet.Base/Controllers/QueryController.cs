@@ -342,8 +342,8 @@ namespace EDennis.AspNet.Base {
 
             var scope = new List<KeyValuePair<string, object>>();
 
-            foreach (PropertyInfo prop in parameters.GetType().Properties)
-                scope.Add(KeyValuePair.Create(prop.Name, prop.GetValue(parameters)));
+            foreach (PropertyInfo prop in parameters.GetType().GetProperties())
+                scope.Add(KeyValuePair.Create(prop.Name, (object)prop.GetValue(parameters)));
 
             return scope.ToArray();
         }
