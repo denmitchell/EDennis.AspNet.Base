@@ -31,12 +31,21 @@ namespace EDennis.AspNet.Base {
         /// </summary>
         /// <param name="jsonElement">The updated data as a JsonElement</param>
         public virtual void Patch(JsonElement jsonElement) {
+            var camelCase = false;
             foreach (var prop in GetType().GetProperties())
-                if (jsonElement.TryGetProperty(prop.Name, out JsonElement value))
+                if (!camelCase && jsonElement.TryGetProperty(prop.Name, out JsonElement value)) {
                     if (value.ValueKind != JsonValueKind.Object && value.ValueKind != JsonValueKind.Array)
                         prop.SetValue(this, DeserializeJsonValue(prop.PropertyType, value));
-
+                } else if (jsonElement.TryGetProperty(CamelCase(prop.Name), out JsonElement value2)) {
+                    camelCase = true;
+                    if (value2.ValueKind != JsonValueKind.Object && value2.ValueKind != JsonValueKind.Array)
+                        prop.SetValue(this, DeserializeJsonValue(prop.PropertyType, value2));
+                }
         }
+
+
+        private static string CamelCase(string input)
+            => (input == null || input.Length < 2) ? input : input.Substring(0, 1).ToLower() + input.Substring(1);
 
         private static object DeserializeJsonValue(Type type, JsonElement value) {
             if (value.ValueKind == JsonValueKind.Null
