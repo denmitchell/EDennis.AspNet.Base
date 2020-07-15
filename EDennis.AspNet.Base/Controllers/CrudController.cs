@@ -85,7 +85,7 @@ namespace EDennis.AspNet.Base {
         public virtual async Task<IActionResult> GetByIdAsync([FromRoute] string key) {
             var qry = Find(key);
             AdjustQuery(ref qry);
-            var entity = (await qry.ToListAsync()).FirstOrDefault();
+            var entity = await qry.FirstOrDefaultAsync();
 
             if (entity == null)
                 return NotFound();
@@ -169,7 +169,7 @@ namespace EDennis.AspNet.Base {
         public virtual async Task<IActionResult> UpdateAsync([FromRoute] string key, [FromBody] TEntity input) {
 
             //retrieve the existing entity
-            var existing = Find(key).FirstOrDefault();
+            var existing = await Find(key).FirstOrDefaultAsync();
 
             //check NotFound, Gone (deleted), Locked
             if (NotFoundGoneLocked(existing, out IActionResult result))
@@ -237,7 +237,7 @@ namespace EDennis.AspNet.Base {
                 return new ObjectResult($"Cannot update {typeof(TEntity).Name} with {input.GetRawText().Substring(0, 200) + "..."}") { StatusCode = (int)HttpStatusCode.UnprocessableEntity };
 
             //retrieve the existing entity
-            var existing = await _dbContext.FindAsync<TEntity>(key);
+            var existing = await Find(key).FirstOrDefaultAsync();
 
             //check NotFound, Gone (deleted), Locked
             if (NotFoundGoneLocked(existing, out IActionResult result))
@@ -295,7 +295,8 @@ namespace EDennis.AspNet.Base {
 
         [HttpDelete("async/{**key}")]
         public async virtual Task<IActionResult> DeleteAsync([FromRoute] string key) {
-            var existing = await _dbContext.FindAsync<TEntity>(key);
+            
+            var existing = await Find(key).FirstOrDefaultAsync();
 
             //check NotFound, Gone (deleted), Locked
             if (NotFoundGoneLocked(existing, out IActionResult result))
