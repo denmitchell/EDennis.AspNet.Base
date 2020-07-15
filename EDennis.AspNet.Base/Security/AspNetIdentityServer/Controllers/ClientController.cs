@@ -1,5 +1,7 @@
 ﻿using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Entities;
+using IdentityServer4.EntityFramework.Mappers;
+using M = IdentityServer4.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,35 +24,29 @@ namespace EDennis.AspNet.Base.Security {
             _dbContext = dbContext;
         }
 
+        /// <summary>
+        /// Returns an instance of IdentityServer4.Models.Client, whose ClientId
+        /// matches the clientId route parameter
+        /// </summary>
+        /// <param name="clientId"></param>
+        /// <returns></returns>
         [HttpGet("{clientId}")]
         public async Task<IActionResult> GetAsync([FromRoute] string clientId) {
-
-            //var client = _dbContext.Clients.To
-
 
             var result = await _dbContext.Clients.FirstOrDefaultAsync(a => a.ClientId == clientId);
             if (result == null)
                 return NotFound();
             else
-                return Ok(new ClientEditModel {
-                    ClientId = clientId,
-                    AllowOfflineAccess = result.AllowOfflineAccess,
-                    RequireConsent = result.RequireConsent,
-                    RequirePkce = result.RequirePkce,
-
-                    AllowedScopes = result.AllowedScopes.Select(s => s.Scope),
-                    ClientClaimsPrefix = result.ClientClaimsPrefix,
-
-                    AllowedCorsOrigins = result.AllowedCorsOrigins.Select(o => o.Origin),
-                    AllowedGrantTypes = result.AllowedGrantTypes.Select(g => g.GrantType),
-                    ClientSecrets = result.ClientSecrets,
-                    RedirectUris = result.RedirectUris.Select(u=>u.RedirectUri),
-                    PostLogoutRedirectUris = result.PostLogoutRedirectUris.Select(u=>u.PostLogoutRedirectUri),
-                    Claims = result.Claims.Select(c => new ClaimModel { ClaimType = c.Type, ClaimValue = c.Value })                        
-                });
+                return Ok(result.ToModel());
         }
 
 
+        /// <summary>
+        /// Deletes a Client, whose ClientId
+        /// matches the clientId route parameter
+        /// </summary>
+        /// <param name="clientId"></param>
+        /// <returns></returns>
         [HttpGet("{clientId}")]
         public async Task<IActionResult> DeleteAsync([FromRoute] string clientId) {
             var result = await _dbContext.Clients.FirstOrDefaultAsync(c => c.ClientId == clientId);
@@ -63,8 +59,13 @@ namespace EDennis.AspNet.Base.Security {
             }
         }
 
+        /// <summary>
+        /// Creates a new Client record from the 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] ClientEditModel model) {
+        public async Task<IActionResult> PostAsync([FromBody] M.Client model) {
 
             var client = new Client {
                 ClientId = model.ClientId,
