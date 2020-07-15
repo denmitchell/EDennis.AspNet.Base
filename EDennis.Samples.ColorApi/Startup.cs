@@ -29,7 +29,7 @@ namespace EDennis.Samples.ColorApi {
                 options.UseSqlServer(cxnString);
             });
 
-            services.AddSingleton(new IDbTransactionCache<ColorContext>());
+            services.AddSingleton(new TransactionCache<ColorContext>());
 
             services.AddMockUser(Configuration);
             services.AddTransactionScope(Configuration);

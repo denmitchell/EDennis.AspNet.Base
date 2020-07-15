@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace EDennis.AspNet.Base.EntityFramework.Entity {
     public static class DbContextExtensions {
+
+
         public async static Task<string> GetFromJsonSqlAsync<TContext>(this TContext context, string fromJsonSql)
             where TContext : DbContext {
 

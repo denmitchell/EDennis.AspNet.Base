@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.ValueGeneration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Concurrent;
@@ -15,18 +16,20 @@ using System.Threading.Tasks;
 using System.Transactions;
 
 namespace EDennis.AspNet.Base.Middleware {
-    public class TransactionScopeMiddleware<TContext>
+    public class CachedTransactionMiddleware<TContext>
         where TContext : DbContext {
 
         private readonly RequestDelegate _next;
-        private readonly IDbTransactionCache<TContext> _cache;
-        private IOptionsMonitor<TransactionScopeOptions> _options;
+        private readonly TransactionCache<TContext> _cache;
+        private IOptionsMonitor<CachedTransactionOptions> _options;
         private string[] _enabledForClaims;
 
-        public const string COOKIE_KEY = "TransactionScope";
+        public const string COOKIE_KEY = "CachedTransaction";
+        public const string ROLLBACK_PATH = "/rollback-cached-transaction";
+        public const string COMMIT_PATH = "/commit-cached-transaction";
 
-        public TransactionScopeMiddleware(RequestDelegate next, IDbTransactionCache<TContext> cache,
-            IOptionsMonitor<TransactionScopeOptions> options) {
+        public CachedTransactionMiddleware(RequestDelegate next, TransactionCache<TContext> cache,
+            IOptionsMonitor<CachedTransactionOptions> options) {
             _next = next;
             _cache = cache;
             _options = options;
@@ -53,7 +56,16 @@ namespace EDennis.AspNet.Base.Middleware {
                             return Task.CompletedTask;
                         }, context);
 
+                    if (context.Request.Path.Value.EndsWith(ROLLBACK_PATH)) {
+                        await _cache.RollbackAsync(Guid.Parse(cookieValue));
+                        return;
+                    } else if (context.Request.Path.Value.EndsWith(COMMIT_PATH)) { 
+                        await _cache.CommitAsync(Guid.Parse(cookieValue));
+                        return;
+                    }
+
                     await _next(context);
+
                 } else
                     await _next(context); 
             }
@@ -82,7 +94,7 @@ namespace EDennis.AspNet.Base.Middleware {
 
     public static class IServiceCollectionExtensions_TransactionScopeMiddleware {
         public static IServiceCollection AddTransactionScope(this IServiceCollection services, IConfiguration config) {
-            services.Configure<TransactionScopeOptions>(config.GetSection("TransactionScope"));
+            services.Configure<CachedTransactionOptions>(config.GetSection("CachedTransaction"));
             return services;
         }
     }
@@ -90,7 +102,7 @@ namespace EDennis.AspNet.Base.Middleware {
     public static class IApplicationBuilderExtensions_TransactionScopeMiddleware {
         public static IApplicationBuilder UseTransactionScope<TContext>(this IApplicationBuilder app)
             where TContext: DbContext {
-            app.UseMiddleware<TransactionScopeMiddleware<TContext>>();
+            app.UseMiddleware<CachedTransactionMiddleware<TContext>>();
             return app;
         }
     }

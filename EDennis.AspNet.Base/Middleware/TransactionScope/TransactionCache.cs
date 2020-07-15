@@ -6,13 +6,14 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Concurrent;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace EDennis.AspNet.Base.Middleware {
 
     /// <summary>
     /// Singleton Lifetime
     /// </summary>
-    public class IDbTransactionCache<TContext> : ConcurrentDictionary<Guid,IDbTransaction>
+    public class TransactionCache<TContext> : ConcurrentDictionary<Guid,IDbTransaction>
         where TContext : DbContext {  
     
         public void ReplaceDbContext(Guid key, DbContextProvider<TContext> provider) {
@@ -56,14 +57,18 @@ namespace EDennis.AspNet.Base.Middleware {
         }
 
 
-        public void Rollback(Guid key) {
+        public async Task RollbackAsync(Guid key) {
             if (TryGetValue(key, out IDbTransaction trans))
-                trans.Rollback();
+                await Task.Run(() => {
+                    trans.Rollback();
+                });
         }
 
-        public void Commit(Guid key) {
+        public async Task CommitAsync(Guid key) {
             if (TryGetValue(key, out IDbTransaction trans))
-                trans.Commit();
+                await Task.Run(() => {
+                    trans.Commit();
+                });
         }
 
 
