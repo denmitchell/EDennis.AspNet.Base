@@ -9,14 +9,15 @@ using System;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using EDennis.AspNet.Base.Security.PatchExtensions;
 
 namespace EDennis.AspNet.Base.Security {
 
-    [Authorize(Policy ="AdministerIDP")]
+    [Authorize(Policy = "AdministerIDP")]
     [Route("api/[controller]")]
     [ApiController]
     public abstract class ClientController<TContext> : ControllerBase
-        where TContext: ConfigurationDbContext {
+        where TContext : ConfigurationDbContext {
 
         private readonly TContext _dbContext;
 
@@ -67,23 +68,7 @@ namespace EDennis.AspNet.Base.Security {
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] M.Client model) {
 
-            var client = new Client {
-                ClientId = model.ClientId,
-                AllowOfflineAccess = model.AllowOfflineAccess,
-                RequireConsent = model.RequireConsent,
-                RequirePkce = model.RequirePkce,
-
-                AllowedScopes = model.AllowedScopes.Select(s => new ClientScope { Scope = s }).ToList(),
-                ClientClaimsPrefix = model.ClientClaimsPrefix,
-
-                AllowedCorsOrigins = model.AllowedCorsOrigins.Select(o => new ClientCorsOrigin { Origin = o }).ToList(),
-                AllowedGrantTypes = model.AllowedGrantTypes.Select(g => new ClientGrantType { GrantType = g }).ToList(),
-                ClientSecrets = model.ClientSecrets.ToList(),
-                RedirectUris = model.RedirectUris.Select(u => new ClientRedirectUri { RedirectUri = u }).ToList(),
-                PostLogoutRedirectUris = model.PostLogoutRedirectUris.Select(u => new ClientPostLogoutRedirectUri { PostLogoutRedirectUri = u }).ToList(),
-                Claims = model.Claims.Select(c => new ClientClaim { Type = c.ClaimType, Value = c.ClaimValue }).ToList(),
-                Enabled = true,
-            };
+            var client = model.ToEntity();
 
             try {
                 _dbContext.Add(client);
@@ -104,71 +89,80 @@ namespace EDennis.AspNet.Base.Security {
             if (existing == null)
                 return NotFound();
 
-            try {
-                if (partialModel.TryGetProperty("AllowOfflineAccess", out JsonElement allowOfflineAccess))
-                    existing.AllowOfflineAccess = allowOfflineAccess.GetBoolean();
-            } catch (InvalidOperationException ex) {
-                ModelState.AddModelError("AllowOfflineAccess", ex.Message);
-            }
 
-            try {
-                if (partialModel.TryGetProperty("RequireConsent", out JsonElement requireConsent))
-                    existing.RequireConsent = requireConsent.GetBoolean();
-            } catch (InvalidOperationException ex) {
-                ModelState.AddModelError("RequireConsent", ex.Message);
+            foreach (var prop in partialModel.EnumerateObject()) {
+                try {
+                    switch (prop.Name) {
+                        case "AbsoluteRefreshTokenLifetime":
+                        case "absoluteRefreshTokenLifetime":
+                            existing.AbsoluteRefreshTokenLifetime = prop.Value.GetInt32();
+                            break;
+                        case "AccessTokenLifetime":
+                        case "accessTokenLifetime":
+                            existing.AccessTokenLifetime = prop.Value.GetInt32();
+                            break;
+                        case "AccessTokenType":
+                        case "accessTokenType":
+                            existing.AccessTokenType = prop.Value.GetInt32();
+                            break;
+                        case "AllowAccessTokensViaBrowser":
+                        case "allowAccessTokensViaBrowser":
+                            existing.AllowAccessTokensViaBrowser = prop.Value.GetBoolean();
+                            break;
+                        case "AllowedCorsOrigins":
+                        case "allowedCorsOrigins":
+                            existing.AllowedCorsOrigins = prop.Value.EnumerateArray().Select(e =>
+                                new ClientCorsOrigin {
+                                    Origin = e.GetString()
+                                }).ToList();
+                            break;
+                        case "AllowedGrantTypes":
+                        case "allowedGrantTypes":
+                            existing.AllowedGrantTypes = prop.Value.EnumerateArray().Select(e =>
+                                new ClientGrantType {
+                                    GrantType = e.GetString()
+                                }).ToList();
+                            break;
+                        case "AllowedScopes":
+                        case "allowedScopes":
+                            existing.AllowedScopes = prop.Value.EnumerateArray().Select(e =>
+                                new ClientScope {
+                                    Scope = e.GetString()
+                                }).ToList();
+                            break;
+                        case "AllowOfflineAccess":
+                        case "allowOfflineAccess":
+                            existing.AllowOfflineAccess = prop.Value.GetBoolean();
+                            break;
+                        case "AllowPlainTextPkce":
+                        case "allowPlainTextPkce":
+                            existing.AllowPlainTextPkce = prop.Value.GetBoolean();
+                            break;
+                        case "AllowRememberConsent":
+                        case "allowRememberConsent":
+                            existing.AllowRememberConsent = prop.Value.GetBoolean();
+                            break;
+                        case "AlwaysIncludeUserClaimsInIdToken":
+                        case "alwaysIncludeUserClaimsInIdToken":
+                            existing.AlwaysIncludeUserClaimsInIdToken = prop.Value.GetBoolean();
+                            break;
+                        case "AlwaysSendClientClaims":
+                        case "alwaysSendClientClaims":
+                            existing.AlwaysSendClientClaims = prop.Value.GetBoolean();
+                            break;
+                        default:
+                            break;
+                    }
+                } catch (InvalidOperationException ex) {
+                    ModelState.AddModelError(prop.Name, ex.Message);
+                }
             }
-
-            try {
-                if (partialModel.TryGetProperty("RequirePkce", out JsonElement requirePkce))
-                    existing.RequirePkce = requirePkce.GetBoolean();
-            } catch (InvalidOperationException ex) {
-                ModelState.AddModelError("RequirePkce", ex.Message);
-            }
-
-            try {
-                if (partialModel.TryGetProperty("ClientClaimsPrefix", out JsonElement clientClaimsPrefix))
-                    existing.ClientClaimsPrefix = clientClaimsPrefix.GetString();
-            } catch (InvalidOperationException ex) {
-                ModelState.AddModelError("ClientClaimsPrefix", ex.Message);
-            }
-
-            try {
-                if (partialModel.TryGetProperty("AllowedScopes", out JsonElement allowedScopes))
-                    existing.AllowedScopes = allowedScopes.EnumerateArray().Select(e =>
-                        new ClientScope {
-                            Scope = e.GetString()
-                        }).ToList();
-            } catch (InvalidOperationException ex) {
-                ModelState.AddModelError("AllowedScopes", ex.Message);
-                return BadRequest(ModelState);
-            }
-
-            try {
-                if (partialModel.TryGetProperty("AllowedGrantTypes", out JsonElement allowedGrantTypes))
-                    existing.AllowedGrantTypes = allowedGrantTypes.EnumerateArray().Select(e =>
-                        new ClientGrantType {
-                            GrantType = e.GetString()
-                        }).ToList();
-            } catch (InvalidOperationException ex) {
-                ModelState.AddModelError("AllowedGrantTypes", ex.Message);
-                return BadRequest(ModelState);
-            }
-
-            try {
-                if (partialModel.TryGetProperty("AllowedCorsOrigins", out JsonElement allowedCorsOrigins))
-                    existing.AllowedCorsOrigins = allowedCorsOrigins.EnumerateArray().Select(e =>
-                        new ClientCorsOrigin {
-                            Origin = e.GetString()
-                        }).ToList();
-            } catch (InvalidOperationException ex) {
-                ModelState.AddModelError("AllowedCorsOrigins", ex.Message);
-                return BadRequest(ModelState);
-            }
+/*
 
             try {
                 if (partialModel.TryGetProperty("ClientSecrets", out JsonElement clientSecrets))
                     existing.ClientSecrets = clientSecrets.EnumerateArray().Select(e =>
-                        new ClientSecret { 
+                        new ClientSecret {
                             Value = e.GetProperty("Value").GetString(),
                             Expiration = e.GetProperty("Expiration").GetDateTime()
                         }).ToList();
@@ -211,7 +205,9 @@ namespace EDennis.AspNet.Base.Security {
                 return BadRequest(ModelState);
             }
 
-            if(ModelState.ErrorCount > 0)
+*/
+
+            if (ModelState.ErrorCount > 0)
                 return BadRequest(ModelState);
 
 
