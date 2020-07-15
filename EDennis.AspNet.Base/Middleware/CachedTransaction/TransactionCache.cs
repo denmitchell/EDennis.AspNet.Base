@@ -61,17 +61,21 @@ namespace EDennis.AspNet.Base.Middleware {
 
 
         public async Task RollbackAsync(Guid key) {
-            if (TryGetValue(key, out IDbTransaction trans))
+            if (TryGetValue(key, out IDbTransaction trans)) {
                 await Task.Run(() => {
                     trans.Rollback();
                 });
+                TryRemove(key, out IDbTransaction _);
+            }
         }
 
         public async Task CommitAsync(Guid key) {
-            if (TryGetValue(key, out IDbTransaction trans))
+            if (TryGetValue(key, out IDbTransaction trans)) {
                 await Task.Run(() => {
                     trans.Commit();
                 });
+                TryRemove(key, out IDbTransaction _);
+            }
         }
 
 

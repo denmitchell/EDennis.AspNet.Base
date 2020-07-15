@@ -24,6 +24,10 @@ namespace EDennis.AspNet.Base.Security {
 
         [HttpGet("{clientId}")]
         public async Task<IActionResult> GetAsync([FromRoute] string clientId) {
+
+            var client = _dbContext.Clients.To
+
+
             var result = await _dbContext.Clients.FirstOrDefaultAsync(a => a.ClientId == clientId);
             if (result == null)
                 return NotFound();
