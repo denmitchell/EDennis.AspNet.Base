@@ -1,17 +1,13 @@
-﻿using IdentityServer4.EntityFramework.DbContexts;
-using IdentityServer4.EntityFramework.Entities;
+﻿using EDennis.AspNet.Base.Security.AspNetIdentityServer.Models.EditModels;
+using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
-using M = IdentityServer4.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using IdentityModel;
-using System.Collections.Generic;
-using EDennis.AspNet.Base.Security.AspNetIdentityServer.Models.EditModels;
+using M = IdentityServer4.Models;
 
 namespace EDennis.AspNet.Base.Security {
 
@@ -63,7 +59,7 @@ namespace EDennis.AspNet.Base.Security {
         }
 
         /// <summary>
-        /// Creates a new Client record from the 
+        /// Creates a new Client record
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -83,7 +79,15 @@ namespace EDennis.AspNet.Base.Security {
             return Ok();
         }
 
-
+        /// <summary>
+        /// Patch-updates a Client record with data from the provided partialModel
+        /// (JSON body).
+        /// </summary>
+        /// <param name="partialModel">JSON object with properties to update</param>
+        /// <param name="clientId">The ID of the client to update</param>
+        /// <param name="mergeCollections">for each collection property, whether to merge 
+        /// (default=true) or replace (false) provided items with existing items</param>
+        /// <returns></returns>
         [HttpPatch("{clientId}")]
         public async Task<IActionResult> PatchAsync([FromBody] JsonElement partialModel, 
             [FromRoute] string clientId, [FromQuery] bool mergeCollections = true) {

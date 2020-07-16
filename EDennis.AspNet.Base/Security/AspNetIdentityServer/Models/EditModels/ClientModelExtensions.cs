@@ -3,13 +3,11 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text.Json;
-using System.Threading.Tasks;
 using M = IdentityServer4.Models;
 
 namespace EDennis.AspNet.Base.Security.AspNetIdentityServer.Models.EditModels {
-    public static class ClientExtensions {
+    public static class ClientModelExtensions {
 
         public static void Patch(this M.Client model, JsonElement partialModel,
             ModelStateDictionary modelState,  bool mergeCollections = true) {

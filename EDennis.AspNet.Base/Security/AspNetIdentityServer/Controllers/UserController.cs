@@ -65,7 +65,7 @@ namespace EDennis.AspNetBase.Security {
             }
 
             var json = await _dbContext.GetFromJsonSqlAsync(sql, parameters);
-            var users = JsonSerializer.Deserialize<List<UserEditModel>>(json);
+            var users = JsonSerializer.Deserialize<List<UserModel>>(json);
 
             return Ok(users);
 
@@ -80,7 +80,7 @@ namespace EDennis.AspNetBase.Security {
             else {
                 var currentRoles = await _userManager.GetRolesAsync(user);
                 var currentClaims = await _userManager.GetClaimsAsync(user);
-                var userEditModel = new UserEditModel {
+                var userEditModel = new UserModel {
                     Id = user.Id,
                     UserName = user.UserName,
                     Email = user.Email,
@@ -95,7 +95,7 @@ namespace EDennis.AspNetBase.Security {
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] UserEditModel userEditModel) {
+        public async Task<IActionResult> CreateAsync([FromBody] UserModel userEditModel) {
 
             if(userEditModel.Id == default)
                 userEditModel.Id = Guid.NewGuid();
@@ -189,7 +189,7 @@ namespace EDennis.AspNetBase.Security {
             var hasRoles = jsonElement.TryGetProperty("Roles", out JsonElement _);
             var hasClaims = jsonElement.TryGetProperty("Claims", out JsonElement _);
 
-            var userEditModel = JsonSerializer.Deserialize<UserEditModel>(jsonElement.GetRawText());
+            var userEditModel = JsonSerializer.Deserialize<UserModel>(jsonElement.GetRawText());
 
             results.AddRange(await UpdateRolesAndClaimsAsync(user, userEditModel, hasRoles, hasClaims));
 
@@ -217,7 +217,7 @@ namespace EDennis.AspNetBase.Security {
 
 
         private async Task<IEnumerable<IdentityResult>> UpdateRolesAndClaimsAsync(TUser user,
-            UserEditModel userEditModel, bool hasRoles, bool hasClaims) {
+            UserModel userEditModel, bool hasRoles, bool hasClaims) {
 
             List<IdentityResult> results = new List<IdentityResult>();
 
