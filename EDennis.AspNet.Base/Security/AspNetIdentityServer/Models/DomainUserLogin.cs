@@ -1,21 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
 namespace EDennis.AspNet.Base.Security {
-    public class DomainRole : IdentityRole<Guid>, ITemporalEntity {
-        public virtual Guid? OrganizationId { get; set; }
-        public virtual Guid? ApplicationId { get; set; }
+    public class DomainUserLogin : IdentityUserLogin<Guid>, ITemporalEntity {
 
         [MaxLength(8000)]
         public string OtherProperties { get; set; }
 
-        public ICollection<DomainUserRole> UserRoles { get; set; }
-
-        public DomainApplication Application { get; set; }
-        public DomainOrganization Organization { get; set; }
+        public DomainUser User { get; set; }
 
 
         public SysStatus SysStatus { get; set; }

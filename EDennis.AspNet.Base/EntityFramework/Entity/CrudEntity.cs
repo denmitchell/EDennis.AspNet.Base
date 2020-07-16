@@ -1,6 +1,5 @@
-﻿using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
 using System.Text.Json;
 
 namespace EDennis.AspNet.Base {
@@ -30,16 +29,18 @@ namespace EDennis.AspNet.Base {
         /// that doesn't use reflection.
         /// </summary>
         /// <param name="jsonElement">The updated data as a JsonElement</param>
-        public virtual void Patch(JsonElement jsonElement) {
+        public virtual void Patch(JsonElement jsonElement, ModelStateDictionary modelState, bool mergeCollections = false) {
             var camelCase = false;
             foreach (var prop in GetType().GetProperties())
-                if (!camelCase && jsonElement.TryGetProperty(prop.Name, out JsonElement value)) {
-                    if (value.ValueKind != JsonValueKind.Object && value.ValueKind != JsonValueKind.Array)
+                try {
+                    if (!camelCase && jsonElement.TryGetProperty(prop.Name, out JsonElement value)) {
                         prop.SetValue(this, DeserializeJsonValue(prop.PropertyType, value));
-                } else if (jsonElement.TryGetProperty(CamelCase(prop.Name), out JsonElement value2)) {
-                    camelCase = true;
-                    if (value2.ValueKind != JsonValueKind.Object && value2.ValueKind != JsonValueKind.Array)
+                    } else if (jsonElement.TryGetProperty(CamelCase(prop.Name), out JsonElement value2)) {
+                        camelCase = true;
                         prop.SetValue(this, DeserializeJsonValue(prop.PropertyType, value2));
+                    }
+                } catch (InvalidOperationException ex) {
+                    modelState.AddModelError(prop.Name, ex.Message);
                 }
         }
 

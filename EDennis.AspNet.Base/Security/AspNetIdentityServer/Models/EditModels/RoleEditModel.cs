@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 
-namespace EDennis.AspNetIdentityServer.Models {
-    public class RoleModel {
+namespace EDennis.AspNet.Base.Security {
+    public class RoleEditModel {
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string OrganizationName { get; set; }

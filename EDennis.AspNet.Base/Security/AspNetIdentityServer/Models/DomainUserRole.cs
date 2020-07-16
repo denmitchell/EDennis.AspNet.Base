@@ -2,21 +2,18 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace EDennis.AspNet.Base.Security {
-    public class DomainRole : IdentityRole<Guid>, ITemporalEntity {
-        public virtual Guid? OrganizationId { get; set; }
-        public virtual Guid? ApplicationId { get; set; }
+    public class DomainUserRole : IdentityUserRole<Guid>, ITemporalEntity {
 
         [MaxLength(8000)]
         public string OtherProperties { get; set; }
 
-        public ICollection<DomainUserRole> UserRoles { get; set; }
-
-        public DomainApplication Application { get; set; }
-        public DomainOrganization Organization { get; set; }
-
+        public DomainUser User { get; set; }
+        public DomainRole Role { get; set; }
 
         public SysStatus SysStatus { get; set; }
         public string SysUser { get; set; }

@@ -1,23 +1,14 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
 namespace EDennis.AspNet.Base.Security {
-    public class DomainRole : IdentityRole<Guid>, ITemporalEntity {
-        public virtual Guid? OrganizationId { get; set; }
-        public virtual Guid? ApplicationId { get; set; }
+    public class DomainOrganization : ITemporalEntity {
+        public Guid Id { get; set; } = CombGuid.Create();
+        public string Name { get; set; }
 
         [MaxLength(8000)]
         public string OtherProperties { get; set; }
-
-        public ICollection<DomainUserRole> UserRoles { get; set; }
-
-        public DomainApplication Application { get; set; }
-        public DomainOrganization Organization { get; set; }
-
-
         public SysStatus SysStatus { get; set; }
         public string SysUser { get; set; }
         public DateTime SysStart { get; set; }
@@ -31,7 +22,5 @@ namespace EDennis.AspNet.Base.Security {
         public void Update(object updated) {
             throw new NotImplementedException();
         }
-
-
     }
 }

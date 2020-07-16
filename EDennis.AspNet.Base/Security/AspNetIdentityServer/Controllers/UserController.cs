@@ -65,7 +65,7 @@ namespace EDennis.AspNetBase.Security {
             }
 
             var json = await _dbContext.GetFromJsonSqlAsync(sql, parameters);
-            var users = JsonSerializer.Deserialize<List<UserModel>>(json);
+            var users = JsonSerializer.Deserialize<List<UserEditModel>>(json);
 
             return Ok(users);
 
@@ -80,7 +80,7 @@ namespace EDennis.AspNetBase.Security {
             else {
                 var currentRoles = await _userManager.GetRolesAsync(user);
                 var currentClaims = await _userManager.GetClaimsAsync(user);
-                var userEditModel = new UserModel {
+                var userEditModel = new UserEditModel {
                     Id = user.Id,
                     UserName = user.UserName,
                     Email = user.Email,
@@ -95,7 +95,7 @@ namespace EDennis.AspNetBase.Security {
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] UserModel userEditModel) {
+        public async Task<IActionResult> CreateAsync([FromBody] UserEditModel userEditModel) {
 
             if(userEditModel.Id == default)
                 userEditModel.Id = Guid.NewGuid();
@@ -132,7 +132,7 @@ namespace EDennis.AspNetBase.Security {
         }
 
 
-        [HttpPatch("{pathParameter:alpha}")]
+        [HttpPatch("{pathParameter}")]
         public async Task<IActionResult> PatchAsync([FromBody] JsonElement jsonElement, [FromRoute] string pathParameter) {
 
             var user = await FindAsync(pathParameter);
@@ -189,7 +189,7 @@ namespace EDennis.AspNetBase.Security {
             var hasRoles = jsonElement.TryGetProperty("Roles", out JsonElement _);
             var hasClaims = jsonElement.TryGetProperty("Claims", out JsonElement _);
 
-            var userEditModel = JsonSerializer.Deserialize<UserModel>(jsonElement.GetRawText());
+            var userEditModel = JsonSerializer.Deserialize<UserEditModel>(jsonElement.GetRawText());
 
             results.AddRange(await UpdateRolesAndClaimsAsync(user, userEditModel, hasRoles, hasClaims));
 
@@ -202,7 +202,7 @@ namespace EDennis.AspNetBase.Security {
         }
 
 
-        [HttpDelete("{pathParameter:alpha}")]
+        [HttpDelete("{pathParameter}")]
         public async Task<IActionResult> Delete([FromRoute] string pathParameter) {
             var user = await FindAsync(pathParameter);
             if (user == null)
@@ -217,7 +217,7 @@ namespace EDennis.AspNetBase.Security {
 
 
         private async Task<IEnumerable<IdentityResult>> UpdateRolesAndClaimsAsync(TUser user,
-            UserModel userEditModel, bool hasRoles, bool hasClaims) {
+            UserEditModel userEditModel, bool hasRoles, bool hasClaims) {
 
             List<IdentityResult> results = new List<IdentityResult>();
 
@@ -251,13 +251,21 @@ namespace EDennis.AspNetBase.Security {
 
         private const string QRY_SQL_USER = @"
 WITH u as (
-  SELECT * 
+  SELECT u.*, o.Name OrganizationName
     FROM AspNetUsers u 
+    LEFT OUTER JOIN AspNetOrganizations o
+        on o.Id = u.OrganizationId
     ORDER BY UserName 
     OFFSET @skip ROWS 
     FETCH NEXT @take ROWS ONLY
 )
-SELECT Users.Id, Users.UserName, Users.Email,
+SELECT 
+    Users.Id, Users.UserName, Users.Email, 
+    CASE Users.EmailConfirmed WHEN 1 then 'true' else 'false' end EmailConfirmed, 
+    Users.PasswordHash, Users.SecurityStamp, Users.ConcurrencyStamp, Users.PhoneNumber, 
+    CASE Users.PhoneNumberConfirmed WHEN 1 then 'true' else 'false' end PhoneNumberConfirmed,
+    CASE Users.TwoFactorEnabled WHEN 1 then 'true' else 'false' end TwoFactorEnabled, 
+    Users.LockoutStart, Users.LockoutEnd, Users.AccessFailedCount, Users.OrganizationName,
 	JSON_QUERY('[' 
 		+ STUFF((SELECT ',' + char(34) + r.Name + char(34)
 		FROM AspNetRoles r
@@ -277,8 +285,10 @@ SELECT Users.Id, Users.UserName, Users.Email,
 
         private const string QRY_SQL_USER_ORG = @"
 WITH u as (
-  SELECT * 
+  SELECT u.*, o.Name OrganizationName
     FROM AspNetUsers u 
+    LEFT OUTER JOIN AspNetOrganizations o
+        on o.Id = u.OrganizationId
     WHERE 
       EXISTS (
         SELECT 0 
@@ -291,7 +301,13 @@ WITH u as (
     OFFSET @skip ROWS 
     FETCH NEXT @take ROWS ONLY
 )
-SELECT Users.Id, Users.UserName, Users.Email,
+SELECT 
+    Users.Id, Users.UserName, Users.Email, 
+    CASE Users.EmailConfirmed WHEN 1 then 'true' else 'false' end EmailConfirmed, 
+    Users.PasswordHash, Users.SecurityStamp, Users.ConcurrencyStamp, Users.PhoneNumber, 
+    CASE Users.PhoneNumberConfirmed WHEN 1 then 'true' else 'false' end PhoneNumberConfirmed,
+    CASE Users.TwoFactorEnabled WHEN 1 then 'true' else 'false' end TwoFactorEnabled, 
+    Users.LockoutStart, Users.LockoutEnd, Users.AccessFailedCount, Users.OrganizationName,
 	JSON_QUERY('[' 
 		+ STUFF((SELECT ',' + char(34) + r.Name + char(34)
 		FROM AspNetRoles r
@@ -311,8 +327,10 @@ SELECT Users.Id, Users.UserName, Users.Email,
 
         private const string QRY_SQL_USER_APP = @"
 WITH u as (
-  SELECT * 
+  SELECT u.*, o.Name OrganizationName
     FROM AspNetUsers u 
+    LEFT OUTER JOIN AspNetOrganizations o
+        on o.Id = u.OrganizationId
     WHERE 
       EXISTS (
         SELECT 0 
@@ -326,7 +344,13 @@ WITH u as (
     OFFSET @skip ROWS 
     FETCH NEXT @take ROWS ONLY
 )
-SELECT Users.Id, Users.UserName, Users.Email,
+SELECT 
+    Users.Id, Users.UserName, Users.Email, 
+    CASE Users.EmailConfirmed WHEN 1 then 'true' else 'false' end EmailConfirmed, 
+    Users.PasswordHash, Users.SecurityStamp, Users.ConcurrencyStamp, Users.PhoneNumber, 
+    CASE Users.PhoneNumberConfirmed WHEN 1 then 'true' else 'false' end PhoneNumberConfirmed,
+    CASE Users.TwoFactorEnabled WHEN 1 then 'true' else 'false' end TwoFactorEnabled, 
+    Users.LockoutStart, Users.LockoutEnd, Users.AccessFailedCount, Users.OrganizationName,
 	JSON_QUERY('[' 
 		+ STUFF((SELECT ',' + char(34) + r.Name + char(34)
 		FROM AspNetRoles r
@@ -347,8 +371,10 @@ SELECT Users.Id, Users.UserName, Users.Email,
 
         private const string QRY_SQL_USER_ORG_APP = @"
 WITH u as (
-  SELECT * 
+  SELECT u.*, o.Name OrganizationName
     FROM AspNetUsers u 
+    LEFT OUTER JOIN AspNetOrganizations o
+        on o.Id = u.OrganizationId
     WHERE 
       EXISTS (
         SELECT 0 
@@ -370,7 +396,13 @@ WITH u as (
     OFFSET @skip ROWS 
     FETCH NEXT @take ROWS ONLY
 )
-SELECT Users.Id, Users.UserName, Users.Email,
+SELECT 
+    Users.Id, Users.UserName, Users.Email, 
+    CASE Users.EmailConfirmed WHEN 1 then 'true' else 'false' end EmailConfirmed, 
+    Users.PasswordHash, Users.SecurityStamp, Users.ConcurrencyStamp, Users.PhoneNumber, 
+    CASE Users.PhoneNumberConfirmed WHEN 1 then 'true' else 'false' end PhoneNumberConfirmed,
+    CASE Users.TwoFactorEnabled WHEN 1 then 'true' else 'false' end TwoFactorEnabled, 
+    Users.LockoutStart, Users.LockoutEnd, Users.AccessFailedCount, Users.OrganizationName,
 	JSON_QUERY('[' 
 		+ STUFF((SELECT ',' + char(34) + r.Name + char(34)
 		FROM AspNetRoles r

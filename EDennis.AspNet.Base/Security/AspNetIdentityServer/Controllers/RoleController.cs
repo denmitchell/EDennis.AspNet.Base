@@ -58,7 +58,7 @@ namespace EDennis.AspNet.Base.Security {
                 return NotFound();
             else {
                 var currentClaims = await _roleManager.GetClaimsAsync(role);
-                var roleEditModel = new RoleModel {
+                var roleEditModel = new RoleEditModel {
                     Id = role.Id,
                     Name = role.Name,
                     Claims = currentClaims
@@ -71,7 +71,7 @@ namespace EDennis.AspNet.Base.Security {
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] RoleModel roleEditModel) {
+        public async Task<IActionResult> CreateAsync([FromBody] RoleEditModel roleEditModel) {
 
             if(roleEditModel.Id == default)
                 roleEditModel.Id = Guid.NewGuid();
@@ -121,7 +121,7 @@ namespace EDennis.AspNet.Base.Security {
 
             var hasClaims = jsonElement.TryGetProperty("Claims", out JsonElement _);
 
-            var roleEditModel = JsonSerializer.Deserialize<RoleModel>(jsonElement.GetRawText());
+            var roleEditModel = JsonSerializer.Deserialize<RoleEditModel>(jsonElement.GetRawText());
 
             results.AddRange(await UpdateClaimsAsync(role, roleEditModel, hasClaims));
 
@@ -151,7 +151,7 @@ namespace EDennis.AspNet.Base.Security {
 
 
         private async Task<IEnumerable<IdentityResult>> UpdateClaimsAsync(TRole role,
-            RoleModel roleEditModel, bool hasClaims) {
+            RoleEditModel roleEditModel, bool hasClaims) {
 
             List<IdentityResult> results = new List<IdentityResult>();
 

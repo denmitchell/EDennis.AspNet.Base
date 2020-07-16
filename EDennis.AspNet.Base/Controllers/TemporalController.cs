@@ -11,8 +11,8 @@ namespace EDennis.AspNet.Base {
     [ApiController]
     public abstract class TemporalController<TContext, TEntity, THistoryEntity> : CrudController<TContext, TEntity>
         where TContext : DbContext
-        where TEntity : TemporalEntity
-        where THistoryEntity : TemporalEntity {
+        where TEntity : class, ITemporalEntity, new()
+        where THistoryEntity : class, ITemporalEntity, new() {
 
         public TemporalController(DbContextProvider<TContext> provider, 
             ILogger<QueryController<TContext,TEntity>> logger) 
@@ -49,7 +49,7 @@ namespace EDennis.AspNet.Base {
 
         private void WriteToHistory(TEntity entity, SysStatus status, string user, DateTime now) {
             if (entity.SysStatus == SysStatus.Normal) {
-                var historyEntity = TemporalEntity.CloneFrom<TEntity, THistoryEntity>(entity);
+                var historyEntity = ITemporalEntity.CloneFrom<TEntity, THistoryEntity>(entity);
                 historyEntity.SysStatus = status;
                 historyEntity.SysUser = user;
                 historyEntity.SysEnd = now.AddTicks(-1);

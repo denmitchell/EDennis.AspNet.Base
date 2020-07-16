@@ -1,10 +1,9 @@
-﻿using EDennis.AspNet.Base.Security;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 
-namespace EDennis.AspNetIdentityServer.Models {
-    public class UserModel {
+namespace EDennis.AspNet.Base.Security {
+    public class UserEditModel {
         public Guid Id { get; set; }
         public string Email { get; set; }
         public string UserName { get; set; }
