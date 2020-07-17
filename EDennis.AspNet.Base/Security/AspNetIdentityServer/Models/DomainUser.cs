@@ -1,5 +1,4 @@
 ﻿using IdentityServer4.Models;
-using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
