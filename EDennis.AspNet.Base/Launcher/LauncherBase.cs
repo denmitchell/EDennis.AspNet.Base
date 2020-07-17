@@ -47,6 +47,10 @@ namespace EDennis.AspNet.Base.Launcher {
 
         private ILogger _logger;
 
+        public LauncherBase(ILogger<LauncherBase> logger) {
+            _logger = logger;
+        }
+
 
         /// <summary>
         /// Launch a set of web applications

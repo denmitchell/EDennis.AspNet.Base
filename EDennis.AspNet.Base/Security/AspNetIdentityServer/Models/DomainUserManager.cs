@@ -30,12 +30,15 @@ namespace EDennis.AspNet.Base.Security {
         }
 
 
-        public async IEnumerable<UserEditModel> GetAsync(string appName = null, string orgName = null,
+        public async Task<IEnumerable<UserEditModel>> GetAsync(string appName = null, string orgName = null,
             int? pageNumber = 1, int? pageSize = 100) {
+            await Task.Run(() => { });
+            throw new NotImplementedException();
         }
 
-        public async UserEditModel GetAsync([FromRoute] string pathParameter) {
-
+        public async Task<UserEditModel> GetAsync(string pathParameter) {
+            await Task.Run(() => { });
+            throw new NotImplementedException();
         }
 
         public virtual async Task<IEnumerable<DomainRole>> GetRolesAsync(DomainUser user, string applicationName) {

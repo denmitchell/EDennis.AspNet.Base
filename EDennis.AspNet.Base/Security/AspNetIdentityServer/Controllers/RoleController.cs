@@ -1,5 +1,4 @@
-﻿using EDennis.AspNetIdentityServer.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,16 +9,13 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace EDennis.AspNet.Base.Security {
-    public class RoleController<TUser, TRole, TContext> : ControllerBase
-        where TUser : DomainUser, new()
-        where TRole : DomainRole, new()
-        where TContext : DomainIdentityDbContext<TUser, TRole> {
+    public class RoleController : ControllerBase {
 
-        private readonly RoleManager<TRole> _roleManager;
-        private readonly TContext _dbContext;
+        private readonly RoleManager<DomainRole> _roleManager;
+        private readonly DomainIdentityDbContext _dbContext;
 
-        public RoleController(RoleManager<TRole> roleManager,
-            TContext dbContext) {
+        public RoleController(RoleManager<DomainRole> roleManager,
+            DomainIdentityDbContext dbContext) {
             _roleManager = roleManager;
             _dbContext = dbContext;
         }
@@ -76,7 +72,7 @@ namespace EDennis.AspNet.Base.Security {
             if(roleEditModel.Id == default)
                 roleEditModel.Id = Guid.NewGuid();
 
-            var role = new TRole {
+            var role = new DomainRole {
                 Id = roleEditModel.Id,
                 Name = roleEditModel.Name,
                 NormalizedName = roleEditModel.Name.ToUpper()
@@ -150,7 +146,7 @@ namespace EDennis.AspNet.Base.Security {
 
 
 
-        private async Task<IEnumerable<IdentityResult>> UpdateClaimsAsync(TRole role,
+        private async Task<IEnumerable<IdentityResult>> UpdateClaimsAsync(DomainRole role,
             RoleEditModel roleEditModel, bool hasClaims) {
 
             List<IdentityResult> results = new List<IdentityResult>();
@@ -171,7 +167,7 @@ namespace EDennis.AspNet.Base.Security {
 
 
 
-        private async Task<TRole> FindAsync(string pathParameter) {
+        private async Task<DomainRole> FindAsync(string pathParameter) {
             if (idPattern.IsMatch(pathParameter))
                 return await _roleManager.FindByIdAsync(pathParameter);
             else

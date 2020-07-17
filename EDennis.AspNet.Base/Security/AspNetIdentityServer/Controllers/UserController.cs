@@ -1,7 +1,6 @@
 ﻿using EDennis.AspNet.Base;
 using EDennis.AspNet.Base.EntityFramework.Entity;
 using EDennis.AspNet.Base.Security;
-using EDennis.AspNetIdentityServer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,16 +16,13 @@ namespace EDennis.AspNetBase.Security {
     [Authorize(Policy = "AdministerIDP")]
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController<TUser,TRole,TContext> : ControllerBase 
-        where TUser : DomainUser, new()
-        where TRole : DomainRole
-        where TContext : DomainIdentityDbContext<TUser,TRole>{
+    public class UserController : ControllerBase {
 
-        private readonly UserManager<TUser> _userManager;
-        private readonly TContext _dbContext;
+        private readonly UserManager<DomainUser> _userManager;
+        private readonly DomainIdentityDbContext _dbContext;
 
-        public UserController(UserManager<TUser> userManager,
-            TContext dbContext) {
+        public UserController(UserManager<DomainUser> userManager,
+            DomainIdentityDbContext dbContext) {
             _userManager = userManager;
             _dbContext = dbContext;
         }
@@ -102,7 +98,7 @@ namespace EDennis.AspNetBase.Security {
 
             userEditModel.UserName ??= userEditModel.Email;
 
-            var user = new TUser {
+            var user = new DomainUser {
                 Id = userEditModel.Id,
                 Email = userEditModel.Email,
                 NormalizedEmail = userEditModel.Email.ToUpper(),
@@ -216,7 +212,7 @@ namespace EDennis.AspNetBase.Security {
         }
 
 
-        private async Task<IEnumerable<IdentityResult>> UpdateRolesAndClaimsAsync(TUser user,
+        private async Task<IEnumerable<IdentityResult>> UpdateRolesAndClaimsAsync(DomainUser user,
             UserEditModel userEditModel, bool hasRoles, bool hasClaims) {
 
             List<IdentityResult> results = new List<IdentityResult>();
@@ -239,7 +235,7 @@ namespace EDennis.AspNetBase.Security {
         }
 
 
-        private async Task<TUser> FindAsync(string pathParameter) {
+        private async Task<DomainUser> FindAsync(string pathParameter) {
             if (pathParameter.Contains("@"))
                 return await _userManager.FindByEmailAsync(pathParameter);
             else if (idPattern.IsMatch(pathParameter))
