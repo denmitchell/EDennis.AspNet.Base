@@ -107,9 +107,10 @@ namespace EDennis.AspNet.Base.Security.AspNetIdentityServer.Models.EditModels {
                                 }
                                 return claim;
                             });
-                            if (mergeCollections && model.Claims != null)
-                                model.Claims = model.Claims.Union(claims).ToArray();
-                            else
+                            if (mergeCollections && model.Claims != null) {
+                                var newClaims = claims.Where(n => !model.Claims.Any(e => e.Type == n.Type && e.Value == n.Value));
+                                model.Claims = model.Claims.Union(newClaims).ToArray();
+                            } else
                                 model.Claims = claims.ToArray();
                             break;
                         case "ClientClaimsPrefix":
@@ -155,9 +156,10 @@ namespace EDennis.AspNet.Base.Security.AspNetIdentityServer.Models.EditModels {
                                 }
                                 return secret;
                             });
-                            if (mergeCollections && model.ClientSecrets != null)
+                            if (mergeCollections && model.ClientSecrets != null) {
+                                var newSecrets = secrets.Where(n => !model.ClientSecrets.Any(e => e.Value == n.Value && e.Expiration == n.Expiration));
                                 model.ClientSecrets = model.ClientSecrets.Union(secrets).ToArray();
-                            else
+                            } else
                                 model.ClientSecrets = secrets.ToArray();
                             break;
                         case "ClientUri":

@@ -54,9 +54,10 @@ namespace EDennis.AspNet.Base.Security.AspNetIdentityServer.Models.EditModels {
                                 }
                                 return secret;
                             });
-                            if (mergeCollections && model.ApiSecrets != null)
-                                model.ApiSecrets = model.ApiSecrets.Union(secrets).ToArray();
-                            else
+                            if (mergeCollections && model.ApiSecrets != null) {
+                                var newSecrets = secrets.Where(n => !model.ApiSecrets.Any(e => e.Value == n.Value && e.Expiration == n.Expiration));
+                                model.ApiSecrets = model.ApiSecrets.Union(newSecrets).ToArray();
+                            } else
                                 model.ApiSecrets = secrets.ToArray();
                             break;
                         case "Description":
