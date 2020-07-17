@@ -9,9 +9,6 @@ using System.Threading.Tasks;
 namespace EDennis.AspNet.Base.Security {
     public class DomainUserRole : IdentityUserRole<Guid>, ITemporalEntity {
 
-        [MaxLength(8000)]
-        public string OtherProperties { get; set; }
-
         public DomainUser User { get; set; }
         public DomainRole Role { get; set; }
 

@@ -9,8 +9,7 @@ namespace EDennis.AspNet.Base.Security {
         public virtual Guid? OrganizationId { get; set; }
         public virtual Guid? ApplicationId { get; set; }
 
-        [MaxLength(8000)]
-        public string OtherProperties { get; set; }
+        public Dictionary<string, string> Properties { get; set; }
 
         public ICollection<DomainUserRole> UserRoles { get; set; }
 

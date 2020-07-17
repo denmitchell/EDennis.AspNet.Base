@@ -1,15 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text.Json;
 
 
 namespace EDennis.AspNet.Base.Security {
     public class DomainUserToken : IdentityUserToken<Guid>, ITemporalEntity {
-
-        [MaxLength(8000)]
-        public string OtherProperties { get; set; }
 
         public DomainUser User { get; set; }
 
@@ -40,9 +39,20 @@ namespace EDennis.AspNet.Base.Security {
                         case "name":
                             LoginProvider = prop.Value.GetString();
                             break;
-                        case "OtherProperties":
-                        case "otherProperties":
-                            OtherProperties = prop.Value.GetString();
+                        case "Properties":
+                        case "properties":
+                            var properties = new Dictionary<string, string>();
+                            prop.Value.EnumerateObject().ToList().ForEach(e => {
+                                properties.Add(e.Name, e.Value.GetString());
+                            });
+                            if (mergeCollections && Properties != null)
+                                foreach (var entry in properties)
+                                    if (Properties.ContainsKey(entry.Key))
+                                        Properties[entry.Key] = entry.Value;
+                                    else
+                                        Properties.Add(entry.Key, entry.Value);
+                            else
+                                Properties = properties;
                             break;
                         case "SysUser":
                         case "sysUser":
@@ -75,7 +85,6 @@ namespace EDennis.AspNet.Base.Security {
             LoginProvider = obj.LoginProvider;
             UserId = obj.UserId;
             Name = obj.Name;
-            OtherProperties = obj.OtherProperties;
             SysUser = obj.SysUser;
             SysStatus = obj.SysStatus;
             SysStart = obj.SysStart;

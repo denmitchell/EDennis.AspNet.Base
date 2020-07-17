@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
 namespace EDennis.AspNet.Base.Security {
     public class DomainUserLogin : IdentityUserLogin<Guid>, ITemporalEntity {
-
-        [MaxLength(8000)]
-        public string OtherProperties { get; set; }
 
         public DomainUser User { get; set; }
 
