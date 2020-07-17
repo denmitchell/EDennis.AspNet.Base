@@ -39,21 +39,6 @@ namespace EDennis.AspNet.Base.Security {
                         case "name":
                             LoginProvider = prop.Value.GetString();
                             break;
-                        case "Properties":
-                        case "properties":
-                            var properties = new Dictionary<string, string>();
-                            prop.Value.EnumerateObject().ToList().ForEach(e => {
-                                properties.Add(e.Name, e.Value.GetString());
-                            });
-                            if (mergeCollections && Properties != null)
-                                foreach (var entry in properties)
-                                    if (Properties.ContainsKey(entry.Key))
-                                        Properties[entry.Key] = entry.Value;
-                                    else
-                                        Properties.Add(entry.Key, entry.Value);
-                            else
-                                Properties = properties;
-                            break;
                         case "SysUser":
                         case "sysUser":
                             SysUser = prop.Value.GetString();

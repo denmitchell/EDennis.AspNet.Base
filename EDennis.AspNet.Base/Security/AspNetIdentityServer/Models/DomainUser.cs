@@ -1,13 +1,18 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using IdentityServer4.Models;
+using Microsoft.AspNet.OData.Query;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Text.Json;
 
 namespace EDennis.AspNet.Base.Security {
     public class DomainUser : IdentityUser<Guid>, ITemporalEntity {
 
+        public const int SHA256_LENGTH = 64; //"a8a2f6ebe286697c527eb35a58b5539532e9b3ae3b64d4eb0a46fb657b41562c";
+        public const int SHA512_LENGTH = 128; //"f3bf9aa70169e4ab5339f20758986538fe6c96d7be3d184a036cde8161105fcf53516428fa096ac56247bb88085b0587d5ec8e56a6807b1af351305b2103d74b";
         public Guid OrganizationId { get; set; }
 
         public DateTime? LockoutBegin { get; set; }
@@ -26,6 +31,23 @@ namespace EDennis.AspNet.Base.Security {
                 }
             }
         }
+
+        private string _passwordHash;
+
+
+        public override string PasswordHash { 
+            get => _passwordHash; 
+            set {
+
+                if (value.Length == SHA256_LENGTH || value.Length == SHA512_LENGTH)
+                    _passwordHash = value;
+                else
+                    _passwordHash = value.Sha256();
+                
+            }
+        }
+
+
 
         public Dictionary<string, string> Properties { get; set; }
 
@@ -47,46 +69,58 @@ namespace EDennis.AspNet.Base.Security {
                         case "accessFailedCount":
                             AccessFailedCount = prop.Value.GetInt32();
                             break;
-                        /*
-                AccessFailedCount = obj.AccessFailedCount;
-                ConcurrencyStamp = Guid.NewGuid().ToString();
-                Email = obj.Email;
-                EmailConfirmed = obj.EmailConfirmed;
-                Id = obj.Id;
-                LockoutBegin = obj.LockoutBegin;
-                LockoutEnabled = obj.LockoutEnabled;
-                LockoutEnd = obj.LockoutEnd;
-                NormalizedEmail = obj.Email.ToUpper();
-                NormalizedUserName = obj.UserName.ToUpper();
-                Organization = obj.Organization;
-                OrganizationId = obj.OrganizationId;
-                PasswordHash = obj.PasswordHash;
-                PhoneNumber = obj.PhoneNumber;
-                PhoneNumberConfirmed = obj.PhoneNumberConfirmed;
-                Properties = obj.Properties;
-                SecurityStamp = obj.SecurityStamp;
-                SysStart = obj.SysStart;
-                SysEnd = obj.SysEnd;
-                SysStatus = obj.SysStatus;
-                SysUser = obj.SysUser;
-                TwoFactorEnabled = obj.TwoFactorEnabled;
-                UserClaims = obj.UserClaims;
-                UserLogins = obj.UserLogins;
-                UserName = obj.UserName;
-                UserRoles = obj.UserRoles;
-                UserTokens = obj.UserTokens;
-                        */
-                        case "LoginProvider":
-                        case "loginProvider":
-                            LoginProvider = prop.Value.GetString();
+                        case "ConcurrencyStamp":
+                        case "concurrencyStamp":
+                            ConcurrencyStamp = prop.Value.GetString();
                             break;
-                        case "UserId":
-                        case "userId":
-                            UserId = prop.Value.GetGuid();
+                        case "Email":
+                        case "email":
+                            Email = prop.Value.GetString();
+                            NormalizedEmail = Email.ToUpper();
                             break;
-                        case "Name":
-                        case "name":
-                            LoginProvider = prop.Value.GetString();
+                        case "EmailConfirmed":
+                        case "emailConfirmed":
+                            EmailConfirmed = prop.Value.GetBoolean();
+                            break;
+                        case "Id":
+                        case "id":
+                            Id = prop.Value.GetGuid();
+                            break;
+                        case "LockoutBegin":
+                        case "lockoutBegin":
+                            LockoutBegin = prop.Value.GetDateTime();
+                            break;
+                        case "LockoutEnabled":
+                        case "lockoutEnabled":
+                            LockoutEnabled = prop.Value.GetBoolean();
+                            break;
+                        case "LockoutEnd":
+                        case "lockoutEnd":
+                            LockoutEnd = prop.Value.GetDateTime();
+                            break;
+                        case "NormalizedEmail":
+                        case "normalizedEmail":
+                            NormalizedEmail = prop.Value.GetString();
+                            break;
+                        case "NormalizedUserName":
+                        case "normalizedUserName":
+                            NormalizedUserName = prop.Value.GetString();
+                            break;
+                        case "OrganizationId":
+                        case "organizationId":
+                            OrganizationId = prop.Value.GetGuid();
+                            break;
+                        case "PasswordHash":
+                        case "passwordHash":
+                            PasswordHash = prop.Value.GetString();
+                            break;
+                        case "PhoneNumber":
+                        case "phoneNumber":
+                            PhoneNumber = prop.Value.GetString();
+                            break;
+                        case "PhoneNumberConfirmed":
+                        case "phoneNumberConfirmed":
+                            PhoneNumberConfirmed = prop.Value.GetBoolean();
                             break;
                         case "Properties":
                         case "properties":
@@ -102,6 +136,10 @@ namespace EDennis.AspNet.Base.Security {
                                         Properties.Add(entry.Key, entry.Value);
                             else
                                 Properties = properties;
+                            break;
+                        case "SecurityStamp":
+                        case "securityStamp":
+                            SecurityStamp = prop.Value.GetString();
                             break;
                         case "SysUser":
                         case "sysUser":
@@ -119,6 +157,17 @@ namespace EDennis.AspNet.Base.Security {
                         case "sysEnd":
                             SysEnd = prop.Value.GetDateTime();
                             break;
+                        case "TwoFactorEnabled":
+                        case "twoFactorEnabled":
+                            TwoFactorEnabled = prop.Value.GetBoolean();
+                            break;
+                        /*
+                UserClaims = obj.UserClaims;
+                UserLogins = obj.UserLogins;
+                UserName = obj.UserName;
+                UserRoles = obj.UserRoles;
+                UserTokens = obj.UserTokens;
+                        */
                         default:
                             break;
                     }
