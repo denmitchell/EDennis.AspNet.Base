@@ -55,7 +55,7 @@ namespace EDennis.AspNet.Base.Security {
         public ICollection<DomainUserClaim> UserClaims { get; set; }
         public ICollection<DomainUserRole> UserRoles { get; set; }
         public ICollection<DomainUserLogin> UserLogins { get; set; }
-        public ICollection<DomainUserLogin> UserTokens { get; set; }
+        public ICollection<DomainUserToken> UserTokens { get; set; }
         public DateTime SysEnd { get; set; }
         public DateTime SysStart { get; set; }
         public SysStatus SysStatus { get; set; }
@@ -161,13 +161,51 @@ namespace EDennis.AspNet.Base.Security {
                         case "twoFactorEnabled":
                             TwoFactorEnabled = prop.Value.GetBoolean();
                             break;
-                        /*
-                UserClaims = obj.UserClaims;
-                UserLogins = obj.UserLogins;
-                UserName = obj.UserName;
-                UserRoles = obj.UserRoles;
-                UserTokens = obj.UserTokens;
-                        */
+                        case "UserName":
+                        case "userName":
+                            UserName = prop.Value.GetString();
+                            NormalizedUserName = UserName.ToUpper();
+                            break;
+                        case "UserClaims":
+                        case "userClaims":
+                            var claims = prop.Value.EnumerateArray()
+                                .Select(e => DomainUserClaim.DeserializeInto(e, new DomainUserClaim(), modelState));
+                            if (mergeCollections && UserClaims != null) {
+                                var newClaims = claims.Where(n => !UserClaims.Any(e => e.ClaimType == n.ClaimType && e.ClaimValue == n.ClaimValue));
+                                UserClaims = UserClaims.Union(newClaims).ToArray();
+                            } else
+                                UserClaims = claims.ToArray();
+                            break;
+                        case "UserRoles":
+                        case "userRoles":
+                            var roles = prop.Value.EnumerateArray()
+                                .Select(e => DomainUserRole.DeserializeInto(e, new DomainUserRole(), modelState));
+                            if (mergeCollections && UserRoles != null) {
+                                var newRoles = roles.Where(n => !UserRoles.Any(e => e.RoleId == n.RoleId));
+                                UserRoles = UserRoles.Union(newRoles).ToArray();
+                            } else
+                                UserRoles = roles.ToArray();
+                            break;
+                        case "UserLogins":
+                        case "userLogins":
+                            var logins = prop.Value.EnumerateArray()
+                                .Select(e => DomainUserLogin.DeserializeInto(e, new DomainUserLogin(), modelState));
+                            if (mergeCollections && UserLogins != null) {
+                                var newLogins = logins.Where(n => !UserLogins.Any(e => e.LoginProvider == n.LoginProvider && e.ProviderKey == n.ProviderKey));
+                                UserLogins = UserLogins.Union(newLogins).ToArray();
+                            } else
+                                UserLogins = logins.ToArray();
+                            break;
+                        case "UserTokens":
+                        case "userTokens":
+                            var tokens = prop.Value.EnumerateArray()
+                                .Select(e => DomainUserToken.DeserializeInto(e, new DomainUserToken(), modelState));                            
+                            if (mergeCollections && UserTokens != null) {
+                                var newTokens = tokens.Where(n => !UserTokens.Any(e => e.LoginProvider == n.LoginProvider && e.Name == n.Name));
+                                UserTokens = UserTokens.Union(newTokens).ToArray();
+                            } else
+                                UserTokens = tokens.ToArray();
+                            break;
                         default:
                             break;
                     }

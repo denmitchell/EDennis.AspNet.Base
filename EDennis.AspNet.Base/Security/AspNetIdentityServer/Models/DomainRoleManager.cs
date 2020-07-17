@@ -23,25 +23,22 @@ namespace EDennis.AspNet.Base.Security {
     /// user management across applications and allows user management to be delegated 
     /// to organization admins.
     /// </summary>
-    /// <typeparam name="TRole">DomainRole or subclass</typeparam>
-    public class DomainRoleManager<TUser,TRole,TContext> : RoleManager<TRole>
-        where TUser : DomainUser, new()
-        where TRole : DomainRole
-        where TContext : DomainIdentityDbContext<TUser, TRole> {
-        public DomainRoleManager(IRoleStore<TRole> store, IEnumerable<IRoleValidator<TRole>> roleValidators, 
-            ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors, ILogger<RoleManager<TRole>> logger) 
+    /// <typeparam name="DomainRole">DomainRole or subclass</typeparam>
+    public class DomainRoleManager : RoleManager<DomainRole> {
+        public DomainRoleManager(IRoleStore<DomainRole> store, IEnumerable<IRoleValidator<DomainRole>> roleValidators, 
+            ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors, ILogger<RoleManager<DomainRole>> logger) 
             : base(store, roleValidators, keyNormalizer, errors, logger) {
         }
 
 
-        public virtual async Task<IEnumerable<TRole>> GetRolesForApplicationAsync(string applicationName) {
+        public virtual async Task<IEnumerable<DomainRole>> GetRolesForApplicationAsync(string applicationName) {
 
 
-            if (!(Store is RoleStore<TRole, TContext, Guid> store))
-                throw new Exception("Cannot use DomainRoleManager.GetRolesForApplicationAsync(string applicationName) without Microsoft.AspNetCore.Identity.EntityFrameworkCore.RoleStore<TRole> where TRole : DomainRole.");
+            if (!(Store is RoleStore<DomainRole, DomainIdentityDbContext, Guid> store))
+                throw new Exception("Cannot use DomainRoleManager.GetRolesForApplicationAsync(string applicationName) without Microsoft.AspNetCore.Identity.EntityFrameworkCore.RoleStore<DomainRole> where DomainRole : DomainRole.");
 
 
-            var qry = store.Context.Set<TRole>()
+            var qry = store.Context.Set<DomainRole>()
                 .FromSqlInterpolated($@"
 select r.* 
   from AspNetRoles r
@@ -54,7 +51,7 @@ select r.*
         }
 
 
-        public virtual async Task<IEnumerable<TRole>> GetRolesForApplicationAsync(Guid applicationId) {
+        public virtual async Task<IEnumerable<DomainRole>> GetRolesForApplicationAsync(Guid applicationId) {
 
             if(!SupportsQueryableRoles)
                 throw new Exception("Cannot use DomainRoleManager.GetRolesForApplicationAsync(int applicationId) without Queryable Roles.");
@@ -67,12 +64,12 @@ select r.*
         }
 
 
-        public virtual async Task<IEnumerable<TRole>> GetRolesForOrganizationAsync(string organizationName) {
+        public virtual async Task<IEnumerable<DomainRole>> GetRolesForOrganizationAsync(string organizationName) {
 
-            if (!(Store is RoleStore<TRole, TContext, Guid> store))
-                throw new Exception("Cannot use DomainRoleManager.GetRolesForOrganizationAsync(string organizationName) without Microsoft.AspNetCore.Identity.EntityFrameworkCore.RoleStore<TRole> where TRole : DomainRole.");
+            if (!(Store is RoleStore<DomainRole, DomainIdentityDbContext, Guid> store))
+                throw new Exception("Cannot use DomainRoleManager.GetRolesForOrganizationAsync(string organizationName) without Microsoft.AspNetCore.Identity.EntityFrameworkCore.RoleStore<DomainRole> where DomainRole : DomainRole.");
 
-            var qry = store.Context.Set<TRole>()
+            var qry = store.Context.Set<DomainRole>()
                 .FromSqlInterpolated($@"
 select r.* 
   from AspNetRoles r
@@ -85,7 +82,7 @@ select r.*
         }
 
 
-        public virtual async Task<IEnumerable<TRole>> GetRolesForOrganizationAsync(Guid organizationId) {
+        public virtual async Task<IEnumerable<DomainRole>> GetRolesForOrganizationAsync(Guid organizationId) {
 
             if (!SupportsQueryableRoles)
                 throw new Exception("Cannot use DomainRoleManager.GetRolesForOrganizationAsync(int organizationId) without Queryable Roles.");
@@ -99,13 +96,13 @@ select r.*
 
 
 
-        public virtual async Task<IEnumerable<Claim>> GetClaimsAsync(IEnumerable<TRole> roles) {
+        public virtual async Task<IEnumerable<Claim>> GetClaimsAsync(IEnumerable<DomainRole> roles) {
 
-            if (!(Store is RoleStore<TRole, TContext, Guid> store))
-                throw new Exception("Cannot use DomainRoleManager.GetClaimsAsync(IEnumerable<TRole> roles) without Microsoft.AspNetCore.Identity.EntityFrameworkCore.RoleStore<TRole> where TRole : DomainRole.");
+            if (!(Store is RoleStore<DomainRole, DomainIdentityDbContext, Guid> store))
+                throw new Exception("Cannot use DomainRoleManager.GetClaimsAsync(IEnumerable<DomainRole> roles) without Microsoft.AspNetCore.Identity.EntityFrameworkCore.RoleStore<DomainRole> where DomainRole : DomainRole.");
 
             if (!store.Context.Database.ProviderName.Contains("SqlServer"))
-                throw new Exception("Cannot use DomainRoleManager.GetClaimsAsync(IEnumerable<TRole> roles) without SqlServer provider");
+                throw new Exception("Cannot use DomainRoleManager.GetClaimsAsync(IEnumerable<DomainRole> roles) without SqlServer provider");
 
             var db = store.Context.Database;
             var cxn = db.GetDbConnection();
