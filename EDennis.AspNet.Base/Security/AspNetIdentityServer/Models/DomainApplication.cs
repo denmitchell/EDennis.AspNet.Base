@@ -17,6 +17,8 @@ namespace EDennis.AspNet.Base.Security {
         public DateTime SysStart { get; set; }
         public DateTime SysEnd { get; set; }
 
+        public ICollection<DomainRole> Roles { get; set; }
+
         public void Patch(JsonElement jsonElement, ModelStateDictionary modelState, bool mergeCollections = true) {
             foreach (var prop in jsonElement.EnumerateObject()) {
                 try {

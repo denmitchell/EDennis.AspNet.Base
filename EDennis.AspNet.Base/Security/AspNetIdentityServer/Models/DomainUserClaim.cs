@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -17,7 +18,6 @@ namespace EDennis.AspNet.Base.Security {
         public string SysUser { get; set; }
         public DateTime SysStart { get; set; }
         public DateTime SysEnd { get; set; }
-
 
         public void Patch(JsonElement jsonElement, ModelStateDictionary modelState, bool mergeCollections = true)
             => DeserializeInto(jsonElement, this, modelState);

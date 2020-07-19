@@ -1,4 +1,5 @@
-﻿create table UserClientClaims (
+﻿/*
+create table UserClientClaims (
 	UserId uniqueidentifier,
 	ClientId nvarchar(200),
 	Claims nvarchar(max)
@@ -14,6 +15,7 @@
 				on delete cascade,
 )
 go
+*/
 create or alter procedure di.UpdateUserClientClaims (
 	@UserId  uniqueidentifier,
 	@ClientId nvarchar(200)

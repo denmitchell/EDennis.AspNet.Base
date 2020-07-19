@@ -12,10 +12,12 @@ namespace EDennis.AspNet.Base.Security {
 
         public Dictionary<string, string> Properties { get; set; }
 
-        public ICollection<DomainUserRole> UserRoles { get; set; }
-
         public DomainApplication Application { get; set; }
         public DomainOrganization Organization { get; set; }
+
+        public ICollection<DomainUserRole> UserRoles { get; set; }
+        public ICollection<DomainRoleClaim> RoleClaims { get; set; }
+
 
 
         public SysStatus SysStatus { get; set; }
