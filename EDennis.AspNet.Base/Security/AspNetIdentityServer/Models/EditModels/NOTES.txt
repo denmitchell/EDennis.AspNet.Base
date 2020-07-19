@@ -1,0 +1,22 @@
+﻿ApplicationEditModel
+	Name, 
+    Properties = null, SysStatus = 0, SysUser = null
+OrganizationEditModel
+	Name, 
+    Properties = null, SysStatus = 0, SysUser = null
+RoleEditModel
+    Name, Application,
+    Organization = defaultOrganization,
+    Properties = null, SysStatus = 0, SysUser = null, 
+    Dictionary<string,string[]> RoleClaims
+UserEditModel
+    UserName, Password, 
+    AccessFailedCount = 0, Email = UserName, EmailConfirmed = false, 
+    LockoutBegin = null, LockoutEnd = null,
+    Organization = defaultOrganization,  
+    PhoneNumber = null, PhoneNumberConfirmed = false, TwoFactorEnabled = false,
+    Properties = null, SysStatus = 0, SysUser = null, 
+    Dictionary<string,string[]> UserClaims
+    string[] UserRoles,
+    --Dictionary<string,string[]> UserLogins -- managed by ASP.NET Identity
+    --Dictionary<string,string[]> UserLogins -- managed by ASP.NET Identity
