@@ -30,6 +30,14 @@ namespace EDennis.AspNet.Base.Security {
         }
 
 
+        public async Task AddOrUpdate(UserEditModel editModel) {
+            var entity = await FindByNameAsync(editModel.Name);
+
+        }
+
+
+
+
         public async Task<IEnumerable<UserEditModel>> GetAsync(string appName = null, string orgName = null,
             int? pageNumber = 1, int? pageSize = 100) {
             await Task.Run(() => { });

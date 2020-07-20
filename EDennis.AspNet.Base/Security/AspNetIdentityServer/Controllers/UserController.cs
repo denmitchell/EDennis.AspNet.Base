@@ -93,7 +93,53 @@ namespace EDennis.AspNetBase.Security {
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] UserEditModel userEditModel) {
 
-            if(userEditModel.Id == default)
+            var existingUser = _dbContext.Set<DomainUser>().FirstOrDefault(u => u.UserName == userEditModel.Name);
+
+            if (existingUser != null) {
+                ModelState.AddModelError("Name", $"A user with Name/UserName='{userEditModel.Name}' already exists.");
+            }
+
+            DomainOrganization existingOrganization;
+
+            if (userEditModel.Organization != null) {
+                existingOrganization = _dbContext.Set<DomainOrganization>().FirstOrDefault(o => o.Name == userEditModel.Organization);
+
+                if (existingOrganization == null) {
+                    ModelState.AddModelError("Organization", $"An organization with Name ='{userEditModel.Organization}' does not exists.");
+                }
+            }
+
+            IEnumerable<DomainRole> existingRoles;
+            List<DomainUserRole> userRoles;
+
+            if (userEditModel.Roles != null && userEditModel.Roles.Count() > 0) {
+                existingRoles = _dbContext.Set<DomainRole>().Where(o => userEditModel.Roles.Contains(o.Name));
+
+                foreach(var role in userEditModel.Roles.Except(existingRoles.Select(r => r.Name))) { 
+                    ModelState.AddModelError("Roles", $"A role with Name ='{role}' does not exists.");
+                }
+
+                if (ModelState.ErrorCount == 0) {
+                    userRoles = new List<DomainUserRole>();
+                    foreach (var role in existingRoles) {
+                        userRoles.Add(new DomainUserRole {
+                            Role = role,
+                            RoleId = role.Id,
+                            User = existingUser,
+                            UserId = existingUser.Id,
+                            SysStatus = SysStatus.Normal
+                        });
+                    }
+                }
+
+            }
+
+
+            if (ModelState.ErrorCount > 0)
+                return Conflict(ModelState);
+
+
+            if (userEditModel.Id == default)
                 userEditModel.Id = Guid.NewGuid();
 
             userEditModel.UserName ??= userEditModel.Email;

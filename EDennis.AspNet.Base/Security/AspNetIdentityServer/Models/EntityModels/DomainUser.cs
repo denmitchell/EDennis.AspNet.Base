@@ -14,7 +14,7 @@ namespace EDennis.AspNet.Base.Security {
         public const int SHA512_LENGTH = 128; //"f3bf9aa70169e4ab5339f20758986538fe6c96d7be3d184a036cde8161105fcf53516428fa096ac56247bb88085b0587d5ec8e56a6807b1af351305b2103d74b";
         public Guid OrganizationId { get; set; }
 
-        public DateTime? LockoutBegin { get; set; }
+        public DateTimeOffset? LockoutBegin { get; set; }
 
         [NotMapped]
         public override bool LockoutEnabled {

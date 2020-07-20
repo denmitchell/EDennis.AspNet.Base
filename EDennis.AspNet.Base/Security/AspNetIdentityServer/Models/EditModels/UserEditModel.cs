@@ -3,23 +3,19 @@ using System.Collections.Generic;
 using System.Security.Claims;
 
 namespace EDennis.AspNet.Base.Security {
-    public class UserEditModel {
-        public Guid Id { get; set; }
+    public class UserEditModel : BaseEditModel {
         public string Email { get; set; }
-        public string UserName { get; set; }
         public string Password { get; set; }
         public bool EmailConfirmed { get; set; }
-        public Guid SecurityStamp { get; set; }
-        public Guid ConcurrencyStamp { get; set; }
         public string PhoneNumber { get; set; }
-        public string PhoneNumberConfirmed { get; set; }
+        public bool PhoneNumberConfirmed { get; set; }
         public bool TwoFactorEnabled { get; set; }
-        public DateTime? LockoutBegin { get; set; }
-        public DateTime? LockoutEnd { get; set; }
+        public DateTimeOffset? LockoutBegin { get; set; }
+        public DateTimeOffset? LockoutEnd { get; set; }
         public int AccessFailedCount { get; set; }
-        public string OrganizationName { get; set; }
+        public string Organization { get; set; }
+        public Dictionary<string, string[]> Claims { get; set; }
         public IEnumerable<string> Roles { get; set; }
-        public IEnumerable<Claim> Claims { get; set; }
 
     }
 }
