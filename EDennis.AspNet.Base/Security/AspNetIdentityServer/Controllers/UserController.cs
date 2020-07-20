@@ -1,5 +1,6 @@
 ﻿using EDennis.AspNet.Base;
 using EDennis.AspNet.Base.EntityFramework.Entity;
+using EDennis.AspNet.Base.Middleware;
 using EDennis.AspNet.Base.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -139,30 +140,29 @@ namespace EDennis.AspNetBase.Security {
                 return Conflict(ModelState);
 
 
-            if (userEditModel.Id == default)
-                userEditModel.Id = Guid.NewGuid();
-
-            userEditModel.UserName ??= userEditModel.Email;
-
             var user = new DomainUser {
-                Id = userEditModel.Id,
+                Id = Guid.NewGuid(),
                 Email = userEditModel.Email,
                 NormalizedEmail = userEditModel.Email.ToUpper(),
-                UserName = userEditModel.UserName,
-                NormalizedUserName = userEditModel.UserName.ToUpper()
+                UserName = userEditModel.Name,
+                NormalizedUserName = userEditModel.Name.ToUpper()
             };
-            var hashed = _userManager.PasswordHasher.HashPassword(user, userEditModel.Password);
-            user.PasswordHash = hashed;
+            if (userEditModel.Password.Length == 256 || userEditModel.Password.Length == 512)
+                user.PasswordHash = userEditModel.Password;
+            else
+                user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, userEditModel.Password);
+
 
             var results = new List<IdentityResult> {
                 await _userManager.CreateAsync(user)
             };
 
+
             if (userEditModel.Roles != null && userEditModel.Roles.Count() > 0)
                 results.Add(await _userManager.AddToRolesAsync(user, userEditModel.Roles));
 
             if (userEditModel.Claims != null && userEditModel.Claims.Count() > 0)
-                results.Add(await _userManager.AddClaimsAsync(user, userEditModel.Claims));
+                results.Add(await _userManager.AddClaimsAsync(user, userEditModel.Claims.ToClaims()));
 
             var failures = results.SelectMany(r => r.Errors);
 
@@ -272,8 +272,8 @@ namespace EDennis.AspNetBase.Security {
 
             if (hasClaims) {
                 var currentClaims = await _userManager.GetClaimsAsync(user);
-                results.Add(await _userManager.RemoveClaimsAsync(user, currentClaims.Except(userEditModel.Claims)));
-                results.Add(await _userManager.AddClaimsAsync(user, userEditModel.Claims.Except(currentClaims)));
+                results.Add(await _userManager.RemoveClaimsAsync(user, currentClaims.Except(userEditModel.Claims.ToClaims())));
+                results.Add(await _userManager.AddClaimsAsync(user, userEditModel.Claims.ToClaims().Except(currentClaims)));
             }
 
             return results;
