@@ -91,6 +91,7 @@ namespace EDennis.AspNet.Base.Security {
             }
 
             var userEditModel = new UserEditModel();
+            var results = new List<IdentityResult>();
 
             foreach (var prop in jsonElement.EnumerateObject()) {
                 try {
@@ -98,10 +99,28 @@ namespace EDennis.AspNet.Base.Security {
                         case "Organization":
                         case "organization":
                             userEditModel.Organization = prop.Value.GetString();
+                            DomainOrganization existingOrganization;
+
+                            if (userEditModel.Organization != null) {
+                                existingOrganization = _dbContext.Set<DomainOrganization>().FirstOrDefault(o => o.Name == userEditModel.Organization);
+
+                                if (existingOrganization == null) {
+                                    modelState.AddModelError("Organization", $"An organization with Name ='{userEditModel.Organization}' does not exists.");
+                                }
+                            }
                             break;
                         case "Roles":
                         case "roles":
+
                             userEditModel.Roles = prop.Value.EnumerateArray().Select(x => x.GetString());
+
+                            var existingRoles = await _userManager.GetRolesAsync(existingUser);
+                            var rolesToAdd = userEditModel.Roles.Except(existingRoles);
+                            var rolesToRemove = existingRoles.Except(userEditModel.Roles);
+
+                            results.Add(await _userManager.AddToRolesAsync(existingUser, rolesToAdd));
+                            results.Add(await _userManager.RemoveFromRolesAsync(existingUser, rolesToRemove));
+
                             break;
                         case "Claims":
                         case "claims":
@@ -131,64 +150,77 @@ namespace EDennis.AspNet.Base.Security {
                         case "name":
                             userEditModel.Name = prop.Value.GetString();
                             break;
+                        case "Password":
+                        case "password":
+                            userEditModel.Password = prop.Value.GetString();
+                            break;
+                        case "PhoneNumber":
+                        case "phoneNumber":
+                            userEditModel.PhoneNumber = prop.Value.GetString();
+                            break;
+                        case "PhoneNumberConfirmed":
+                        case "phoneNumberConfirmed":
+                            userEditModel.PhoneNumberConfirmed = prop.Value.GetBoolean();
+                            break;
+                        case "Properties":
+                        case "properties":
+                            userEditModel.Properties = JsonSerializer.Deserialize<Dictionary<string, string>>(prop.Value.GetRawText());
+                            break;
+                        case "SysUser":
+                        case "sysUser":
+                            userEditModel.SysUser = prop.Value.GetString();
+                            break;
+                        case "SysStatus":
+                        case "sysStatus":
+                            userEditModel.SysStatus = (SysStatus)Enum.Parse(typeof(SysStatus), prop.Value.GetString());
+                            break;
+                        case "TwoFactorEnabled":
+                        case "twoFactorEnabled":
+                            userEditModel.TwoFactorEnabled = prop.Value.GetBoolean();
+                            break;
                     }
                 } catch (InvalidOperationException ex) {
-
+                    modelState.AddModelError(prop.Name, $"{ex.Message}: Cannot parse value for {prop.Value} from {typeof(DomainUserRole).Name} JSON");
                 }
 
 
-
-                DomainOrganization existingOrganization;
-
-                if (userEditModel.Organization != null) {
-                    existingOrganization = _dbContext.Set<DomainOrganization>().FirstOrDefault(o => o.Name == userEditModel.Organization);
-
-                    if (existingOrganization == null) {
-                        modelState.AddModelError("Organization", $"An organization with Name ='{userEditModel.Organization}' does not exists.");
-                    }
-                }
 
                 if (modelState.ErrorCount > 0)
-                                return new ObjectResult(modelState) { StatusCode = StatusCodes.Status409Conflict };
+                    return new ObjectResult(modelState) { StatusCode = StatusCodes.Status409Conflict };
 
 
-                            var user = new DomainUser {
-                                Id = Guid.NewGuid(),
-                                Email = userEditModel.Email,
-                                NormalizedEmail = userEditModel.Email.ToUpper(),
-                                UserName = userEditModel.Name,
-                                NormalizedUserName = userEditModel.Name.ToUpper()
-                            };
-                            if (userEditModel.Password.Length == DomainUser.SHA256_LENGTH || userEditModel.Password.Length == DomainUser.SHA512_LENGTH)
-                                user.PasswordHash = userEditModel.Password;
-                            else
-                                user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, userEditModel.Password);
+                var user = new DomainUser {
+                    Id = Guid.NewGuid(),
+                    Email = userEditModel.Email,
+                    NormalizedEmail = userEditModel.Email.ToUpper(),
+                    UserName = userEditModel.Name,
+                    NormalizedUserName = userEditModel.Name.ToUpper()
+                };
+                if (userEditModel.Password.Length == DomainUser.SHA256_LENGTH || userEditModel.Password.Length == DomainUser.SHA512_LENGTH)
+                    user.PasswordHash = userEditModel.Password;
+                else
+                    user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, userEditModel.Password);
 
 
-                            var results = new List<IdentityResult> {
-                await _userManager.CreateAsync(user)
-            };
+                results.Add(await _userManager.CreateAsync(user));
 
 
-                            if (userEditModel.Roles != null && userEditModel.Roles.Count() > 0)
-                                results.Add(await _userManager.AddToRolesAsync(user, userEditModel.Roles));
+                if (userEditModel.Claims != null && userEditModel.Claims.Count() > 0)
+                    results.Add(await _userManager.AddClaimsAsync(user, userEditModel.Claims.ToClaims()));
 
-                            if (userEditModel.Claims != null && userEditModel.Claims.Count() > 0)
-                                results.Add(await _userManager.AddClaimsAsync(user, userEditModel.Claims.ToClaims()));
+                var failures = results.SelectMany(r => r.Errors);
 
-                            var failures = results.SelectMany(r => r.Errors);
+                if (failures.Count() > 0)
+                    return new ObjectResult(failures) { StatusCode = StatusCodes.Status409Conflict };
+                else
+                    return new ObjectResult(userEditModel) { StatusCode = StatusCodes.Status200OK };
 
-                            if (failures.Count() > 0)
-                                return new ObjectResult(failures) { StatusCode = StatusCodes.Status409Conflict };
-                            else
-                                return new ObjectResult(userEditModel) { StatusCode = StatusCodes.Status200OK };
-
-                    }
+            }
 
 
 
 
 
-                }
+        }
 
-}
+    }
