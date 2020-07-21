@@ -4,6 +4,10 @@ using System.Linq;
 using System.Security.Claims;
 
 namespace EDennis.AspNet.Base.Security {
+
+    /// <summary>
+    /// Are these still needed, or can we use EDennis.AspNet.Base.ClaimExtensions?
+    /// </summary>
     public static class ClaimsExtensions {
         public static IEnumerable<Claim> ToClaimEnumerable<E>(this Dictionary<string, E> dict)
         where E : IEnumerable<string> {

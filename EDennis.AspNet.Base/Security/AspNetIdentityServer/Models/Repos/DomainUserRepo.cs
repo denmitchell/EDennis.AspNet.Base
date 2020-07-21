@@ -1,5 +1,5 @@
 ﻿using EDennis.AspNet.Base.EntityFramework;
-using EDennis.AspNet.Base.Security.AspNetIdentityServer.Models.Extensions;
+using EDennis.AspNet.Base.Security.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -101,7 +101,7 @@ namespace EDennis.AspNet.Base.Security {
                 existingOrganization = _dbContext.Set<DomainOrganization>().FirstOrDefault(o => o.Name == userEditModel.Organization);
 
                 if (existingOrganization == null) {
-                    modelState.AddModelError("Organization", $"An organization with Name ='{userEditModel.Organization}' does not exists.");
+                    modelState.AddModelError("Organization", $"An organization with Name ='{userEditModel.Organization}' does not exist.");
                 }
             }
 
@@ -267,7 +267,7 @@ namespace EDennis.AspNet.Base.Security {
                             break;
                     }
                 } catch (InvalidOperationException ex) {
-                    modelState.AddModelError(prop.Name, $"{ex.Message}: Cannot parse value for {prop.Value} from {typeof(DomainUserRole).Name} JSON");
+                    modelState.AddModelError(prop.Name, $"{ex.Message}: Cannot parse value for {prop.Value} from {typeof(DomainUser).Name} JSON");
                 }
             }
 
