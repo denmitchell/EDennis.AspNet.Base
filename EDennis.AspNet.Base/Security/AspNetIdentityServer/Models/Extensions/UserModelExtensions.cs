@@ -43,7 +43,7 @@ namespace EDennis.AspNet.Base.Security.AspNetIdentityServer.Models.Extensions {
                 LockoutEnd = editModel.LockoutEnd,
                 PhoneNumber = editModel.PhoneNumber,
                 PhoneNumberConfirmed = editModel.PhoneNumberConfirmed,
-                PasswordHash = (editModel.Password.Length == 256 || editModel.Password.Length == 512) ? editModel.Password : editModel.Password.ToSha256(),
+                PasswordHash = (editModel.Password.Length == DomainUser.SHA256_LENGTH || editModel.Password.Length == DomainUser.SHA512_LENGTH) ? editModel.Password : editModel.Password.ToSha256(),
                 SysStatus = editModel.SysStatus,
                 SysUser = editModel.SysUser,
                 TwoFactorEnabled = editModel.TwoFactorEnabled,

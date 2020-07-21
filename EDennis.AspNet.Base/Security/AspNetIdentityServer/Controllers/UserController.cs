@@ -162,7 +162,7 @@ namespace EDennis.AspNetBase.Security {
                 results.Add(await _userManager.AddToRolesAsync(user, userEditModel.Roles));
 
             if (userEditModel.Claims != null && userEditModel.Claims.Count() > 0)
-                results.Add(await _userManager.AddClaimsAsync(user, userEditModel.Claims.ToClaims()));
+                results.Add(await _userManager.AddClaimsAsync(user, userEditModel.Claims.ToClaimEnumerable()));
 
             var failures = results.SelectMany(r => r.Errors);
 
@@ -272,8 +272,8 @@ namespace EDennis.AspNetBase.Security {
 
             if (hasClaims) {
                 var currentClaims = await _userManager.GetClaimsAsync(user);
-                results.Add(await _userManager.RemoveClaimsAsync(user, currentClaims.Except(userEditModel.Claims.ToClaims())));
-                results.Add(await _userManager.AddClaimsAsync(user, userEditModel.Claims.ToClaims().Except(currentClaims)));
+                results.Add(await _userManager.RemoveClaimsAsync(user, currentClaims.Except(userEditModel.Claims.ToClaimEnumerable())));
+                results.Add(await _userManager.AddClaimsAsync(user, userEditModel.Claims.ToClaimEnumerable().Except(currentClaims)));
             }
 
             return results;

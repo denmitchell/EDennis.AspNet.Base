@@ -4,12 +4,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.EntityFrameworkCore.Update;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace EDennis.AspNet.Base.Security {
@@ -18,11 +18,72 @@ namespace EDennis.AspNet.Base.Security {
         public DomainIdentityDbContext _dbContext;
         public UserManager<DomainUser> _userManager;
 
+        public static Regex idPattern = new Regex("[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}");
+        public static Regex lpPattern = new Regex("(?:\\(\\s*loginProvider\\s*=\\s*'?)([^,']+)(?:'?\\s*,\\s*providerKey\\s*=\\s*'?)([^)']+)(?:'?\\s*\\))");
+
+
         public DomainUserRepo(DbContextProvider<DomainIdentityDbContext> provider, UserManager<DomainUser> userManager) {
             _dbContext = provider.DbContext;
             _userManager = userManager;
         }
 
+
+
+        public async Task<ObjectResult> GetAsync(string pathParameter) {
+            var user = await FindAsync(pathParameter);
+            if (user == null)
+                return new ObjectResult(null) { StatusCode = StatusCodes.Status404NotFound };
+            else {
+                var currentRoles = await _userManager.GetRolesAsync(user);
+                var currentClaims = (await _userManager.GetClaimsAsync(user)).ToStringDictionary();
+
+                var userEditModel = user.ToEditModel();
+                userEditModel.Roles = currentRoles;
+                userEditModel.Claims = currentClaims;
+
+                return new ObjectResult(userEditModel) { StatusCode = StatusCodes.Status200OK };
+            }
+        }
+
+
+
+
+
+        public async Task<ObjectResult> GetAsync(string appName = null, string orgName = null,
+            int? pageNumber = 1, int? pageSize = 100) {
+
+
+            var skip = (pageNumber ?? 1 - 1) * pageSize ?? 100;
+            var take = pageSize ?? 100;
+
+            var qry = _dbContext.Users as IQueryable<DomainUser>;
+
+            if (appName != null)
+                qry = qry.Where(u => u.UserRoles.Any(r => r.Role.Application.Name == appName));
+
+            if (orgName != null)
+                qry = qry.Where(u => u.Organization.Name == orgName);
+
+            qry = qry.Skip(skip)
+                .Take(take)
+                .AsNoTracking();
+                
+            var result = (await qry.ToListAsync()).Select(x=>x.ToEditModel());
+
+            return new ObjectResult(result) { StatusCode = StatusCodes.Status200OK };
+
+        }
+
+
+
+        private async Task<DomainUser> FindAsync(string pathParameter) {
+            if (pathParameter.Contains("@"))
+                return await _userManager.FindByEmailAsync(pathParameter);
+            else if (idPattern.IsMatch(pathParameter))
+                return await _userManager.FindByIdAsync(pathParameter);
+            else
+                return await _userManager.FindByNameAsync(pathParameter);
+        }
 
 
         public async Task<ObjectResult> CreateAsync(UserEditModel userEditModel, ModelStateDictionary modelState) {
@@ -70,7 +131,7 @@ namespace EDennis.AspNet.Base.Security {
                 results.Add(await _userManager.AddToRolesAsync(user, userEditModel.Roles));
 
             if (userEditModel.Claims != null && userEditModel.Claims.Count() > 0)
-                results.Add(await _userManager.AddClaimsAsync(user, userEditModel.Claims.ToClaims()));
+                results.Add(await _userManager.AddClaimsAsync(user, userEditModel.Claims.ToClaimEnumerable()));
 
             var failures = results.SelectMany(r => r.Errors);
 
@@ -126,7 +187,7 @@ namespace EDennis.AspNet.Base.Security {
                         case "Claims":
                         case "claims":
                             userEditModel.Claims = JsonSerializer.Deserialize<Dictionary<string, string[]>>(prop.Value.GetRawText());
-                            var newClaims = userEditModel.Claims.ToClaims();
+                            var newClaims = userEditModel.Claims.ToClaimEnumerable();
                             var existingClaims = await _userManager.GetClaimsAsync(existingUser);
                             var claimsToAdd = newClaims.Except(existingClaims);
                             var claimsToRemove = existingClaims.Except(newClaims);

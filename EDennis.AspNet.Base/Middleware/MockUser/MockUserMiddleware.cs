@@ -28,7 +28,7 @@ namespace EDennis.AspNet.Base.Middleware {
                 || !_options.CurrentValue.Enabled)
                 await _next(context);
             else {
-                var claims = _options.CurrentValue.Claims.ToClaims();
+                var claims = _options.CurrentValue.Claims.ToClaimEnumerable();
                 context.User = new ClaimsPrincipal(new ClaimsIdentity(claims,"mockAuth"));
                  
                 await _next(context); 
