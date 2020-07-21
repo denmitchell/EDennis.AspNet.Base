@@ -1,4 +1,5 @@
 ﻿using EDennis.AspNet.Base.Middleware.MockUser;
+using EDennis.AspNet.Base.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -52,17 +53,6 @@ namespace EDennis.AspNet.Base.Middleware {
     }
 
 
-    public static class DictionaryExtensionMethods {
-        public static IEnumerable<Claim> ToClaims<E>(this Dictionary<string, E> dict)
-        where E : IEnumerable<string> {
-            var list = new List<Claim>();
-            foreach(var entry in dict) {
-                foreach (var item in entry.Value)
-                    list.Add(new Claim(entry.Key, item));
-            }
-            return list;
-        }
-    }
 
 }
 

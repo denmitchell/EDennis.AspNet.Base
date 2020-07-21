@@ -60,6 +60,7 @@ namespace EDennis.AspNet.Base.Security {
         public SysStatus SysStatus { get; set; }
         public string SysUser { get; set; }
 
+
         public void Patch(JsonElement jsonElement, ModelStateDictionary modelState, bool mergeCollections = true) {
             foreach (var prop in jsonElement.EnumerateObject()) {
                 try {
