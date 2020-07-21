@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore.Update;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -226,6 +227,26 @@ namespace EDennis.AspNet.Base.Security {
         }
 
 
+
+        public async Task<ObjectResult> DeleteAsync(string name) {
+
+            var existingUser = _dbContext.Set<DomainUser>().FirstOrDefault(u => u.UserName == name);
+
+            if (existingUser == null)
+                return new ObjectResult(null) { StatusCode = StatusCodes.Status404NotFound };
+
+            var results = new List<IdentityResult>();
+
+            results.Add(await _userManager.DeleteAsync(existingUser));
+
+            var failures = results.SelectMany(r => r.Errors);
+
+            if (failures.Count() > 0)
+                return new ObjectResult(failures) { StatusCode = StatusCodes.Status409Conflict };
+            else
+                return new ObjectResult(null) { StatusCode = StatusCodes.Status204NoContent };
+
+        }
 
 
 
