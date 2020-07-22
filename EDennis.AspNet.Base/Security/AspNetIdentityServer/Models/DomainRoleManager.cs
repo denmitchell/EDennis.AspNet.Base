@@ -64,38 +64,6 @@ select r.*
         }
 
 
-        public virtual async Task<IEnumerable<DomainRole>> GetRolesForOrganizationAsync(string organizationName) {
-
-            if (!(Store is RoleStore<DomainRole, DomainIdentityDbContext, Guid> store))
-                throw new Exception("Cannot use DomainRoleManager.GetRolesForOrganizationAsync(string organizationName) without Microsoft.AspNetCore.Identity.EntityFrameworkCore.RoleStore<DomainRole> where DomainRole : DomainRole.");
-
-            var qry = store.Context.Set<DomainRole>()
-                .FromSqlInterpolated($@"
-select r.* 
-  from AspNetRoles r
-  inner join AspNetOrganizations o
-    on o.Id = r.OrganizationId
-  where o.Name = {organizationName}
-            ").AsNoTracking();
-
-            return await qry.ToListAsync();
-        }
-
-
-        public virtual async Task<IEnumerable<DomainRole>> GetRolesForOrganizationAsync(Guid organizationId) {
-
-            if (!SupportsQueryableRoles)
-                throw new Exception("Cannot use DomainRoleManager.GetRolesForOrganizationAsync(int organizationId) without Queryable Roles.");
-
-            var qry = Roles
-                .Where(r => r.OrganizationId == organizationId)
-                .AsNoTracking();
-
-            return await qry.ToListAsync();
-        }
-
-
-
         public virtual async Task<IEnumerable<Claim>> GetClaimsAsync(IEnumerable<DomainRole> roles) {
 
             if (!(Store is RoleStore<DomainRole, DomainIdentityDbContext, Guid> store))

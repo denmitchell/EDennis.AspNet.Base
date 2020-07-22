@@ -6,7 +6,6 @@
                 SysStatus = domainModel.SysStatus,
                 SysUser = domainModel.SysUser,
                 Properties = domainModel.Properties,
-                Organization = domainModel.Organization.Name,
                 Application = domainModel.Application.Name,
                 Claims = domainModel.RoleClaims.ToDictionary()                        
             };

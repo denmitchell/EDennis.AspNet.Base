@@ -5,6 +5,7 @@ using System.Text.Json;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace EDennis.AspNet.Base.Security {
     public class DomainIdentityDbContext 
@@ -23,7 +24,7 @@ namespace EDennis.AspNet.Base.Security {
 
         public DbSet<DomainApplication> Applications { get; set; }
         public DbSet<DomainOrganization> Organizations { get; set; }
-        public DbSet<UserClientClaims> UserClientClaims { get; set; }
+        public DbSet<UserClientApplicationRoles> UserClientClaims { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder) {
             base.OnModelCreating(builder);
@@ -150,12 +151,13 @@ namespace EDennis.AspNet.Base.Security {
                     .OnDelete(DeleteBehavior.ClientCascade);
             });
 
-            builder.Entity<UserClientClaims>(e => {
-                e.ToTable("UserClientClaims")
-                .HasKey(p => new { p.UserId, p.ClientId });
+            builder.Entity<UserClientApplicationRoles>(e => {
+                e.ToView("UserClientApplicationRoles")
+                .HasKey(p => new { p.UserId, p.ClientId, p.ApplicationName, p.RoleName });
             });
 
         }
+
 
     }
 }

@@ -7,17 +7,13 @@ using System.Text.Json;
 
 namespace EDennis.AspNet.Base.Security {
     public class DomainRole : IdentityRole<Guid>, ITemporalEntity {
-        public virtual Guid? OrganizationId { get; set; }
         public virtual Guid? ApplicationId { get; set; }
 
         public Dictionary<string, string> Properties { get; set; }
 
         public DomainApplication Application { get; set; }
-        public DomainOrganization Organization { get; set; }
 
         public ICollection<DomainUserRole> UserRoles { get; set; }
-        public ICollection<DomainRoleClaim> RoleClaims { get; set; }
-
 
 
         public SysStatus SysStatus { get; set; }
@@ -33,10 +29,6 @@ namespace EDennis.AspNet.Base.Security {
                         case "ApplicationId":
                         case "applicationId":
                             ApplicationId = prop.Value.GetGuid();
-                            break;
-                        case "OrganizationId":
-                        case "organizationId":
-                            OrganizationId = prop.Value.GetGuid();
                             break;
                         case "ConcurrencyStamp":
                         case "concurrencyStamp":
@@ -95,8 +87,6 @@ namespace EDennis.AspNet.Base.Security {
             var obj = updated as DomainRole;
             Application = obj.Application;
             ApplicationId = obj.ApplicationId;
-            Organization = obj.Organization;
-            OrganizationId = obj.OrganizationId;
             ConcurrencyStamp = obj.ConcurrencyStamp;
             Id = obj.Id;
             Name = obj.Name;

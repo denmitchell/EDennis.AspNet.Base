@@ -33,11 +33,7 @@ namespace EDennis.AspNet.Base.Security {
             if (role == null)
                 return new ObjectResult(null) { StatusCode = StatusCodes.Status404NotFound };
             else {
-                var currentClaims = (await _roleManager.GetClaimsAsync(role)).ToStringDictionary();
-
                 var roleEditModel = role.ToEditModel();
-                roleEditModel.Claims = currentClaims;
-
                 return new ObjectResult(roleEditModel) { StatusCode = StatusCodes.Status200OK };
             }
         }
@@ -46,7 +42,7 @@ namespace EDennis.AspNet.Base.Security {
 
 
 
-        public async Task<ObjectResult> GetAsync(string appName = null, string orgName = null,
+        public async Task<ObjectResult> GetAsync(string appName = null,
             int? pageNumber = 1, int? pageSize = 100) {
 
 
@@ -57,9 +53,6 @@ namespace EDennis.AspNet.Base.Security {
 
             if (appName != null)
                 qry = qry.Where(r => r.Application.Name == appName);
-
-            if (orgName != null)
-                qry = qry.Where(r => r.Organization.Name == orgName);
 
             qry = qry.Skip(skip)
                 .Take(take)
@@ -90,16 +83,6 @@ namespace EDennis.AspNet.Base.Security {
                 modelState.AddModelError("Name", $"A role with Name ='{roleEditModel.Name}' already exists.");
             }
 
-            DomainOrganization existingOrganization;
-
-            if (roleEditModel.Organization != null) {
-                existingOrganization = _dbContext.Set<DomainOrganization>().FirstOrDefault(o => o.Name == roleEditModel.Organization);
-
-                if (existingOrganization == null) {
-                    modelState.AddModelError("Organization", $"An organization with Name ='{roleEditModel.Organization}' does not exist.");
-                }
-            }
-
 
             DomainApplication existingApplication;
 
@@ -110,7 +93,6 @@ namespace EDennis.AspNet.Base.Security {
                     modelState.AddModelError("Application", $"An Application with Name ='{roleEditModel.Application}' does not exist.");
                 }
             }
-
 
 
             if (modelState.ErrorCount > 0)
@@ -126,10 +108,6 @@ namespace EDennis.AspNet.Base.Security {
             var results = new List<IdentityResult> {
                 await _roleManager.CreateAsync(user)
             };
-
-            if (roleEditModel.Claims != null && roleEditModel.Claims.Count() > 0)
-                foreach(var claim in roleEditModel.Claims.ToClaimEnumerable())
-                    results.Add(await _roleManager.AddClaimAsync(user,claim));
 
             var failures = results.SelectMany(r => r.Errors);
 
@@ -158,20 +136,6 @@ namespace EDennis.AspNet.Base.Security {
             foreach (var prop in jsonElement.EnumerateObject()) {
                 try {
                     switch (prop.Name) {
-                        case "Organization":
-                        case "organization":
-                            roleEditModel.Organization = prop.Value.GetString();
-                            DomainOrganization existingOrganization = null;
-
-                            if (roleEditModel.Organization != null) {
-                                existingOrganization = _dbContext.Set<DomainOrganization>().FirstOrDefault(o => o.Name == roleEditModel.Organization);
-
-                                if (existingOrganization == null) {
-                                    modelState.AddModelError("Organization", $"An organization with Name ='{roleEditModel.Organization}' does not exists.");
-                                }
-                            }
-                            existingRole.Organization = existingOrganization;
-                            break;
                         case "Application":
                         case "application":
                             roleEditModel.Application = prop.Value.GetString();
@@ -185,19 +149,6 @@ namespace EDennis.AspNet.Base.Security {
                                 }
                             }
                             existingRole.Application = existingApplication;
-                            break;
-                        case "Claims":
-                        case "claims":
-                            roleEditModel.Claims = JsonSerializer.Deserialize<Dictionary<string, string[]>>(prop.Value.GetRawText());
-                            var newClaims = roleEditModel.Claims.ToClaimEnumerable();
-                            var existingClaims = await _roleManager.GetClaimsAsync(existingRole);
-                            var claimsToAdd = newClaims.Except(existingClaims);
-                            var claimsToRemove = existingClaims.Except(newClaims);
-
-                            foreach (var claim in claimsToAdd)
-                                results.Add(await _roleManager.AddClaimAsync(existingRole, claim));
-                            foreach (var claim in claimsToRemove)
-                                results.Add(await _roleManager.RemoveClaimAsync(existingRole, claim));
                             break;
                         case "Name":
                         case "name":
