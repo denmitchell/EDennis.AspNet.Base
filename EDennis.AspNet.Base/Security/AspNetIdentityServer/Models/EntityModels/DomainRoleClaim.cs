@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
-
-namespace EDennis.AspNet.Base.Security {
+﻿namespace EDennis.AspNet.Base.Security {
 
     /// <summary>
     /// Role claims are omitted purposefully from the DbContext model.
