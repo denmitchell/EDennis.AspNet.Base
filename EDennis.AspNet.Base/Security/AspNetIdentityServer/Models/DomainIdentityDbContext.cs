@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace EDennis.AspNet.Base.Security {
     public class DomainIdentityDbContext 
         : IdentityDbContext<DomainUser, DomainRole, Guid, DomainUserClaim, 
-            DomainUserRole, DomainUserLogin, DomainRoleClaim, DomainUserToken> {
+            DomainUserRole, DomainUserLogin, IdentityRoleClaim<Guid>, DomainUserToken> {
 
         /*
         public DbSet<DomainUser> Users { get; set; }
@@ -24,7 +24,7 @@ namespace EDennis.AspNet.Base.Security {
 
         public DbSet<DomainApplication> Applications { get; set; }
         public DbSet<DomainOrganization> Organizations { get; set; }
-        public DbSet<UserClientApplicationRoles> UserClientClaims { get; set; }
+        public DbSet<UserClientApplicationRoles> UserClientApplicationRoles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder) {
             base.OnModelCreating(builder);
@@ -90,12 +90,6 @@ namespace EDennis.AspNet.Base.Security {
                         v => JsonSerializer.Deserialize<Dictionary<string, string>>(v, null)
                         );
 
-                e.HasOne(f => f.Organization)
-                    .WithMany(r => r.Roles)
-                    .HasForeignKey(f => f.OrganizationId)
-                    .HasConstraintName("fk_DomainRole_DomainOrganization")
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-
                 e.HasOne(f => f.Application)
                     .WithMany(r => r.Roles)
                     .HasForeignKey(f => f.ApplicationId)
@@ -140,14 +134,6 @@ namespace EDennis.AspNet.Base.Security {
                     .WithMany(r => r.UserTokens)
                     .HasForeignKey(f => f.UserId)
                     .HasConstraintName("fk_DomainUserToken_DomainUser")
-                    .OnDelete(DeleteBehavior.ClientCascade);
-            });
-
-            builder.Entity<DomainRoleClaim>(e => {
-                e.HasOne(f => f.Role)
-                    .WithMany(r => r.RoleClaims)
-                    .HasForeignKey(f => f.RoleId)
-                    .HasConstraintName("fk_DomainRoleClaim_DomainRole")
                     .OnDelete(DeleteBehavior.ClientCascade);
             });
 

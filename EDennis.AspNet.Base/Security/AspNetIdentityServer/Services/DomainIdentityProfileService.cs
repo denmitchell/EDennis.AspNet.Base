@@ -43,10 +43,23 @@ namespace EDennis.AspNet.Base.Security {
             var userId = Guid.Parse(context.Subject.GetSubjectId());
             var clientId = context.Client.ClientId;
 
-            var claimsRec = await _dbContext.UserClientClaims.SingleAsync(x => x.UserId == userId && x.ClientId == clientId);
-            var claims = JsonSerializer.Deserialize<List<ClaimModel>>(claimsRec.Claims);
 
-            context.IssuedClaims.AddRange(claims.Select(c => new Claim(c.ClaimType, c.ClaimValue)));
+            //add roles
+            var roles = await _dbContext.UserClientApplicationRoles
+                .Where(x => x.UserId == userId && x.ClientId == clientId)
+                .ToListAsync();
+
+            context.IssuedClaims.AddRange(roles.Select(r => new Claim(r.ApplicationName, r.RoleName)));
+
+
+            //add requested user claims
+            var userClaims = await _dbContext.UserClaims
+                                .Where(uc => uc.UserId == userId
+                                    && context.RequestedClaimTypes.Any(rct => rct == uc.ClaimType))
+                                .Select(uc=>new Claim(uc.ClaimType, uc.ClaimValue))
+                                .ToListAsync();
+
+            context.IssuedClaims.AddRange(userClaims);
         }
 
 
