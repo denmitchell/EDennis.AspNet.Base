@@ -8,6 +8,18 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace EDennis.AspNet.Base.Security {
+
+    /// <summary>
+    /// With the DomainIdentity classes, DomainRoleClaims (UserRoleClaims<Guid>) was
+    /// purposely omitted from the model in order to make role-associated claims a
+    /// concern of individual applications, where these claims are cached in a 
+    /// singleton (DomainRoleClaimCache).
+    /// The DomainRolesClaimsTransformer class provides a mechanism for retrieving
+    /// role-associated claims from the singleton cache.  The class is used just
+    /// like any IClaimsTransformation implementation.  Configure the DI for 
+    /// IClaimsTransformation,DomainRolesClaimsTransformer as Scoped lifetime 
+    /// in Startup.cs
+    /// </summary>
     public class DomainRoleClaimsTransformer : IClaimsTransformation {
 
         private readonly DomainRoleClaimCache _cache;

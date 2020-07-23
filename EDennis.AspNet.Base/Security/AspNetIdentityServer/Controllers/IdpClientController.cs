@@ -14,12 +14,12 @@ namespace EDennis.AspNet.Base.Security {
     [Authorize(Policy = "AdministerIDP")]
     [Route("api/[controller]")]
     [ApiController]
-    public abstract class ClientController<TContext> : ControllerBase
+    public abstract class IdpClientController<TContext> : ControllerBase
         where TContext : ConfigurationDbContext {
 
         private readonly TContext _dbContext;
 
-        public ClientController(TContext dbContext) {
+        public IdpClientController(TContext dbContext) {
             _dbContext = dbContext;
         }
 

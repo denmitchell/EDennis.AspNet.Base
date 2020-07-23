@@ -1,5 +1,4 @@
-﻿using EDennis.AspNet.Base.EntityFramework;
-using EDennis.AspNet.Base.Security.Extensions;
+﻿using EDennis.AspNet.Base.Security.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -22,8 +21,8 @@ namespace EDennis.AspNet.Base.Security {
         public static Regex lpPattern = new Regex("(?:\\(\\s*loginProvider\\s*=\\s*'?)([^,']+)(?:'?\\s*,\\s*providerKey\\s*=\\s*'?)([^)']+)(?:'?\\s*\\))");
 
 
-        public DomainUserRepo(DbContextProvider<DomainIdentityDbContext> provider, UserManager<DomainUser> userManager) {
-            _dbContext = provider.DbContext;
+        public DomainUserRepo(DomainIdentityDbContext dbContext, UserManager<DomainUser> userManager) {
+            _dbContext = dbContext;
             _userManager = userManager;
         }
 

@@ -1,5 +1,5 @@
 ﻿--generates guid that orders before other records
-create or alter function di.TestGuid(@dec bigint)
+create or alter function _.TestGuid(@dec bigint)
 returns uniqueidentifier as
 begin
 	declare @rem bigint

@@ -12,16 +12,6 @@ namespace EDennis.AspNet.Base.Security {
         : IdentityDbContext<DomainUser, DomainRole, Guid, DomainUserClaim, 
             DomainUserRole, DomainUserLogin, IdentityRoleClaim<Guid>, DomainUserToken> {
 
-        /*
-        public DbSet<DomainUser> Users { get; set; }
-        public DbSet<DomainRole> Roles { get; set; }
-        public DbSet<DomainRoleClaim> RoleClaims {get; set;}
-        public DbSet<DomainUserRole> UserRoles { get; set; }
-        public DbSet<DomainUserClaim> UserClaims { get; set; }
-        public DbSet<DomainUserLogin> UserLogins { get; set; }
-        public DbSet<DomainUserToken> UserTokens { get; set; }
-        */
-
         public DbSet<DomainApplication> Applications { get; set; }
         public DbSet<DomainOrganization> Organizations { get; set; }
         public DbSet<UserClientApplicationRoles> UserClientApplicationRoles { get; set; }

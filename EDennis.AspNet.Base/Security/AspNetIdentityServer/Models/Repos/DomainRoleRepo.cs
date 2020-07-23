@@ -1,5 +1,4 @@
-﻿using EDennis.AspNet.Base.EntityFramework;
-using EDennis.AspNet.Base.Security.Extensions;
+﻿using EDennis.AspNet.Base.Security.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -21,8 +20,8 @@ namespace EDennis.AspNet.Base.Security {
         public static Regex idPattern = new Regex("[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}");
 
 
-        public DomainRoleRepo(DbContextProvider<DomainIdentityDbContext> provider, RoleManager<DomainRole> roleManager) {
-            _dbContext = provider.DbContext;
+        public DomainRoleRepo(DomainIdentityDbContext dbContext, RoleManager<DomainRole> roleManager) {
+            _dbContext = dbContext;
             _roleManager = roleManager;
         }
 
