@@ -80,6 +80,7 @@ namespace EDennis.AspNet.Base.Security {
 
             if (existingRole != null) {
                 modelState.AddModelError("Name", $"A role with Name ='{roleEditModel.Name}' already exists.");
+                return new ObjectResult(modelState) { StatusCode = StatusCodes.Status409Conflict };
             }
 
 
@@ -99,7 +100,7 @@ namespace EDennis.AspNet.Base.Security {
 
 
             var user = new DomainRole {
-                Id = Guid.NewGuid(),
+                Id = CombGuid.Create(),
                 Name = roleEditModel.Name,
                 NormalizedName = roleEditModel.Name.ToUpper()
             };
@@ -126,6 +127,7 @@ namespace EDennis.AspNet.Base.Security {
 
             if (existingRole == null) {
                 modelState.AddModelError("Name", $"A role with Name ='{name}' does not exist.");
+                return new ObjectResult(modelState) { StatusCode = StatusCodes.Status404NotFound };
             }
 
             var results = new List<IdentityResult>();

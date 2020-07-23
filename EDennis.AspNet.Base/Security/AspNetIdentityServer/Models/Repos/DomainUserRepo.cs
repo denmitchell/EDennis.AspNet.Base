@@ -92,6 +92,7 @@ namespace EDennis.AspNet.Base.Security {
 
             if (existingUser != null) {
                 modelState.AddModelError("Name", $"A user with Name/UserName='{userEditModel.Name}' already exists.");
+                return new ObjectResult(modelState) { StatusCode = StatusCodes.Status409Conflict };
             }
 
             DomainOrganization existingOrganization;
@@ -109,7 +110,7 @@ namespace EDennis.AspNet.Base.Security {
 
 
             var user = new DomainUser {
-                Id = Guid.NewGuid(),
+                Id = CombGuid.Create(),
                 Email = userEditModel.Email,
                 NormalizedEmail = userEditModel.Email.ToUpper(),
                 UserName = userEditModel.Name,
@@ -150,6 +151,7 @@ namespace EDennis.AspNet.Base.Security {
 
             if (existingUser == null) {
                 modelState.AddModelError("Name", $"A user with Name/UserName='{name}' does not exist.");
+                return new ObjectResult(modelState) { StatusCode = StatusCodes.Status404NotFound };
             }
 
             var results = new List<IdentityResult>();

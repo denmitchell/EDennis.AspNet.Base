@@ -10,7 +10,7 @@ namespace EDennis.AspNet.Base.Security {
     /// this view joins data from two materialized views --
     /// ClientApplications and UserApplicationRoles.
     /// </summary>
-    public class UserClientApplicationRoles {
+    public class UserClientApplicationRole {
         public Guid UserId { get; set; }
         public string ClientId { get; set; }
         public string ApplicationName { get; set; }

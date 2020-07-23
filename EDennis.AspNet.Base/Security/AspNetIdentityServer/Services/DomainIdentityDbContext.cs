@@ -14,7 +14,7 @@ namespace EDennis.AspNet.Base.Security {
 
         public DbSet<DomainApplication> Applications { get; set; }
         public DbSet<DomainOrganization> Organizations { get; set; }
-        public DbSet<UserClientApplicationRoles> UserClientApplicationRoles { get; set; }
+        public DbSet<UserClientApplicationRole> UserClientApplicationRoles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder) {
             base.OnModelCreating(builder);
@@ -127,7 +127,7 @@ namespace EDennis.AspNet.Base.Security {
                     .OnDelete(DeleteBehavior.ClientCascade);
             });
 
-            builder.Entity<UserClientApplicationRoles>(e => {
+            builder.Entity<UserClientApplicationRole>(e => {
                 e.ToView("UserClientApplicationRoles")
                 .HasKey(p => new { p.UserId, p.ClientId, p.ApplicationName, p.RoleName });
             });
