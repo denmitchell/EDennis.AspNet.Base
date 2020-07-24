@@ -1,7 +1,7 @@
-﻿using EDennis.AspNet.Base.Security.AspNetIdentityServer.Models.EditModels;
+﻿using EDennis.AspNet.Base.Security.AspNetIdentityServer.Controllers;
+using EDennis.AspNet.Base.Security.Extensions;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -11,10 +11,7 @@ using M = IdentityServer4.Models;
 
 namespace EDennis.AspNet.Base.Security {
 
-    [Authorize(Policy = "AdministerIDP")]
-    [Route("api/[controller]")]
-    [ApiController]
-    public abstract class IdpClientController<TContext> : ControllerBase
+    public abstract class IdpClientController<TContext> : IdpBaseController
         where TContext : ConfigurationDbContext {
 
         private readonly TContext _dbContext;

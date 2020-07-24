@@ -3,18 +3,45 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace EDennis.AspNet.Base.Security {
 
-    [Authorize(Policy = "AdministerIDP")]
-    [Route("api/[controller]")]
-    [ApiController]
-    public abstract class IdpApplicationController : CrudController<DomainIdentityDbContext, DomainApplication> {
-        public IdpApplicationController(DbContextProvider<DomainIdentityDbContext> provider, 
-            ILogger<QueryController<DomainIdentityDbContext, DomainApplication>> logger) 
-            : base(provider, logger) { }
+    public abstract class IdpApplicationController : IdpBaseController {
 
-        public override IQueryable<DomainApplication> Find(string pathParameter)
-            => _dbContext.Applications.Where(a=>a.Name == pathParameter);
+        private readonly DomainApplicationRepo _repo;
+
+        public IdpApplicationController(DomainApplicationRepo repo) {
+            _repo = repo;
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetAsync(
+            [FromQuery] int? pageNumber = 1, [FromQuery] int? pageSize = 100)
+                => await _repo.GetAsync(pageNumber, pageSize);
+
+
+        [HttpGet("{pathParameter}")]
+        public async Task<IActionResult> GetAsync([FromRoute] string pathParameter)
+                => await _repo.GetAsync(pathParameter);
+
+
+        [HttpPost]
+        public async Task<IActionResult> CreateAsync([FromBody] ApplicationEditModel appEditModel)
+                => await _repo.CreateAsync(appEditModel, ModelState, GetSysUser());
+
+
+        [HttpPatch("{pathParameter}")]
+        public async Task<IActionResult> PatchAsync([FromRoute] string pathParameter, [FromBody] JsonElement jsonElement)
+                => await _repo.PatchAsync(pathParameter, jsonElement, ModelState, GetSysUser());
+
+
+        [HttpDelete("{pathParameter}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute] string pathParameter)
+                => await _repo.DeleteAsync(pathParameter, ModelState, GetSysUser());
+
+
     }
 }

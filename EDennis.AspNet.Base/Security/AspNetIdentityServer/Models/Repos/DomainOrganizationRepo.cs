@@ -12,24 +12,24 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace EDennis.AspNet.Base.Security {
-    public class DomainApplicationRepo {
+    public class DomainOrganizationRepo {
 
         public DomainIdentityDbContext _dbContext;
 
         public static Regex idPattern = new Regex("[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}");
 
-        public DomainApplicationRepo(DomainIdentityDbContext dbContext) {
+        public DomainOrganizationRepo(DomainIdentityDbContext dbContext) {
             _dbContext = dbContext;
         }
 
 
         public async Task<ObjectResult> GetAsync(string pathParameter) {
-            var application = await FindAsync(pathParameter);
-            if (application == null)
+            var organization = await FindAsync(pathParameter);
+            if (organization == null)
                 return new ObjectResult(null) { StatusCode = StatusCodes.Status404NotFound };
             else {
-                var applicationEditModel = application.ToEditModel();
-                return new ObjectResult(applicationEditModel) { StatusCode = StatusCodes.Status200OK };
+                var organizationEditModel = organization.ToEditModel();
+                return new ObjectResult(organizationEditModel) { StatusCode = StatusCodes.Status200OK };
             }
         }
 
@@ -44,7 +44,7 @@ namespace EDennis.AspNet.Base.Security {
             var skip = (pageNumber ?? 1 - 1) * pageSize ?? 100;
             var take = pageSize ?? 100;
 
-            var qry = _dbContext.Applications as IQueryable<DomainApplication>;
+            var qry = _dbContext.Organizations as IQueryable<DomainOrganization>;
 
             qry = qry.Skip(skip)
                 .Take(take)
@@ -58,44 +58,44 @@ namespace EDennis.AspNet.Base.Security {
 
 
 
-        private async Task<DomainApplication> FindAsync(string pathParameter) {
+        private async Task<DomainOrganization> FindAsync(string pathParameter) {
             if (idPattern.IsMatch(pathParameter))
-                return await _dbContext.FindAsync<DomainApplication>(Guid.Parse(pathParameter));
+                return await _dbContext.FindAsync<DomainOrganization>(Guid.Parse(pathParameter));
             else
-                return await _dbContext.Set<DomainApplication>()
+                return await _dbContext.Set<DomainOrganization>()
                     .FirstOrDefaultAsync(a=>a.Name == pathParameter);
         }
 
 
-        public async Task<ObjectResult> CreateAsync(ApplicationEditModel applicationEditModel, 
+        public async Task<ObjectResult> CreateAsync(OrganizationEditModel organizationEditModel, 
             ModelStateDictionary modelState, string sysUser) {
 
 
-            var existingApplication = _dbContext.Set<DomainApplication>().FirstOrDefault(r => r.Name == applicationEditModel.Name);
+            var existingOrganization = _dbContext.Set<DomainOrganization>().FirstOrDefault(r => r.Name == organizationEditModel.Name);
 
-            if (existingApplication != null) {
-                modelState.AddModelError("Name", $"An application with Name ='{applicationEditModel.Name}' already exists.");
+            if (existingOrganization != null) {
+                modelState.AddModelError("Name", $"An organization with Name ='{organizationEditModel.Name}' already exists.");
                 return new ObjectResult(modelState) { StatusCode = StatusCodes.Status409Conflict };
             }
 
 
-            var application = new DomainApplication {
+            var organization = new DomainOrganization {
                 Id = CombGuid.Create(),
-                Name = applicationEditModel.Name,
-                Properties = applicationEditModel.Properties,
+                Name = organizationEditModel.Name,
+                Properties = organizationEditModel.Properties,
                 SysStatus = SysStatus.Normal,
                 SysUser = sysUser
             };
 
             try {
-                await _dbContext.AddAsync(application);
+                await _dbContext.AddAsync(organization);
                 await _dbContext.SaveChangesAsync();
             } catch (DbUpdateException ex) {
-                modelState.AddModelError("", $"Cannot add application '{applicationEditModel.Name}': {ex.Message}");
+                modelState.AddModelError("", $"Cannot add organization '{organizationEditModel.Name}': {ex.Message}");
                 return new ObjectResult(modelState) { StatusCode = StatusCodes.Status409Conflict };
             }
 
-            return new ObjectResult(applicationEditModel) { StatusCode = StatusCodes.Status200OK };
+            return new ObjectResult(organizationEditModel) { StatusCode = StatusCodes.Status200OK };
 
         }
 
@@ -105,14 +105,14 @@ namespace EDennis.AspNet.Base.Security {
             ModelStateDictionary modelState, string sysUser) {
 
 
-            var existingApplication = _dbContext.Set<DomainApplication>().FirstOrDefault(r => r.Name == name);
+            var existingOrganization = _dbContext.Set<DomainOrganization>().FirstOrDefault(r => r.Name == name);
 
-            if (existingApplication == null) {
-                modelState.AddModelError("Name", $"An application with Name ='{name}' does not exist.");
+            if (existingOrganization == null) {
+                modelState.AddModelError("Name", $"An organization with Name ='{name}' does not exist.");
                 return new ObjectResult(modelState) { StatusCode = StatusCodes.Status404NotFound };
             }
 
-            var applicationEditModel = existingApplication.ToEditModel();
+            var organizationEditModel = existingOrganization.ToEditModel();
 
 
             foreach (var prop in jsonElement.EnumerateObject()) {
@@ -120,25 +120,25 @@ namespace EDennis.AspNet.Base.Security {
                     switch (prop.Name) {
                         case "Name":
                         case "name":
-                            applicationEditModel.Name = prop.Value.GetString();
-                            existingApplication.Name = applicationEditModel.Name;
+                            organizationEditModel.Name = prop.Value.GetString();
+                            existingOrganization.Name = organizationEditModel.Name;
                             break;
                         case "Properties":
                         case "properties":
-                            applicationEditModel.Properties = JsonSerializer.Deserialize<Dictionary<string, string>>(prop.Value.GetRawText());
-                            existingApplication.Properties = applicationEditModel.Properties;
+                            organizationEditModel.Properties = JsonSerializer.Deserialize<Dictionary<string, string>>(prop.Value.GetRawText());
+                            existingOrganization.Properties = organizationEditModel.Properties;
                             break;
                         case "SysStatus":
                         case "sysStatus":
-                            applicationEditModel.SysStatus = (SysStatus)Enum.Parse(typeof(SysStatus), prop.Value.GetString());
-                            existingApplication.SysStatus = applicationEditModel.SysStatus;
+                            organizationEditModel.SysStatus = (SysStatus)Enum.Parse(typeof(SysStatus), prop.Value.GetString());
+                            existingOrganization.SysStatus = organizationEditModel.SysStatus;
                             break;
                     }
-                    applicationEditModel.SysUser = sysUser;
-                    existingApplication.SysUser = sysUser;
+                    organizationEditModel.SysUser = sysUser;
+                    existingOrganization.SysUser = sysUser;
 
                 } catch (InvalidOperationException ex) {
-                    modelState.AddModelError(prop.Name, $"{ex.Message}: Cannot parse value for {prop.Value} from {typeof(DomainApplication).Name} JSON");
+                    modelState.AddModelError(prop.Name, $"{ex.Message}: Cannot parse value for {prop.Value} from {typeof(DomainOrganization).Name} JSON");
                 }
             }
 
@@ -147,14 +147,14 @@ namespace EDennis.AspNet.Base.Security {
 
 
             try {
-                _dbContext.Update(existingApplication);
+                _dbContext.Update(existingOrganization);
                 await _dbContext.SaveChangesAsync();
             } catch (DbUpdateException ex) {
-                modelState.AddModelError("", $"Cannot update application '{name}': {ex.Message}");
+                modelState.AddModelError("", $"Cannot update organization '{name}': {ex.Message}");
                 return new ObjectResult(modelState) { StatusCode = StatusCodes.Status409Conflict };
             }
 
-            return new ObjectResult(applicationEditModel) { StatusCode = StatusCodes.Status200OK };
+            return new ObjectResult(organizationEditModel) { StatusCode = StatusCodes.Status200OK };
 
         }
 
@@ -163,27 +163,27 @@ namespace EDennis.AspNet.Base.Security {
         public async Task<ObjectResult> DeleteAsync(string name, ModelStateDictionary modelState, 
             string sysUser) {
 
-            var existingApplication = _dbContext.Set<DomainApplication>().FirstOrDefault(r => r.Name == name);
+            var existingOrganization = _dbContext.Set<DomainOrganization>().FirstOrDefault(r => r.Name == name);
 
-            if (existingApplication == null)
+            if (existingOrganization == null)
                 return new ObjectResult(null) { StatusCode = StatusCodes.Status404NotFound };
 
             //first, try to update the record with a Deleted status and the deleting user;
             //however, just ignore if there is an error.
             try {
-                existingApplication.SysStatus = SysStatus.Deleted;
-                existingApplication.SysUser = sysUser;
-                _dbContext.Update(existingApplication);
+                existingOrganization.SysStatus = SysStatus.Deleted;
+                existingOrganization.SysUser = sysUser;
+                _dbContext.Update(existingOrganization);
                 await _dbContext.SaveChangesAsync();
             } catch (Exception) { }
 
 
             //second, actually delete the record
             try {
-                _dbContext.Remove(existingApplication);
+                _dbContext.Remove(existingOrganization);
                 await _dbContext.SaveChangesAsync();
             } catch (DbUpdateException ex) {
-                modelState.AddModelError("", $"Cannot delete application '{name}': {ex.Message}");
+                modelState.AddModelError("", $"Cannot delete organization '{name}': {ex.Message}");
                 return new ObjectResult(modelState) { StatusCode = StatusCodes.Status409Conflict };
             }
 

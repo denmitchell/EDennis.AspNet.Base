@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 
-namespace EDennis.AspNet.Base.Security {
+namespace EDennis.AspNet.Base.Security.Extensions {
 
     /// <summary>
     /// Are these still needed, or can we use EDennis.AspNet.Base.ClaimExtensions?

@@ -1,15 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 
 namespace EDennis.AspNet.Base.Security {
 
-    [Authorize(Policy = "AdministerIDP")]
-    [Route("api/[controller]")]
-    [ApiController]
-    public abstract class IdpRoleController : ControllerBase {
+    public abstract class IdpRoleController : IdpBaseController {
 
         private readonly DomainRoleRepo _repo;
 
@@ -31,17 +27,17 @@ namespace EDennis.AspNet.Base.Security {
 
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] RoleEditModel roleEditModel)
-                => await _repo.CreateAsync(roleEditModel, ModelState);
+                => await _repo.CreateAsync(roleEditModel, ModelState, GetSysUser());
 
 
         [HttpPatch("{pathParameter}")]
         public async Task<IActionResult> PatchAsync([FromRoute] string pathParameter, [FromBody] JsonElement jsonElement)
-                => await _repo.PatchAsync(pathParameter, jsonElement, ModelState);
+                => await _repo.PatchAsync(pathParameter, jsonElement, ModelState, GetSysUser());
 
 
         [HttpDelete("{pathParameter}")]
         public async Task<IActionResult> DeleteAsync([FromRoute] string pathParameter)
-                => await _repo.DeleteAsync(pathParameter);
+                => await _repo.DeleteAsync(pathParameter, ModelState, GetSysUser());
 
 
     }

@@ -1,5 +1,4 @@
 ﻿using EDennis.AspNet.Base.Security;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -7,10 +6,7 @@ using System.Threading.Tasks;
 namespace EDennis.AspNetBase.Security {
 
 
-    [Authorize(Policy = "AdministerIDP")]
-    [Route("api/[controller]")]
-    [ApiController]
-    public abstract class IdpUserController : ControllerBase {
+    public abstract class IdpUserController : IdpBaseController {
 
         private readonly DomainUserRepo _repo;
 
@@ -32,17 +28,17 @@ namespace EDennis.AspNetBase.Security {
 
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] UserEditModel userEditModel)
-                => await _repo.CreateAsync(userEditModel, ModelState);
+                => await _repo.CreateAsync(userEditModel, ModelState, GetSysUser());
 
 
         [HttpPatch("{pathParameter}")]
         public async Task<IActionResult> PatchAsync([FromRoute] string pathParameter, [FromBody] JsonElement jsonElement)
-                => await _repo.PatchAsync(pathParameter, jsonElement, ModelState);
+                => await _repo.PatchAsync(pathParameter, jsonElement, ModelState, GetSysUser());
 
 
         [HttpDelete("{pathParameter}")]
         public async Task<IActionResult> DeleteAsync([FromRoute] string pathParameter)
-                => await _repo.DeleteAsync(pathParameter);
+                => await _repo.DeleteAsync(pathParameter, ModelState, GetSysUser());
 
 
     }

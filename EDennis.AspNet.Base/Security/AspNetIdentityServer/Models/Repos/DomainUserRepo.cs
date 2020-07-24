@@ -85,7 +85,8 @@ namespace EDennis.AspNet.Base.Security {
         }
 
 
-        public async Task<ObjectResult> CreateAsync(UserEditModel userEditModel, ModelStateDictionary modelState) {
+        public async Task<ObjectResult> CreateAsync(UserEditModel userEditModel, 
+            ModelStateDictionary modelState, string sysUser) {
 
 
             var existingUser = _dbContext.Set<DomainUser>().FirstOrDefault(u => u.UserName == userEditModel.Name);
@@ -114,7 +115,9 @@ namespace EDennis.AspNet.Base.Security {
                 Email = userEditModel.Email,
                 NormalizedEmail = userEditModel.Email.ToUpper(),
                 UserName = userEditModel.Name,
-                NormalizedUserName = userEditModel.Name.ToUpper()
+                NormalizedUserName = userEditModel.Name.ToUpper(),
+                SysStatus = SysStatus.Normal,
+                SysUser = sysUser
             };
             if (userEditModel.Password.Length == DomainUser.SHA256_LENGTH || userEditModel.Password.Length == DomainUser.SHA512_LENGTH)
                 user.PasswordHash = userEditModel.Password;
@@ -133,10 +136,12 @@ namespace EDennis.AspNet.Base.Security {
             if (userEditModel.Claims != null && userEditModel.Claims.Count() > 0)
                 results.Add(await _userManager.AddClaimsAsync(user, userEditModel.Claims.ToClaimEnumerable()));
 
-            var failures = results.SelectMany(r => r.Errors);
 
-            if (failures.Count() > 0)
-                return new ObjectResult(failures) { StatusCode = StatusCodes.Status409Conflict };
+            results.SelectMany(r => r.Errors).ToList()
+                .ForEach(e => modelState.AddModelError("", e.Description));
+
+            if (modelState.ErrorCount > 0)
+                return new ObjectResult(modelState) { StatusCode = StatusCodes.Status409Conflict };
             else
                 return new ObjectResult(userEditModel) { StatusCode = StatusCodes.Status200OK };
 
@@ -144,7 +149,8 @@ namespace EDennis.AspNet.Base.Security {
 
 
 
-        public async Task<ObjectResult> PatchAsync(string name, JsonElement jsonElement, ModelStateDictionary modelState) {
+        public async Task<ObjectResult> PatchAsync(string name, JsonElement jsonElement, 
+            ModelStateDictionary modelState, string sysUser) {
 
 
             var existingUser = _dbContext.Set<DomainUser>().FirstOrDefault(u => u.UserName == name);
@@ -251,11 +257,6 @@ namespace EDennis.AspNet.Base.Security {
                             userEditModel.Properties = JsonSerializer.Deserialize<Dictionary<string, string>>(prop.Value.GetRawText());
                             existingUser.Properties = userEditModel.Properties;
                             break;
-                        case "SysUser":
-                        case "sysUser":
-                            userEditModel.SysUser = prop.Value.GetString();
-                            existingUser.SysUser = userEditModel.SysUser;
-                            break;
                         case "SysStatus":
                         case "sysStatus":
                             userEditModel.SysStatus = (SysStatus)Enum.Parse(typeof(SysStatus), prop.Value.GetString());
@@ -267,6 +268,8 @@ namespace EDennis.AspNet.Base.Security {
                             existingUser.TwoFactorEnabled = userEditModel.TwoFactorEnabled;
                             break;
                     }
+                    userEditModel.SysUser = sysUser;
+                    existingUser.SysUser = userEditModel.SysUser;
                 } catch (InvalidOperationException ex) {
                     modelState.AddModelError(prop.Name, $"{ex.Message}: Cannot parse value for {prop.Value} from {typeof(DomainUser).Name} JSON");
                 }
@@ -275,14 +278,13 @@ namespace EDennis.AspNet.Base.Security {
             if (modelState.ErrorCount > 0)
                 return new ObjectResult(modelState) { StatusCode = StatusCodes.Status409Conflict };
 
-
             results.Add(await _userManager.UpdateAsync(existingUser));
 
+            results.SelectMany(r => r.Errors).ToList()
+                .ForEach(e=>modelState.AddModelError("",e.Description));
 
-            var failures = results.SelectMany(r => r.Errors);
-
-            if (failures.Count() > 0)
-                return new ObjectResult(failures) { StatusCode = StatusCodes.Status409Conflict };
+            if (modelState.ErrorCount > 0)
+                return new ObjectResult(modelState) { StatusCode = StatusCodes.Status409Conflict };
             else
                 return new ObjectResult(userEditModel) { StatusCode = StatusCodes.Status200OK };
 
@@ -290,21 +292,36 @@ namespace EDennis.AspNet.Base.Security {
 
 
 
-        public async Task<ObjectResult> DeleteAsync(string name) {
+        public async Task<ObjectResult> DeleteAsync(string name, ModelStateDictionary modelState,
+            string sysUser) {
 
             var existingUser = _dbContext.Set<DomainUser>().FirstOrDefault(u => u.UserName == name);
 
             if (existingUser == null)
                 return new ObjectResult(null) { StatusCode = StatusCodes.Status404NotFound };
 
-            var results = new List<IdentityResult>();
 
-            results.Add(await _userManager.DeleteAsync(existingUser));
+            //first, try to update the record with a Deleted status and the deleting user;
+            //however, just ignore if there is an error.
+            try {
+                existingUser.SysStatus = SysStatus.Deleted;
+                existingUser.SysUser = sysUser;
+                _dbContext.Update(existingUser);
+                await _dbContext.SaveChangesAsync();
+            } catch (Exception) { }
 
-            var failures = results.SelectMany(r => r.Errors);
 
-            if (failures.Count() > 0)
-                return new ObjectResult(failures) { StatusCode = StatusCodes.Status409Conflict };
+            //second, actually delete the record
+
+            var results = new List<IdentityResult> {
+                await _userManager.DeleteAsync(existingUser)
+            };
+
+            results.SelectMany(r => r.Errors)
+                .ToList().ForEach(e=>modelState.AddModelError("",e.Description));
+
+            if (modelState.ErrorCount > 0)
+                return new ObjectResult(modelState) { StatusCode = StatusCodes.Status409Conflict };
             else
                 return new ObjectResult(null) { StatusCode = StatusCodes.Status204NoContent };
 

@@ -73,7 +73,8 @@ namespace EDennis.AspNet.Base.Security {
         }
 
 
-        public async Task<ObjectResult> CreateAsync(RoleEditModel roleEditModel, ModelStateDictionary modelState) {
+        public async Task<ObjectResult> CreateAsync(RoleEditModel roleEditModel, 
+            ModelStateDictionary modelState, string sysUser) {
 
 
             var existingRole = _dbContext.Set<DomainRole>().FirstOrDefault(r => r.Name == roleEditModel.Name);
@@ -102,17 +103,21 @@ namespace EDennis.AspNet.Base.Security {
             var user = new DomainRole {
                 Id = CombGuid.Create(),
                 Name = roleEditModel.Name,
-                NormalizedName = roleEditModel.Name.ToUpper()
+                NormalizedName = roleEditModel.Name.ToUpper(),
+                SysStatus = SysStatus.Normal,
+                SysUser = sysUser
             };
 
             var results = new List<IdentityResult> {
                 await _roleManager.CreateAsync(user)
             };
 
-            var failures = results.SelectMany(r => r.Errors);
 
-            if (failures.Count() > 0)
-                return new ObjectResult(failures) { StatusCode = StatusCodes.Status409Conflict };
+            results.SelectMany(r => r.Errors).ToList()
+                .ForEach(e => modelState.AddModelError("", e.Description));
+
+            if (modelState.ErrorCount > 0)
+                return new ObjectResult(modelState) { StatusCode = StatusCodes.Status409Conflict };
             else
                 return new ObjectResult(roleEditModel) { StatusCode = StatusCodes.Status200OK };
 
@@ -120,7 +125,8 @@ namespace EDennis.AspNet.Base.Security {
 
 
 
-        public async Task<ObjectResult> PatchAsync(string name, JsonElement jsonElement, ModelStateDictionary modelState) {
+        public async Task<ObjectResult> PatchAsync(string name, JsonElement jsonElement, 
+            ModelStateDictionary modelState, string sysUser) {
 
 
             var existingRole = _dbContext.Set<DomainRole>().FirstOrDefault(r => r.Name == name);
@@ -161,17 +167,14 @@ namespace EDennis.AspNet.Base.Security {
                             roleEditModel.Properties = JsonSerializer.Deserialize<Dictionary<string, string>>(prop.Value.GetRawText());
                             existingRole.Properties = roleEditModel.Properties;
                             break;
-                        case "SysUser":
-                        case "sysUser":
-                            roleEditModel.SysUser = prop.Value.GetString();
-                            existingRole.SysUser = roleEditModel.SysUser;
-                            break;
                         case "SysStatus":
                         case "sysStatus":
                             roleEditModel.SysStatus = (SysStatus)Enum.Parse(typeof(SysStatus), prop.Value.GetString());
                             existingRole.SysStatus = roleEditModel.SysStatus;
                             break;
                     }
+                    roleEditModel.SysUser = sysUser;
+                    existingRole.SysUser = roleEditModel.SysUser;
                 } catch (InvalidOperationException ex) {
                     modelState.AddModelError(prop.Name, $"{ex.Message}: Cannot parse value for {prop.Value} from {typeof(DomainRole).Name} JSON");
                 }
@@ -183,11 +186,11 @@ namespace EDennis.AspNet.Base.Security {
 
             results.Add(await _roleManager.UpdateAsync(existingRole));
 
+            results.SelectMany(r => r.Errors).ToList()
+                .ForEach(e => modelState.AddModelError("", e.Description));
 
-            var failures = results.SelectMany(r => r.Errors);
-
-            if (failures.Count() > 0)
-                return new ObjectResult(failures) { StatusCode = StatusCodes.Status409Conflict };
+            if (modelState.ErrorCount > 0)
+                return new ObjectResult(modelState) { StatusCode = StatusCodes.Status409Conflict };
             else
                 return new ObjectResult(roleEditModel) { StatusCode = StatusCodes.Status200OK };
 
@@ -195,21 +198,34 @@ namespace EDennis.AspNet.Base.Security {
 
 
 
-        public async Task<ObjectResult> DeleteAsync(string name) {
+        public async Task<ObjectResult> DeleteAsync(string name, ModelStateDictionary modelState,
+            string sysUser) {
 
             var existingRole = _dbContext.Set<DomainRole>().FirstOrDefault(r => r.Name == name);
 
             if (existingRole == null)
                 return new ObjectResult(null) { StatusCode = StatusCodes.Status404NotFound };
 
-            var results = new List<IdentityResult>();
 
-            results.Add(await _roleManager.DeleteAsync(existingRole));
+            //first, try to update the record with a Deleted status and the deleting user;
+            //however, just ignore if there is an error.
+            try {
+                existingRole.SysStatus = SysStatus.Deleted;
+                existingRole.SysUser = sysUser;
+                _dbContext.Update(existingRole);
+                await _dbContext.SaveChangesAsync();
+            } catch (Exception) { }
 
-            var failures = results.SelectMany(r => r.Errors);
 
-            if (failures.Count() > 0)
-                return new ObjectResult(failures) { StatusCode = StatusCodes.Status409Conflict };
+            var results = new List<IdentityResult> {
+                await _roleManager.DeleteAsync(existingRole)
+            };
+
+            results.SelectMany(r => r.Errors)
+                .ToList().ForEach(e => modelState.AddModelError("", e.Description));
+
+            if (modelState.ErrorCount > 0)
+                return new ObjectResult(modelState) { StatusCode = StatusCodes.Status409Conflict };
             else
                 return new ObjectResult(null) { StatusCode = StatusCodes.Status204NoContent };
 
