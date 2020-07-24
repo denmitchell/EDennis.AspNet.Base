@@ -3,12 +3,16 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Text.Unicode;
 using System.Threading.Tasks;
 
 namespace EDennis.AspNet.Base.Security {
@@ -163,7 +167,10 @@ namespace EDennis.AspNet.Base.Security {
             var results = new List<IdentityResult>();
             var userEditModel = existingUser.ToEditModel();
 
+            bool propertiesObjectWritten = false;
 
+            using var ms = new MemoryStream();
+            using var jw = new Utf8JsonWriter(ms);
             foreach (var prop in jsonElement.EnumerateObject()) {
                 try {
                     switch (prop.Name) {
@@ -267,7 +274,19 @@ namespace EDennis.AspNet.Base.Security {
                             userEditModel.TwoFactorEnabled = prop.Value.GetBoolean();
                             existingUser.TwoFactorEnabled = userEditModel.TwoFactorEnabled;
                             break;
+                        default:
+                            if (!propertiesObjectWritten) {
+                                jw.WriteStartObject();
+                                propertiesObjectWritten = true;
+                            }
+                            prop.WriteTo(jw);
+                            break;
                     }
+                    //if (propertiesObjectWritten) {
+                    //    jw.WriteEndObject();
+                    //    userEditModel.Properties = Encoding.UTF8.GetString(ms.ToArray());
+                    //}
+
                     userEditModel.SysUser = sysUser;
                     existingUser.SysUser = userEditModel.SysUser;
                 } catch (InvalidOperationException ex) {

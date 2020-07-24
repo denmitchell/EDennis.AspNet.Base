@@ -1,17 +1,15 @@
-﻿using EDennis.AspNet.Base.Security.Extensions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace EDennis.AspNet.Base.Security {
+
     public class DomainApplicationRepo {
 
         public DomainIdentityDbContext _dbContext;
@@ -28,8 +26,7 @@ namespace EDennis.AspNet.Base.Security {
             if (application == null)
                 return new ObjectResult(null) { StatusCode = StatusCodes.Status404NotFound };
             else {
-                var applicationEditModel = application.ToEditModel();
-                return new ObjectResult(applicationEditModel) { StatusCode = StatusCodes.Status200OK };
+                return new ObjectResult(application) { StatusCode = StatusCodes.Status200OK };
             }
         }
 
@@ -50,7 +47,7 @@ namespace EDennis.AspNet.Base.Security {
                 .Take(take)
                 .AsNoTracking();
                 
-            var result = (await qry.ToListAsync()).Select(x=>x.ToEditModel());
+            var result = await qry.ToListAsync();
 
             return new ObjectResult(result) { StatusCode = StatusCodes.Status200OK };
 
@@ -67,35 +64,45 @@ namespace EDennis.AspNet.Base.Security {
         }
 
 
-        public async Task<ObjectResult> CreateAsync(ApplicationEditModel applicationEditModel, 
+        /// <summary>
+        /// Note: the create method accepts a JsonElement to permit the addition of
+        /// any number of arbitrary properties, which get packed into a "Properties"
+        /// property as a JSON object string.  The DomainApplicationJsonConverter
+        /// unpacks the extra properties and promotes them to top-level JSON
+        /// properties during serialization.
+        /// </summary>
+        /// <param name="jsonElement"></param>
+        /// <param name="modelState"></param>
+        /// <param name="sysUser"></param>
+        /// <returns></returns>
+        public async Task<ObjectResult> CreateAsync(JsonElement jsonElement, 
             ModelStateDictionary modelState, string sysUser) {
 
+            var newApplication = new DomainApplication();
+            newApplication.DeserializeInto(jsonElement, modelState);
 
-            var existingApplication = _dbContext.Set<DomainApplication>().FirstOrDefault(r => r.Name == applicationEditModel.Name);
+            newApplication.Id = CombGuid.Create();
+            newApplication.SysUser = sysUser;
+            newApplication.SysStatus = SysStatus.Normal;
+
+
+            var existingApplication = _dbContext.Set<DomainApplication>().FirstOrDefault(r => r.Name == newApplication.Name);
 
             if (existingApplication != null) {
-                modelState.AddModelError("Name", $"An application with Name ='{applicationEditModel.Name}' already exists.");
+                modelState.AddModelError("Name", $"An application with Name ='{newApplication.Name}' already exists.");
                 return new ObjectResult(modelState) { StatusCode = StatusCodes.Status409Conflict };
             }
 
-
-            var application = new DomainApplication {
-                Id = CombGuid.Create(),
-                Name = applicationEditModel.Name,
-                Properties = applicationEditModel.Properties,
-                SysStatus = SysStatus.Normal,
-                SysUser = sysUser
-            };
 
             try {
-                await _dbContext.AddAsync(application);
+                await _dbContext.AddAsync(newApplication);
                 await _dbContext.SaveChangesAsync();
             } catch (DbUpdateException ex) {
-                modelState.AddModelError("", $"Cannot add application '{applicationEditModel.Name}': {ex.Message}");
+                modelState.AddModelError("", $"Cannot add application '{newApplication.Name}': {ex.Message}");
                 return new ObjectResult(modelState) { StatusCode = StatusCodes.Status409Conflict };
             }
 
-            return new ObjectResult(applicationEditModel) { StatusCode = StatusCodes.Status200OK };
+            return new ObjectResult(newApplication) { StatusCode = StatusCodes.Status200OK };
 
         }
 
@@ -112,35 +119,9 @@ namespace EDennis.AspNet.Base.Security {
                 return new ObjectResult(modelState) { StatusCode = StatusCodes.Status404NotFound };
             }
 
-            var applicationEditModel = existingApplication.ToEditModel();
+            existingApplication.DeserializeInto(jsonElement, modelState);
+            existingApplication.SysUser = sysUser;
 
-
-            foreach (var prop in jsonElement.EnumerateObject()) {
-                try {
-                    switch (prop.Name) {
-                        case "Name":
-                        case "name":
-                            applicationEditModel.Name = prop.Value.GetString();
-                            existingApplication.Name = applicationEditModel.Name;
-                            break;
-                        case "Properties":
-                        case "properties":
-                            applicationEditModel.Properties = JsonSerializer.Deserialize<Dictionary<string, string>>(prop.Value.GetRawText());
-                            existingApplication.Properties = applicationEditModel.Properties;
-                            break;
-                        case "SysStatus":
-                        case "sysStatus":
-                            applicationEditModel.SysStatus = (SysStatus)Enum.Parse(typeof(SysStatus), prop.Value.GetString());
-                            existingApplication.SysStatus = applicationEditModel.SysStatus;
-                            break;
-                    }
-                    applicationEditModel.SysUser = sysUser;
-                    existingApplication.SysUser = sysUser;
-
-                } catch (InvalidOperationException ex) {
-                    modelState.AddModelError(prop.Name, $"{ex.Message}: Cannot parse value for {prop.Value} from {typeof(DomainApplication).Name} JSON");
-                }
-            }
 
             if (modelState.ErrorCount > 0)
                 return new ObjectResult(modelState) { StatusCode = StatusCodes.Status400BadRequest };
@@ -154,7 +135,7 @@ namespace EDennis.AspNet.Base.Security {
                 return new ObjectResult(modelState) { StatusCode = StatusCodes.Status409Conflict };
             }
 
-            return new ObjectResult(applicationEditModel) { StatusCode = StatusCodes.Status200OK };
+            return new ObjectResult(existingApplication) { StatusCode = StatusCodes.Status200OK };
 
         }
 
@@ -191,10 +172,6 @@ namespace EDennis.AspNet.Base.Security {
 
         }
 
-
-
     }
-
-
 
 }

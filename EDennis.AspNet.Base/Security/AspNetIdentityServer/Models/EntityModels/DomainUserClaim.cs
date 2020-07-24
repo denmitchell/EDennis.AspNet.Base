@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -9,7 +9,7 @@ namespace EDennis.AspNet.Base.Security {
 
 
     [JsonConverter(typeof(DomainUserClaimJsonConverter))]
-    public class DomainUserClaim : IdentityUserClaim<Guid>, ITemporalEntity {
+    public class DomainUserClaim : IdentityUserClaim<Guid>, IDomainEntity {
 
         public DomainUser User { get; set; }
 
@@ -19,59 +19,52 @@ namespace EDennis.AspNet.Base.Security {
         public DateTime SysStart { get; set; }
         public DateTime SysEnd { get; set; }
 
-        public void Patch(JsonElement jsonElement, ModelStateDictionary modelState, bool mergeCollections = true)
-            => DeserializeInto(jsonElement, this, modelState);
+        public string Properties { get; set; }
 
+        public void DeserializeInto(JsonElement source, ModelStateDictionary modelState) {
 
-        public void Update(object updated) {
-            var obj = updated as DomainUserClaim;
-            Id = obj.Id;
-            UserId = obj.UserId;
-            ClaimType = obj.ClaimType;
-            ClaimValue = obj.ClaimValue;
-            SysUser = obj.SysUser;
-            SysStatus = obj.SysStatus;
-            SysStart = obj.SysStart;
-            SysEnd = obj.SysEnd;
-        }
-
-        public static DomainUserClaim DeserializeInto(JsonElement jsonElement, DomainUserClaim claim, ModelStateDictionary modelState) {
-            foreach (var prop in jsonElement.EnumerateObject()) {
+            bool hasWrittenProperties = false;
+            using var ms = new MemoryStream();
+            using var jw = new Utf8JsonWriter(ms);
+            foreach (var prop in source.EnumerateObject()) {
                 try {
                     switch (prop.Name) {
                         case "Id":
                         case "id":
-                            claim.Id = prop.Value.GetInt32();
+                            Id = prop.Value.GetInt32();
                             break;
                         case "UserId":
                         case "userId":
-                            claim.UserId = prop.Value.GetGuid();
+                            UserId = prop.Value.GetGuid();
                             break;
                         case "Name":
                         case "name":
-                            claim.ClaimType = prop.Value.GetString();
+                            ClaimType = prop.Value.GetString();
                             break;
                         case "Value":
                         case "value":
-                            claim.ClaimValue = prop.Value.GetString();
+                            ClaimValue = prop.Value.GetString();
                             break;
                         case "SysUser":
                         case "sysUser":
-                            claim.SysUser = prop.Value.GetString();
+                            SysUser = prop.Value.GetString();
                             break;
                         case "SysStatus":
                         case "sysStatus":
-                            claim.SysStatus = (SysStatus)Enum.Parse(typeof(SysStatus), prop.Value.GetString());
+                            SysStatus = (SysStatus)Enum.Parse(typeof(SysStatus), prop.Value.GetString());
                             break;
                         case "SysStart":
                         case "sysStart":
-                            claim.SysStart = prop.Value.GetDateTime();
+                            SysStart = prop.Value.GetDateTime();
                             break;
                         case "SysEnd":
                         case "sysEnd":
-                            claim.SysEnd = prop.Value.GetDateTime();
+                            SysEnd = prop.Value.GetDateTime();
                             break;
                         default:
+                            if (!hasWrittenProperties)
+                                jw.WriteStartObject();
+                            prop.WriteTo(jw);
                             break;
                     }
                 } catch (InvalidOperationException ex) {
@@ -79,7 +72,6 @@ namespace EDennis.AspNet.Base.Security {
                 }
 
             }
-            return claim;
 
         }
 
@@ -105,6 +97,12 @@ namespace EDennis.AspNet.Base.Security {
                 writer.WriteString("SysStatus", value.SysStatus.ToString());
                 writer.WriteString("SysStart", value.SysStart.ToString("u"));
                 writer.WriteString("SysEnd", value.SysStart.ToString("u"));
+                //extract catch-all properties and promote to top-level in JSON
+                if (value.Properties != null) {
+                    using var doc = JsonDocument.Parse(value.Properties);
+                    foreach (var prop in doc.RootElement.EnumerateObject())
+                        prop.WriteTo(writer);
+                }
             }
             writer.WriteEndObject();
         }

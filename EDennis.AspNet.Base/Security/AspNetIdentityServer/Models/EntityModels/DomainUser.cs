@@ -4,11 +4,15 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace EDennis.AspNet.Base.Security {
-    public class DomainUser : IdentityUser<Guid>, ITemporalEntity {
+
+    [JsonConverter(typeof(DomainUserJsonConverter))]
+    public class DomainUser : IdentityUser<Guid>, IDomainEntity, IHasStringProperties {
 
         public const int SHA256_LENGTH = 64; //"a8a2f6ebe286697c527eb35a58b5539532e9b3ae3b64d4eb0a46fb657b41562c";
         public const int SHA512_LENGTH = 128; //"f3bf9aa70169e4ab5339f20758986538fe6c96d7be3d184a036cde8161105fcf53516428fa096ac56247bb88085b0587d5ec8e56a6807b1af351305b2103d74b";
@@ -48,7 +52,7 @@ namespace EDennis.AspNet.Base.Security {
 
 
 
-        public Dictionary<string, string> Properties { get; set; }
+        public string Properties { get; set; }
 
         public DomainOrganization Organization { get; set; }
         public ICollection<DomainUserClaim> UserClaims { get; set; }
@@ -61,8 +65,12 @@ namespace EDennis.AspNet.Base.Security {
         public string SysUser { get; set; }
 
 
-        public void Patch(JsonElement jsonElement, ModelStateDictionary modelState, bool mergeCollections = true) {
-            foreach (var prop in jsonElement.EnumerateObject()) {
+        public void DeserializeInto(JsonElement source, ModelStateDictionary modelState) {
+            bool hasWrittenProperties = false;
+            using var ms = new MemoryStream();
+            using var jw = new Utf8JsonWriter(ms);
+
+            foreach (var prop in source.EnumerateObject()) {
                 try {
                     switch (prop.Name) {
                         case "AccessFailedCount":
@@ -122,21 +130,6 @@ namespace EDennis.AspNet.Base.Security {
                         case "phoneNumberConfirmed":
                             PhoneNumberConfirmed = prop.Value.GetBoolean();
                             break;
-                        case "Properties":
-                        case "properties":
-                            var properties = new Dictionary<string, string>();
-                            prop.Value.EnumerateObject().ToList().ForEach(e => {
-                                properties.Add(e.Name, e.Value.GetString());
-                            });
-                            if (mergeCollections && Properties != null)
-                                foreach (var entry in properties)
-                                    if (Properties.ContainsKey(entry.Key))
-                                        Properties[entry.Key] = entry.Value;
-                                    else
-                                        Properties.Add(entry.Key, entry.Value);
-                            else
-                                Properties = properties;
-                            break;
                         case "SecurityStamp":
                         case "securityStamp":
                             SecurityStamp = prop.Value.GetString();
@@ -166,21 +159,29 @@ namespace EDennis.AspNet.Base.Security {
                             UserName = prop.Value.GetString();
                             NormalizedUserName = UserName.ToUpper();
                             break;
+                        case "UserClaims__Packed":
+                        case "userClaims__Packed":
+                            var unpackedClaims = new List<DomainUserClaim>();
+                            foreach (var packedClaim in prop.Value.EnumerateObject())
+                                foreach (var packedValue in packedClaim.Value.EnumerateArray())
+                                    unpackedClaims.Add(new DomainUserClaim { ClaimType = packedClaim.Name, ClaimValue = packedValue.GetString() });
+                            UserClaims = unpackedClaims.ToArray();
+                            break;
                         case "UserClaims":
                         case "userClaims":
-                            var claims = prop.Value.EnumerateArray()
-                                .Select(e => DomainUserClaim.DeserializeInto(e, new DomainUserClaim(), modelState));
-                            if (mergeCollections && UserClaims != null) {
-                                var newClaims = claims.Where(n => !UserClaims.Any(e => e.ClaimType == n.ClaimType && e.ClaimValue == n.ClaimValue));
-                                UserClaims = UserClaims.Union(newClaims).ToArray();
-                            } else
-                                UserClaims = claims.ToArray();
+                            var claims = new List<DomainUserClaim>();
+                            foreach (var item in prop.Value.EnumerateArray()) {
+                                var claim = new DomainUserClaim();
+                                claim.DeserializeInto(item, modelState);
+                                claims.Add(claim);
+                            }
+                            UserClaims = claims.ToArray();
                             break;
                         case "UserRoles":
                         case "userRoles":
                             var roles = prop.Value.EnumerateArray()
                                 .Select(e => DomainUserRole.DeserializeInto(e, new DomainUserRole(), modelState));
-                            if (mergeCollections && UserRoles != null) {
+                            if (UserRoles != null) {
                                 var newRoles = roles.Where(n => !UserRoles.Any(e => e.RoleId == n.RoleId));
                                 UserRoles = UserRoles.Union(newRoles).ToArray();
                             } else
@@ -190,7 +191,7 @@ namespace EDennis.AspNet.Base.Security {
                         case "userLogins":
                             var logins = prop.Value.EnumerateArray()
                                 .Select(e => DomainUserLogin.DeserializeInto(e, new DomainUserLogin(), modelState));
-                            if (mergeCollections && UserLogins != null) {
+                            if (UserLogins != null) {
                                 var newLogins = logins.Where(n => !UserLogins.Any(e => e.LoginProvider == n.LoginProvider && e.ProviderKey == n.ProviderKey));
                                 UserLogins = UserLogins.Union(newLogins).ToArray();
                             } else
@@ -200,13 +201,16 @@ namespace EDennis.AspNet.Base.Security {
                         case "userTokens":
                             var tokens = prop.Value.EnumerateArray()
                                 .Select(e => DomainUserToken.DeserializeInto(e, new DomainUserToken(), modelState));                            
-                            if (mergeCollections && UserTokens != null) {
+                            if (UserTokens != null) {
                                 var newTokens = tokens.Where(n => !UserTokens.Any(e => e.LoginProvider == n.LoginProvider && e.Name == n.Name));
                                 UserTokens = UserTokens.Union(newTokens).ToArray();
                             } else
                                 UserTokens = tokens.ToArray();
                             break;
                         default:
+                            if (!hasWrittenProperties)
+                                jw.WriteStartObject();
+                            prop.WriteTo(jw);
                             break;
                     }
                 } catch (InvalidOperationException ex) {
@@ -214,36 +218,76 @@ namespace EDennis.AspNet.Base.Security {
                 }
             }
         }
-
-        public void Update(object updated) {
-            var obj = updated as DomainUser;
-            AccessFailedCount = obj.AccessFailedCount;
-            ConcurrencyStamp = Guid.NewGuid().ToString();
-            Email = obj.Email;
-            EmailConfirmed = obj.EmailConfirmed;
-            Id = obj.Id;
-            LockoutBegin = obj.LockoutBegin;
-            LockoutEnabled = obj.LockoutEnabled;
-            LockoutEnd = obj.LockoutEnd;
-            NormalizedEmail = obj.Email.ToUpper();
-            NormalizedUserName = obj.UserName.ToUpper();
-            Organization = obj.Organization;
-            OrganizationId = obj.OrganizationId;
-            PasswordHash = obj.PasswordHash;
-            PhoneNumber = obj.PhoneNumber;
-            PhoneNumberConfirmed = obj.PhoneNumberConfirmed;
-            Properties = obj.Properties;
-            SecurityStamp = obj.SecurityStamp;
-            SysStart = obj.SysStart;
-            SysEnd = obj.SysEnd;
-            SysStatus = obj.SysStatus;
-            SysUser = obj.SysUser;
-            TwoFactorEnabled = obj.TwoFactorEnabled;
-            UserClaims = obj.UserClaims;
-            UserLogins = obj.UserLogins;
-            UserName = obj.UserName;
-            UserRoles = obj.UserRoles;
-            UserTokens = obj.UserTokens;
-        }
     }
+
+    public class DomainUserJsonConverter : JsonConverter<DomainUser> {
+        public override DomainUser Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            => JsonSerializer.Deserialize<DomainUser>(ref reader, options);
+
+        public override void Write(Utf8JsonWriter writer, DomainUser value, JsonSerializerOptions options) {
+            writer.WriteStartObject();
+            {
+                writer.WriteString("Id", value.Id.ToString());
+                writer.WriteString("UserName", value.UserName);
+                if (value.AccessFailedCount != default)
+                    writer.WriteNumber("AccessFailedCount", value.AccessFailedCount);
+                writer.WriteString("Email", value.Email);
+                writer.WriteBoolean("EmailConfirmed", value.EmailConfirmed);
+                writer.WriteBoolean("LockoutEnabled", value.LockoutEnabled);
+                if(value.LockoutBegin != default)
+                    writer.WriteString("LockoutBegin", value.LockoutBegin.Value.ToString("u"));
+                if (value.LockoutEnd != default)
+                    writer.WriteString("LockoutEnd", value.LockoutEnd.Value.ToString("u"));
+                if (value.OrganizationId != default)
+                    writer.WriteString("OrganizationId", value.OrganizationId.ToString());
+                if (value.Organization != null)
+                    writer.WriteString("OrganizationName", value.Organization.Name);
+                if (value.PhoneNumber != default)
+                    writer.WriteString("PhoneNumber",value.PhoneNumber);
+                if (value.PhoneNumberConfirmed != default)
+                    writer.WriteBoolean("PhoneNumberConfirmed", value.PhoneNumberConfirmed);
+                if (value.TwoFactorEnabled != default)
+                    writer.WriteBoolean("TwoFactorEnabled", value.TwoFactorEnabled);
+                if(value.UserClaims != null && value.UserClaims.Count > 0) {
+                    var dict = value.UserClaims.ToDictionary();
+                    writer.WriteStartObject("Claims");
+                    {
+                        foreach (var entry in dict) {
+                            writer.WritePropertyName(entry.Key);
+                            writer.WriteStartArray();
+                            {
+                                foreach (var item in entry.Value)
+                                    writer.WriteStringValue(item);
+                            }
+                            writer.WriteEndArray();
+                        }
+                    }
+                    writer.WriteEndObject();
+                }
+                if (value.UserRoles != null && value.UserRoles.Count > 0) {
+                    var roles = value.UserRoles.Select(r=>r.Role.Name);
+                    writer.WriteStartArray("Roles");
+                    {
+                        foreach (var role in roles)
+                            writer.WriteStringValue(role);
+                    }
+                    writer.WriteEndObject();
+                }
+
+                writer.WriteString("SysUser", value.SysUser);
+                writer.WriteString("SysStatus", value.SysStatus.ToString());
+                writer.WriteString("SysStart", value.SysStart.ToString("u"));
+                writer.WriteString("SysEnd", value.SysStart.ToString("u"));
+                //extract catch-all properties and promote to top-level in JSON
+                if (value.Properties != null) {
+                    using var doc = JsonDocument.Parse(value.Properties);
+                    foreach (var prop in doc.RootElement.EnumerateObject())
+                        prop.WriteTo(writer);
+                }
+            }
+            writer.WriteEndObject();
+        }
+
+    }
+
 }

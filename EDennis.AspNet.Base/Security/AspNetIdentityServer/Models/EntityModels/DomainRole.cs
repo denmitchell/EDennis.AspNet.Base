@@ -2,14 +2,19 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace EDennis.AspNet.Base.Security {
-    public class DomainRole : IdentityRole<Guid>, ITemporalEntity {
+
+    [JsonConverter(typeof(DomainRoleJsonConverter))]
+    public class DomainRole : IdentityRole<Guid>, IDomainEntity, IHasStringProperties {
         public virtual Guid? ApplicationId { get; set; }
 
-        public Dictionary<string, string> Properties { get; set; }
+        public string Properties { get; set; }
 
         public DomainApplication Application { get; set; }
 
@@ -22,10 +27,18 @@ namespace EDennis.AspNet.Base.Security {
         public DateTime SysEnd { get; set; }
 
 
-        public void Patch(JsonElement jsonElement, ModelStateDictionary modelState, bool mergeCollections = true) {
-            foreach (var prop in jsonElement.EnumerateObject()) {
+        public void DeserializeInto(JsonElement source, ModelStateDictionary modelState) {
+            bool hasWrittenProperties = false;
+            using var ms = new MemoryStream();
+            using var jw = new Utf8JsonWriter(ms);
+
+            foreach (var prop in source.EnumerateObject()) {
                 try {
                     switch (prop.Name) {
+                        case "Id":
+                        case "id":
+                            Id = prop.Value.GetGuid();
+                            break;
                         case "ApplicationId":
                         case "applicationId":
                             ApplicationId = prop.Value.GetGuid();
@@ -42,21 +55,6 @@ namespace EDennis.AspNet.Base.Security {
                         case "NormalizedName":
                         case "normalizedName":
                             NormalizedName = prop.Value.GetString();
-                            break;
-                        case "Properties":
-                        case "properties":
-                            var properties = new Dictionary<string, string>();
-                            prop.Value.EnumerateObject().ToList().ForEach(e => {
-                                properties.Add(e.Name, e.Value.GetString());
-                            });
-                            if (mergeCollections && Properties != null)
-                                foreach (var entry in properties)
-                                    if (Properties.ContainsKey(entry.Key))
-                                        Properties[entry.Key] = entry.Value;
-                                    else
-                                        Properties.Add(entry.Key, entry.Value);
-                            else
-                                Properties = properties;
                             break;
                         case "SysUser":
                         case "sysUser":
@@ -75,31 +73,48 @@ namespace EDennis.AspNet.Base.Security {
                             SysEnd = prop.Value.GetDateTime();
                             break;
                         default:
+                            if (!hasWrittenProperties)
+                                jw.WriteStartObject();
+                            prop.WriteTo(jw);
                             break;
                     }
                 } catch (InvalidOperationException ex) {
                     modelState.AddModelError(prop.Name, $"{ex.Message}: Cannot parse value for {prop.Value} from {GetType().Name} JSON");
                 }
+                if (hasWrittenProperties) {
+                    jw.WriteEndObject();
+                    Properties = Encoding.UTF8.GetString(ms.ToArray());
+                }
             }
         }
 
-        public void Update(object updated) {
-            var obj = updated as DomainRole;
-            Application = obj.Application;
-            ApplicationId = obj.ApplicationId;
-            ConcurrencyStamp = obj.ConcurrencyStamp;
-            Id = obj.Id;
-            Name = obj.Name;
-            NormalizedName = obj.Name.ToUpper();
-            Properties = obj.Properties;
-            SysStart = obj.SysStart;
-            SysEnd = obj.SysEnd;
-            SysStatus = obj.SysStatus;
-            SysUser = obj.SysUser;
-            UserRoles = obj.UserRoles;
+    }
+
+    public class DomainRoleJsonConverter : JsonConverter<DomainRole> {
+        public override DomainRole Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            => JsonSerializer.Deserialize<DomainRole>(ref reader, options);
+
+        public override void Write(Utf8JsonWriter writer, DomainRole value, JsonSerializerOptions options) {
+            writer.WriteStartObject();
+            {
+                writer.WriteString("Id", value.Id.ToString());
+                writer.WriteString("Name", value.Name);
+                writer.WriteString("SysUser", value.SysUser);
+                writer.WriteString("SysStatus", value.SysStatus.ToString());
+                writer.WriteString("SysStart", value.SysStart.ToString("u"));
+                writer.WriteString("SysEnd", value.SysStart.ToString("u"));
+                //extract catch-all properties and promote to top-level in JSON
+                if (value.Properties != null) {
+                    using var doc = JsonDocument.Parse(value.Properties);
+                    foreach (var prop in doc.RootElement.EnumerateObject())
+                        prop.WriteTo(writer);
+                }
+                writer.WriteString("ApplicationId", value.ApplicationId.ToString());
+                if (value.Application != null)
+                    writer.WriteString("ApplicationName", value.Application.Name.ToString());
+            }
+            writer.WriteEndObject();
         }
-
-
 
     }
 }

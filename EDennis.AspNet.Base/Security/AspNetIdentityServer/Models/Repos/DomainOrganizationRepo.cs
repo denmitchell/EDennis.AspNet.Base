@@ -1,17 +1,15 @@
-﻿using EDennis.AspNet.Base.Security.Extensions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace EDennis.AspNet.Base.Security {
+
     public class DomainOrganizationRepo {
 
         public DomainIdentityDbContext _dbContext;
@@ -28,8 +26,7 @@ namespace EDennis.AspNet.Base.Security {
             if (organization == null)
                 return new ObjectResult(null) { StatusCode = StatusCodes.Status404NotFound };
             else {
-                var organizationEditModel = organization.ToEditModel();
-                return new ObjectResult(organizationEditModel) { StatusCode = StatusCodes.Status200OK };
+                return new ObjectResult(organization) { StatusCode = StatusCodes.Status200OK };
             }
         }
 
@@ -37,7 +34,7 @@ namespace EDennis.AspNet.Base.Security {
 
 
 
-        public async Task<ObjectResult> GetAsync(int? pageNumber = 1, 
+        public async Task<ObjectResult> GetAsync(int? pageNumber = 1,
             int? pageSize = 100) {
 
 
@@ -49,8 +46,8 @@ namespace EDennis.AspNet.Base.Security {
             qry = qry.Skip(skip)
                 .Take(take)
                 .AsNoTracking();
-                
-            var result = (await qry.ToListAsync()).Select(x=>x.ToEditModel());
+
+            var result = await qry.ToListAsync();
 
             return new ObjectResult(result) { StatusCode = StatusCodes.Status200OK };
 
@@ -63,45 +60,55 @@ namespace EDennis.AspNet.Base.Security {
                 return await _dbContext.FindAsync<DomainOrganization>(Guid.Parse(pathParameter));
             else
                 return await _dbContext.Set<DomainOrganization>()
-                    .FirstOrDefaultAsync(a=>a.Name == pathParameter);
+                    .FirstOrDefaultAsync(a => a.Name == pathParameter);
         }
 
 
-        public async Task<ObjectResult> CreateAsync(OrganizationEditModel organizationEditModel, 
+        /// <summary>
+        /// Note: the create method accepts a JsonElement to permit the addition of
+        /// any number of arbitrary properties, which get packed into a "Properties"
+        /// property as a JSON object string.  The DomainOrganizationJsonConverter
+        /// unpacks the extra properties and promotes them to top-level JSON
+        /// properties during serialization.
+        /// </summary>
+        /// <param name="jsonElement"></param>
+        /// <param name="modelState"></param>
+        /// <param name="sysUser"></param>
+        /// <returns></returns>
+        public async Task<ObjectResult> CreateAsync(JsonElement jsonElement,
             ModelStateDictionary modelState, string sysUser) {
 
+            var newOrganization = new DomainOrganization();
+            newOrganization.DeserializeInto(jsonElement, modelState);
 
-            var existingOrganization = _dbContext.Set<DomainOrganization>().FirstOrDefault(r => r.Name == organizationEditModel.Name);
+            newOrganization.Id = CombGuid.Create();
+            newOrganization.SysUser = sysUser;
+            newOrganization.SysStatus = SysStatus.Normal;
+
+
+            var existingOrganization = _dbContext.Set<DomainOrganization>().FirstOrDefault(r => r.Name == newOrganization.Name);
 
             if (existingOrganization != null) {
-                modelState.AddModelError("Name", $"An organization with Name ='{organizationEditModel.Name}' already exists.");
+                modelState.AddModelError("Name", $"An organization with Name ='{newOrganization.Name}' already exists.");
                 return new ObjectResult(modelState) { StatusCode = StatusCodes.Status409Conflict };
             }
 
-
-            var organization = new DomainOrganization {
-                Id = CombGuid.Create(),
-                Name = organizationEditModel.Name,
-                Properties = organizationEditModel.Properties,
-                SysStatus = SysStatus.Normal,
-                SysUser = sysUser
-            };
 
             try {
-                await _dbContext.AddAsync(organization);
+                await _dbContext.AddAsync(newOrganization);
                 await _dbContext.SaveChangesAsync();
             } catch (DbUpdateException ex) {
-                modelState.AddModelError("", $"Cannot add organization '{organizationEditModel.Name}': {ex.Message}");
+                modelState.AddModelError("", $"Cannot add organization '{newOrganization.Name}': {ex.Message}");
                 return new ObjectResult(modelState) { StatusCode = StatusCodes.Status409Conflict };
             }
 
-            return new ObjectResult(organizationEditModel) { StatusCode = StatusCodes.Status200OK };
+            return new ObjectResult(newOrganization) { StatusCode = StatusCodes.Status200OK };
 
         }
 
 
 
-        public async Task<ObjectResult> PatchAsync(string name, JsonElement jsonElement, 
+        public async Task<ObjectResult> PatchAsync(string name, JsonElement jsonElement,
             ModelStateDictionary modelState, string sysUser) {
 
 
@@ -112,35 +119,9 @@ namespace EDennis.AspNet.Base.Security {
                 return new ObjectResult(modelState) { StatusCode = StatusCodes.Status404NotFound };
             }
 
-            var organizationEditModel = existingOrganization.ToEditModel();
+            existingOrganization.DeserializeInto(jsonElement, modelState);
+            existingOrganization.SysUser = sysUser;
 
-
-            foreach (var prop in jsonElement.EnumerateObject()) {
-                try {
-                    switch (prop.Name) {
-                        case "Name":
-                        case "name":
-                            organizationEditModel.Name = prop.Value.GetString();
-                            existingOrganization.Name = organizationEditModel.Name;
-                            break;
-                        case "Properties":
-                        case "properties":
-                            organizationEditModel.Properties = JsonSerializer.Deserialize<Dictionary<string, string>>(prop.Value.GetRawText());
-                            existingOrganization.Properties = organizationEditModel.Properties;
-                            break;
-                        case "SysStatus":
-                        case "sysStatus":
-                            organizationEditModel.SysStatus = (SysStatus)Enum.Parse(typeof(SysStatus), prop.Value.GetString());
-                            existingOrganization.SysStatus = organizationEditModel.SysStatus;
-                            break;
-                    }
-                    organizationEditModel.SysUser = sysUser;
-                    existingOrganization.SysUser = sysUser;
-
-                } catch (InvalidOperationException ex) {
-                    modelState.AddModelError(prop.Name, $"{ex.Message}: Cannot parse value for {prop.Value} from {typeof(DomainOrganization).Name} JSON");
-                }
-            }
 
             if (modelState.ErrorCount > 0)
                 return new ObjectResult(modelState) { StatusCode = StatusCodes.Status400BadRequest };
@@ -154,13 +135,13 @@ namespace EDennis.AspNet.Base.Security {
                 return new ObjectResult(modelState) { StatusCode = StatusCodes.Status409Conflict };
             }
 
-            return new ObjectResult(organizationEditModel) { StatusCode = StatusCodes.Status200OK };
+            return new ObjectResult(existingOrganization) { StatusCode = StatusCodes.Status200OK };
 
         }
 
 
 
-        public async Task<ObjectResult> DeleteAsync(string name, ModelStateDictionary modelState, 
+        public async Task<ObjectResult> DeleteAsync(string name, ModelStateDictionary modelState,
             string sysUser) {
 
             var existingOrganization = _dbContext.Set<DomainOrganization>().FirstOrDefault(r => r.Name == name);
@@ -191,10 +172,6 @@ namespace EDennis.AspNet.Base.Security {
 
         }
 
-
-
     }
-
-
 
 }
