@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System;
-using System.Text.Json;
+﻿using System;
 
 namespace EDennis.AspNet.Base.Security {
     public interface IDomainEntity {
@@ -9,6 +7,5 @@ namespace EDennis.AspNet.Base.Security {
         SysStatus SysStatus { get; set; }
         string SysUser { get; set; }
 
-        void DeserializeInto(JsonElement source, ModelStateDictionary modelState);
     }
 }

@@ -89,32 +89,4 @@ namespace EDennis.AspNet.Base.Security {
         }
 
     }
-
-    public class DomainRoleJsonConverter : JsonConverter<DomainRole> {
-        public override DomainRole Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-            => JsonSerializer.Deserialize<DomainRole>(ref reader, options);
-
-        public override void Write(Utf8JsonWriter writer, DomainRole value, JsonSerializerOptions options) {
-            writer.WriteStartObject();
-            {
-                writer.WriteString("Id", value.Id.ToString());
-                writer.WriteString("Name", value.Name);
-                writer.WriteString("SysUser", value.SysUser);
-                writer.WriteString("SysStatus", value.SysStatus.ToString());
-                writer.WriteString("SysStart", value.SysStart.ToString("u"));
-                writer.WriteString("SysEnd", value.SysStart.ToString("u"));
-                //extract catch-all properties and promote to top-level in JSON
-                if (value.Properties != null) {
-                    using var doc = JsonDocument.Parse(value.Properties);
-                    foreach (var prop in doc.RootElement.EnumerateObject())
-                        prop.WriteTo(writer);
-                }
-                writer.WriteString("ApplicationId", value.ApplicationId.ToString());
-                if (value.Application != null)
-                    writer.WriteString("ApplicationName", value.Application.Name.ToString());
-            }
-            writer.WriteEndObject();
-        }
-
-    }
 }
