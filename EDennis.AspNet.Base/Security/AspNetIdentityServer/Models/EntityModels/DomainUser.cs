@@ -56,7 +56,11 @@ namespace EDennis.AspNet.Base.Security {
 
         public DomainOrganization Organization { get; set; }
         public ICollection<DomainUserClaim> UserClaims { get; set; }
+        public Dictionary<string,string[]> UserClaims__Packed { get; set; }
+
         public ICollection<DomainUserRole> UserRoles { get; set; }
+        public Dictionary<string,string[]> UserRoles__Packed { get; set; }
+
         public ICollection<DomainUserLogin> UserLogins { get; set; }
         public ICollection<DomainUserToken> UserTokens { get; set; }
         public DateTime SysEnd { get; set; }
@@ -65,168 +69,7 @@ namespace EDennis.AspNet.Base.Security {
         public string SysUser { get; set; }
 
 
-        public void DeserializeInto(JsonElement source, ModelStateDictionary modelState, DomainIdentityDbContext dbContext) {
-            bool hasWrittenProperties = false;
-            using var ms = new MemoryStream();
-            using var jw = new Utf8JsonWriter(ms);
-
-            foreach (var prop in source.EnumerateObject()) {
-                try {
-                    switch (prop.Name) {
-                        case "AccessFailedCount":
-                        case "accessFailedCount":
-                            AccessFailedCount = prop.Value.GetInt32();
-                            break;
-                        case "ConcurrencyStamp":
-                        case "concurrencyStamp":
-                            ConcurrencyStamp = prop.Value.GetString();
-                            break;
-                        case "Email":
-                        case "email":
-                            Email = prop.Value.GetString();
-                            NormalizedEmail = Email.ToUpper();
-                            break;
-                        case "EmailConfirmed":
-                        case "emailConfirmed":
-                            EmailConfirmed = prop.Value.GetBoolean();
-                            break;
-                        case "Id":
-                        case "id":
-                            Id = prop.Value.GetGuid();
-                            break;
-                        case "LockoutBegin":
-                        case "lockoutBegin":
-                            LockoutBegin = prop.Value.GetDateTime();
-                            break;
-                        case "LockoutEnabled":
-                        case "lockoutEnabled":
-                            LockoutEnabled = prop.Value.GetBoolean();
-                            break;
-                        case "LockoutEnd":
-                        case "lockoutEnd":
-                            LockoutEnd = prop.Value.GetDateTime();
-                            break;
-                        case "NormalizedEmail":
-                        case "normalizedEmail":
-                            NormalizedEmail = prop.Value.GetString();
-                            break;
-                        case "NormalizedUserName":
-                        case "normalizedUserName":
-                            NormalizedUserName = prop.Value.GetString();
-                            break;
-                        case "OrganizationId":
-                        case "organizationId":
-                            OrganizationId = prop.Value.GetGuid();
-                            break;
-                        case "PasswordHash":
-                        case "passwordHash":
-                            PasswordHash = prop.Value.GetString();
-                            break;
-                        case "PhoneNumber":
-                        case "phoneNumber":
-                            PhoneNumber = prop.Value.GetString();
-                            break;
-                        case "PhoneNumberConfirmed":
-                        case "phoneNumberConfirmed":
-                            PhoneNumberConfirmed = prop.Value.GetBoolean();
-                            break;
-                        case "SecurityStamp":
-                        case "securityStamp":
-                            SecurityStamp = prop.Value.GetString();
-                            break;
-                        case "SysUser":
-                        case "sysUser":
-                            SysUser = prop.Value.GetString();
-                            break;
-                        case "SysStatus":
-                        case "sysStatus":
-                            SysStatus = (SysStatus)Enum.Parse(typeof(SysStatus), prop.Value.GetString());
-                            break;
-                        case "SysStart":
-                        case "sysStart":
-                            SysStart = prop.Value.GetDateTime();
-                            break;
-                        case "SysEnd":
-                        case "sysEnd":
-                            SysEnd = prop.Value.GetDateTime();
-                            break;
-                        case "TwoFactorEnabled":
-                        case "twoFactorEnabled":
-                            TwoFactorEnabled = prop.Value.GetBoolean();
-                            break;
-                        case "UserName":
-                        case "userName":
-                            UserName = prop.Value.GetString();
-                            NormalizedUserName = UserName.ToUpper();
-                            break;
-                        case "UserClaims__Packed":
-                        case "userClaims__Packed":
-                            var unpackedClaims = new List<DomainUserClaim>();
-                            foreach (var packedClaim in prop.Value.EnumerateObject())
-                                foreach (var packedValue in packedClaim.Value.EnumerateArray())
-                                    unpackedClaims.Add(new DomainUserClaim { ClaimType = packedClaim.Name, ClaimValue = packedValue.GetString() });
-                            UserClaims = unpackedClaims.ToArray();
-                            break;
-                        case "UserClaims":
-                        case "userClaims":
-                            var claims = new List<DomainUserClaim>();
-                            foreach (var item in prop.Value.EnumerateArray()) {
-                                var claim = new DomainUserClaim();
-                                claim.DeserializeInto(item, modelState);
-                                claims.Add(claim);
-                            }
-                            UserClaims = claims.ToArray();
-                            break;
-                        case "UserRoles__Packed":
-                        case "userRoles__Packed":
-                            var unpackedRoles = new List<DomainUserRole>();
-                            var roleNames = prop.Value.EnumerateArray().Select(x=>x.GetString());
-                            UserRoles = dbContext.Set<DomainRole>()
-                                .Where(r => roleNames.Any(n => n == r.Name))
-                                .Select(r => new DomainUserRole { UserId = Id, RoleId = r.Id })
-                                .ToArray();
-                            break;
-                        case "UserRoles":
-                        case "userRoles":
-                            var roles = new List<DomainUserRole>();
-                            foreach (var item in prop.Value.EnumerateArray()) {
-                                var role = new DomainUserRole();
-                                role.DeserializeInto(item, modelState);
-                                roles.Add(role);
-                            }
-                            UserRoles = roles.ToArray();
-                            break;
-                        case "UserLogins":
-                        case "userLogins":
-                            var logins = prop.Value.EnumerateArray()
-                                .Select(e => DomainUserLogin.DeserializeInto(e, new DomainUserLogin(), modelState));
-                            if (UserLogins != null) {
-                                var newLogins = logins.Where(n => !UserLogins.Any(e => e.LoginProvider == n.LoginProvider && e.ProviderKey == n.ProviderKey));
-                                UserLogins = UserLogins.Union(newLogins).ToArray();
-                            } else
-                                UserLogins = logins.ToArray();
-                            break;
-                        case "UserTokens":
-                        case "userTokens":
-                            var tokens = prop.Value.EnumerateArray()
-                                .Select(e => DomainUserToken.DeserializeInto(e, new DomainUserToken(), modelState));
-                            if (UserTokens != null) {
-                                var newTokens = tokens.Where(n => !UserTokens.Any(e => e.LoginProvider == n.LoginProvider && e.Name == n.Name));
-                                UserTokens = UserTokens.Union(newTokens).ToArray();
-                            } else
-                                UserTokens = tokens.ToArray();
-                            break;
-                        default:
-                            if (!hasWrittenProperties)
-                                jw.WriteStartObject();
-                            prop.WriteTo(jw);
-                            break;
-                    }
-                } catch (InvalidOperationException ex) {
-                    modelState.AddModelError(prop.Name, $"{ex.Message}: Cannot parse value for {prop.Value} from {GetType().Name} JSON");
-                }
-            }
-        }
+        
     }
 
 }
