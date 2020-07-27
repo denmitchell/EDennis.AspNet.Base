@@ -9,15 +9,12 @@ namespace EDennis.AspNet.Base.Security {
 
 
     [JsonConverter(typeof(DomainUserClaimJsonConverter))]
-    public class DomainUserClaim : IdentityUserClaim<Guid>, IDomainEntity, IHasStringProperties {
+    public class DomainUserClaim : IdentityUserClaim<Guid>, IDomainEntity {
 
         public SysStatus SysStatus { get; set; }
         public string SysUser { get; set; }
         public DateTime SysStart { get; set; }
         public DateTime SysEnd { get; set; }
-
-        public string Properties { get; set; }
-        public DomainUser User { get; set; }
 
     }
 

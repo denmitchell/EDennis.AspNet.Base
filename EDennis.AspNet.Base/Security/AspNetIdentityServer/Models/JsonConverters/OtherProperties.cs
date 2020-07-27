@@ -30,5 +30,29 @@ namespace EDennis.AspNet.Base.Security.AspNetIdentityServer.Models.JsonConverter
                     break;
             }
         }
+
+
+        public void Add(JsonProperty prop) {
+            switch (prop.Value.ValueKind) {
+                case JsonValueKind.Null:
+                    props.Add($"{prop.Name}:null");
+                    break;
+                case JsonValueKind.True:
+                    props.Add($"{prop.Name}:true");
+                    break;
+                case JsonValueKind.False:
+                    props.Add($"{prop.Name}:false");
+                    break;
+                case JsonValueKind.Number:
+                    props.Add($"{prop.Name}:{prop.Value.GetDecimal()}");
+                    break;
+                case JsonValueKind.String:
+                    props.Add($"{prop.Name}:\"{prop.Value.GetString()}\"");
+                    break;
+                default:
+                    break;
+            }
+        }
+
     }
 }

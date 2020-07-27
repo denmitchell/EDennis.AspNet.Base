@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Text.Json;
+﻿using System;
 using System.Text.Json.Serialization;
 
 namespace EDennis.AspNet.Base.Security {
@@ -17,8 +12,7 @@ namespace EDennis.AspNet.Base.Security {
         public SysStatus SysStatus { get; set; }
         public DateTime SysStart { get; set; }
         public DateTime SysEnd { get; set; }
-
         public string Properties { get; set; }
-        public ICollection<DomainUser> Users { get; set; }
+
     }
 }

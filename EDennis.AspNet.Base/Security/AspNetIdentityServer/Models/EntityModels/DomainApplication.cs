@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace EDennis.AspNet.Base.Security {
@@ -12,10 +11,7 @@ namespace EDennis.AspNet.Base.Security {
         public SysStatus SysStatus { get; set; }
         public DateTime SysStart { get; set; }
         public DateTime SysEnd { get; set; }
-
         public string Properties { get; set; }
-        public ICollection<DomainRole> Roles { get; set; }
-
 
     }
 }
