@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using EDennis.AspNet.Base.Security.AspNetIdentityServer.Models.JsonConverters;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace EDennis.AspNet.Base.Security {
     public class DomainUserJsonConverter : JsonConverter<DomainUser> {
+
+        private OtherProperties _otherProperties;
+
         public override DomainUser Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
             var obj = new DomainUser();
             DeserializeInto(obj, reader);
@@ -22,17 +27,14 @@ namespace EDennis.AspNet.Base.Security {
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="request"></param>
-        public static void DeserializeInto(DomainUser obj, HttpRequest request) {
+        public void DeserializeInto(DomainUser obj, HttpRequest request) {
             using var reader = new StreamReader(request.Body, Encoding.UTF8);
             var str = Encoding.UTF8.GetBytes(Task.Run(() => reader.ReadToEndAsync()).Result);
             var bytes = new ReadOnlySpan<byte>(str);
             DeserializeInto(obj, new Utf8JsonReader(bytes));
         }
 
-        public static void DeserializeInto(DomainUser obj, Utf8JsonReader reader) {
-            bool hasWrittenProperties = false;
-            using var ms = new MemoryStream();
-            using var jw = new Utf8JsonWriter(ms);
+        public void DeserializeInto(DomainUser obj, Utf8JsonReader reader) {
             while (reader.Read()) {
                 switch (reader.TokenType) {
                     case JsonTokenType.PropertyName:
@@ -127,110 +129,32 @@ namespace EDennis.AspNet.Base.Security {
                                 break;
                             case "UserClaims__Packed":
                             case "userClaims__Packed":
-                                var unpackedClaims = new List<DomainUserClaim>();
-                                foreach (var packedClaim in reader.EnumerateObject())
-                                    foreach (var packedValue in packedClaim.Value.EnumerateArray())
-                                        unpackedClaims.Add(new DomainUserClaim { ClaimType = packedClaim.Name, ClaimValue = packedValue.GetString() });
-                                obj.UserClaims = unpackedClaims.ToArray();
+                                Read_UserClaimsPacked(obj, ref reader);
                                 break;
                             case "UserClaims":
                             case "userClaims":
-                                var claims = new List<DomainUserClaim>();
-                                foreach (var item in reader.EnumerateArray()) {
-                                    var claim = new DomainUserClaim();
-                                    claim.DeserializeInto(item, modelState);
-                                    claims.Add(claim);
-                                }
-                                obj.UserClaims = claims.ToArray();
+                                Read_UserClaims(obj, ref reader);
                                 break;
                             case "UserRoles":
                             case "userRoles":
-                                obj.UserRoles = new List<DomainUserRole>();
-                                var urDepth = reader.CurrentDepth;
-                                while (reader.Read()) {
-                                    if (reader.CurrentDepth > urDepth + 2)
-                                        continue;
-                                    else if (reader.TokenType == JsonTokenType.EndArray)
-                                        break;
-                                    else if (reader.TokenType == JsonTokenType.StartObject) {
-                                        obj.UserRoles.Add(new DomainUserRole { UserId = obj.Id });
-                                    } else if (reader.TokenType == JsonTokenType.PropertyName) {
-                                        var prop2 = reader.GetString();
-                                        reader.Read();
-                                        if (prop2 == "RoleId" || prop2 == "roleId")
-                                            obj.UserRoles.Last().RoleId = reader.GetGuid();
-                                    }
-                                }
+                                Read_UserRoles(obj, ref reader);
                                 break;
                             case "UserRoles__Packed":
                             case "userRoles__Packed":
-                                obj.UserRoles__Packed = new Dictionary<string, string[]>();
-                                while (reader.Read()) {
-                                    if (reader.TokenType == JsonTokenType.EndObject)
-                                        break;
-                                    else if (reader.TokenType == JsonTokenType.PropertyName) {
-                                        var prop2 = reader.GetString();
-                                        var roleNames = new List<string>();
-                                        while (reader.Read()) {
-                                            if (reader.TokenType == JsonTokenType.StartArray)
-                                        }
-                                        if (prop2 == "RoleId" || prop2 == "roleId")
-                                            obj.UserRoles.Last().RoleId = reader.GetGuid();
-                                    } else if (reader.TokenType == JsonTokenType.StartObject) {
-                                        obj.UserRoles.Add(new DomainUserRole { UserId = obj.Id });
-                                    }
-                                }
-                                //var roleNames = reader.EnumerateArray().Select(x => x.GetString());
-                                //obj.UserRoles = dbContext.Set<DomainRole>()
-                                //    .Where(r => roleNames.Any(n => n == r.Name))
-                                //    .Select(r => new DomainUserRole { UserId = Id, RoleId = r.Id })
-                                //    .ToArray();
+                                Read_UserRolesPacked(obj, ref reader);
                                 break;
                             case "UserLogins":
                             case "userLogins":
-                                obj.UserLogins = new List<DomainUserLogin>();
-                                var ulDepth = reader.CurrentDepth;
-                                while (reader.Read()) {
-                                    if (reader.CurrentDepth > ulDepth + 2)
-                                        continue;
-                                    else if (reader.TokenType == JsonTokenType.EndArray)
-                                        break;
-                                    else if (reader.TokenType == JsonTokenType.StartObject) {
-                                        obj.UserLogins.Add(new DomainUserLogin { UserId = obj.Id });
-                                    } else if (reader.TokenType == JsonTokenType.PropertyName) {
-                                        var prop2 = reader.GetString();
-                                        reader.Read();
-                                        if (prop2 == "LoginProvider" || prop2 == "loginProvider")
-                                            obj.UserLogins.Last().LoginProvider = reader.GetString();
-                                        else if (prop2 == "ProviderKey" || prop2 == "providerKey")
-                                            obj.UserLogins.Last().ProviderKey = reader.GetString();
-                                        else if (prop2 == "ProviderDisplayName" || prop2 == "providerDisplayName")
-                                            obj.UserLogins.Last().ProviderDisplayName = reader.GetString();
-                                    }
-                                }
+                                Read_UserLogins(obj, ref reader);
                                 break;
                             case "UserTokens":
                             case "userTokens":
-                                obj.UserTokens = new List<DomainUserToken>();
-                                var utDepth = reader.CurrentDepth;
-                                while (reader.Read()) {
-                                    if (reader.CurrentDepth > utDepth + 2)
-                                        continue;
-                                    else if (reader.TokenType == JsonTokenType.EndArray)
-                                        break;
-                                    else if (reader.TokenType == JsonTokenType.StartObject) {
-                                        obj.UserTokens.Add(new DomainUserToken { UserId = obj.Id });
-                                    } else if (reader.TokenType == JsonTokenType.PropertyName) {
-                                        var prop2 = reader.GetString();
-                                        reader.Read();
-                                        if (prop2 == "LoginProvider" || prop2 == "loginProvider")
-                                            obj.UserTokens.Last().LoginProvider = reader.GetString();
-                                        else if (prop2 == "Value" || prop2 == "value")
-                                            obj.UserTokens.Last().Value = reader.GetString();
-                                    }
-                                }
+                                Read_UserTokens(obj, ref reader);
                                 break;
                             default:
+                                if (_otherProperties == null)
+                                    _otherProperties = new OtherProperties();
+                                _otherProperties.Add(prop, ref reader);
                                 break;
 
                         }
@@ -239,37 +163,331 @@ namespace EDennis.AspNet.Base.Security {
                         break;
                 }
             }
-            if (hasWrittenProperties) {
-                jw.WriteEndObject();
-                obj.Properties = Encoding.UTF8.GetString(ms.ToArray());
+            if (_otherProperties != null) {
+                obj.Properties = _otherProperties.ToString();
             }
 
         }
 
+        #region UserRoles
 
-        private void Read_OtherProperties(DomainUser obj, ref Utf8JsonReader reader, bool hasWrittenProperties) {
-            if (!hasWrittenProperties)
-                jw.WriteStartObject();
-            switch (reader.TokenType) {
-                case JsonTokenType.Null:
-                    jw.WriteNull(prop);
-                    break;
-                case JsonTokenType.True:
-                case JsonTokenType.False:
-                    jw.WriteBoolean(prop, reader.GetBoolean());
-                    break;
-                case JsonTokenType.Number:
-                    jw.WriteNumber(prop, reader.GetDecimal());
-                    break;
-                case JsonTokenType.String:
-                    jw.WriteString(prop, reader.GetString());
-                    break;
-                default:
-                    break;
+        private void Read_UserRoles(DomainUser obj, ref Utf8JsonReader reader) {
+            var currentDepth = reader.CurrentDepth;
+            obj.UserRoles = new List<DomainUserRole>();
+            while (!(reader.CurrentDepth == currentDepth && reader.TokenType == JsonTokenType.EndArray)) {
+                Read_UserRole(obj.UserRoles, ref reader);
             }
         }
 
+        private void Read_UserRole(ICollection<DomainUserRole> userRoles, ref Utf8JsonReader reader) {
+            var userRole = new DomainUserRole();
+            var currentDepth = reader.CurrentDepth;
+            OtherProperties otherProperties = null;
+            while (!(reader.CurrentDepth == currentDepth && reader.TokenType == JsonTokenType.EndObject)) {
+                reader.Read();
+                if (reader.TokenType == JsonTokenType.PropertyName) {
+                    string prop = reader.GetString();
+                    reader.Read();
+                    switch (prop) {
+                        case "UserId":
+                        case "userId":
+                            userRole.UserId = reader.GetGuid();
+                            break;
+                        case "RoleId":
+                        case "roleId":
+                            userRole.RoleId = reader.GetGuid();
+                            break;
+                        case "SysUser":
+                        case "sysUser":
+                            userRole.SysUser = reader.GetString();
+                            break;
+                        case "SysStatus":
+                        case "sysStatus":
+                            userRole.SysStatus = (SysStatus)Enum.Parse(typeof(SysStatus), reader.GetString());
+                            break;
+                        case "SysStart":
+                        case "sysStart":
+                            userRole.SysStart = reader.GetDateTime();
+                            break;
+                        case "SysEnd":
+                        case "sysEnd":
+                            userRole.SysEnd = reader.GetDateTime();
+                            break;
+                        case "Role":
+                        case "role":
+                        case "User":
+                        case "user":
+                            break;
+                        default:
+                            if (otherProperties == null)
+                                otherProperties = new OtherProperties();
+                            otherProperties.Add(prop, ref reader);
+                            break;
+                    }
+                }
 
+            }
+            if (otherProperties != null)
+                userRole.Properties = otherProperties.ToString();
+            userRoles.Add(userRole);
+        }
+
+        #endregion
+        #region UserClaims
+
+        private void Read_UserClaims(DomainUser obj, ref Utf8JsonReader reader) {
+            var currentDepth = reader.CurrentDepth;
+            obj.UserClaims = new List<DomainUserClaim>();
+            while (!(reader.CurrentDepth == currentDepth && reader.TokenType == JsonTokenType.EndArray)) {
+                Read_UserClaim(obj.UserClaims, ref reader);
+            }
+        }
+
+        private void Read_UserClaim(ICollection<DomainUserClaim> userClaims, ref Utf8JsonReader reader) {
+            var userClaim = new DomainUserClaim();
+            var currentDepth = reader.CurrentDepth;
+            OtherProperties otherProperties = null;
+            string prop;
+            while (!(reader.CurrentDepth == currentDepth && reader.TokenType == JsonTokenType.EndObject)) {
+                reader.Read();
+                if (reader.TokenType == JsonTokenType.PropertyName) {
+                    prop = reader.GetString();
+                    reader.Read();
+                    switch (prop) {
+                        case "Id":
+                        case "id":
+                            userClaim.Id = reader.GetInt32();
+                            break;
+                        case "UserId":
+                        case "userId":
+                            userClaim.UserId = reader.GetGuid();
+                            break;
+                        case "ClaimType":
+                        case "claimType":
+                            userClaim.ClaimType = reader.GetString();
+                            break;
+                        case "ClaimValue":
+                        case "claimValue":
+                            userClaim.ClaimValue = reader.GetString();
+                            break;
+                        case "SysUser":
+                        case "sysUser":
+                            userClaim.SysUser = reader.GetString();
+                            break;
+                        case "SysStatus":
+                        case "sysStatus":
+                            userClaim.SysStatus = (SysStatus)Enum.Parse(typeof(SysStatus), reader.GetString());
+                            break;
+                        case "SysStart":
+                        case "sysStart":
+                            userClaim.SysStart = reader.GetDateTime();
+                            break;
+                        case "SysEnd":
+                        case "sysEnd":
+                            userClaim.SysEnd = reader.GetDateTime();
+                            break;
+                        case "User":
+                        case "user":
+                            break;
+                        default:
+                            if (otherProperties == null)
+                                otherProperties = new OtherProperties();
+                            otherProperties.Add(prop, ref reader);
+                            break;
+                    }
+                }
+
+            }
+            if (otherProperties != null)
+                userClaim.Properties = otherProperties.ToString();
+
+            userClaims.Add(userClaim);
+        }
+
+        #endregion
+        #region UserLogins
+
+        private void Read_UserLogins(DomainUser obj, ref Utf8JsonReader reader) {
+            obj.UserLogins = new List<DomainUserLogin>();
+            var currentDepth = reader.CurrentDepth;
+            while (!(reader.CurrentDepth == currentDepth && reader.TokenType == JsonTokenType.EndArray)) {
+                Read_UserLogin(obj.UserLogins, ref reader);
+            }
+        }
+
+        private void Read_UserLogin(ICollection<DomainUserLogin> userLogins, ref Utf8JsonReader reader) {
+            var userLogin = new DomainUserLogin();
+            var currentDepth = reader.CurrentDepth;
+            string prop;
+            while (!(reader.CurrentDepth == currentDepth && reader.TokenType == JsonTokenType.EndObject)) {
+                reader.Read();
+                if (reader.TokenType == JsonTokenType.PropertyName) {
+                    prop = reader.GetString();
+                    reader.Read();
+                    switch (prop) {
+                        case "UserId":
+                        case "userId":
+                            userLogin.UserId = reader.GetGuid();
+                            break;
+                        case "LoginProvider":
+                        case "loginProvider":
+                            userLogin.LoginProvider = reader.GetString();
+                            break;
+                        case "ProviderKey":
+                        case "providerKey":
+                            userLogin.ProviderKey = reader.GetString();
+                            break;
+                        case "ProviderDisplayName":
+                        case "providerDisplayName":
+                            userLogin.ProviderDisplayName = reader.GetString();
+                            break;
+                        case "SysUser":
+                        case "sysUser":
+                            userLogin.SysUser = reader.GetString();
+                            break;
+                        case "SysStatus":
+                        case "sysStatus":
+                            userLogin.SysStatus = (SysStatus)Enum.Parse(typeof(SysStatus), reader.GetString());
+                            break;
+                        case "SysStart":
+                        case "sysStart":
+                            userLogin.SysStart = reader.GetDateTime();
+                            break;
+                        case "SysEnd":
+                        case "sysEnd":
+                            userLogin.SysEnd = reader.GetDateTime();
+                            break;
+                        case "User":
+                        case "user":
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+            }
+            userLogins.Add(userLogin);
+        }
+
+        #endregion
+        #region UserTokens
+        private void Read_UserTokens(DomainUser obj, ref Utf8JsonReader reader) {
+            obj.UserTokens = new List<DomainUserToken>();
+            var currentDepth = reader.CurrentDepth;
+            while (!(reader.CurrentDepth == currentDepth && reader.TokenType == JsonTokenType.EndArray)) {
+                Read_UserToken(obj.UserTokens, ref reader);
+            }
+        }
+
+        private void Read_UserToken(ICollection<DomainUserToken> userTokens, ref Utf8JsonReader reader) {
+            var userToken = new DomainUserToken();
+            var currentDepth = reader.CurrentDepth;
+            string prop;
+            while (!(reader.CurrentDepth == currentDepth && reader.TokenType == JsonTokenType.EndObject)) {
+                reader.Read();
+                if (reader.TokenType == JsonTokenType.PropertyName) {
+                    prop = reader.GetString();
+                    reader.Read();
+                    switch (prop) {
+                        case "UserId":
+                        case "userId":
+                            userToken.UserId = reader.GetGuid();
+                            break;
+                        case "LoginProvider":
+                        case "loginProvider":
+                            userToken.LoginProvider = reader.GetString();
+                            break;
+                        case "Name":
+                        case "name":
+                            userToken.Name = reader.GetString();
+                            break;
+                        case "Value":
+                        case "value":
+                            userToken.Value = reader.GetString();
+                            break;
+                        case "SysUser":
+                        case "sysUser":
+                            userToken.SysUser = reader.GetString();
+                            break;
+                        case "SysStatus":
+                        case "sysStatus":
+                            userToken.SysStatus = (SysStatus)Enum.Parse(typeof(SysStatus), reader.GetString());
+                            break;
+                        case "SysStart":
+                        case "sysStart":
+                            userToken.SysStart = reader.GetDateTime();
+                            break;
+                        case "SysEnd":
+                        case "sysEnd":
+                            userToken.SysEnd = reader.GetDateTime();
+                            break;
+                        case "User":
+                        case "user":
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+            }
+            userTokens.Add(userToken);
+        }
+
+        #endregion
+        #region UserClaimsPacked
+
+        private void Read_UserClaimsPacked(DomainUser obj, ref Utf8JsonReader reader) {
+            var currentDepth = reader.CurrentDepth;
+            obj.UserClaims__Packed = new Dictionary<string, List<string>>();
+
+            while (!(reader.CurrentDepth == currentDepth && reader.TokenType == JsonTokenType.EndObject)) {
+                string claimType;
+                reader.Read();
+                if (reader.TokenType == JsonTokenType.PropertyName) {
+                    claimType = reader.GetString();
+                    var claimValues = new List<string>();
+                    Read_UserClaimPacked(claimValues, ref reader);
+                    obj.UserClaims__Packed.Add(claimType, claimValues);
+                }
+            }
+        }
+
+        private void Read_UserClaimPacked(List<string> claimValues, ref Utf8JsonReader reader) {
+            var currentDepth = reader.CurrentDepth;
+            while (!(reader.CurrentDepth == currentDepth && reader.TokenType == JsonTokenType.EndArray)) {
+                reader.Read();
+                claimValues.Add(reader.GetString());
+            }
+        }
+
+        #endregion
+        #region UserRolesPacked
+
+        private void Read_UserRolesPacked(DomainUser obj, ref Utf8JsonReader reader) {
+            var currentDepth = reader.CurrentDepth;
+            obj.UserRoles__Packed = new Dictionary<string, List<string>>();
+
+            while (!(reader.CurrentDepth == currentDepth && reader.TokenType == JsonTokenType.EndObject)) {
+                string appName = "";
+                reader.Read();
+                if (reader.TokenType == JsonTokenType.PropertyName) {
+                    appName = reader.GetString();
+                    var roleNames = new List<string>();
+                    Read_UserRolePacked(roleNames, ref reader);
+                    obj.UserRoles__Packed.Add(appName, roleNames);
+                }
+            }
+        }
+
+        private void Read_UserRolePacked(List<string> roleNames, ref Utf8JsonReader reader) {
+            var currentDepth = reader.CurrentDepth;
+            while (!(reader.CurrentDepth == currentDepth && reader.TokenType == JsonTokenType.EndArray)) {
+                reader.Read();
+                roleNames.Add(reader.GetString());
+            }
+        }
+
+        #endregion
 
         public override void Write(Utf8JsonWriter writer, DomainUser value, JsonSerializerOptions options) {
             writer.WriteStartObject();
@@ -296,29 +514,46 @@ namespace EDennis.AspNet.Base.Security {
                 if (value.TwoFactorEnabled != default)
                     writer.WriteBoolean("TwoFactorEnabled", value.TwoFactorEnabled);
                 if (value.UserClaims != null && value.UserClaims.Count > 0) {
-                    var dict = value.UserClaims.ToDictionary();
-                    writer.WriteStartObject("Claims");
+                    writer.WriteStartArray("Claims");
                     {
-                        foreach (var entry in dict) {
-                            writer.WritePropertyName(entry.Key);
-                            writer.WriteStartArray();
+                        foreach (var entry in value.UserClaims) {
+                            writer.WriteStartObject();
                             {
-                                foreach (var item in entry.Value)
-                                    writer.WriteStringValue(item);
+                                writer.WriteNumber("Id",entry.Id);
+                                writer.WriteString("ClaimType", entry.ClaimType);
+                                writer.WriteString("ClaimValue", entry.ClaimValue);
+                                writer.WriteString("SysUser", entry.SysUser);
+                                writer.WriteString("SysStatus", entry.SysStatus.ToString());
+                                writer.WriteString("SysStart", entry.SysStart.ToString("u"));
+                                writer.WriteString("SysEnd", entry.SysEnd.ToString("u"));
                             }
-                            writer.WriteEndArray();
+                            writer.WriteEndObject();
                         }
                     }
-                    writer.WriteEndObject();
+                    writer.WriteEndArray();
                 }
                 if (value.UserRoles != null && value.UserRoles.Count > 0) {
-                    var roles = value.UserRoles.Select(r => r.Role.Name);
                     writer.WriteStartArray("Roles");
                     {
-                        foreach (var role in roles)
-                            writer.WriteStringValue(role);
+                        foreach (var entry in value.UserRoles) {
+                            writer.WriteStartObject();
+                            {
+                                writer.WriteString("UserId", entry.UserId);
+                                writer.WriteString("RoleId", entry.RoleId);
+                                if (entry.Role != null) {
+                                    writer.WriteString("RoleName", entry.Role.Name);
+                                    if(entry.Role.Application != null)
+                                        writer.WriteString("ApplicationName", entry.Role.Application.Name);
+                                }
+                                writer.WriteString("SysUser", entry.SysUser);
+                                writer.WriteString("SysStatus", entry.SysStatus.ToString());
+                                writer.WriteString("SysStart", entry.SysStart.ToString("u"));
+                                writer.WriteString("SysEnd", entry.SysEnd.ToString("u"));
+                            }
+                            writer.WriteEndObject();
+                        }
                     }
-                    writer.WriteEndObject();
+                    writer.WriteEndArray();
                 }
 
                 writer.WriteString("SysUser", value.SysUser);

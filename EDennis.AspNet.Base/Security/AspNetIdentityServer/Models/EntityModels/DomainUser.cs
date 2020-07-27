@@ -56,10 +56,10 @@ namespace EDennis.AspNet.Base.Security {
 
         public DomainOrganization Organization { get; set; }
         public ICollection<DomainUserClaim> UserClaims { get; set; }
-        public Dictionary<string,string[]> UserClaims__Packed { get; set; }
+        public Dictionary<string,List<string>> UserClaims__Packed { get; set; }
 
         public ICollection<DomainUserRole> UserRoles { get; set; }
-        public Dictionary<string,string[]> UserRoles__Packed { get; set; }
+        public Dictionary<string,List<string>> UserRoles__Packed { get; set; }
 
         public ICollection<DomainUserLogin> UserLogins { get; set; }
         public ICollection<DomainUserToken> UserTokens { get; set; }
