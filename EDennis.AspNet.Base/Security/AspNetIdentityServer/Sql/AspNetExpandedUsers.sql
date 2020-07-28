@@ -1,7 +1,6 @@
-﻿create view UserOrgAppClaimsRoles as
-	--with schemabinding as 
+﻿create view AspNetExpandedUsers as
 	select u.Id, u.UserName, u.Email, u.EmailConfirmed, u.PhoneNumber, u.PhoneNumberConfirmed,
-	u.TwoFactorEnabled, /*u.LockoutBegin,*/ u.LockoutEnd, u.LockoutEnabled, u.AccessFailedCount,
+	u.TwoFactorEnabled, u.LockoutBegin, u.LockoutEnd, u.LockoutEnabled, u.AccessFailedCount,
 	o.Name OrganizationName,
 
 	JSON_QUERY('{' 
@@ -48,7 +47,3 @@
         inner join dbo.AspNetApplications a
             on r.ApplicationId = a.Id
 go
---create unique clustered index 
---	ucidx_UserOrgAppClaimsRoles
---		on UserOrgAppClaimsRoles(Id);
---go
