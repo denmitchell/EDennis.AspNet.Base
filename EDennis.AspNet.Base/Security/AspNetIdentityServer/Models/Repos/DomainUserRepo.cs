@@ -1,6 +1,4 @@
-﻿using EDennis.AspNet.Base.Security.AspNetIdentityServer.Models.JsonConverters;
-using EDennis.AspNet.Base.Security.Extensions;
-using IdentityModel;
+﻿using IdentityModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -32,14 +30,14 @@ namespace EDennis.AspNet.Base.Security {
 
 
         /// <summary>
-        /// Get an instance of an DomainUser, based upon either:
+        /// Get an instance of a DomainUser, based upon the path parameter
+        /// </summary>
+        /// <param name="pathParameter">One of the following:
         /// <list type="bullet">
         /// <item>GUID Id</item>
-        /// <item>string Email</item>
         /// <item>string UserName</item>
+        /// <item>string Email</item>
         /// </list>
-        /// </summary>
-        /// <param name="pathParameter">Id, Email, or UserName</param>
         /// <returns>ObjectResult holding either:
         /// <list type="bullet">
         /// <item>DomainUser with Success status code</item>
@@ -138,14 +136,14 @@ select u.*
 
 
         /// <summary>
-        /// Get an instance of an ExpandedDomainUser, based upon either:
+        /// Get an instance of an ExpandedDomainUser, based upon the provided path parameter
+        /// </summary>
+        /// <param name="pathParameter">One of the following:
         /// <list type="bullet">
         /// <item>GUID Id</item>
-        /// <item>string Email</item>
         /// <item>string UserName</item>
+        /// <item>string Email</item>
         /// </list>
-        /// </summary>
-        /// <param name="pathParameter">Id, Email, or UserName</param>
         /// <returns>ObjectResult holding either:
         /// <list type="bullet">
         /// <item>ExpandedDomainUser with Success status code</item>
@@ -251,7 +249,7 @@ select u.*
         /// <param name="jsonElement">A JSON array of users to create.</param>
         /// <param name="modelState">Object for holding errors</param>
         /// <param name="sysUser">The SysUser to associate with created records</param>
-        /// <returns></returns>
+        /// <returns>Null object with Status Code</returns>
         public async Task<ObjectResult> BatchCreateAsync(JsonElement jsonElement,
             ModelStateDictionary modelState, string sysUser) {
             if (jsonElement.ValueKind == JsonValueKind.Array) {
@@ -276,13 +274,20 @@ select u.*
         /// <param name="jsonElement">A JSON object of a user to create</param>
         /// <param name="modelState">Object for holding errors</param>
         /// <param name="sysUser">The SysUser to associate with created record</param>
-        /// <returns></returns>
+        /// <returns>One of the following:
+        /// <list type="bullet">
+        /// <item>Created DomainUser object and Success status code</item>
+        /// <item>Null object and Conflict status code</item>
+        /// </list>
+        /// </returns>
         public async Task<ObjectResult> CreateAsync(JsonElement jsonElement,
             ModelStateDictionary modelState, string sysUser) {
 
             var inputUser = new DomainUser();
             DeserializeInto(inputUser, jsonElement, modelState, sysUser);
 
+            if (inputUser.Id == default)
+                inputUser.Id = CombGuid.Create();
 
             if (modelState.ErrorCount > 0)
                 return new ObjectResult(modelState) { StatusCode = StatusCodes.Status409Conflict };
@@ -325,8 +330,13 @@ select u.*
         /// </param>
         /// <param name="jsonElement">A JSON object of a user to patch</param>
         /// <param name="modelState">Object for holding errors</param>
-        /// <param name="sysUser">The SysUser to associate with created record</param>
-        /// <returns></returns>
+        /// <param name="sysUser">The SysUser to associate with patched record</param>
+        /// <returns>One of the following:
+        /// <list type="bullet">
+        /// <item>Updated DomainUser object and Success status code</item>
+        /// <item>Null object and Conflict status code</item>
+        /// </list>
+        /// </returns>
         public async Task<ObjectResult> PatchAsync(string pathParameter, JsonElement jsonElement,
             ModelStateDictionary modelState, string sysUser) {
 
@@ -334,7 +344,7 @@ select u.*
             var existingUser = await FindAsync(pathParameter);
 
             if (existingUser == null) {
-                modelState.AddModelError("Name", $"A user designated by '{pathParameter}' does not exist.");
+                modelState.AddModelError("pathParameter", $"A user designated by '{pathParameter}' does not exist.");
                 return new ObjectResult(modelState) { StatusCode = StatusCodes.Status404NotFound };
             }
 
@@ -358,7 +368,9 @@ select u.*
         }
 
         /// <summary>
-        /// Deletes a single user.
+        /// Deletes a single user record.  Note that the record's
+        /// SysStatus is updated to Deleted and saved before deleting, which
+        /// ensures an audit trail of the person who deleted the record
         /// </summary>
         /// <param name="pathParameter">One of the following:
         /// <list type="bullet">
@@ -368,7 +380,7 @@ select u.*
         /// </list>
         /// </param>
         /// <param name="modelState">Object for holding errors</param>
-        /// <param name="sysUser">The SysUser to associate with created record</param>
+        /// <param name="sysUser">The SysUser to associate with deleted record</param>
         /// <returns></returns>
         public async Task<ObjectResult> DeleteAsync(string pathParameter, ModelStateDictionary modelState, string sysUser) {
 
@@ -675,7 +687,12 @@ select u.*
         /// <summary>
         /// Finds DomainUsers by the provided path parameter
         /// </summary>
-        /// <param name="pathParameter">Id, Email, or UserName</param>
+        /// <param name="pathParameter">One of the following:
+        /// <list type="bullet">
+        /// <item>GUID Id</item>
+        /// <item>string UserName</item>
+        /// <item>string Email</item>
+        /// </list>
         /// <returns>DomainUser record</returns>
         private async Task<DomainUser> FindAsync(string pathParameter) {
             if (pathParameter.Contains("@"))
@@ -693,7 +710,12 @@ select u.*
         /// <summary>
         /// Finds ExpandedDomainUsers by the provided path parameter
         /// </summary>
-        /// <param name="pathParameter">Id, Email, or UserName</param>
+        /// <param name="pathParameter">One of the following:
+        /// <list type="bullet">
+        /// <item>GUID Id</item>
+        /// <item>string UserName</item>
+        /// <item>string Email</item>
+        /// </list>
         /// <returns>ExpandedDomainUser record</returns>
         private async Task<ExpandedDomainUser> FindExpandedAsync(string pathParameter) {
             if (pathParameter.Contains("@"))
@@ -715,7 +737,8 @@ select u.*
         /// <param name="jsonElement">Parsed JSON object</param>
         /// <param name="modelState">Object to hold errors</param>
         /// <param name="sysUser">SysUser to update in user record</param>
-        private void DeserializeInto(DomainUser user, JsonElement jsonElement, ModelStateDictionary modelState, string sysUser) {
+        private void DeserializeInto(DomainUser user, JsonElement jsonElement, 
+            ModelStateDictionary modelState, string sysUser) {
             OtherProperties otherProperties = null;
             foreach (var prop in jsonElement.EnumerateObject()) {
                 try {

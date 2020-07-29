@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json;
 
-namespace EDennis.AspNet.Base.Security.AspNetIdentityServer.Models.JsonConverters {
+namespace EDennis.AspNet.Base.Security {
     public class OtherProperties {
         private readonly List<string> props = new List<string>();
 

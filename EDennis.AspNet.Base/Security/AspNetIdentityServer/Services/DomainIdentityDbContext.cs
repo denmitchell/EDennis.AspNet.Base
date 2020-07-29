@@ -22,11 +22,17 @@ namespace EDennis.AspNet.Base.Security {
             builder.Entity<DomainUser>(e => {
                 e.Property(u => u.Id)
                     .HasDefaultValue(CombGuid.Create());
+
+                e.HasIndex(i => i.UserName)
+                    .IsUnique(true);
             });
 
             builder.Entity<DomainRole>(e => {
                 e.Property(u => u.Id)
                     .HasDefaultValue(CombGuid.Create());
+
+                e.HasIndex(i => new { i.ApplicationId, i.Name })
+                    .IsUnique(true);
             });
 
             builder.Entity<DomainApplication>(e => {
@@ -35,6 +41,10 @@ namespace EDennis.AspNet.Base.Security {
 
                 e.Property(u => u.Id)
                     .HasDefaultValue(CombGuid.Create());
+
+                e.HasIndex(i => i.Name)
+                    .IsUnique(true);
+
             });
 
             builder.Entity<DomainOrganization>(e => {
@@ -43,6 +53,9 @@ namespace EDennis.AspNet.Base.Security {
 
                 e.Property(u => u.Id)
                     .HasDefaultValue(CombGuid.Create());
+
+                e.HasIndex(i => i.Name)
+                    .IsUnique(true);
             });
 
 
