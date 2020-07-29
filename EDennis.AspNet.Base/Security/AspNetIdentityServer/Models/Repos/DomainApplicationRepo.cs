@@ -214,18 +214,18 @@ namespace EDennis.AspNet.Base.Security {
         public async Task<ObjectResult> DeleteAsync(string pathParameter, ModelStateDictionary modelState, 
             string sysUser) {
 
-            var existingUser = await FindAsync(pathParameter);
+            var existingApp = await FindAsync(pathParameter);
 
-            if (existingUser == null)
+            if (existingApp == null)
                 return new ObjectResult(null) { StatusCode = StatusCodes.Status404NotFound };
 
 
             //first, try to update the record with a Deleted status and the deleting user;
             //however, just ignore if there is an error.
             try {
-                existingUser.SysStatus = SysStatus.Deleted;
-                existingUser.SysUser = sysUser;
-                _dbContext.Update(existingUser);
+                existingApp.SysStatus = SysStatus.Deleted;
+                existingApp.SysUser = sysUser;
+                _dbContext.Update(existingApp);
                 await _dbContext.SaveChangesAsync();
             } catch (Exception ex) {
                 modelState.AddModelError("", ex.Message);
@@ -234,7 +234,7 @@ namespace EDennis.AspNet.Base.Security {
 
             //second, actually delete the record
             try {
-                _dbContext.Remove(existingUser);
+                _dbContext.Remove(existingApp);
                 await _dbContext.SaveChangesAsync();
             } catch (Exception ex) {
                 modelState.AddModelError("", ex.Message);
@@ -263,9 +263,9 @@ namespace EDennis.AspNet.Base.Security {
 
 
         /// <summary>
-        /// Deserializes the provided JsonElement into the referenced DomainUser object
+        /// Deserializes the provided JsonElement into the referenced DomainApplication object
         /// </summary>
-        /// <param name="user">Referenced DomainUser object (new or existing)</param>
+        /// <param name="user">Referenced DomainApplication object (new or existing)</param>
         /// <param name="jsonElement">Parsed JSON object</param>
         /// <param name="modelState">Object to hold errors</param>
         /// <param name="sysUser">SysUser to update in user record</param>

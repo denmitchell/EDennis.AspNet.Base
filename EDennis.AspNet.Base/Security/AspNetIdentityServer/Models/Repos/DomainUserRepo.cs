@@ -289,6 +289,17 @@ select u.*
             if (inputUser.Id == default)
                 inputUser.Id = CombGuid.Create();
 
+            //allow OrganizationName to be passed in and resolved to OrganizationId, when OrganizationId = default
+            if (inputUser.OrganizationId == default && jsonElement.TryGetProperty("OrganizationName", out JsonElement orgNameElement)) {
+                var orgName = orgNameElement.GetString();
+                try {
+                    var orgId = (await _dbContext.Organizations.FirstOrDefaultAsync(o => o.Name == orgName)).Id;
+                    inputUser.OrganizationId = orgId;
+                } catch (Exception ex) {
+                    modelState.AddModelError("", ex.Message);
+                }
+            }
+
             if (modelState.ErrorCount > 0)
                 return new ObjectResult(modelState) { StatusCode = StatusCodes.Status409Conflict };
 
@@ -747,11 +758,6 @@ select u.*
                         case "userName":
                             user.UserName = prop.Value.GetString();
                             user.NormalizedUserName ??= user.UserName.ToUpper();
-                            var existingUser = _dbContext.Set<DomainUser>().FirstOrDefault(u => u.UserName == user.UserName);
-
-                            if (existingUser != null) {
-                                modelState.AddModelError("Name", $"A user with Name/UserName='{user.UserName}' already exists.");
-                            }
                             break;
                         case "NormalizedUserName":
                         case "normalizedUserName":
@@ -824,13 +830,16 @@ select u.*
                             break;
                         case "OrganizationId":
                         case "organizationId":
-                            prop.Value.GetInt32();
+                            user.OrganizationId = prop.Value.GetGuid();
                             break;
                         case "ConcurrencyStamp":
                         case "concurrencyStamp":
                         case "SecurityStamp":
                         case "securityStamp":
                         case "LockoutEnabled":
+                        case "lockoutEnabled":
+                        case "OrganizationName":
+                        case "organizationName":
                         default:
                             if (otherProperties == null)
                                 otherProperties = new OtherProperties();

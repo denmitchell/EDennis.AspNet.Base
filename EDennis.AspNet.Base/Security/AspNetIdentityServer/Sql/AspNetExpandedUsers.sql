@@ -1,7 +1,8 @@
 ﻿create view AspNetExpandedUsers as
-	select u.Id, u.UserName, u.Email, u.EmailConfirmed, u.PhoneNumber, u.PhoneNumberConfirmed,
+	select u.Id, u.UserName, u.NormalizedUserName, u.Email u.NormalizedEmail, u.EmailConfirmed, u.PhoneNumber, u.PhoneNumberConfirmed,
 	u.TwoFactorEnabled, u.LockoutBegin, u.LockoutEnd, u.LockoutEnabled, u.AccessFailedCount,
-	o.Name OrganizationName,
+	o.Name OrganizationName, o.OrganizationId, 
+	u.SysUser, u.SysStatus, u.SysStart, u.SysEnd, u.Properties,
 
 	JSON_QUERY('{' 
 		+ STUFF((

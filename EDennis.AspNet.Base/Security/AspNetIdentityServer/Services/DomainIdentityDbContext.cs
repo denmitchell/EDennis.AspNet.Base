@@ -13,6 +13,7 @@ namespace EDennis.AspNet.Base.Security {
         public DbSet<DomainOrganization> Organizations { get; set; }
         public DbSet<UserClientApplicationRole> UserClientApplicationRoles { get; set; }
         public DbSet<ExpandedDomainUser> ExpandedUsers { get; set; }
+        public DbSet<ExpandedDomainRole> ExpandedRoles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder) {
             base.OnModelCreating(builder);
@@ -68,6 +69,12 @@ namespace EDennis.AspNet.Base.Security {
 
                 e.Property(p => p.RolesDictionary)
                     .HasConversion(new SerializerConverter<Dictionary<string, List<string>>>());
+            });
+
+
+            builder.Entity<ExpandedDomainRole>(e => {
+                e.ToView("AspNetIdentityExpandedRoles")
+                    .HasKey(p => p.Id);
             });
 
 
