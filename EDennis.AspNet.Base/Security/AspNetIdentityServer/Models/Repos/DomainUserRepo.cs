@@ -32,7 +32,7 @@ namespace EDennis.AspNet.Base.Security {
 
 
         /// <summary>
-        /// Get an instance of an ExpandedDomainUser, based upon either:
+        /// Get an instance of an DomainUser, based upon either:
         /// <list type="bullet">
         /// <item>GUID Id</item>
         /// <item>string Email</item>
@@ -40,7 +40,12 @@ namespace EDennis.AspNet.Base.Security {
         /// </list>
         /// </summary>
         /// <param name="pathParameter">Id, Email, or UserName</param>
-        /// <returns>ExpandedDomainUser</returns>
+        /// <returns>ObjectResult holding either:
+        /// <list type="bullet">
+        /// <item>DomainUser with Success status code</item>
+        /// <item>null object with Not Found status code</item>
+        /// </list>
+        /// </returns>
         public async Task<ObjectResult> GetAsync(string pathParameter) {
             var user = await FindAsync(pathParameter);
             if (user == null)
@@ -50,9 +55,8 @@ namespace EDennis.AspNet.Base.Security {
             }
         }
 
-
         /// <summary>
-        /// Gets a paged list of users by application name, organization name, 
+        /// Gets a paged list of DomainUsers by application name, organization name, 
         /// both application name and organization name, or neither application
         /// name nor organization name.
         /// </summary>
@@ -60,7 +64,7 @@ namespace EDennis.AspNet.Base.Security {
         /// <param name="orgName">Organization Name</param>
         /// <param name="pageNumber">Page number of recordset</param>
         /// <param name="pageSize">Page size of recordset</param>
-        /// <returns></returns>
+        /// <returns>Paged list of DomainUser records</returns>
         public async Task<ObjectResult> GetAsync(string appName = null, string orgName = null,
             int? pageNumber = 1, int? pageSize = 100) {
 
@@ -74,15 +78,15 @@ namespace EDennis.AspNet.Base.Security {
             if (appName != null && orgName != null)
                 sql = $@"
 select u.*
-	from @ExpandedUsers u
+	from AspNetUsers u
 	where
         OrganizationName = {orgName} and
         exists (
 		select 0 
-			from @Roles r
-			inner join @Applications a
+			from AspNetRoles r
+			inner join AspNetApplications a
 				on a.Id = r.ApplicationId
-			inner join @UserRoles ur
+			inner join AspNetUserRoles ur
 				on r.Id = ur.RoleId
 			where a.Name = {appName}
 				and ur.UserId = u.Id
@@ -92,14 +96,14 @@ select u.*
             else if (appName != null)
                 sql = $@"
 select u.*
-	from @ExpandedUsers u
+	from AspNetUsers u
 	where
         exists (
 		select 0 
-			from @Roles r
-			inner join @Applications a
+			from AspNetRoles r
+			inner join AspNetApplications a
 				on a.Id = r.ApplicationId
-			inner join @UserRoles ur
+			inner join AspNetUserRoles ur
 				on r.Id = ur.RoleId
 			where a.Name = {appName}
 				and ur.UserId = u.Id
@@ -109,7 +113,7 @@ select u.*
             else if (orgName != null)
                 sql = $@"
 select u.*
-	from @ExpandedUsers u
+	from AspNetUsers u
 	where
         OrganizationName = {orgName}
     offset {skip} rows
@@ -118,12 +122,12 @@ select u.*
             else
                 sql = $@"
 select u.*
-	from @ExpandedUsers u
+	from AspNetUsers u
     offset {skip} rows
     fetch next {take} rows only
 ";
             #endregion
-            var result = await _dbContext.ExpandedUsers
+            var result = await _dbContext.Set<DomainUser>()
                             .FromSqlInterpolated(sql)
                             .AsNoTracking()
                             .ToListAsync();
@@ -133,21 +137,146 @@ select u.*
 
 
 
-        private async Task<ExpandedDomainUser> FindAsync(string pathParameter) {
-            if (pathParameter.Contains("@"))
-                return await _dbContext.Set<ExpandedDomainUser>()
-                    .SingleAsync(u => u.NormalizedEmail == pathParameter.ToUpper());
+        /// <summary>
+        /// Get an instance of an ExpandedDomainUser, based upon either:
+        /// <list type="bullet">
+        /// <item>GUID Id</item>
+        /// <item>string Email</item>
+        /// <item>string UserName</item>
+        /// </list>
+        /// </summary>
+        /// <param name="pathParameter">Id, Email, or UserName</param>
+        /// <returns>ObjectResult holding either:
+        /// <list type="bullet">
+        /// <item>ExpandedDomainUser with Success status code</item>
+        /// <item>null object with Not Found status code</item>
+        /// </list>
+        /// </returns>
+        public async Task<ObjectResult> GetExpandedAsync(string pathParameter) {
+            var user = await FindExpandedAsync(pathParameter);
+            if (user == null)
+                return new ObjectResult(null) { StatusCode = StatusCodes.Status404NotFound };
+            else {
+                return new ObjectResult(user) { StatusCode = StatusCodes.Status200OK };
+            }
+        }
 
-            else if (idPattern.IsMatch(pathParameter))
-                return await _dbContext.Set<ExpandedDomainUser>()
-                    .SingleAsync(u => u.Id == Guid.Parse(pathParameter));
+        /// <summary>
+        /// Gets a paged list of ExpandedDomainUsers by application name, organization name, 
+        /// both application name and organization name, or neither application
+        /// name nor organization name.
+        /// </summary>
+        /// <param name="appName">Application Name</param>
+        /// <param name="orgName">Organization Name</param>
+        /// <param name="pageNumber">Page number of recordset</param>
+        /// <param name="pageSize">Page size of recordset</param>
+        /// <returns>Paged list of ExpandedDomainUser records</returns>
+        public async Task<ObjectResult> GetExpandedAsync(string appName = null, string orgName = null,
+            int? pageNumber = 1, int? pageSize = 100) {
+
+            var skip = (pageNumber ?? 1 - 1) * pageSize ?? 100;
+            var take = pageSize ?? 100;
+
+            #region FormattableString sql
+            FormattableString sql;
+
+            if (appName != null && orgName != null)
+                sql = $@"
+select u.*
+	from AspNetExpandedUsers u
+	where
+        OrganizationName = {orgName} and
+        exists (
+		select 0 
+			from AspNetRoles r
+			inner join AspNetApplications a
+				on a.Id = r.ApplicationId
+			inner join AspNetUserRoles ur
+				on r.Id = ur.RoleId
+			where a.Name = {appName}
+				and ur.UserId = u.Id
+	)    offset {skip} rows
+    fetch next {take} rows only
+";
+            else if (appName != null)
+                sql = $@"
+select u.*
+	from AspNetExpandedUsers u
+	where
+        exists (
+		select 0 
+			from AspNetRoles r
+			inner join AspNetApplications a
+				on a.Id = r.ApplicationId
+			inner join AspNetUserRoles ur
+				on r.Id = ur.RoleId
+			where a.Name = {appName}
+				and ur.UserId = u.Id
+	)    offset {skip} rows
+    fetch next {take} rows only
+";
+            else if (orgName != null)
+                sql = $@"
+select u.*
+	from AspNetExpandedUsers u
+	where
+        OrganizationName = {orgName}
+    offset {skip} rows
+    fetch next {take} rows only
+";
             else
-                return await _dbContext.Set<ExpandedDomainUser>()
-                    .SingleAsync(u => u.NormalizedUserName == pathParameter.ToUpper());
+                sql = $@"
+select u.*
+	from AspNetExpandedUsers u
+    offset {skip} rows
+    fetch next {take} rows only
+";
+            #endregion
+            var result = await _dbContext.ExpandedUsers
+                            .FromSqlInterpolated(sql)
+                            .AsNoTracking()
+                            .ToListAsync();
+
+            return new ObjectResult(result) { StatusCode = StatusCodes.Status200OK };
         }
 
 
 
+        /// <summary>
+        /// Creates multiple users.
+        /// Note that a JSON array is used so that the model can accomodate
+        /// arbitrary extra properties that get packed as a JSON Properties 
+        /// column in the AspNetUsers table
+        /// </summary>
+        /// <param name="jsonElement">A JSON array of users to create.</param>
+        /// <param name="modelState">Object for holding errors</param>
+        /// <param name="sysUser">The SysUser to associate with created records</param>
+        /// <returns></returns>
+        public async Task<ObjectResult> BatchCreateAsync(JsonElement jsonElement,
+            ModelStateDictionary modelState, string sysUser) {
+            if (jsonElement.ValueKind == JsonValueKind.Array) {
+                ObjectResult result = null;
+                foreach(var user in jsonElement.EnumerateArray()) {
+                    var localResult = await CreateAsync(user, modelState, sysUser);
+                    if (result == null || localResult.StatusCode >= 400)
+                        result = localResult;
+                }
+                return result;
+            } else {
+                return await CreateAsync(jsonElement, modelState, sysUser);
+            }
+        }
+
+        /// <summary>
+        /// Creates a single user.
+        /// Note that a JSON object is used so that the model can accomodate
+        /// arbitrary extra properties that get packed as a JSON Properties 
+        /// column in the AspNetUsers table
+        /// </summary>
+        /// <param name="jsonElement">A JSON object of a user to create</param>
+        /// <param name="modelState">Object for holding errors</param>
+        /// <param name="sysUser">The SysUser to associate with created record</param>
+        /// <returns></returns>
         public async Task<ObjectResult> CreateAsync(JsonElement jsonElement,
             ModelStateDictionary modelState, string sysUser) {
 
@@ -175,6 +304,29 @@ select u.*
 
 
 
+        /// <summary>
+        /// Updates a single user.
+        /// Note that a JSON object is used for two reasons:
+        /// <list type="bullet">
+        /// <item>The model can accomodate arbitrary extra properties that 
+        /// get packed as a JSON Properties column in the AspNetUsers table
+        /// </item>
+        /// <item>Only properties provided in the JSON element are 
+        /// updated.  Hence, this allows for partial updates.
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="pathParameter">One of the following:
+        /// <list type="bullet">
+        /// <item>GUID Id</item>
+        /// <item>string UserName</item>
+        /// <item>string Email</item>
+        /// </list>
+        /// </param>
+        /// <param name="jsonElement">A JSON object of a user to patch</param>
+        /// <param name="modelState">Object for holding errors</param>
+        /// <param name="sysUser">The SysUser to associate with created record</param>
+        /// <returns></returns>
         public async Task<ObjectResult> PatchAsync(string pathParameter, JsonElement jsonElement,
             ModelStateDictionary modelState, string sysUser) {
 
@@ -205,10 +357,22 @@ select u.*
 
         }
 
-        public async Task<ObjectResult> DeleteAsync(string name, ModelStateDictionary modelState,
-            string sysUser) {
+        /// <summary>
+        /// Deletes a single user.
+        /// </summary>
+        /// <param name="pathParameter">One of the following:
+        /// <list type="bullet">
+        /// <item>GUID Id</item>
+        /// <item>string UserName</item>
+        /// <item>string Email</item>
+        /// </list>
+        /// </param>
+        /// <param name="modelState">Object for holding errors</param>
+        /// <param name="sysUser">The SysUser to associate with created record</param>
+        /// <returns></returns>
+        public async Task<ObjectResult> DeleteAsync(string pathParameter, ModelStateDictionary modelState, string sysUser) {
 
-            var existingUser = _dbContext.Set<DomainUser>().FirstOrDefault(u => u.UserName == name);
+            var existingUser = await FindAsync(pathParameter);
 
             if (existingUser == null)
                 return new ObjectResult(null) { StatusCode = StatusCodes.Status404NotFound };
@@ -240,6 +404,7 @@ select u.*
                 return new ObjectResult(null) { StatusCode = StatusCodes.Status204NoContent };
 
         }
+
 
 
         /// <summary>
@@ -287,7 +452,6 @@ select u.*
 
         }
 
-
         /// <summary>
         /// For a given application, updates roles for all users.  Note that base records
         /// for users and roles must already exist in the database.  Only UserRole
@@ -329,6 +493,8 @@ select u.*
             await cmd.ExecuteNonQueryAsync();
 
         }
+
+
 
         /// <summary>
         /// Updates all application roles for a given user.  Note that base records
@@ -373,7 +539,6 @@ select u.*
             await cmd.ExecuteNonQueryAsync();
 
         }
-
 
         /// <summary>
         /// Updates all application roles for a given user.  Note that base records
@@ -462,7 +627,6 @@ select u.*
 
         }
 
-
         /// <summary>
         /// Updates all claims for a given user.  Note that base record
         /// for user must already exist in the database.  Only UserClaim
@@ -506,6 +670,51 @@ select u.*
 
 
 
+        #region Private Helper Methods
+
+        /// <summary>
+        /// Finds DomainUsers by the provided path parameter
+        /// </summary>
+        /// <param name="pathParameter">Id, Email, or UserName</param>
+        /// <returns>DomainUser record</returns>
+        private async Task<DomainUser> FindAsync(string pathParameter) {
+            if (pathParameter.Contains("@"))
+                return await _dbContext.Set<DomainUser>()
+                    .SingleAsync(u => u.NormalizedEmail == pathParameter.ToUpper());
+
+            else if (idPattern.IsMatch(pathParameter))
+                return await _dbContext.Set<DomainUser>()
+                    .SingleAsync(u => u.Id == Guid.Parse(pathParameter));
+            else
+                return await _dbContext.Set<DomainUser>()
+                    .SingleAsync(u => u.NormalizedUserName == pathParameter.ToUpper());
+        }
+
+        /// <summary>
+        /// Finds ExpandedDomainUsers by the provided path parameter
+        /// </summary>
+        /// <param name="pathParameter">Id, Email, or UserName</param>
+        /// <returns>ExpandedDomainUser record</returns>
+        private async Task<ExpandedDomainUser> FindExpandedAsync(string pathParameter) {
+            if (pathParameter.Contains("@"))
+                return await _dbContext.Set<ExpandedDomainUser>()
+                    .SingleAsync(u => u.NormalizedEmail == pathParameter.ToUpper());
+
+            else if (idPattern.IsMatch(pathParameter))
+                return await _dbContext.Set<ExpandedDomainUser>()
+                    .SingleAsync(u => u.Id == Guid.Parse(pathParameter));
+            else
+                return await _dbContext.Set<ExpandedDomainUser>()
+                    .SingleAsync(u => u.NormalizedUserName == pathParameter.ToUpper());
+        }
+
+        /// <summary>
+        /// Deserializes the provided JsonElement into the referenced DomainUser object
+        /// </summary>
+        /// <param name="user">Referenced DomainUser object (new or existing)</param>
+        /// <param name="jsonElement">Parsed JSON object</param>
+        /// <param name="modelState">Object to hold errors</param>
+        /// <param name="sysUser">SysUser to update in user record</param>
         private void DeserializeInto(DomainUser user, JsonElement jsonElement, ModelStateDictionary modelState, string sysUser) {
             OtherProperties otherProperties = null;
             foreach (var prop in jsonElement.EnumerateObject()) {
@@ -611,6 +820,8 @@ select u.*
             }
             user.Properties = otherProperties.ToString();
         }
+
+        #endregion
 
     }
 
