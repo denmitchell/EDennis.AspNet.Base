@@ -1,5 +1,4 @@
 using EDennis.NetStandard.Base.EntityFramework;
-using EDennis.AspNet.Base.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using EDennis.NetStandard.Base.Middleware;
 
 namespace EDennis.Samples.ColorApi {
     public class Startup {
