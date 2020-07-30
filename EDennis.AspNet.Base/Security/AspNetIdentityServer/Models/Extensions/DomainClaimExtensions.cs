@@ -1,13 +1,9 @@
 ﻿using EDennis.AspNet.Base.Security;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
-namespace EDennis.AspNet.Base {
-    public static class ClaimExtensions {
+namespace EDennis.AspNet.Base.Security {
+    public static class DomainClaimExtensions {
 
         public static Dictionary<string, string[]> ToDictionary(this IEnumerable<DomainUserClaim> claims) {
             return claims.GroupBy(c => new { c.ClaimType })

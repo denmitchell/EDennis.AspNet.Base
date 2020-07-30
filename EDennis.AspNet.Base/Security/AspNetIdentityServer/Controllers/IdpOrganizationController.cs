@@ -25,8 +25,8 @@ namespace EDennis.AspNet.Base.Security {
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] OrganizationEditModel orgEditModel)
-                => await _repo.CreateAsync(orgEditModel, ModelState, GetSysUser());
+        public async Task<IActionResult> CreateAsync([FromBody] JsonElement jsonElement)
+                => await _repo.CreateAsync(jsonElement, ModelState, GetSysUser());
 
 
         [HttpPatch("{pathParameter}")]

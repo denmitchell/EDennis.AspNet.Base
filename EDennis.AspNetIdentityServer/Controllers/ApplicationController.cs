@@ -8,7 +8,7 @@ namespace EDennis.AspNetIdentityServer.Controllers {
 
     [Authorize(Policy = "AdministerIDP")]
     public class ApplicationController : IdpApplicationController {
-        public ApplicationController(DbContextProvider<DomainIdentityDbContext> provider, ILogger<QueryController<DomainIdentityDbContext, DomainApplication>> logger) : base(provider, logger) {
+        public ApplicationController(DomainApplicationRepo repo) : base(repo) {
         }
     }
 }

@@ -440,7 +440,7 @@ select u.*
         /// <param name="modelState">object to hold errors</param>
         /// <param name="sysUser">the SysUser to be associated with the update</param>
         /// <returns></returns>
-        public async Task UpdateUserRolesForAppUsers(string appName,
+        public async Task UpdateDictionaryUserRolesForAppUsers(string appName,
                 Dictionary<string,List<string>> userRoles, string sysUser) {
 
 
@@ -528,7 +528,7 @@ select u.*
         /// <param name="appRoles">Dictionary where ApplicationName is the key and List of RoleNames is the value</param>
         /// <param name="sysUser">the SysUser to be associated with the update</param>
         /// <returns></returns>
-        public async Task UpdateUserRolesForUser(string userName,
+        public async Task UpdateDictionaryUserRolesForUser(string userName,
                 Dictionary<string, List<string>> appRoles, string sysUser) {
 
 
@@ -615,7 +615,7 @@ select u.*
         /// <param name="claims">Dictionary where ClaimType is the key and List of ClaimValue is the value</param>
         /// <param name="sysUser">the SysUser to be associated with the update</param>
         /// <returns></returns>
-        public async Task UpdateUserClaims(string userName,
+        public async Task UpdateDictionaryUserClaims(string userName,
                 Dictionary<string, List<string>> claims, string sysUser) {
 
 

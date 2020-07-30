@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 
-namespace EDennis.AspNet.Base.Security.Extensions {
+namespace EDennis.AspNet.Base.Extensions {
 
     /// <summary>
     /// Are these still needed, or can we use EDennis.AspNet.Base.ClaimExtensions?
@@ -19,7 +18,7 @@ namespace EDennis.AspNet.Base.Security.Extensions {
             return list;
         }
 
-        public static Dictionary<string,string[]> ToStringDictionary(this IEnumerable<Claim> claims) {
+        public static Dictionary<string, string[]> ToStringDictionary(this IEnumerable<Claim> claims) {
             return claims.GroupBy(c => new { c.Type })
              .Select(g => new { g.Key.Type, Value = g.Select(i => i.Value).ToArray() })
                  .ToDictionary(d => d.Type, d => d.Value);

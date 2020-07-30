@@ -6,7 +6,7 @@ namespace EDennis.AspNet.Base {
         SysStatus SysStatus { get; set; }
         string SysUser { get; set; }
 
-        void Patch(JsonElement jsonElement, ModelStateDictionary modelState, bool mergeCollections = true);
+        void Patch(JsonElement jsonElement, ModelStateDictionary modelState);
         void Update(object updated);
     }
 }

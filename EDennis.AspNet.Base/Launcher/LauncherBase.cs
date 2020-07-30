@@ -47,7 +47,7 @@ namespace EDennis.AspNet.Base.Launcher {
 
         private ILogger _logger;
 
-        public LauncherBase(ILogger<LauncherBase> logger) {
+        public LauncherBase(ILogger logger) {
             _logger = logger;
         }
 

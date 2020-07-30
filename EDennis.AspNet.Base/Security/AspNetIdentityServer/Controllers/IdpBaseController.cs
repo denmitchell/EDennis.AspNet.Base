@@ -16,8 +16,8 @@ namespace EDennis.AspNet.Base.Security {
                 .OrderByDescending(c => c.Type)
                 .FirstOrDefault(c => c.Type == "name"
                     || c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
-                    || c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/email"
                     || c.Type == "email"
+                    || c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/email"
                     || c.Type == "client_id")
                 ?.Value;
             return sysUser;

@@ -52,7 +52,7 @@ namespace EDennis.AspNet.Base {
         [NonAction]
         protected virtual void DoUpdate(TEntity input, TEntity existing) => existing.Update(input);
         [NonAction]
-        protected virtual void DoPatch(JsonElement input, TEntity existing) => existing.Patch(input);
+        protected virtual void DoPatch(JsonElement input, TEntity existing) => existing.Patch(input,ModelState);
         [NonAction]
         protected virtual void DoDelete(TEntity existing) => _dbContext.Remove(existing);
 

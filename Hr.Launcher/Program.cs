@@ -1,13 +1,27 @@
 ﻿using EDennis.AspNet.Base.Launcher;
+using ME = Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Extensions.Logging;
 using System;
 using IS = EDennis.AspNetIdentityServer;
 using PApi = Hr.PersonApi;
-//using UApi = Hr.UserApi;
 
 namespace Hr.Launcher {
     public class Program : LauncherBase {
+        
+        public Program(ME.ILogger logger) : base(logger) { }
+
         static void Main(string[] args) {
-            new Program().Launch(args, true, true);
+
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .CreateLogger();
+
+            var logger = new SerilogLoggerProvider(Log.Logger).CreateLogger(typeof(LauncherBase).Name);
+
+
+            new Program(logger).Launch(args, true, true);
             Console.WriteLine("Press any key to stop the servers.");
             Console.ReadKey(); //block with Console
         }

@@ -1,8 +1,4 @@
-﻿using EDennis.AspNet.Base.EntityFramework;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -29,8 +25,8 @@ namespace EDennis.AspNet.Base.Security {
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] ApplicationEditModel appEditModel)
-                => await _repo.CreateAsync(appEditModel, ModelState, GetSysUser());
+        public async Task<IActionResult> CreateAsync([FromBody] JsonElement element)
+                => await _repo.CreateAsync(element, ModelState, GetSysUser());
 
 
         [HttpPatch("{pathParameter}")]

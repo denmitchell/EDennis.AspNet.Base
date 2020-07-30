@@ -1,4 +1,5 @@
-﻿using EDennis.AspNet.Base.Middleware.MockUser;
+﻿using EDennis.AspNet.Base.Extensions;
+using EDennis.AspNet.Base.Middleware.MockUser;
 using EDennis.AspNet.Base.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

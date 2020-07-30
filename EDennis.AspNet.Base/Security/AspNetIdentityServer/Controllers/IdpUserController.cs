@@ -1,5 +1,6 @@
 ﻿using EDennis.AspNet.Base.Security;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -40,6 +41,35 @@ namespace EDennis.AspNetBase.Security {
         public async Task<IActionResult> DeleteAsync([FromRoute] string pathParameter)
                 => await _repo.DeleteAsync(pathParameter, ModelState, GetSysUser());
 
+
+        [HttpPut("{userName}/DomainUserClaims")]
+        public async Task UpdateUserClaims([FromRoute] string userName, [FromBody] List<DomainUserClaim> claims)
+                => await _repo.UpdateDomainUserClaims(userName, claims, GetSysUser());
+
+
+        [HttpPut("{userName}/DictionaryUserClaims")]
+        public async Task UpdateUserClaims([FromRoute] string userName, [FromBody] Dictionary<string,List<string>> claims)
+                => await _repo.UpdateDictionaryUserClaims(userName, claims, GetSysUser());
+
+
+        [HttpPut("{userName}/DomainUserRolesForUser")]
+        public async Task UpdateUserRolesForUser([FromRoute] string userName, [FromBody] List<DomainUserRole> roles)
+                => await _repo.UpdateDomainUserRolesForUser(userName, roles, GetSysUser());
+
+
+        [HttpPut("{userName}/DictionaryUserRolesForUser")]
+        public async Task UpdateUserRolesForUser([FromRoute] string userName, [FromBody] Dictionary<string, List<string>> roles)
+                => await _repo.UpdateDictionaryUserRolesForUser(userName, roles, GetSysUser());
+
+
+        [HttpPut("{appName}/DomainUserRolesForAppUsers")]
+        public async Task UpdateUserRolesForAppUsers([FromRoute] string appName, [FromBody] List<DomainUserRole> roles)
+                => await _repo.UpdateDomainUserRolesForAppUsers(appName, roles, GetSysUser());
+
+
+        [HttpPut("{appName}/DictionaryUserRolesForAppUsers")]
+        public async Task UpdateUserRolesForAppUsers([FromRoute] string appName, [FromBody] Dictionary<string, List<string>> roles)
+                => await _repo.UpdateDictionaryUserRolesForAppUsers(appName, roles, GetSysUser());
 
     }
 }

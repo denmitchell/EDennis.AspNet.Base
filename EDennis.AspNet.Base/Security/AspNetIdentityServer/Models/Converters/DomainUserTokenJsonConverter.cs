@@ -3,9 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace EDennis.AspNet.Base.Security {
-    /// <summary>
-    /// Explicitly define JsonConverter to prevent circular referencing during Serialization
-    /// </summary>
+
     public class DomainUserTokenJsonConverter : JsonConverter<DomainUserToken> {
 
         public override DomainUserToken Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

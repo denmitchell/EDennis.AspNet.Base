@@ -1,5 +1,4 @@
-﻿using EDennis.AspNet.Base.Security.AspNetIdentityServer.Controllers;
-using EDennis.AspNet.Base.Security.Extensions;
+﻿using EDennis.AspNet.Base.Security.Extensions;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Mvc;

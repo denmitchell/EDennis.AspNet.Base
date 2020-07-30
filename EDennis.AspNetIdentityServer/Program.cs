@@ -102,7 +102,7 @@ namespace EDennis.AspNetIdentityServer {
             using var scope = host.Services.CreateScope();
             try {
 
-                var context = scope.ServiceProvider.GetService<DomainIdentityDbContext<DomainUser,DomainRole>>();
+                var context = scope.ServiceProvider.GetService<DomainIdentityDbContext>();
 
                 //ensure db is migrated before seeding
                 context.Database.Migrate();

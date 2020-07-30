@@ -29,7 +29,7 @@ namespace EDennis.AspNet.Base {
         /// that doesn't use reflection.
         /// </summary>
         /// <param name="jsonElement">The updated data as a JsonElement</param>
-        public virtual void Patch(JsonElement jsonElement, ModelStateDictionary modelState, bool mergeCollections = false) {
+        public virtual void Patch(JsonElement jsonElement, ModelStateDictionary modelState) {
             var camelCase = false;
             foreach (var prop in GetType().GetProperties())
                 try {

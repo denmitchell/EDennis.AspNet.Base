@@ -7,12 +7,13 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace EDennis.AspNet.Base.Security {
+
     /// <summary>
-    /// Explicitly define JsonConverter to 
-    ///   (a) prevent circular referencing during Serialization
-    ///   (b) pack extra properties into a catch-all Property property as a JSON string
+    /// Used to handle serialization/deserialization of Properties property
     /// </summary>
     public class DomainOrganizationJsonConverter : JsonConverter<DomainOrganization> {
+
+        OtherProperties _otherProperties;
 
         public override DomainOrganization Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
             var obj = new DomainOrganization();
@@ -21,22 +22,21 @@ namespace EDennis.AspNet.Base.Security {
         }
 
         /// <summary>
-        /// For Patch operations.  Do not include a [FromBody] parameter
-        /// First, retrieve obj from store
+        /// This method can be used to directly deserialize an HttpRequest body
+        /// into an object.
+        /// If used, do not include a [FromBody] parameter
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="request"></param>
-        public static void DeserializeInto(DomainOrganization obj, HttpRequest request) {
+        public void DeserializeInto(DomainOrganization obj, HttpRequest request) {
             using var reader = new StreamReader(request.Body, Encoding.UTF8);
             var str = Encoding.UTF8.GetBytes(Task.Run(() => reader.ReadToEndAsync()).Result);
             var bytes = new ReadOnlySpan<byte>(str);
             DeserializeInto(obj, new Utf8JsonReader(bytes));
         }
 
-        public static void DeserializeInto(DomainOrganization obj, Utf8JsonReader reader) {
-            bool hasWrittenProperties = false;
-            using var ms = new MemoryStream();
-            using var jw = new Utf8JsonWriter(ms);
+
+        public void DeserializeInto(DomainOrganization obj, Utf8JsonReader reader) {
             while (reader.Read()) {
                 switch (reader.TokenType) {
                     case JsonTokenType.PropertyName:
@@ -68,36 +68,18 @@ namespace EDennis.AspNet.Base.Security {
                                 obj.SysEnd = reader.GetDateTime();
                                 break;
                             default:
-                                if (!hasWrittenProperties)
-                                    jw.WriteStartObject();
-                                switch (reader.TokenType) {
-                                    case JsonTokenType.Null:
-                                        jw.WriteNull(prop);
-                                        break;
-                                    case JsonTokenType.True:
-                                    case JsonTokenType.False:
-                                        jw.WriteBoolean(prop, reader.GetBoolean());
-                                        break;
-                                    case JsonTokenType.Number:
-                                        jw.WriteNumber(prop, reader.GetDecimal());
-                                        break;
-                                    case JsonTokenType.String:
-                                        jw.WriteString(prop, reader.GetString());
-                                        break;
-                                    default:
-                                        break;
-                                }
+                                if (_otherProperties == null)
+                                    _otherProperties = new OtherProperties();
+                                _otherProperties.Add(prop, ref reader);
                                 break;
-
                         }
                         break;
                     default:
                         break;
                 }
             }
-            if (hasWrittenProperties) {
-                jw.WriteEndObject();
-                obj.Properties = Encoding.UTF8.GetString(ms.ToArray());
+            if (_otherProperties != null) {
+                obj.Properties = _otherProperties.ToString();
             }
 
         }
