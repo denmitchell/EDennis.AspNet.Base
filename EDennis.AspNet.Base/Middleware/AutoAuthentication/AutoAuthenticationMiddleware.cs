@@ -1,4 +1,6 @@
-﻿using IdentityModel.Client;
+﻿using EDennis.AspNet.Base.Security;
+using EDennis.AspNet.Base.Security.OIDC;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -29,12 +31,14 @@ namespace EDennis.AspNet.Base.Middleware {
         private readonly RequestDelegate _next;
         private readonly AutoAuthenticationOptions _options;
         private readonly OidcOptions _oidcOptions;
+        private readonly AutoLoginOptions _autoLoginOptions;
         private readonly IHttpClientFactory _factory;
 
 
         public AutoAuthenticationMiddleware(RequestDelegate next, 
             IOptionsMonitor<AutoAuthenticationOptions> options,
-            IOptionsMonitor<OidcOptions> oidcOptions, 
+            IOptionsMonitor<OidcOptions> oidcOptions,
+            IOptionsMonitor<AutoLoginOptions> _autoLoginOptions,
             IHttpClientFactory factory) {
             _next = next;
             _factory = factory;
@@ -166,8 +170,8 @@ namespace EDennis.AspNet.Base.Middleware {
             var msg = new HttpRequestMessage() {
                 Content = new FormUrlEncodedContent(
                     new KeyValuePair<string, string>[] {
-                        KeyValuePair.Create("Input.Email",_oidcOptions.AutoLoginUsername),
-                        KeyValuePair.Create("Input.Password",_oidcOptions.AutoLoginPassword),
+                        KeyValuePair.Create("Input.Email",_autoLoginOptions.AutoLoginUsername),
+                        KeyValuePair.Create("Input.Password",_autoLoginOptions.AutoLoginPassword),
                         KeyValuePair.Create("__RequestVerificationToken",requestVerificationToken),
                         KeyValuePair.Create("Input.RememberMe","false")
                     }

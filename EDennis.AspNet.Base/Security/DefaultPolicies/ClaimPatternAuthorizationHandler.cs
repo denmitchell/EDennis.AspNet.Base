@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using EDennis.AspNet.Base.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Concurrent;
@@ -25,18 +26,18 @@ namespace EDennis.AspNet.Base {
         /// <param name="AllowedValues">The optional list of claim values, which, if present, 
         /// the claim must NOT match.</param>
         public ClaimPatternAuthorizationHandler(
-                string requirementScope, OidcOptions oidcOptions,
+                string requirementScope, DefaultPoliciesOptions defaultPoliciesOptions,
                 ConcurrentDictionary<string, bool> policyPatternCache,
                 ILogger logger) {
 
             RequirementScope = requirementScope;
             PolicyPatternCache = policyPatternCache;
 
-            if (oidcOptions != null) { 
+            if (defaultPoliciesOptions != null) { 
                 
-                IsOidc = oidcOptions.ResponseType == "code";
-                ExclusionPrefix = oidcOptions.ExclusionPrefix ?? ExclusionPrefix;
-                UserScopePrefix = (oidcOptions.UserScopePrefix ?? UserScopePrefix).ToLower() ;
+                IsOidc = defaultPoliciesOptions.ResponseType == "code";
+                ExclusionPrefix = defaultPoliciesOptions.ExclusionPrefix ?? ExclusionPrefix;
+                UserScopePrefix = (defaultPoliciesOptions.UserScopePrefix ?? UserScopePrefix).ToLower() ;
                 Logger = logger;
             }
         }

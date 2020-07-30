@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using EDennis.AspNet.Base.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
@@ -11,7 +12,7 @@ namespace EDennis.AspNet.Base {
         private AuthorizationOptions _options;
         private Task<AuthorizationPolicy> _cachedPolicyTask;
         private readonly IConfiguration _configuration;
-        private readonly OidcOptions _oidcOptions;
+        private readonly DefaultPoliciesOptions _defaultPoliciesOptions;
         //outerkey is the scope policy (the default policy associated with the action method)
         //inner key is the pattern that matches either negatively or positively
         public ConcurrentDictionary<string, ConcurrentDictionary<string, bool>> PolicyPatternCacheSet { get; private set; }
@@ -19,10 +20,10 @@ namespace EDennis.AspNet.Base {
 
 
         public DefaultPoliciesAuthorizationPolicyProvider(IConfiguration configuration,
-            OidcOptions oidcOptions, ILogger logger) {
+            DefaultPoliciesOptions defaultPoliciesOptions, ILogger logger) {
 
             _configuration = configuration;
-            _oidcOptions = oidcOptions;
+            _defaultPoliciesOptions = defaultPoliciesOptions;
             PolicyPatternCacheSet = new ConcurrentDictionary<string, ConcurrentDictionary<string,bool>>();
             _logger = logger;
         }
@@ -77,7 +78,7 @@ namespace EDennis.AspNet.Base {
                 foreach (var policy in policies)
                     _options.AddPolicy(policy, builder => {
                         var policyPatternCache = PolicyPatternCacheSet.GetOrAdd(policy, new ConcurrentDictionary<string, bool>());
-                        builder.RequireClaimPatternMatch(policy, _oidcOptions, policyPatternCache, _logger);
+                        builder.RequireClaimPatternMatch(policy, _defaultPoliciesOptions, policyPatternCache, _logger);
                     });
             }
 
