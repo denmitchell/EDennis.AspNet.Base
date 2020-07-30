@@ -1,4 +1,5 @@
 ﻿using EDennis.AspNet.Base;
+using EDennis.NetStandard.Base;
 
 namespace EDennis.Samples.ColorApi
 {

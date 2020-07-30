@@ -1,5 +1,5 @@
-﻿using EDennis.AspNet.Base;
-using EDennis.AspNet.Base.EntityFramework;
+﻿using EDennis.NetStandard.Base;
+using EDennis.NetStandard.Base.EntityFramework;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;

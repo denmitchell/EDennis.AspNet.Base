@@ -1,4 +1,5 @@
 ﻿using EDennis.AspNet.Base.Security;
+using EDennis.NetStandard.Base.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;

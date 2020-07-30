@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EDennis.AspNet.Base\EDennis.AspNet.Base.csproj" />
+    <ProjectReference Include="..\EDennis.NetStandard.Base\EDennis.NetStandard.Base.csproj" />
   </ItemGroup>
 
 

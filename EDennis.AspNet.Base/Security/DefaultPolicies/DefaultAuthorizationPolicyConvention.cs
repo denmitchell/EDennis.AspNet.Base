@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
+using EDennis.NetStandard.Base;
 
 namespace EDennis.AspNet.Base {
 

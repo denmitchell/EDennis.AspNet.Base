@@ -1,14 +1,11 @@
-﻿using AutoMapper.Configuration;
-using EDennis.AspNet.Base.EntityFramework;
+﻿using EDennis.NetStandard.Base.EntityFramework;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Concurrent;
 using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
-using System.Transactions;
 
 namespace EDennis.AspNet.Base.Middleware {
 

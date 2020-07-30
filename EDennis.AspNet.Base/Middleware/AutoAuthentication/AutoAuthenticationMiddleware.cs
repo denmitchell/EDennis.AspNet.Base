@@ -1,5 +1,4 @@
-﻿using EDennis.AspNet.Base.Security;
-using EDennis.AspNet.Base.Security.OIDC;
+﻿using EDennis.NetStandard.Base.Security;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

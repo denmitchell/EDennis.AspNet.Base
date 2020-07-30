@@ -1,6 +1,7 @@
 using EDennis.AspNet.Base.Security;
 using EDennis.AspNetIdentityServer.Data;
 using EDennis.AspNetIdentityServer.Models;
+using EDennis.NetStandard.Base.Security;
 using IdentityModel;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;

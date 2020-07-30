@@ -1,13 +1,10 @@
-﻿using EDennis.AspNet.Base.Extensions;
+﻿using EDennis.NetStandard.Base.Extensions;
 using EDennis.AspNet.Base.Middleware.MockUser;
-using EDennis.AspNet.Base.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 

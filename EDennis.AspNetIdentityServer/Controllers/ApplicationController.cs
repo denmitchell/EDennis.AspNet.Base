@@ -1,8 +1,5 @@
-﻿using EDennis.AspNet.Base;
-using EDennis.AspNet.Base.EntityFramework;
-using EDennis.AspNet.Base.Security;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Authorization;
+using EDennis.NetStandard.Base.Security;
 
 namespace EDennis.AspNetIdentityServer.Controllers {
 

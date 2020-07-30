@@ -1,5 +1,5 @@
-﻿using EDennis.AspNet.Base;
-using EDennis.AspNet.Base.EntityFramework;
+﻿using EDennis.NetStandard.Base.EntityFramework;
+using EDennis.NetStandard.Base;
 using Microsoft.EntityFrameworkCore;
 
 

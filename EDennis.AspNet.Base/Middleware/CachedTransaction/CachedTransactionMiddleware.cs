@@ -1,4 +1,4 @@
-﻿using EDennis.AspNet.Base.EntityFramework;
+﻿using EDennis.NetStandard.Base.EntityFramework;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
