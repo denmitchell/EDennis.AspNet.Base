@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EDennis.AspNetCore.Base.Web
+namespace EDennis.AspNet.Base.Web
 {
 
     public static class DataSourceLoadOptionsBuilder{

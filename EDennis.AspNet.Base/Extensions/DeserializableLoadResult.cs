@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace EDennis.AspNetCore.Base.Web
+namespace EDennis.AspNet.Base.Web
 {
     public class DeserializableLoadResult<T> {
         public ICollection<T> data { get; set; }

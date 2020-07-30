@@ -1,5 +1,4 @@
-﻿//using EDennis.AspNetCore.Base.EntityFramework;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Hr.App.Data.Models {
