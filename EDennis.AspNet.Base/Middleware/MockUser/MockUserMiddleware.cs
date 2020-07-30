@@ -1,4 +1,6 @@
-﻿using EDennis.AspNet.Base.Middleware.MockUser;
+﻿using EDennis.AspNet.Base.Extensions;
+using EDennis.AspNet.Base.Middleware.MockUser;
+using EDennis.AspNet.Base.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -27,7 +29,7 @@ namespace EDennis.AspNet.Base.Middleware {
                 || !_options.CurrentValue.Enabled)
                 await _next(context);
             else {
-                var claims = _options.CurrentValue.Claims.ToClaims();
+                var claims = _options.CurrentValue.Claims.ToClaimEnumerable();
                 context.User = new ClaimsPrincipal(new ClaimsIdentity(claims,"mockAuth"));
                  
                 await _next(context); 
@@ -52,17 +54,6 @@ namespace EDennis.AspNet.Base.Middleware {
     }
 
 
-    public static class DictionaryExtensionMethods {
-        public static IEnumerable<Claim> ToClaims<E>(this Dictionary<string, E> dict)
-        where E : IEnumerable<string> {
-            var list = new List<Claim>();
-            foreach(var entry in dict) {
-                foreach (var item in entry.Value)
-                    list.Add(new Claim(entry.Key, item));
-            }
-            return list;
-        }
-    }
 
 }
 

@@ -80,8 +80,5 @@ namespace EDennis.AspNetCore.Base.Web
         }
 
     }
-
-
-
-
 }
+

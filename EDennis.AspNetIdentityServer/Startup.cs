@@ -30,12 +30,12 @@ namespace EDennis.AspNetIdentityServer {
             //Debugger.Launch();
 
             string cxnAspNetIdentity = Configuration["DbContexts:AspNetIdentityDbContext:ConnectionString"];
-            services.AddDbContext<DomainIdentityDbContext<DomainUser, DomainRole>>(options =>
+            services.AddDbContext<DomainIdentityDbContext>(options =>
                 options.UseSqlServer(cxnAspNetIdentity));
 
 
             services.AddIdentity<DomainUser, DomainRole>(options => options.SignIn.RequireConfirmedAccount = true)
-                           .AddEntityFrameworkStores<DomainIdentityDbContext<DomainUser,DomainRole>>()
+                           .AddEntityFrameworkStores<DomainIdentityDbContext>()
                            .AddDefaultTokenProviders();
 
             services.AddControllersWithViews();
@@ -58,12 +58,12 @@ namespace EDennis.AspNetIdentityServer {
                 })
                 .AddDeveloperSigningCredential()
                 .AddAspNetIdentity<DomainUser>()
-                .AddProfileService<DomainIdentityProfileService<DomainUser,DomainRole, DomainIdentityDbContext<DomainUser,DomainRole>>>();
+                .AddProfileService<DomainIdentityProfileService>();
 
 
             //replace Identity Server's ProfileService with a profile service that determines
             //which claims to retrieve for a user/client as configured in the database
-            services.Replace(ServiceDescriptor.Transient<IProfileService, DomainIdentityProfileService<DomainUser, DomainRole, DomainIdentityDbContext<DomainUser, DomainRole>>>());
+            services.Replace(ServiceDescriptor.Transient<IProfileService, DomainIdentityProfileService>());
 
             services.AddOidcLogging(Configuration);
 

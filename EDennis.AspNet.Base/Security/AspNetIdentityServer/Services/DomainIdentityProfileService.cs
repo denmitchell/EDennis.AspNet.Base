@@ -26,16 +26,13 @@ namespace EDennis.AspNet.Base.Security {
     /// NOTE: when configuring an ApiResource, add UserClaims -- all
     /// user claims that should be added to access token
     /// </summary>
-    public class DomainIdentityProfileService<TUser,TRole,TContext> : IProfileService 
-        where TUser: DomainUser, new()
-        where TRole: DomainRole
-        where TContext: DomainIdentityDbContext<TUser,TRole> {
+    public class DomainIdentityProfileService : IProfileService {
 
-        private readonly DomainIdentityDbContext<TUser, TRole> _dbContext;
-        private readonly ILogger<DomainIdentityProfileService<TUser, TRole, TContext>> _logger;
+        private readonly DomainIdentityDbContext _dbContext;
+        private readonly ILogger<DomainIdentityProfileService> _logger;
 
-        public DomainIdentityProfileService(DomainIdentityDbContext<TUser,TRole> dbContext,
-            ILogger<DomainIdentityProfileService<TUser,TRole,TContext>> logger) {
+        public DomainIdentityProfileService(DomainIdentityDbContext dbContext,
+            ILogger<DomainIdentityProfileService> logger) {
             _dbContext = dbContext;
             _logger = logger;
         }
@@ -46,10 +43,23 @@ namespace EDennis.AspNet.Base.Security {
             var userId = Guid.Parse(context.Subject.GetSubjectId());
             var clientId = context.Client.ClientId;
 
-            var claimsRec = await _dbContext.UserClientClaims.SingleAsync(x => x.UserId == userId && x.ClientId == clientId);
-            var claims = JsonSerializer.Deserialize<List<ClaimModel>>(claimsRec.Claims);
 
-            context.IssuedClaims.AddRange(claims.Select(c => new Claim(c.ClaimType, c.ClaimValue)));
+            //add roles
+            var roles = await _dbContext.UserClientApplicationRoles
+                .Where(x => x.UserId == userId && x.ClientId == clientId)
+                .ToListAsync();
+
+            context.IssuedClaims.AddRange(roles.Select(r => new Claim(r.ApplicationName, r.RoleName)));
+
+
+            //add requested user claims
+            var userClaims = await _dbContext.UserClaims
+                                .Where(uc => uc.UserId == userId
+                                    && context.RequestedClaimTypes.Any(rct => rct == uc.ClaimType))
+                                .Select(uc=>new Claim(uc.ClaimType, uc.ClaimValue))
+                                .ToListAsync();
+
+            context.IssuedClaims.AddRange(userClaims);
         }
 
 
@@ -92,7 +102,7 @@ namespace EDennis.AspNet.Base.Security {
         /// <param name="context"></param>
         /// <param name="user"></param>
         /// <returns></returns>
-        protected virtual async Task IsActiveAsync(IsActiveContext context, TUser user) {
+        protected virtual async Task IsActiveAsync(IsActiveContext context, DomainUser user) {
             context.IsActive = await IsUserActiveAsync(user);
         }
 
@@ -102,7 +112,7 @@ namespace EDennis.AspNet.Base.Security {
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public virtual Task<bool> IsUserActiveAsync(TUser user) {
+        public virtual Task<bool> IsUserActiveAsync(DomainUser user) {
             return Task.FromResult(true);
         }
 
@@ -112,8 +122,8 @@ namespace EDennis.AspNet.Base.Security {
         /// </summary>
         /// <param name="subjectId"></param>
         /// <returns></returns>
-        protected virtual async Task<TUser> FindUserAsync(Guid userId) {
-            var user = await _dbContext.Set<TUser>().FindAsync(userId);
+        protected virtual async Task<DomainUser> FindUserAsync(Guid userId) {
+            var user = await _dbContext.Set<DomainUser>().FindAsync(userId);
             if (user == null) {
                 _logger?.LogWarning("No user found matching subject Id: {subjectId}", userId);
             }
