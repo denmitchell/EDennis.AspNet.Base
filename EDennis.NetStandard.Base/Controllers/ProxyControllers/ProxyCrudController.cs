@@ -1,54 +1,78 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EDennis.NetStandard.Base.Security;
+using EDennis.NetStandard.Base.Web;
+using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace EDennis.NetStandard.Base.Controllers.ProxyControllers {
-    public class ProxyCrudController<TEntity> : ICrudController<TEntity>
+    public abstract class ProxyCrudController<TEntity> : ProxyQueryController<TEntity>, ICrudController<TEntity>
         where TEntity : class, ICrudEntity {
 
+
+        public ProxyCrudController(IHttpClientFactory clientFactory, ClientCredentialsTokenService tokenService) :
+            base(clientFactory,tokenService) { }
+
+
+        [HttpPost]
         public IActionResult Create([FromBody] TEntity input) {
-            throw new System.NotImplementedException();
+            return _client.Post($"{ControllerName}",input);
         }
 
-        public Task<IActionResult> CreateAsync([FromBody] TEntity input) {
-            throw new System.NotImplementedException();
+        [HttpPost("async")]
+        public async Task<IActionResult> CreateAsync([FromBody] TEntity input) {
+            return await _client.PostAsync($"{ControllerName}/async", input);
         }
 
+        [HttpDelete("{**key}")]
         public IActionResult Delete([FromRoute] string key) {
-            throw new System.NotImplementedException();
+            return _client.Delete<TEntity>($"{ControllerName}/{key}");
         }
 
-        public Task<IActionResult> DeleteAsync([FromRoute] string key) {
-            throw new System.NotImplementedException();
+        [HttpDelete("async/{**key}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute] string key) {
+            return await _client.DeleteAsync<TEntity>($"{ControllerName}/{key}");
         }
 
+        [NonAction]
         public IQueryable<TEntity> Find(string pathParameter) {
             throw new System.NotImplementedException();
         }
 
+
+        [HttpGet("{**key}")]
         public IActionResult GetById([FromRoute] string key) {
-            throw new System.NotImplementedException();
+            return _client.Get<TEntity>($"{ControllerName}/{key}");
         }
 
-        public Task<IActionResult> GetByIdAsync([FromRoute] string key) {
-            throw new System.NotImplementedException();
+
+        [HttpGet("async/{**key}")]
+        public async Task<IActionResult> GetByIdAsync([FromRoute] string key) {
+            return await _client.GetAsync<TEntity>($"{ControllerName}/{key}");
         }
 
+
+        [HttpPatch("{**key}")]
         public IActionResult Patch([FromRoute] string key, [FromBody] JsonElement input) {
-            throw new System.NotImplementedException();
+            return _client.Patch($"{ControllerName}/{key}", input);
         }
 
-        public Task<IActionResult> PatchAsync([FromRoute] string key, [FromBody] JsonElement input) {
-            throw new System.NotImplementedException();
+
+        [HttpPatch("async/{**key}")]
+        public async Task<IActionResult> PatchAsync([FromRoute] string key, [FromBody] JsonElement input) {
+            return await _client.PatchAsync($"{ControllerName}/{key}", input);
         }
 
+
+        [HttpPut("{**key}")]
         public IActionResult Update([FromRoute] string key, [FromBody] TEntity input) {
-            throw new System.NotImplementedException();
+            return _client.Put($"{ControllerName}/{key}", input);
         }
 
-        public Task<IActionResult> UpdateAsync([FromRoute] string key, [FromBody] TEntity input) {
-            throw new System.NotImplementedException();
+        [HttpPut("async/{**key}")]
+        public async Task<IActionResult> UpdateAsync([FromRoute] string key, [FromBody] TEntity input) {
+            return await _client.PutAsync($"{ControllerName}/{key}", input);
         }
     }
 }
