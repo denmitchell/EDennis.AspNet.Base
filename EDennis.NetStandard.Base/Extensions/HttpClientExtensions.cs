@@ -1,6 +1,7 @@
 ﻿using Flurl;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
 using System;
@@ -285,9 +286,6 @@ namespace EDennis.NetStandard.Base.Web {
             });
             return pingable;
         }
-
-
-
 
 
         private static ObjectResult<T> ForwardRequest<T>(this HttpClient client, HttpRequestMessage msg, string relativeUrlFromBase) {

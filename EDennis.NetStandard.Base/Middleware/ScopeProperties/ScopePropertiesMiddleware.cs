@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using EDennis.NetStandard.Base.Web;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using System;
@@ -21,13 +22,15 @@ namespace EDennis.NetStandard.Base.Middleware {
                 await _next(context);
             else {
 
+                //only relevant during testing
                 var cookies = context.Request.Cookies;
-                if (cookies.TryGetValue("TransactionScope", out string transactionScope))
-                    scopeProperties.Add("TransactionScope", transactionScope);
+                if (cookies.TryGetValue(CachedTransactionOptions.COOKIE_KEY, out string transactionScope))
+                    scopeProperties.Add(CachedTransactionOptions.COOKIE_KEY, transactionScope);
 
+                //relevant during testing and production
                 var headers = context.Request.Headers;
-                if (headers.TryGetValue("Authorization", out StringValues authorization))
-                    scopeProperties.Add("Authorization", authorization);
+                if (headers.TryGetValue(PassthroughClaimsOptions.CLAIMS_HEADER, out StringValues passthroughClaims))
+                    scopeProperties.Add(PassthroughClaimsOptions.CLAIMS_HEADER, passthroughClaims.ToString());
  
                 await _next(context); 
             }

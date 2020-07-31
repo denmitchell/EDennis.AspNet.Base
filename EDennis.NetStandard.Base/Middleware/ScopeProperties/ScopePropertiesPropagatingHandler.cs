@@ -1,4 +1,5 @@
 ﻿using EDennis.NetStandard.Base.Middleware;
+using EDennis.NetStandard.Base.Web;
 using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Http;
@@ -19,11 +20,12 @@ namespace EDennis.NetStandard.Base.Handlers {
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) {
 
-            if(_scopeProperties.TryGetValue("TransactionScope", out string transactionScope))
-                CookieContainer.Add(new Cookie("TransactionScope", transactionScope));
+            if(_scopeProperties.TryGetValue(CachedTransactionOptions.COOKIE_KEY, out string transactionScope))
+                CookieContainer.Add(new Cookie(CachedTransactionOptions.COOKIE_KEY, transactionScope));
 
-            if (_scopeProperties.TryGetValue("Authorization", out string authorization))
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer",authorization.ToString().Replace("Bearer ", ""));
+            if (_scopeProperties.TryGetValue(PassthroughClaimsOptions.CLAIMS_HEADER, out string claimsHeader))
+                request.Headers.Add(PassthroughClaimsOptions.CLAIMS_HEADER, claimsHeader);
+
 
             return await base.SendAsync(request, cancellationToken);
             

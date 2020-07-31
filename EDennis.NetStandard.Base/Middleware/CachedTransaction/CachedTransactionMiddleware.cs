@@ -2,18 +2,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ValueGeneration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Primitives;
-using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Transactions;
 
 namespace EDennis.NetStandard.Base.Middleware {
     public class CachedTransactionMiddleware<TContext>
@@ -23,10 +18,6 @@ namespace EDennis.NetStandard.Base.Middleware {
         private readonly TransactionCache<TContext> _cache;
         private IOptionsMonitor<CachedTransactionOptions> _options;
         private string[] _enabledForClaims;
-
-        public const string COOKIE_KEY = "CachedTransaction";
-        public const string ROLLBACK_PATH = "/rollback-cached-transaction";
-        public const string COMMIT_PATH = "/commit-cached-transaction";
 
         public CachedTransactionMiddleware(RequestDelegate next, TransactionCache<TContext> cache,
             IOptionsMonitor<CachedTransactionOptions> options) {
@@ -52,14 +43,14 @@ namespace EDennis.NetStandard.Base.Middleware {
                     if (cookieAdded)
                         context.Response.OnStarting(state => {
                             var httpContext = (HttpContext)state;
-                            httpContext.Response.Cookies.Append(COOKIE_KEY, cookieValue);
+                            httpContext.Response.Cookies.Append(CachedTransactionOptions.COOKIE_KEY, cookieValue);
                             return Task.CompletedTask;
                         }, context);
 
-                    if (context.Request.Path.Value.EndsWith(ROLLBACK_PATH)) {
+                    if (context.Request.Path.Value.EndsWith(CachedTransactionOptions.ROLLBACK_PATH)) {
                         await _cache.RollbackAsync(Guid.Parse(cookieValue));
                         return;
-                    } else if (context.Request.Path.Value.EndsWith(COMMIT_PATH)) { 
+                    } else if (context.Request.Path.Value.EndsWith(CachedTransactionOptions.COMMIT_PATH)) { 
                         await _cache.CommitAsync(Guid.Parse(cookieValue));
                         return;
                     }
@@ -73,7 +64,7 @@ namespace EDennis.NetStandard.Base.Middleware {
         }
 
         private string GetOrAddCookie(HttpContext context, out bool added) {
-            if (context.Request.Cookies.TryGetValue(COOKIE_KEY, out string cookieValue)) {
+            if (context.Request.Cookies.TryGetValue(CachedTransactionOptions.COOKIE_KEY, out string cookieValue)) {
                 added = false;
                 return cookieValue;
             } else {

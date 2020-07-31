@@ -37,12 +37,13 @@ namespace EDennis.NetStandard.Base.Middleware {
         public AutoAuthenticationMiddleware(RequestDelegate next, 
             IOptionsMonitor<AutoAuthenticationOptions> options,
             IOptionsMonitor<OidcOptions> oidcOptions,
-            IOptionsMonitor<AutoLoginOptions> _autoLoginOptions,
+            IOptionsMonitor<AutoLoginOptions> autoLoginOptions,
             IHttpClientFactory factory) {
             _next = next;
             _factory = factory;
             _options = options.CurrentValue;
             _oidcOptions = oidcOptions.CurrentValue;
+            _autoLoginOptions = autoLoginOptions.CurrentValue;
             if (!_oidcOptions.Authority.EndsWith("/"))
                 _oidcOptions.Authority += "/";
         }
