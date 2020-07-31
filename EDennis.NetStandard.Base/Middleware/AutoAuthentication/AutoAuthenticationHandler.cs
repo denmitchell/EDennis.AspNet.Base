@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace EDennis.NetStandard.Base.Handlers {
+namespace EDennis.NetStandard.Base.Middleware {
 
     public class AutoAuthenticationHandler: DelegatingHandler {
 
