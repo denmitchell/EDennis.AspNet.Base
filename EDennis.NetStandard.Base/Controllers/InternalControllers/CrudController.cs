@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Net;
@@ -14,8 +12,7 @@ using System.Threading.Tasks;
 namespace EDennis.NetStandard.Base {
     [Route("api/[controller]")]
     [ApiController]
-    public abstract class CrudController<TContext, TEntity> : QueryController<TContext, TEntity>
-        where TContext : DbContext
+    public abstract class CrudController<TContext, TEntity> : QueryController<TContext, TEntity>, ICrudController<TEntity> where TContext : DbContext
         where TEntity : class, ICrudEntity {
 
         protected string _sysUser;
@@ -55,7 +52,7 @@ namespace EDennis.NetStandard.Base {
         [NonAction]
         protected virtual void DoUpdate(TEntity input, TEntity existing) => existing.Update(input);
         [NonAction]
-        protected virtual void DoPatch(JsonElement input, TEntity existing) => existing.Patch(input,ModelState);
+        protected virtual void DoPatch(JsonElement input, TEntity existing) => existing.Patch(input, ModelState);
         [NonAction]
         protected virtual void DoDelete(TEntity existing) => _dbContext.Remove(existing);
 
@@ -63,8 +60,8 @@ namespace EDennis.NetStandard.Base {
         #endregion
 
 
-        public CrudController(DbContextProvider<TContext> provider, 
-            ILogger<QueryController<TContext,TEntity>> logger) : base(provider, logger) {
+        public CrudController(DbContextProvider<TContext> provider,
+            ILogger<QueryController<TContext, TEntity>> logger) : base(provider, logger) {
 
         }
 
@@ -114,7 +111,7 @@ namespace EDennis.NetStandard.Base {
                 using (_logger.BeginScope(GetLoggerScope(input)))
                     _logger.LogError(ex.Message);
                 ModelState.AddModelError("", $"An instance of {typeof(TEntity).Name} could not be created with values: {input}");
-                    return Conflict(ModelState);
+                return Conflict(ModelState);
             }
         }
 
@@ -283,7 +280,7 @@ namespace EDennis.NetStandard.Base {
             } catch (DbUpdateConcurrencyException ex2) {
                 using (_logger.BeginScope(GetLoggerScope(new { key })))
                     _logger.LogError(ex2.Message);
-                ModelState.AddModelError("",$"Delete of { typeof(TEntity).Name }({key}) created concurrency conflict: {ex2.InnerException.Message}");
+                ModelState.AddModelError("", $"Delete of { typeof(TEntity).Name }({key}) created concurrency conflict: {ex2.InnerException.Message}");
                 return new ObjectResult(ModelState) { StatusCode = (int)HttpStatusCode.Conflict };
             } catch (DbUpdateException ex1) {
                 using (_logger.BeginScope(GetLoggerScope(new { key })))
@@ -298,7 +295,7 @@ namespace EDennis.NetStandard.Base {
 
         [HttpDelete("async/{**key}")]
         public async virtual Task<IActionResult> DeleteAsync([FromRoute] string key) {
-            
+
             var existing = await Find(key).FirstOrDefaultAsync();
 
             //check NotFound, Gone (deleted), Locked

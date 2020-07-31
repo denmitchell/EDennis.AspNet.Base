@@ -23,14 +23,13 @@ namespace EDennis.NetStandard.Base {
     /// <typeparam name="TEntity">A model class</typeparam>
     [Route("api/[controller]")]
     [ApiController]
-    public class QueryController<TContext, TEntity> : ControllerBase 
-        where TContext : DbContext
+    public class QueryController<TContext, TEntity> : ControllerBase, IQueryController<TEntity> where TContext : DbContext
         where TEntity : class {
 
         protected readonly TContext _dbContext;
         protected ILogger _logger;
 
-        public QueryController(DbContextProvider<TContext> provider, ILogger<QueryController<TContext,TEntity>> logger) {
+        public QueryController(DbContextProvider<TContext> provider, ILogger<QueryController<TContext, TEntity>> logger) {
             _dbContext = provider.DbContext;
             _logger = logger;
         }
@@ -256,7 +255,7 @@ namespace EDennis.NetStandard.Base {
         /// <returns></returns>
         private IQueryable<TEntity> BuildLinqQuery(string where, string orderBy, int? skip, int? take, int? totalRecords, out DynamicLinqResult<TEntity> pagedResult) {
 
-            var qry  = GetQuery();
+            var qry = GetQuery();
 
             try {
                 if (!string.IsNullOrWhiteSpace(where))
@@ -323,7 +322,7 @@ namespace EDennis.NetStandard.Base {
         /// also applies AdjustQuery
         /// </summary>
         /// <returns></returns>
-        private IQueryable<TEntity> GetQuery(){
+        private IQueryable<TEntity> GetQuery() {
             var qry = _dbContext
                 .Set<TEntity>()
                 .AsNoTracking();
@@ -338,12 +337,12 @@ namespace EDennis.NetStandard.Base {
         /// </summary>
         /// <param name="parameters">a dynamic object with key-value pairs</param>
         /// <returns></returns>
-        protected KeyValuePair<string,object>[] GetLoggerScope(dynamic parameters) {
+        protected KeyValuePair<string, object>[] GetLoggerScope(dynamic parameters) {
 
             var scope = new List<KeyValuePair<string, object>>();
 
             foreach (PropertyInfo prop in parameters.GetType().GetProperties())
-                scope.Add(new KeyValuePair<string,object>(prop.Name, (object)prop.GetValue(parameters)));
+                scope.Add(new KeyValuePair<string, object>(prop.Name, (object)prop.GetValue(parameters)));
 
             return scope.ToArray();
         }

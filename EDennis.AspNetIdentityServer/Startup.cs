@@ -1,6 +1,6 @@
 using EDennis.AspNet.Base.Security;
 using EDennis.AspNetIdentityServer.Models;
-using EDennis.NetStandard.Base;
+using EDennis.NetStandard.Base.Middleware;
 using EDennis.NetStandard.Base.Security;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
