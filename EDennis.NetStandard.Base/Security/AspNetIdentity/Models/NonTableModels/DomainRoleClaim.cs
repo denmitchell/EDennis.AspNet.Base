@@ -1,4 +1,4 @@
-﻿namespace EDennis.NetStandard.Base.Security {
+﻿namespace EDennis.NetStandard.Base {
 
     /// <summary>
     /// Role claims are omitted purposefully from the DbContext model.

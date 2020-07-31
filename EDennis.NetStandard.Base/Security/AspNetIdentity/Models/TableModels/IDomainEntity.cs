@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EDennis.NetStandard.Base.Security {
+namespace EDennis.NetStandard.Base {
     public interface IDomainEntity {
         DateTime SysEnd { get; set; }
         DateTime SysStart { get; set; }

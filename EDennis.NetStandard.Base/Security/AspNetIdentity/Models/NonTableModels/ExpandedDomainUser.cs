@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace EDennis.NetStandard.Base.Security {
+namespace EDennis.NetStandard.Base {
     public class ExpandedDomainUser {
         public Guid Id { get; set; }
         public string UserName { get; set; }

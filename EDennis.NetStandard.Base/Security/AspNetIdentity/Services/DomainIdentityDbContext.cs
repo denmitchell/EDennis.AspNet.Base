@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 
-namespace EDennis.NetStandard.Base.Security {
+namespace EDennis.NetStandard.Base {
     public class DomainIdentityDbContext 
         : IdentityDbContext<DomainUser, DomainRole, Guid, DomainUserClaim, 
             DomainUserRole, DomainUserLogin, IdentityRoleClaim<Guid>, DomainUserToken> {

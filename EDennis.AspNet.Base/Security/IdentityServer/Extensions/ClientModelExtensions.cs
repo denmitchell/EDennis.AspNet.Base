@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text.Json;
 using M = IdentityServer4.Models;
 
-namespace EDennis.AspNet.Base.Security.Extensions {
+namespace EDennis.AspNet.Base {
     public static class ClientModelExtensions {
 
         public static void Patch(this M.Client model, JsonElement partialModel,

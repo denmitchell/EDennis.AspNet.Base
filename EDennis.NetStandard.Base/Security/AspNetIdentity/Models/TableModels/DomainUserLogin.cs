@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace EDennis.NetStandard.Base.Security {
+namespace EDennis.NetStandard.Base {
 
     [JsonConverter(typeof(DomainUserLoginJsonConverter))]
     public class DomainUserLogin : IdentityUserLogin<Guid>, IDomainEntity {

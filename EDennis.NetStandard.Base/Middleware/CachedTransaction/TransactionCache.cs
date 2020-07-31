@@ -1,5 +1,4 @@
-﻿using EDennis.NetStandard.Base.EntityFramework;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Concurrent;
@@ -7,7 +6,7 @@ using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
 
-namespace EDennis.NetStandard.Base.Middleware {
+namespace EDennis.NetStandard.Base {
 
     /// <summary>
     /// Singleton Lifetime

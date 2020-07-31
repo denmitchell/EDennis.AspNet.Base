@@ -5,7 +5,7 @@ using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace EDennis.NetStandard.Base.Security {
+namespace EDennis.NetStandard.Base {
 
     [JsonConverter(typeof(DomainUserRoleJsonConverter))]
     public class DomainUserRole : IdentityUserRole<Guid>, IDomainEntity {

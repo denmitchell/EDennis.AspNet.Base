@@ -2,7 +2,7 @@
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace EDennis.NetStandard.Base.Middleware {
+namespace EDennis.NetStandard.Base {
     public class PassthroughClaimsSwaggerOperationFilter : IOperationFilter {
         public void Apply(OpenApiOperation operation, OperationFilterContext context) {
 

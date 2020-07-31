@@ -1,4 +1,4 @@
-﻿using EDennis.NetStandard.Base.Security;
+﻿using EDennis.NetStandard.Base;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -13,7 +13,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace EDennis.NetStandard.Base.Middleware {
+namespace EDennis.NetStandard.Base {
 
     //note: requires services.AddHttpClient("AutoAuthenticationClient",c=>{...})
     //                   .AddHttpMessageHandler<AutoAuthenticationHandler>();

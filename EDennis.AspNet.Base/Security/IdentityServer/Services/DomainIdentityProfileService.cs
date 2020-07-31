@@ -1,4 +1,4 @@
-﻿using EDennis.NetStandard.Base.Security;
+﻿using EDennis.NetStandard.Base;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace EDennis.AspNet.Base.Security {
+namespace EDennis.AspNet.Base {
 
     /// <summary>
     /// Gets all roles prefixed by client_id, as well as

@@ -1,4 +1,4 @@
-﻿namespace EDennis.NetStandard.Base.Security {
+﻿namespace EDennis.NetStandard.Base {
     public interface IHasStringProperties {
         string Properties { get; set; }
     }

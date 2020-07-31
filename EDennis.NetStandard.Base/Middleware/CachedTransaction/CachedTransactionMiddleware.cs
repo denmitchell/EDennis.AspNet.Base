@@ -1,5 +1,4 @@
-﻿using EDennis.NetStandard.Base.EntityFramework;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -10,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EDennis.NetStandard.Base.Middleware {
+namespace EDennis.NetStandard.Base {
     public class CachedTransactionMiddleware<TContext>
         where TContext : DbContext {
 

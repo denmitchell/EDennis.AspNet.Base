@@ -4,9 +4,8 @@ using Microsoft.Extensions.Options;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Primitives;
-using EDennis.NetStandard.Base.Extensions;
 
-namespace EDennis.NetStandard.Base.Middleware {
+namespace EDennis.NetStandard.Base {
 
     /// <summary>
     /// This middleware will transform headers into user claims per configuration settings.

@@ -1,4 +1,4 @@
-﻿namespace EDennis.NetStandard.Base.Security {
+﻿namespace EDennis.NetStandard.Base {
     public class ClientCredentialsOptions {
         public string Authority { get; set; }
         public string Audience { get; set; }

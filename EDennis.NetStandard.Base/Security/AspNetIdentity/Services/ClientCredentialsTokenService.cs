@@ -5,7 +5,7 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace EDennis.NetStandard.Base.Security {
+namespace EDennis.NetStandard.Base {
     public class ClientCredentialsTokenService {
 
         private readonly ClientCredentialsOptions _options;

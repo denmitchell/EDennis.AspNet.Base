@@ -2,7 +2,7 @@
 using System;
 using System.Text.Json.Serialization;
 
-namespace EDennis.NetStandard.Base.Security {
+namespace EDennis.NetStandard.Base {
 
     [JsonConverter(typeof(DomainRoleJsonConverter))]
     public class DomainRole : IdentityRole<Guid>, IDomainEntity, IHasStringProperties {

@@ -1,8 +1,8 @@
-﻿using EDennis.NetStandard.Base.Security;
+﻿using EDennis.NetStandard.Base;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace EDennis.NetStandard.Base.Security {
+namespace EDennis.NetStandard.Base {
     public static class DomainClaimExtensions {
 
         public static Dictionary<string, string[]> ToDictionary(this IEnumerable<DomainUserClaim> claims) {

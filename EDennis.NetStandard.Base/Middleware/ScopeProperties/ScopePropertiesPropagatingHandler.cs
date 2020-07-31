@@ -1,13 +1,9 @@
-﻿using EDennis.NetStandard.Base.Middleware;
-using EDennis.NetStandard.Base.Web;
-using Microsoft.Extensions.Options;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace EDennis.NetStandard.Base.Handlers {
+namespace EDennis.NetStandard.Base {
 
     public class ScopePropertiesPropagatingHandler: HttpClientHandler {
 

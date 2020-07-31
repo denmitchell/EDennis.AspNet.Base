@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Security.Claims;
 
-namespace EDennis.NetStandard.Base.Extensions {
+namespace EDennis.NetStandard.Base {
 
     /// <summary>
     /// Are these still needed, or can we use EDennis.NetStandard.Base.ClaimExtensions?

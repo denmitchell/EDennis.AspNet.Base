@@ -7,7 +7,7 @@ using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
 
-namespace EDennis.NetStandard.Base.EntityFramework.Entity {
+namespace EDennis.NetStandard.Base {
     public static class DbContextExtensions {
 
 

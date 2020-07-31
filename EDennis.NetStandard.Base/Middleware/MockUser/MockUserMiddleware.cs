@@ -1,6 +1,4 @@
-﻿using EDennis.NetStandard.Base.Extensions;
-using EDennis.NetStandard.Base.Middleware.MockUser;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,7 +6,7 @@ using Microsoft.Extensions.Options;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace EDennis.NetStandard.Base.Middleware {
+namespace EDennis.NetStandard.Base {
     public class MockUserMiddleware {
 
         private readonly RequestDelegate _next;

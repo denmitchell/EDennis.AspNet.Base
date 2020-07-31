@@ -1,5 +1,4 @@
-﻿using EDennis.NetStandard.Base.Security;
-using EDennis.NetStandard.Base.Web;
+﻿using EDennis.NetStandard.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -7,7 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace EDennis.NetStandard.Base.Controllers.ProxyControllers {
+namespace EDennis.NetStandard.Base {
 
     [Route("api/[controller]")]
     [ApiController]
@@ -15,7 +14,6 @@ namespace EDennis.NetStandard.Base.Controllers.ProxyControllers {
         where TEntity : class {
 
         protected readonly HttpClient _client;
-        private readonly string controllerName;
 
 
         public ProxyQueryController(IHttpClientFactory clientFactory, ClientCredentialsTokenService tokenService) {

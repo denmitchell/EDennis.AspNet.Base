@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 
-namespace EDennis.NetStandard.Base.Security {
+namespace EDennis.NetStandard.Base {
     /// <summary>
     /// Singleton cache used by IClaimsTransformation
     /// </summary>

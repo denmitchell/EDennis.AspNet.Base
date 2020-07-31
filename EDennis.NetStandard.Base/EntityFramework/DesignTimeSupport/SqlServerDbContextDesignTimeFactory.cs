@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using System;
 
-namespace EDennis.NetStandard.Base.EntityFramework {
+namespace EDennis.NetStandard.Base {
 
     /// <summary>
     /// This class is used in lieu of providing an OnConfiguring

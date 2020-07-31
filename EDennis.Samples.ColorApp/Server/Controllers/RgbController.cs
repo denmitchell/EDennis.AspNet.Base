@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+﻿using EDennis.NetStandard.Base;
+using EDennis.Samples.ColorApp.Shared;
+using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
 
 namespace EDennis.Samples.ColorApi.Controllers {
     [ApiController]
     [Route("[controller]")]
-    public class RgbController : ControllerBase {
+    public class RgbController : ProxyCrudController<Rgb> {
 
-        public RgbController(ILogger<RgbController> logger) {
-            logger.LogTrace("RgbController entered.");
+        public RgbController(IHttpClientFactory clientFactory, 
+            ClientCredentialsTokenService tokenService) 
+            : base(clientFactory, tokenService) {
         }
-
-
-
     }
 }

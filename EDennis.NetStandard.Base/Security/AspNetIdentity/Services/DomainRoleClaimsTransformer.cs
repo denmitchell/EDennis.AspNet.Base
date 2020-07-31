@@ -6,7 +6,7 @@ using System.Linq.Dynamic.Core;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace EDennis.NetStandard.Base.Security {
+namespace EDennis.NetStandard.Base {
 
     /// <summary>
     /// With the DomainIdentity classes, DomainRoleClaims (UserRoleClaims<Guid>) was

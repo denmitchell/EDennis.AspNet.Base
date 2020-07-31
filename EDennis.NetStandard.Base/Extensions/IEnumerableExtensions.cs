@@ -4,7 +4,7 @@ using System.Data;
 using System.Text;
 using static Dapper.SqlMapper;
 
-namespace EDennis.NetStandard.Base.Extensions {
+namespace EDennis.NetStandard.Base {
     public static class IEnumerableExtensions {
 
 		/// <summary>

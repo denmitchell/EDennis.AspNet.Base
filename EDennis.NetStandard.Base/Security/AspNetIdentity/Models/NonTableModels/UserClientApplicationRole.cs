@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EDennis.NetStandard.Base.Security {
+namespace EDennis.NetStandard.Base {
 
     /// <summary>
     /// This entity is mapped to a view with the same name.

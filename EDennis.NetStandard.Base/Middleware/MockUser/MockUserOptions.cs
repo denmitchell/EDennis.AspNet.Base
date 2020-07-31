@@ -1,10 +1,6 @@
-﻿using EDennis.NetStandard.Base.Security;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace EDennis.NetStandard.Base.Middleware.MockUser {
+namespace EDennis.NetStandard.Base {
     public class MockUserOptions {
         public bool Enabled { get; set; }
         public Dictionary<string,string[]> Claims {get; set;}

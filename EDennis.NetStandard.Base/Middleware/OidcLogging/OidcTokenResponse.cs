@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace EDennis.NetStandard.Base.Middleware {
+namespace EDennis.NetStandard.Base {
     public class OidcTokenResponse {
 
         [JsonPropertyName("id_token")]

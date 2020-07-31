@@ -3,7 +3,7 @@ using System;
 using System.Linq.Expressions;
 using System.Text.Json;
 
-namespace EDennis.NetStandard.Base.Security {
+namespace EDennis.NetStandard.Base {
 
     /// <summary>
     /// Used to handle serialization/deserialization of JSON strings

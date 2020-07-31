@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace EDennis.NetStandard.Base.Security {
+namespace EDennis.NetStandard.Base {
 
     [JsonConverter(typeof(DomainUserJsonConverter))]
     public class DomainUser : IdentityUser<Guid>, IDomainEntity, IHasStringProperties {

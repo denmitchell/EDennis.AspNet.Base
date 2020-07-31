@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using System.Linq;
 using EDennis.Samples.ColorApp.Server.Data;
 using EDennis.Samples.ColorApp.Server.Models;
+using Microsoft.OpenApi.Models;
 
 namespace EDennis.Samples.ColorApp.Server {
     public class Startup {
@@ -40,6 +41,11 @@ namespace EDennis.Samples.ColorApp.Server {
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddSwaggerGen(c => {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ColorProxyApi", Version = "v1" });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,6 +76,12 @@ namespace EDennis.Samples.ColorApp.Server {
                 endpoints.MapControllers();
                 endpoints.MapFallbackToFile("index.html");
             });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Color Proxy API V1");
+            });
+
         }
     }
 }

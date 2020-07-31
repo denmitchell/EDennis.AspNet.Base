@@ -1,4 +1,4 @@
-﻿namespace EDennis.NetStandard.Base.Security {
+﻿namespace EDennis.NetStandard.Base {
     public class OidcOptions : ClientCredentialsOptions {
         public string ResponseType { get; set; }
         public string GrantType { get; set; }

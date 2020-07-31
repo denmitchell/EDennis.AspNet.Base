@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace EDennis.NetStandard.Base.Web {
+namespace EDennis.NetStandard.Base {
     public class ObjectResult<TResult> : ObjectResult {
         public TResult TypedValue { get; }
         public ObjectResult(object value) : base(value) {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace EDennis.NetStandard.Base.Security {
+namespace EDennis.NetStandard.Base {
 
     [JsonConverter(typeof(DomainApplicationJsonConverter))]
     public class DomainApplication : IDomainEntity, IHasStringProperties {

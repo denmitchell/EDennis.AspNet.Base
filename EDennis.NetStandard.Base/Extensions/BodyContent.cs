@@ -2,7 +2,7 @@
 using System.Text;
 using System.Text.Json;
 
-namespace EDennis.NetStandard.Base.Web {
+namespace EDennis.NetStandard.Base {
     
     /// <summary>
     /// This class provides some convenience methods

@@ -7,7 +7,6 @@ using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using DevExtreme.AspNet.Data;
-using EDennis.NetStandard.Base.EntityFramework;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace EDennis.NetStandard.Base.Middleware {
+namespace EDennis.NetStandard.Base {
     public class CachedTransactionOptions {
         public Dictionary<string, string[]> EnabledForClaims { get; set; }
 

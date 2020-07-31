@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace EDennis.NetStandard.Base.Web {
+namespace EDennis.NetStandard.Base {
     public static partial class RequestExtensions {
         public static bool ContainsPathHeaderOrQueryKey(this HttpRequest request, string key, out string value, string defaultValue = null) {
             value = defaultValue;

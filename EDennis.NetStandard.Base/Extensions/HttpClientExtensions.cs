@@ -1,7 +1,6 @@
 ﻿using Flurl;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
 using System;
@@ -16,7 +15,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace EDennis.NetStandard.Base.Web {
+namespace EDennis.NetStandard.Base {
 
     public static partial class HttpClientExtensions {
 

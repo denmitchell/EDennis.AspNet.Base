@@ -1,5 +1,4 @@
-﻿using EDennis.AspNet.Base.Security.Extensions;
-using EDennis.NetStandard.Base.Security;
+﻿using EDennis.NetStandard.Base;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +8,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using M = IdentityServer4.Models;
 
-namespace EDennis.AspNet.Base.Security {
+namespace EDennis.AspNet.Base {
 
     public abstract class IdpIdentityResourceController<TContext> : IdpBaseController
         where TContext : ConfigurationDbContext {

@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace EDennis.NetStandard.Base.Security {
+namespace EDennis.NetStandard.Base {
     /// <summary>
     /// Explicitly define JsonConverter to prevent circular referencing during Serialization
     /// </summary>

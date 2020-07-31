@@ -1,5 +1,5 @@
 ﻿using System;
-namespace EDennis.NetStandard.Base.Security {
+namespace EDennis.NetStandard.Base {
     public class ExpandedDomainRole {
         public Guid Id { get; set; }
         public string Name { get; set; }
