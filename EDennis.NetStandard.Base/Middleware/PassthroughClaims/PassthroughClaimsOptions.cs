@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Dynamic;
 
-namespace EDennis.NetStandard.Base.Web {
+namespace EDennis.NetStandard.Base.Middleware {
     public class PassthroughClaimsOptions {
         public bool Enabled { get; set; }
 

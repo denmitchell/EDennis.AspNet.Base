@@ -1,15 +1,12 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
 using System.Security.Claims;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Diagnostics;
 using Microsoft.Extensions.Primitives;
 using EDennis.NetStandard.Base.Extensions;
 
-namespace EDennis.NetStandard.Base.Web {
+namespace EDennis.NetStandard.Base.Middleware {
 
     /// <summary>
     /// This middleware will transform headers into user claims per configuration settings.

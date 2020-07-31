@@ -6,16 +6,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IO;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace EDennis.NetStandard.Base {
+namespace EDennis.NetStandard.Base.Middleware {
     public class OidcLoggingMiddleware {
 
         private readonly RequestDelegate _next;
