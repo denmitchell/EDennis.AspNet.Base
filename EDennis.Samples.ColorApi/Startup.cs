@@ -31,6 +31,8 @@ namespace EDennis.Samples.ColorApi {
 
             services.AddMockUser(Configuration);
             services.AddCachedTransaction(Configuration);
+            services.AddHttpLogging(Configuration);
+
 
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ColorApi", Version = "v1" });
@@ -48,10 +50,10 @@ namespace EDennis.Samples.ColorApi {
 
             app.UseRouting();
 
-            app.UseMockUser();
+            app.UseMockUserFor("/Rgb");
             app.UseAuthorization();
-            app.UseCachedTransaction<ColorContext>();
-            
+            app.UseCachedTransactionFor<ColorContext>("/Rgb");
+            app.UseHttpLoggingFor("/Rgb");            
 
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();
