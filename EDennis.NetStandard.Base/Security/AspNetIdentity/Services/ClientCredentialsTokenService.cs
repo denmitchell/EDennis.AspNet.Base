@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace EDennis.NetStandard.Base {
-    public class ClientCredentialsTokenService {
+    public class ClientCredentialsTokenService : ITokenService {
 
         private readonly ClientCredentialsOptions _options;
         private readonly IHttpClientFactory _httpClientFactory;
@@ -31,7 +31,7 @@ namespace EDennis.NetStandard.Base {
             client.SetBearerToken(_token);
         }
 
-        public async Task UpdateCachedTokenAsync() {
+        private async Task UpdateCachedTokenAsync() {
 
             // get metadata
             var idpClient = _httpClientFactory.CreateClient("ClientCredentialsTokenService");

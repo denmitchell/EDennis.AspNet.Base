@@ -8,6 +8,14 @@ using System.Threading.Tasks;
 
 namespace EDennis.NetStandard.Base {
 
+    /// <summary>
+    /// Base proxy ("external") controller for communicating with an
+    /// internal controller via secure HttpClient.
+    /// Note: setup the DependencyInjection to include:
+    /// <list type="bullet">
+    /// <item>AddHttpClient("{name of the controller class}", config=> { config.BaseAddress = ... ;});</item>
+    /// <item>AddSingleton<ITokenService,ClientCredentialsTokenService>(); //or use MockTokenService to bypass token generation</item>
+    /// </list>
     [Route("api/[controller]")]
     [ApiController]
     public abstract class ProxyQueryController<TEntity> : ControllerBase, IQueryController<TEntity>
@@ -16,7 +24,7 @@ namespace EDennis.NetStandard.Base {
         protected readonly HttpClient _client;
 
 
-        public ProxyQueryController(IHttpClientFactory clientFactory, ClientCredentialsTokenService tokenService) {
+        public ProxyQueryController(IHttpClientFactory clientFactory, ITokenService tokenService) {
             _client = clientFactory.CreateClient(GetType().Name);
             tokenService.AssignTokenAsync(_client).Wait();
         }

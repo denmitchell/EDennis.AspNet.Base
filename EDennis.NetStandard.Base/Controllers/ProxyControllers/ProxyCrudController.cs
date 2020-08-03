@@ -12,7 +12,7 @@ namespace EDennis.NetStandard.Base {
     /// Note: setup the DependencyInjection to include:
     /// <list type="bullet">
     /// <item>AddHttpClient("{name of the controller class}", config=> { config.BaseAddress = ... ;});</item>
-    /// <item>AddSingleton(new ClientCredentialsTokenService());</item>
+    /// <item>AddSingleton<ITokenService,ClientCredentialsTokenService>(); //or use MockTokenService to bypass token generation</item>
     /// </list>
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
@@ -20,7 +20,7 @@ namespace EDennis.NetStandard.Base {
         where TEntity : class, ICrudEntity {
 
 
-        public ProxyCrudController(IHttpClientFactory clientFactory, ClientCredentialsTokenService tokenService) :
+        public ProxyCrudController(IHttpClientFactory clientFactory, ITokenService tokenService) :
             base(clientFactory,tokenService) { }
 
 
