@@ -36,7 +36,7 @@ namespace EDennis.NetStandard.Base {
             var req = context.Request;
             var enabled = _settings.Enabled;
 
-            if (!enabled || req.Path.StartsWithSegments(new PathString("/swagger"))) {
+            if (!enabled) {
                 await _next(context);
             } else {
 

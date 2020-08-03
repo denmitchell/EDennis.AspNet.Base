@@ -12,15 +12,11 @@ using System.Threading.Tasks;
 namespace EDennis.AspNet.Base {
 
     /// <summary>
-    /// Gets all roles prefixed by client_id, as well as
-    /// all associated role claims and requested user claims.
+    /// Gets all roles associated with the ClientId, as well as 
+    /// any requested UserClaims.
     /// 
-    /// NOTE: this implementation depends upon maintenance of a 
-    /// UserClientClaims table, which associates a User.ID (GUID) and
-    /// ClientId (varchar) with a set of claims (JSON column).
-    /// After updating ApiResources, ApiClaims, ClientScopes,
-    /// AspNetUser, AspNetUserRoles, AspNetUserClaims, or AspNetRoles
-    /// execute stored procedure di.UpdateUserClientClaims
+    /// NOTE: this implementation depends upon the existence of a 
+    /// UserClientApplicationRoles view (materialized is better)
     /// 
     /// NOTE: when configuring an ApiResource, add UserClaims -- all
     /// user claims that should be added to access token

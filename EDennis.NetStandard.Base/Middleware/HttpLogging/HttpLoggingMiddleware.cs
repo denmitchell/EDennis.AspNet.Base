@@ -90,8 +90,10 @@ namespace EDennis.NetStandard.Base {
             _logger.LogInformation($"*****PATH: {context.Request.Path.Value}");
 
             if (!_options.Enabled
-                || (!MatchesQuery(context) && !MatchesClaim(context)))
+                || (!MatchesQuery(context) && !MatchesClaim(context))) {
                 await next.Invoke(context);
+                return;
+            }
 
 
             // create a new log object
@@ -120,14 +122,14 @@ namespace EDennis.NetStandard.Base {
             log.RequestedOn = DateTime.Now;
 
             if (_options.MaxResponseBodyLength == 0)
-                await next.Invoke(context);
+                await next(context);
             else {
                 var originalBodyStream = context.Response.Body;
 
                 using var responseBody = _recyclableMemoryStreamManager.GetStream();
                 context.Response.Body = responseBody;
 
-                await next.Invoke(context);
+                await next(context);
 
                 context.Response.Body.Seek(0, SeekOrigin.Begin);
                 log.Response = await new StreamReader(context.Response.Body).ReadToEndAsync();

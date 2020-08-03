@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Concurrent;
 
@@ -22,8 +23,9 @@ namespace EDennis.NetStandard.Base {
                 throw new ArgumentNullException(nameof(requirementScope));
             }
 
+            var options = Options.Create(defaultPoliciesOptions);
 
-            builder.Requirements.Add(new ClaimPatternAuthorizationHandler(requirementScope, defaultPoliciesOptions, policyPatternCache, logger));
+            builder.Requirements.Add(new ClaimPatternAuthorizationHandler(requirementScope, policyPatternCache, logger, options));
             return builder;
         }
 

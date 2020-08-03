@@ -48,8 +48,7 @@ namespace EDennis.NetStandard.Base {
 
         public async Task InvokeAsync(HttpContext context) {
 
-            if (context.Request.Path.Value.Contains("swagger")
-                || !_options.Enabled )
+            if (!_options.Enabled)
                 await _next(context);
             else {
                 var client = _factory.CreateClient("MockOidcClient");

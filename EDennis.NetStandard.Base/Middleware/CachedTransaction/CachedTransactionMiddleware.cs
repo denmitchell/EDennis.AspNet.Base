@@ -29,38 +29,36 @@ namespace EDennis.NetStandard.Base {
 
         public async Task InvokeAsync(HttpContext context) {
 
-            if (context.Request.Path.Value.Contains("swagger"))
+            var claims = context.User?.Claims;
+
+            if (claims != null && _enabledForClaims.Any(e => claims.Any(c => $"{c.Type}|{c.Value}" == e))) {
+                var cookieValue = GetOrAddCookie(context, out bool cookieAdded);
+
+                var dbContextProvider = context.RequestServices.GetRequiredService<DbContextProvider<TContext>>();
+                _cache.ReplaceDbContext(Guid.Parse(cookieValue), dbContextProvider);
+
+                if (cookieAdded)
+                    context.Response.OnStarting(state => {
+                        var httpContext = (HttpContext)state;
+                        httpContext.Response.Cookies.Append(CachedTransactionOptions.COOKIE_KEY, cookieValue);
+                        return Task.CompletedTask;
+                    }, context);
+
+                if (context.Request.Path.Value.EndsWith(CachedTransactionOptions.ROLLBACK_PATH)) {
+                    await _cache.RollbackAsync(Guid.Parse(cookieValue));
+                    return;
+                } else if (context.Request.Path.Value.EndsWith(CachedTransactionOptions.COMMIT_PATH)) { 
+                    await _cache.CommitAsync(Guid.Parse(cookieValue));
+                    return;
+                }
+
                 await _next(context);
-            else {
-                var claims = context.User?.Claims;
-                if (claims != null && _enabledForClaims.Any(e => claims.Any(c => $"{c.Type}|{c.Value}" == e))) {
-                    var cookieValue = GetOrAddCookie(context, out bool cookieAdded);
 
-                    var dbContextProvider = context.RequestServices.GetRequiredService<DbContextProvider<TContext>>();
-                    _cache.ReplaceDbContext(Guid.Parse(cookieValue), dbContextProvider);
-
-                    if (cookieAdded)
-                        context.Response.OnStarting(state => {
-                            var httpContext = (HttpContext)state;
-                            httpContext.Response.Cookies.Append(CachedTransactionOptions.COOKIE_KEY, cookieValue);
-                            return Task.CompletedTask;
-                        }, context);
-
-                    if (context.Request.Path.Value.EndsWith(CachedTransactionOptions.ROLLBACK_PATH)) {
-                        await _cache.RollbackAsync(Guid.Parse(cookieValue));
-                        return;
-                    } else if (context.Request.Path.Value.EndsWith(CachedTransactionOptions.COMMIT_PATH)) { 
-                        await _cache.CommitAsync(Guid.Parse(cookieValue));
-                        return;
-                    }
-
-                    await _next(context);
-
-                } else
-                    await _next(context); 
-            }
+            } else
+                await _next(context); 
 
         }
+
 
         private string GetOrAddCookie(HttpContext context, out bool added) {
             if (context.Request.Cookies.TryGetValue(CachedTransactionOptions.COOKIE_KEY, out string cookieValue)) {

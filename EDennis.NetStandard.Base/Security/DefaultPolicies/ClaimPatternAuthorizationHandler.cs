@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using IdentityModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -9,13 +11,21 @@ using System.Threading.Tasks;
 
 
 namespace EDennis.NetStandard.Base {
+
     /// <summary>
     /// Implements an <see cref="IAuthorizationHandler"/> and <see cref="IAuthorizationRequirement"/>
-    /// which succeeds if no Allowed claim type values are present and if the claim type itself 
-    /// is not Allowed.
+    /// to evaluate claim patterns (scopes with wildcards) against policy requirements.
+    /// 
+    /// NOTE: Breaking change: Remove support for "user_scope" -- now just use
+    /// "scope".  To obtain scope claims from a user, assign the user to a role 
+    /// and specify role-associated claims in the target application, which are
+    /// loaded into the DomainRoleClaimCache and retrieved with the
+    /// DomainRoleClaimsTransformer
     /// 
     /// NOTE: This is adapted from ... https://github.com/aspnet/Security/blob/master/src/Microsoft.AspNetCore.Authorization/Infrastructure/ClaimsAuthorizationRequirement.cs
     /// 
+    /// <see cref="DomainRoleClaimCache"/>
+    /// <see cref="DomainRoleClaimsTransformer"/>
     /// </summary>
     public class ClaimPatternAuthorizationHandler : AuthorizationHandler<ClaimPatternAuthorizationHandler>, IAuthorizationRequirement {
         /// <summary>
@@ -25,18 +35,18 @@ namespace EDennis.NetStandard.Base {
         /// <param name="AllowedValues">The optional list of claim values, which, if present, 
         /// the claim must NOT match.</param>
         public ClaimPatternAuthorizationHandler(
-                string requirementScope, DefaultPoliciesOptions defaultPoliciesOptions,
+                string requirementScope,
                 ConcurrentDictionary<string, bool> policyPatternCache,
-                ILogger logger) {
+                ILogger logger,
+                IOptions<DefaultPoliciesOptions> defaultPoliciesOptions = null) {
 
             RequirementScope = requirementScope;
             PolicyPatternCache = policyPatternCache;
 
-            if (defaultPoliciesOptions != null) { 
-                
-                IsOidc = defaultPoliciesOptions.ResponseType == "code";
-                ExclusionPrefix = defaultPoliciesOptions.ExclusionPrefix ?? ExclusionPrefix;
-                UserScopePrefix = (defaultPoliciesOptions.UserScopePrefix ?? UserScopePrefix).ToLower() ;
+            if (defaultPoliciesOptions != null) {
+                var options = defaultPoliciesOptions?.Value ?? new DefaultPoliciesOptions();
+
+                ExclusionPrefix = options.ExclusionPrefix ?? ExclusionPrefix;
                 Logger = logger;
             }
         }
@@ -47,8 +57,6 @@ namespace EDennis.NetStandard.Base {
         /// </summary>
         public string RequirementScope { get; }
 
-        public string UserScopePrefix { get; } = "user_";
-        public bool IsOidc { get; }
         public ILogger Logger { get; set; }
 
         /// <summary>
@@ -93,8 +101,7 @@ namespace EDennis.NetStandard.Base {
             bool isSuccess = false;
             List<string> scopeClaims;
 
-            //prepend user scope prefix if this is OIDC.
-            var scopeClaimType = $"{(IsOidc ? UserScopePrefix : "")}scope";
+            var scopeClaimType = JwtClaimTypes.Scope;
 
             //only process if there are any claims
             if (claimsPrincipal.Claims != null && claimsPrincipal.Claims.Count() > 0) {

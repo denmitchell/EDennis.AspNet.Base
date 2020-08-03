@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -19,10 +20,10 @@ namespace EDennis.NetStandard.Base {
 
 
         public DefaultPoliciesAuthorizationPolicyProvider(IConfiguration configuration,
-            DefaultPoliciesOptions defaultPoliciesOptions, ILogger logger) {
+            ILogger logger, IOptionsMonitor<DefaultPoliciesOptions> defaultPoliciesOptions = null) {
 
             _configuration = configuration;
-            _defaultPoliciesOptions = defaultPoliciesOptions;
+            _defaultPoliciesOptions = defaultPoliciesOptions?.CurrentValue ?? new DefaultPoliciesOptions();
             PolicyPatternCacheSet = new ConcurrentDictionary<string, ConcurrentDictionary<string,bool>>();
             _logger = logger;
         }

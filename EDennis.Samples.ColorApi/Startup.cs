@@ -25,6 +25,7 @@ namespace EDennis.Samples.ColorApi {
             services.AddScoped<DbContextProvider<ColorContext>>();
             services.AddDbContext<ColorContext>(options => {
                 options.UseSqlServer(cxnString);
+                options.EnableSensitiveDataLogging();
             });
 
             services.AddSingleton(new TransactionCache<ColorContext>());
@@ -51,6 +52,7 @@ namespace EDennis.Samples.ColorApi {
             app.UseRouting();
 
             app.UseMockUserFor("/Rgb");
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseCachedTransactionFor<ColorContext>("/Rgb");
             app.UseHttpLoggingFor("/Rgb");            
