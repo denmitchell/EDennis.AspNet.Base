@@ -30,20 +30,17 @@ namespace EDennis.NetStandard.Base {
         private readonly RequestDelegate _next;
         private readonly AutoAuthenticationOptions _options;
         private readonly OidcOptions _oidcOptions;
-        private readonly AutoLoginOptions _autoLoginOptions;
         private readonly IHttpClientFactory _factory;
 
 
         public AutoAuthenticationMiddleware(RequestDelegate next, 
             IOptionsMonitor<AutoAuthenticationOptions> options,
             IOptionsMonitor<OidcOptions> oidcOptions,
-            IOptionsMonitor<AutoLoginOptions> autoLoginOptions,
             IHttpClientFactory factory) {
             _next = next;
             _factory = factory;
             _options = options.CurrentValue;
             _oidcOptions = oidcOptions.CurrentValue;
-            _autoLoginOptions = autoLoginOptions.CurrentValue;
             if (!_oidcOptions.Authority.EndsWith("/"))
                 _oidcOptions.Authority += "/";
         }
@@ -170,8 +167,8 @@ namespace EDennis.NetStandard.Base {
             var msg = new HttpRequestMessage() {
                 Content = new FormUrlEncodedContent(
                     new KeyValuePair<string, string>[] {
-                        new KeyValuePair<string, string>("Input.Email",_autoLoginOptions.AutoLoginUsername),
-                        new KeyValuePair<string, string>("Input.Password",_autoLoginOptions.AutoLoginPassword),
+                        new KeyValuePair<string, string>("Input.Email",_options.AutoLoginUsername),
+                        new KeyValuePair<string, string>("Input.Password",_options.AutoLoginPassword),
                         new KeyValuePair<string, string>("__RequestVerificationToken",requestVerificationToken),
                         new KeyValuePair<string, string>("Input.RememberMe","false")
                     }
@@ -320,6 +317,28 @@ namespace EDennis.NetStandard.Base {
             app.UseMiddleware<AutoAuthenticationMiddleware>();
             return app;
         }
+
+        public static IApplicationBuilder UseAutoAuthenticationFor(this IApplicationBuilder app,
+            params string[] startsWithSegments) {
+            app.UseWhen(context =>
+            {
+                foreach (var partialPath in startsWithSegments)
+                    if (context.Request.Path.StartsWithSegments(partialPath))
+                        return true;
+                return false;
+            },
+                app => app.UseAutoAuthentication()
+            );
+            return app;
+        }
+
+        public static IApplicationBuilder UseAutoAuthenticationWhen(this IApplicationBuilder app,
+            Func<HttpContext, bool> predicate) {
+            app.UseWhen(predicate, app => app.UseAutoAuthentication());
+            return app;
+        }
+
+
     }
 
 

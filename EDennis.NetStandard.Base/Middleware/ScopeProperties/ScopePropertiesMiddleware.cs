@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
+using System;
 using System.Threading.Tasks;
 
 namespace EDennis.NetStandard.Base {
@@ -31,6 +34,36 @@ namespace EDennis.NetStandard.Base {
 
         }
 
+    }
+
+    public static class IApplicationBuilderExtensions_ScopePropertiesMiddleware {
+        public static IApplicationBuilder UseScopeProperties(this IApplicationBuilder app) {
+            app.UseMiddleware<ScopePropertiesMiddleware>();
+            return app;
+        }
+
+
+        public static IApplicationBuilder UseScopePropertiesFor(this IApplicationBuilder app,
+            params string[] startsWithSegments) {
+            app.UseWhen(context =>
+            {
+                foreach (var partialPath in startsWithSegments)
+                    if (context.Request.Path.StartsWithSegments(partialPath))
+                        return true;
+                return false;
+            },
+                app => app.UseScopeProperties()
+            );
+            return app;
+        }
+
+        public static IApplicationBuilder UseScopePropertiesWhen(this IApplicationBuilder app,
+            Func<HttpContext, bool> predicate) {
+            app.UseWhen(predicate, app => app.UseScopeProperties());
+            return app;
+        }
+
 
     }
+
 }

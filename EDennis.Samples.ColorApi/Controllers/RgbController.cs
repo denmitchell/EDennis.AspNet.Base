@@ -1,5 +1,4 @@
 ﻿using EDennis.NetStandard.Base;
-using EDennis.NetStandard.Base.EntityFramework;
 using EDennis.Samples.ColorApp.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

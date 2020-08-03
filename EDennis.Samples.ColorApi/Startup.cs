@@ -50,7 +50,7 @@ namespace EDennis.Samples.ColorApi {
 
             app.UseMockUser();
             app.UseAuthorization();
-            app.UseTransactionScope<ColorContext>();
+            app.UseCachedTransaction<ColorContext>();
             
 
             app.UseEndpoints(endpoints => {

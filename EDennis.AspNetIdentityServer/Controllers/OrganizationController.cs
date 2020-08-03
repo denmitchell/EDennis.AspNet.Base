@@ -1,7 +1,7 @@
-﻿using EDennis.NetStandard.Base.Security;
+﻿using EDennis.NetStandard.Base;
 using Microsoft.AspNetCore.Authorization;
 
-namespace EDennis.AspNetIdentityServer.Controllers {
+namespace EDennis.AspNetIdentityServer {
 
     [Authorize(Policy = "AdministerIDP")]
     public class OrganizationController : IdpOrganizationController {

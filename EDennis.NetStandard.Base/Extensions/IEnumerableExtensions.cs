@@ -85,6 +85,32 @@ namespace EDennis.NetStandard.Base {
 		}
 
 
+		/// <summary>
+		/// Packs an IEnumerable<KeyValuePair<string,string>> into a Dictionary
+		/// where 
+		/// <list type="bullet">
+		/// <item>the key is the first tuple element</item>
+		/// <item>the value is a list of the second tuple element</item>
+		/// </list>
+		/// </summary>
+		/// <typeparam name="T">The underlying type having one property as a key and the other as a value</typeparam>
+		/// <param name="kvs">The collection to pack into a string</param>
+		/// <param name="tupleFunc">A function that resolves a single object into a key-value tuple</param>
+		/// <code>
+		/// var claimString = claims.ToDictionary((Claim c) => (c.Type,c.Value));
+		/// </code>
+		/// <returns>Dictionary representation of key value pairs</returns>
+		public static Dictionary<string, List<string>> ToDictionary<T>(this IEnumerable<T> kvs, Func<T, ValueTuple<string, string>> tupleFunc) {
+			Dictionary<string, List<string>> dict = new Dictionary<string, List<string>>();
+			foreach (var kv in kvs) {
+				var (k, v) = tupleFunc(kv);
+				if (!dict.ContainsKey(k))
+					dict.Add(k, new List<string>());
+				dict[k].Add(v);
+			}
+			return dict;
+		}
+
 
 
 		public static ICustomQueryParameter ToStringTableTypeParameter(this IEnumerable<string> values) {

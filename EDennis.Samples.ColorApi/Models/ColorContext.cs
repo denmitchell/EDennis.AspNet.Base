@@ -1,5 +1,4 @@
-﻿using EDennis.NetStandard.Base.EntityFramework;
-using EDennis.NetStandard.Base;
+﻿using EDennis.NetStandard.Base;
 using Microsoft.EntityFrameworkCore;
 using EDennis.Samples.ColorApp.Shared;
 

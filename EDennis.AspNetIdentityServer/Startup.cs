@@ -1,7 +1,5 @@
-using EDennis.AspNet.Base.Security;
-using EDennis.AspNetIdentityServer.Models;
-using EDennis.NetStandard.Base.Middleware;
-using EDennis.NetStandard.Base.Security;
+using EDennis.AspNet.Base;
+using EDennis.NetStandard.Base;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,8 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System.Reflection;
 
 namespace EDennis.AspNetIdentityServer {
@@ -82,7 +78,7 @@ namespace EDennis.AspNetIdentityServer {
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger) {
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
 
             app.UseOidcLogging();
 

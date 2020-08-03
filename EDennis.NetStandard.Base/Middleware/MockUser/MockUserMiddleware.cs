@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -46,9 +47,30 @@ namespace EDennis.NetStandard.Base {
             app.UseMiddleware<MockUserMiddleware>();
             return app;
         }
+
+
+        public static IApplicationBuilder UseMockUserFor(this IApplicationBuilder app,
+            params string[] startsWithSegments) {
+            app.UseWhen(context =>
+            {
+                foreach (var partialPath in startsWithSegments)
+                    if (context.Request.Path.StartsWithSegments(partialPath))
+                        return true;
+                return false;
+            },
+                app => app.UseMockUser()
+            );
+            return app;
+        }
+
+        public static IApplicationBuilder UseMockUserWhen(this IApplicationBuilder app,
+            Func<HttpContext, bool> predicate) {
+            app.UseWhen(predicate, app => app.UseMockUser());
+            return app;
+        }
+
+
     }
-
-
 
 }
 

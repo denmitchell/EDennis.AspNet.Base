@@ -1,6 +1,5 @@
-using System;
 
-namespace EDennis.AspNetIdentityServer.Models {
+namespace EDennis.AspNetIdentityServer {
     public class ErrorViewModel {
         public string RequestId { get; set; }
 

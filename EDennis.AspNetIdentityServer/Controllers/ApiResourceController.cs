@@ -1,8 +1,8 @@
-﻿using EDennis.AspNet.Base.Security;
+﻿using EDennis.AspNet.Base;
 using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.AspNetCore.Authorization;
 
-namespace EDennis.AspNetIdentityServer.Controllers {
+namespace EDennis.AspNetIdentityServer {
 
     [Authorize(Policy = "AdministerIDP")]
     public class ApiResourceController : IdpApiResourceController<ConfigurationDbContext> {

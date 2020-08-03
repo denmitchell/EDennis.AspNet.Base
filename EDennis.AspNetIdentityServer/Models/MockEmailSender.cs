@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace EDennis.AspNetIdentityServer.Models {
+namespace EDennis.AspNetIdentityServer {
     public class MockEmailSender : IEmailSender {
 
         private readonly ILogger<MockEmailSender> _logger;

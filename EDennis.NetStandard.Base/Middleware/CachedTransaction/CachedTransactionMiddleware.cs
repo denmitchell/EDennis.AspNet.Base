@@ -89,12 +89,36 @@ namespace EDennis.NetStandard.Base {
         }
     }
 
-    public static class IApplicationBuilderExtensions_TransactionScopeMiddleware {
-        public static IApplicationBuilder UseTransactionScope<TContext>(this IApplicationBuilder app)
+    public static class IApplicationBuilderExtensions_CachedTransactionMiddleware {
+        public static IApplicationBuilder UseCachedTransaction<TContext>(this IApplicationBuilder app)
             where TContext: DbContext {
             app.UseMiddleware<CachedTransactionMiddleware<TContext>>();
             return app;
         }
+
+        public static IApplicationBuilder UseCachedTransactionFor<TContext>(this IApplicationBuilder app,
+            params string[] startsWithSegments)
+            where TContext : DbContext {
+            app.UseWhen(context =>
+            {
+                foreach (var partialPath in startsWithSegments)
+                    if (context.Request.Path.StartsWithSegments(partialPath))
+                        return true;
+                return false;
+            },
+                app => app.UseCachedTransaction<TContext>()
+            );
+            return app;
+        }
+
+        public static IApplicationBuilder UseCachedTransactionWhen<TContext>(this IApplicationBuilder app,
+            Func<HttpContext, bool> predicate)
+            where TContext : DbContext {
+                app.UseWhen(predicate, app => app.UseCachedTransaction<TContext>());
+            return app;
+        }
+
+
     }
 
 

@@ -4,6 +4,9 @@ using Microsoft.Extensions.Options;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Primitives;
+using System;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 
 namespace EDennis.NetStandard.Base {
 
@@ -50,11 +53,41 @@ namespace EDennis.NetStandard.Base {
     }
 
 
-    public static partial class IApplicationBuilderExtensions_Middleware {
+    public static class IServiceCollectionExtensions_PassthroughClaimsMiddleware {
+        public static IServiceCollection AddPassthroughClaims(this IServiceCollection services, IConfiguration config) {
+            services.Configure<MockUserOptions>(config.GetSection("Security:PassthroughClaims"));
+            return services;
+        }
+    }
+
+
+    public static partial class IApplicationBuilderExtensions_PassthroughClaimsMiddleware {
         public static IApplicationBuilder UsePassthroughClaims(this IApplicationBuilder app) {
             app.UseMiddleware<PassthroughClaimsMiddleware>();
             return app;
         }
+
+
+        public static IApplicationBuilder UsePassthroughClaimsFor(this IApplicationBuilder app,
+            params string[] startsWithSegments) {
+            app.UseWhen(context =>
+            {
+                foreach (var partialPath in startsWithSegments)
+                    if (context.Request.Path.StartsWithSegments(partialPath))
+                        return true;
+                return false;
+            },
+                app => app.UsePassthroughClaims()
+            );
+            return app;
+        }
+
+        public static IApplicationBuilder UsePassthroughClaimsWhen(this IApplicationBuilder app,
+            Func<HttpContext, bool> predicate) {
+            app.UseWhen(predicate, app => app.UsePassthroughClaims());
+            return app;
+        }
+
     }
 
 }

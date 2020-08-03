@@ -1,10 +1,9 @@
-﻿using EDennis.NetStandard.Base;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace EDennis.AspNetBase.Security {
+namespace EDennis.NetStandard.Base {
 
 
     public abstract class IdpUserController : IdpBaseController {

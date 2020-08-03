@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IO;
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -189,6 +190,27 @@ namespace EDennis.NetStandard.Base {
             app.UseMiddleware<OidcLoggingMiddleware>();
             return app;
         }
+
+        public static IApplicationBuilder UseOidcLoggingFor(this IApplicationBuilder app,
+            params string[] startsWithSegments) {
+            app.UseWhen(context =>
+            {
+                foreach (var partialPath in startsWithSegments)
+                    if (context.Request.Path.StartsWithSegments(partialPath))
+                        return true;
+                return false;
+            },
+                app => app.UseOidcLogging()
+            );
+            return app;
+        }
+
+        public static IApplicationBuilder UseOidcLoggingWhen(this IApplicationBuilder app,
+            Func<HttpContext, bool> predicate) {
+            app.UseWhen(predicate, app => app.UseOidcLogging());
+            return app;
+        }
+
     }
 
 }
