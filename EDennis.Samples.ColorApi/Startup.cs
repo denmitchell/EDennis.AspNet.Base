@@ -30,7 +30,7 @@ namespace EDennis.Samples.ColorApi {
             services.AddSingleton(new TransactionCache<ColorContext>());
 
             services.AddMockUser(Configuration);
-            services.AddTransactionScope(Configuration);
+            services.AddCachedTransaction(Configuration);
 
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ColorApi", Version = "v1" });

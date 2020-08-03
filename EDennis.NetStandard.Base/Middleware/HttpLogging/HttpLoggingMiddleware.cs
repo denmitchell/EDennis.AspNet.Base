@@ -1,10 +1,11 @@
-﻿using EDennis.NetStandard.Base;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IO;
 using System;
@@ -22,17 +23,19 @@ namespace EDennis.NetStandard.Base {
         private readonly ILogger<HttpLoggingMiddleware> _logger;
         private readonly RecyclableMemoryStreamManager _recyclableMemoryStreamManager;
         private readonly string _configFileDir;
-        private readonly string _configFileName = "httpLogging.json";
-        private HttpLoggingOptions _options;
+        private readonly string _configFileName = "httpLogging.json"; //default
+        private HttpLoggingConfiguration _options;
 
-        public HttpLoggingMiddleware(RequestDelegate next, 
-            ILogger<HttpLoggingMiddleware> logger, 
+        public HttpLoggingMiddleware(RequestDelegate next,
+            ILogger<HttpLoggingMiddleware> logger,
+            IOptionsMonitor<HttpLoggingOptions> options,
             IConfiguration config) {
             this.next = next;
             _logger = logger;
             _recyclableMemoryStreamManager = new RecyclableMemoryStreamManager();
+
             _configFileDir = config.GetValue<string>(WebHostDefaults.ContentRootKey);
-            _configFileName = config["HttpLogging:ConfigFile"] ?? _configFileName;
+            _configFileName = options.CurrentValue.ConfigFile;
 
             //initial load of configuration file
             LoadConfigurationAsync().Wait();
@@ -42,7 +45,7 @@ namespace EDennis.NetStandard.Base {
         }
 
         public async Task WatchConfigFileAsync() {
-            await Task.Run(()=>{
+            await Task.Run(() => {
                 using var watcher = new FileSystemWatcher {
                     Path = _configFileDir,
                     NotifyFilter = NotifyFilters.LastWrite,
@@ -71,7 +74,7 @@ namespace EDennis.NetStandard.Base {
                     var config = new ConfigurationBuilder()
                         .AddJsonFile($"{_configFileDir}/{_configFileName}")
                         .Build();
-                    _options = new HttpLoggingOptions();
+                    _options = new HttpLoggingConfiguration();
                     config.Bind(_options);
                 } catch (Exception ex) {
                     _logger.LogError($"Could not load HttpLogging configuration file at {_configFileDir}/{_configFileName}: " + ex.Message);
@@ -86,8 +89,7 @@ namespace EDennis.NetStandard.Base {
 
             _logger.LogInformation($"*****PATH: {context.Request.Path.Value}");
 
-            if (context.Request.Path.Value.Contains("swagger")
-                || !_options.Enabled 
+            if (!_options.Enabled
                 || (!MatchesQuery(context) && !MatchesClaim(context)))
                 await next.Invoke(context);
 
@@ -98,21 +100,21 @@ namespace EDennis.NetStandard.Base {
                 Method = context.Request.Method,
                 QueryString = context.Request.QueryString.ToString(),
                 DisplayUrl = context.Request.GetDisplayUrl(),
-                Headers = _options.IncludeHeaders ? context.Request.Headers.ToDictionary((KeyValuePair<string, StringValues> h)=> (h.Key, h.Value.ToString())) : null,
+                Headers = _options.IncludeHeaders ? context.Request.Headers.ToDictionary((KeyValuePair<string, StringValues> h) => (h.Key, h.Value.ToString())) : null,
                 Claims = _options.IncludeClaims ? context.Request.HttpContext.User?.Claims?.ToDictionary((Claim c) => (c.Type, c.Value)) : null
             };
 
-            if (_options.MaxRequestBodyLength > 0                
+            if (_options.MaxRequestBodyLength > 0
                 && context.Request.ContentLength != default
                 && context.Request.ContentLength > 0
-                && (context.Request.Method == "POST" || context.Request.Method == "PUT" 
-                || context.Request.Method == "PATCH") 
-                ) { 
+                && (context.Request.Method == "POST" || context.Request.Method == "PUT"
+                || context.Request.Method == "PATCH")
+                ) {
                 context.Request.EnableBuffering();
                 var body = await new StreamReader(context.Request.Body)
                                                     .ReadToEndAsync();
                 context.Request.Body.Position = 0;
-                log.Payload = body.SafeSubstring(0,_options.MaxRequestBodyLength);
+                log.Payload = body.SafeSubstring(0, _options.MaxRequestBodyLength);
             }
 
             log.RequestedOn = DateTime.Now;
@@ -184,6 +186,13 @@ namespace EDennis.NetStandard.Base {
 
     }
 
+    public static class IServiceCollectionExtensions_HttpLoggingMiddleware {
+        public static IServiceCollection AddHttpLogging(this IServiceCollection services, IConfiguration config) {
+            services.Configure<HttpLoggingOptions>(config.GetSection("Logging:HttpLogging"));
+            return services;
+        }
+    }
+
     public static class IApplicationBuilderExtensions {
         public static IApplicationBuilder UseHttpLogging(this IApplicationBuilder app) {
             app.UseMiddleware<HttpLoggingMiddleware>();
@@ -193,24 +202,25 @@ namespace EDennis.NetStandard.Base {
         public static IApplicationBuilder UseHttpLoggingFor(this IApplicationBuilder app,
             params string[] startsWithSegments) {
             app.UseWhen(context =>
-                {
-                    foreach (var partialPath in startsWithSegments)
-                        if (context.Request.Path.StartsWithSegments(partialPath))
-                            return true;
-                    return false;
-                }, 
+            {
+                foreach (var partialPath in startsWithSegments)
+                    if (context.Request.Path.StartsWithSegments(partialPath))
+                        return true;
+                return false;
+            },
                 app => app.UseHttpLogging()
             );
             return app;
         }
 
         public static IApplicationBuilder UseHttpLoggingWhen(this IApplicationBuilder app,
-            Func<HttpContext,bool> predicate) {
-                app.UseWhen(predicate, app => app.UseHttpLogging());
+            Func<HttpContext, bool> predicate) {
+            app.UseWhen(predicate, app => app.UseHttpLogging());
             return app;
         }
 
 
     }
+
 
 }

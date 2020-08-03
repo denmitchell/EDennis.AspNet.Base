@@ -15,7 +15,7 @@ namespace EDennis.NetStandard.Base {
 
         private readonly RequestDelegate _next;
         private readonly TransactionCache<TContext> _cache;
-        private IOptionsMonitor<CachedTransactionOptions> _options;
+        private readonly IOptionsMonitor<CachedTransactionOptions> _options;
         private string[] _enabledForClaims;
 
         public CachedTransactionMiddleware(RequestDelegate next, TransactionCache<TContext> cache,
@@ -83,7 +83,7 @@ namespace EDennis.NetStandard.Base {
 
 
     public static class IServiceCollectionExtensions_TransactionScopeMiddleware {
-        public static IServiceCollection AddTransactionScope(this IServiceCollection services, IConfiguration config) {
+        public static IServiceCollection AddCachedTransaction(this IServiceCollection services, IConfiguration config) {
             services.Configure<CachedTransactionOptions>(config.GetSection("CachedTransaction"));
             return services;
         }
