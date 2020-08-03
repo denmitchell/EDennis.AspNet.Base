@@ -87,8 +87,6 @@ namespace EDennis.NetStandard.Base {
 
         public async Task InvokeAsync(HttpContext context) {
 
-            _logger.LogInformation($"*****PATH: {context.Request.Path.Value}");
-
             if (!_options.Enabled
                 || (!MatchesQuery(context) && !MatchesClaim(context))) {
                 await next.Invoke(context);
