@@ -36,25 +36,25 @@ namespace EDennis.NetStandard.Base {
 
         [HttpGet("devextreme")]
         public IActionResult GetWithDevExtreme([FromQuery] string select, [FromQuery] string sort, [FromQuery] string filter, [FromQuery] int skip, [FromQuery] int take, [FromQuery] string totalSummary, [FromQuery] string group, [FromQuery] string groupSummary) {
-            return _client.Forward<DeserializableLoadResult<TEntity>>(HttpContext.Request, $"{ControllerName}/devextreme");
+            return _client.Forward<DeserializableLoadResult<TEntity>>(HttpContext.Request, $"{ControllerPath}/devextreme");
         }
 
 
         [HttpGet("devextreme/async")]
         public async Task<IActionResult> GetWithDevExtremeAsync([FromQuery] string select, [FromQuery] string sort, [FromQuery] string filter, [FromQuery] int skip, [FromQuery] int take, [FromQuery] string totalSummary, [FromQuery] string group, [FromQuery] string groupSummary) {
-            return await _client.ForwardAsync<DeserializableLoadResult<TEntity>>(HttpContext.Request, $"{ControllerName}/devextreme/async");
+            return await _client.ForwardAsync<DeserializableLoadResult<TEntity>>(HttpContext.Request, $"{ControllerPath}/devextreme/async");
         }
 
 
         [HttpGet("linq")]
         public IActionResult GetWithDynamicLinq([FromQuery] string where = null, [FromQuery] string orderBy = null, [FromQuery] string select = null, [FromQuery] int? skip = null, [FromQuery] int? take = null, [FromQuery] int? totalRecords = null) {
-            return _client.Forward<TEntity>(HttpContext.Request, $"{ControllerName}/linq");
+            return _client.Forward<TEntity>(HttpContext.Request, $"{ControllerPath}/linq");
         }
 
 
         [HttpGet("linq/async")]
         public async Task<IActionResult> GetWithDynamicLinqAsync([FromQuery] string where = null, [FromQuery] string orderBy = null, [FromQuery] string select = null, [FromQuery] int? skip = null, [FromQuery] int? take = null, [FromQuery] int? totalRecords = null) {
-            return await _client.ForwardAsync<TEntity>(HttpContext.Request, $"{ControllerName}/linq/async");
+            return await _client.ForwardAsync<TEntity>(HttpContext.Request, $"{ControllerPath}/linq/async");
         }
 
         public IEnumerable<TEntity> GetWithOData([FromQuery] string select, [FromQuery] string orderBy, [FromQuery] string filter, [FromQuery] string expand, [FromQuery] int skip, [FromQuery] int top) {
