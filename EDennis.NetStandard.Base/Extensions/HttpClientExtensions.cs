@@ -368,8 +368,12 @@ namespace EDennis.NetStandard.Base {
             var currentHeaders = client.DefaultRequestHeaders.Select(x => x.Key);
             var requestHeaders = req.Headers.Where(h => !h.Key.StartsWith("Content-"));
             var headers = requestHeaders.Where(h => !currentHeaders.Contains(h.Key));
-            foreach (var header in headers)
-                msg.Headers.Add(header.Key, header.Value.AsEnumerable());
+            foreach (var header in headers) {
+                if (header.Key.StartsWith(":"))
+                    msg.Headers.Add(header.Key.Substring(1), header.Value.AsEnumerable());
+                else
+                    msg.Headers.Add(header.Key, header.Value.AsEnumerable());
+            }
             msg.Headers.Host = client.BaseAddress.Host;
             return msg;
         }

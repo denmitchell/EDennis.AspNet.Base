@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,7 +11,6 @@ namespace EDennis.NetStandard.Base {
         private AuthorizationOptions _options;
         private Task<AuthorizationPolicy> _cachedPolicyTask;
         private readonly IConfiguration _configuration;
-        private readonly DefaultPoliciesOptions _defaultPoliciesOptions;
         //outerkey is the scope policy (the default policy associated with the action method)
         //inner key is the pattern that matches either negatively or positively
         public ConcurrentDictionary<string, ConcurrentDictionary<string, bool>> PolicyPatternCacheSet { get; private set; }
@@ -20,10 +18,9 @@ namespace EDennis.NetStandard.Base {
 
 
         public DefaultPoliciesAuthorizationPolicyProvider(IConfiguration configuration,
-            ILogger logger, IOptionsMonitor<DefaultPoliciesOptions> defaultPoliciesOptions = null) {
+            ILogger logger) {
 
             _configuration = configuration;
-            _defaultPoliciesOptions = defaultPoliciesOptions?.CurrentValue ?? new DefaultPoliciesOptions();
             PolicyPatternCacheSet = new ConcurrentDictionary<string, ConcurrentDictionary<string,bool>>();
             _logger = logger;
         }
@@ -72,13 +69,13 @@ namespace EDennis.NetStandard.Base {
             //*** by AddDefaultAuthorizationPolicyConvention
             //***
             List<string> policies = new List<string>();
-            _configuration.Bind("DefaultPolicies", policies);
+            _configuration.Bind(DefaultAuthorizationPolicyConvention.DEFAULT_POLICIES_KEY, policies);
 
             if (policies.Count > 0) {
                 foreach (var policy in policies)
                     _options.AddPolicy(policy, builder => {
                         var policyPatternCache = PolicyPatternCacheSet.GetOrAdd(policy, new ConcurrentDictionary<string, bool>());
-                        builder.RequireClaimPatternMatch(policy, _defaultPoliciesOptions, policyPatternCache, _logger);
+                        builder.RequireClaimPatternMatch(policy, policyPatternCache, _logger);
                     });
             }
 

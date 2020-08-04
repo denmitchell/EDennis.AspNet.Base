@@ -61,6 +61,12 @@ namespace EDennis.NetStandard.Base {
             throw new System.NotImplementedException();
         }
 
+        protected string ControllerPath {
+            get {
+                return $"api/{ControllerName}";
+            }
+        }
+
         protected string ControllerName { 
             get {
                 return ControllerContext.ActionDescriptor.ControllerName;

@@ -35,20 +35,12 @@ namespace EDennis.NetStandard.Base {
         /// <param name="AllowedValues">The optional list of claim values, which, if present, 
         /// the claim must NOT match.</param>
         public ClaimPatternAuthorizationHandler(
-                string requirementScope,
-                ConcurrentDictionary<string, bool> policyPatternCache,
-                ILogger logger,
-                IOptions<DefaultPoliciesOptions> defaultPoliciesOptions = null) {
+                string requirementScope, ConcurrentDictionary<string, bool> policyPatternCache,
+                ILogger logger) {
 
             RequirementScope = requirementScope;
             PolicyPatternCache = policyPatternCache;
-
-            if (defaultPoliciesOptions != null) {
-                var options = defaultPoliciesOptions?.Value ?? new DefaultPoliciesOptions();
-
-                ExclusionPrefix = options.ExclusionPrefix ?? ExclusionPrefix;
-                Logger = logger;
-            }
+            Logger = logger;
         }
 
 
@@ -64,7 +56,7 @@ namespace EDennis.NetStandard.Base {
         /// NOTE: When only exclusions are present, application-level scope
         ///       is used as the base from which exclusions are applied.
         /// </summary>
-        public string ExclusionPrefix { get; } = "-";
+        public const string EXCLUSION_PREFIX = "-";
 
         //within a singleton, holds all previously matched patterns
         //that indicate success or failure against the policy
@@ -147,7 +139,7 @@ namespace EDennis.NetStandard.Base {
         /// <returns></returns>
         public bool EvaluateScopeClaim(string requirement, string scopeClaim) {
 
-            MatchContext context = scopeClaim.StartsWith(ExclusionPrefix) ? MatchContext.Exclusion : MatchContext.Inclusion;
+            MatchContext context = scopeClaim.StartsWith(EXCLUSION_PREFIX) ? MatchContext.Exclusion : MatchContext.Inclusion;
 
             //split each scope into a set of patterns
             var patterns = scopeClaim.Split(',').Select(x=>x.Trim());
@@ -199,7 +191,7 @@ namespace EDennis.NetStandard.Base {
         public void EvaluatePattern(string source, string patternPossiblyWithPrefix,
             ref MatchType[] characterMatches) {
 
-            MatchContext context = patternPossiblyWithPrefix.StartsWith(ExclusionPrefix) ? MatchContext.Exclusion : MatchContext.Inclusion;
+            MatchContext context = patternPossiblyWithPrefix.StartsWith(EXCLUSION_PREFIX) ? MatchContext.Exclusion : MatchContext.Inclusion;
             var pattern = patternPossiblyWithPrefix.Substring(context == MatchContext.Exclusion ? 1 : 0);
 
             MatchType[] matches = new MatchType[characterMatches.Length]; 

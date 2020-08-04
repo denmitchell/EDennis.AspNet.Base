@@ -10,15 +10,19 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace EDennis.AspNetIdentityServer {
     public class Startup {
-        public Startup(IConfiguration configuration) {
+        public Startup(IConfiguration configuration, IWebHostEnvironment env) {
             Configuration = configuration;
+            Environment = env;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
@@ -74,6 +78,20 @@ namespace EDennis.AspNetIdentityServer {
             //        options.ClientId = "<insert here>";
             //        options.ClientSecret = "<insert here>";
             //    });
+
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdministerIDP", policy =>
+                {
+                    var openEnvironments = new List<string>();
+                    Configuration.GetSection("Administration:OpenEnvironments").Bind(openEnvironments);
+                    if (openEnvironments.Contains(Environment.EnvironmentName))
+                        policy.RequireAssertion(context => true); //open
+                    else
+                        policy.RequireRole("AdministerIDP");
+                });
+            });
                 
         }
 

@@ -15,17 +15,13 @@ namespace EDennis.NetStandard.Base {
         /// <param name="allowedValues">Values the claim must process one or more of for evaluation to succeed.</param>
         /// <returns>A reference to this instance after the operation has completed.</returns>
         public static AuthorizationPolicyBuilder RequireClaimPatternMatch(
-            this AuthorizationPolicyBuilder builder,
-            string requirementScope, DefaultPoliciesOptions defaultPoliciesOptions,
-            ConcurrentDictionary<string, bool> policyPatternCache,
-            ILogger logger) {
+            this AuthorizationPolicyBuilder builder, string requirementScope,
+            ConcurrentDictionary<string, bool> policyPatternCache, ILogger logger) {
             if (requirementScope == null) {
                 throw new ArgumentNullException(nameof(requirementScope));
             }
 
-            var options = Options.Create(defaultPoliciesOptions);
-
-            builder.Requirements.Add(new ClaimPatternAuthorizationHandler(requirementScope, policyPatternCache, logger, options));
+            builder.Requirements.Add(new ClaimPatternAuthorizationHandler(requirementScope, policyPatternCache, logger));
             return builder;
         }
 

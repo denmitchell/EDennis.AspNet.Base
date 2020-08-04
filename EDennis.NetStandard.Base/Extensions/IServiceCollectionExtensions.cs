@@ -1,12 +1,36 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using EDennis.NetStandard.Base.Middleware.TokenAuthentication;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using System;
 
-namespace EDennis.NetStandard.Base.Extensions {
+namespace EDennis.NetStandard.Base {
     
     
-    public static class IServiceCollectionExtensions {
+    public static class IServiceCollectionExtensions_NetStandard {
+
+        public static IServiceCollection AddSecureTokenService<TTokenService>(this IServiceCollection services,
+            IConfiguration config, string tokenServiceConfigKey = "Security:ClientCredentials")
+            where TTokenService : class, ITokenService {
+
+            services.AddSingleton<ITokenService, TTokenService>();
+
+            if (typeof(ClientCredentialsTokenService).IsAssignableFrom(typeof(TTokenService))) {
+
+                var options = new ClientCredentialsOptions();
+                config.GetSection("tokenServiceConfigKey").Bind(options);
+
+                if (options.Authority == null)
+                    throw new Exception($"Not able to bind Configuration[\"{tokenServiceConfigKey}\"] to ClientCredentialsOptions");
+
+                services.AddAuthentication("Bearer")
+                    .AddScheme<BearerTokenOptions, BearerTokenHandler>("Bearer", options => { });
+            }
+
+            return services;
+        }
+
 
         /// <summary>
         /// Configures the TokenService and the HttpClient for all ProxyQueryControllers
@@ -16,13 +40,13 @@ namespace EDennis.NetStandard.Base.Extensions {
         /// and whose key is the name of the Proxy Controller, minus the word Controller.
         /// </summary>
         public static IServiceCollection AddProxyClients<TTokenService>(this IServiceCollection services,
-            IConfiguration config)
+            IConfiguration config, string proxyClientsConfigKey = "ProxyClients")
             where TTokenService : class, ITokenService {
 
-            services.TryAddSingleton<ITokenService, TTokenService>();
+            services.AddSingleton<ITokenService, TTokenService>();
 
             var clients = new ProxyClients();
-            config.GetSection("ProxyClients").Bind(clients);
+            config.GetSection(proxyClientsConfigKey).Bind(clients);
 
             foreach(var client in clients) {
                 var clientName = client.Key;
