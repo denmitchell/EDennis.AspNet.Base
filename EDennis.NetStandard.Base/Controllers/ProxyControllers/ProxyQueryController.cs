@@ -36,13 +36,13 @@ namespace EDennis.NetStandard.Base {
 
         [HttpGet("devextreme")]
         public IActionResult GetWithDevExtreme([FromQuery] string select, [FromQuery] string sort, [FromQuery] string filter, [FromQuery] int skip, [FromQuery] int take, [FromQuery] string totalSummary, [FromQuery] string group, [FromQuery] string groupSummary) {
-            return _client.Forward<TEntity>(HttpContext.Request, $"{ControllerName}/devextreme");
+            return _client.Forward<DeserializableLoadResult<TEntity>>(HttpContext.Request, $"{ControllerName}/devextreme");
         }
 
 
         [HttpGet("devextreme/async")]
         public async Task<IActionResult> GetWithDevExtremeAsync([FromQuery] string select, [FromQuery] string sort, [FromQuery] string filter, [FromQuery] int skip, [FromQuery] int take, [FromQuery] string totalSummary, [FromQuery] string group, [FromQuery] string groupSummary) {
-            return await _client.ForwardAsync<TEntity>(HttpContext.Request, $"{ControllerName}/devextreme/async");
+            return await _client.ForwardAsync<DeserializableLoadResult<TEntity>>(HttpContext.Request, $"{ControllerName}/devextreme/async");
         }
 
 
