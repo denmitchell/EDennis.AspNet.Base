@@ -5,8 +5,22 @@ using System;
 namespace EDennis.NetStandard.Base {
     
     
-    public static class IServiceCollectionExtensions_NetStandard {
+    public static class IServiceCollectionExtensions_Security {
 
+        /// <summary>
+        /// Sets up the SecureTokenService and BearerTokenHandler via
+        /// <code>
+        /// services.AddSecureTokenService<ClientCredentialsTokenService>(Configuration);
+        /// </code>
+        /// Note: you need to include a Security:ClientCredentials section in 
+        /// configuration.
+        /// Note: you need to call app.UseAuthentication in Configure, as well.
+        /// </summary>
+        /// <typeparam name="TTokenService"></typeparam>
+        /// <param name="services"></param>
+        /// <param name="config"></param>
+        /// <param name="tokenServiceConfigKey"></param>
+        /// <returns></returns>
         public static IServiceCollection AddSecureTokenService<TTokenService>(this IServiceCollection services,
             IConfiguration config, string tokenServiceConfigKey = "Security:ClientCredentials")
             where TTokenService : class, ITokenService {

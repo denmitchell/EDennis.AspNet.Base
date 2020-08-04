@@ -1,22 +1,20 @@
 ﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using System;
-using System.Diagnostics;
-using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
 namespace EDennis.NetStandard.Base {
-    public class TokenAuthenticationMiddleware : AuthenticationMiddleware {
-        public TokenAuthenticationMiddleware(RequestDelegate next, IAuthenticationSchemeProvider schemes) : base(next, schemes) {
-            Schemes.AddScheme(new AuthenticationScheme(BearerTokenOptions.AUTHENTICATION_SCHEME,
-                BearerTokenOptions.AUTHENTICATION_SCHEME, typeof(BearerTokenHandler)));
-        }
-    }
 
+    /// <summary>
+    /// Used in conjunction with ClientCredentialsTokenService as a replacement for
+    /// AuthenticationBuilder.AddJwtBearer() extension method, which requires
+    /// .Net Core 3.1.  (This library uses .Net Standard)
+    /// </summary>
+    /// <see cref="ClientCredentialsTokenService"/>
+    /// <see cref="IServiceCollectionExtensions_Security"/>
     public class BearerTokenHandler : AuthenticationHandler<BearerTokenOptions> {
 
 
@@ -31,27 +29,21 @@ namespace EDennis.NetStandard.Base {
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync() {
             if (!Request.Headers.TryGetValue(BearerTokenOptions.HEADER_KEY, out StringValues authHeaderValue)) {
-                Debug.WriteLine("No Authorization header");
                 Logger.LogInformation("No Authorization header");
                 return AuthenticateResult.NoResult();
             }
 
             var authHeader = authHeaderValue.ToString();
-            string token = "";
+            string token;
 
             if (!authHeader.StartsWith(BearerTokenOptions.HEADER_VALUE_PREFIX, StringComparison.OrdinalIgnoreCase)) {
-                Debug.WriteLine("No 'Bearer ' in Authorization header");
                 Logger.LogInformation("No 'Bearer ' in Authorization header");
                 return AuthenticateResult.NoResult();
             } else {
                 token = authHeader.Substring(BearerTokenOptions.HEADER_VALUE_PREFIX.Length).Trim();
             }
 
-            Logger.LogInformation($"token: {token}");
-
             var cp = await _tokenService.ValidateTokenAsync(token);
-
-            Logger.LogInformation($"Claim count: {cp.Claims?.ToArray()?.Length ?? 0}");
 
             if (cp != null) {
                 var ticket = new AuthenticationTicket(cp, new AuthenticationProperties(),
