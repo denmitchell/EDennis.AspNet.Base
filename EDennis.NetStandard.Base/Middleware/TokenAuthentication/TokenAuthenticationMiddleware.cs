@@ -1,55 +1,60 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Primitives;
 using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
-namespace EDennis.NetStandard.Base.Middleware.TokenAuthentication {
+namespace EDennis.NetStandard.Base {
     public class TokenAuthenticationMiddleware : AuthenticationMiddleware {
         public TokenAuthenticationMiddleware(RequestDelegate next, IAuthenticationSchemeProvider schemes) : base(next, schemes) {
             Schemes.AddScheme(new AuthenticationScheme(BearerTokenOptions.AUTHENTICATION_SCHEME,
                 BearerTokenOptions.AUTHENTICATION_SCHEME, typeof(BearerTokenHandler)));
-        }        
+        }
     }
 
     public class BearerTokenHandler : AuthenticationHandler<BearerTokenOptions> {
 
-        
-        private readonly ClientCredentialsTokenService _tokenService;
 
-        public BearerTokenHandler(ClientCredentialsTokenService tokenService,
-            IOptionsMonitor<BearerTokenOptions> options, ILoggerFactory logger, 
-            UrlEncoder encoder, ISystemClock clock) : base(options, logger, encoder, clock) {            
+        private readonly ITokenService _tokenService;
+
+        public BearerTokenHandler(ITokenService tokenService,
+            IOptionsMonitor<BearerTokenOptions> options, ILoggerFactory logger,
+            UrlEncoder encoder, ISystemClock clock) : base(options, logger, encoder, clock) {
             _tokenService = tokenService;
         }
 
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync() {
-            string authorization = Request.Headers[BearerTokenOptions.HEADER_KEY];
+            if (!Request.Headers.TryGetValue(BearerTokenOptions.HEADER_KEY, out StringValues authHeaderValue)) {
+                Debug.WriteLine("No Authorization header");
+                Logger.LogInformation("No Authorization header");
+                return AuthenticateResult.NoResult();
+            }
+
+            var authHeader = authHeaderValue.ToString();
             string token = "";
 
-            // If no authorization header found, nothing to process further
-            if (string.IsNullOrEmpty(authorization)) {
+            if (!authHeader.StartsWith(BearerTokenOptions.HEADER_VALUE_PREFIX, StringComparison.OrdinalIgnoreCase)) {
+                Debug.WriteLine("No 'Bearer ' in Authorization header");
+                Logger.LogInformation("No 'Bearer ' in Authorization header");
                 return AuthenticateResult.NoResult();
+            } else {
+                token = authHeader.Substring(BearerTokenOptions.HEADER_VALUE_PREFIX.Length).Trim();
             }
 
-            if (authorization.StartsWith(BearerTokenOptions.HEADER_VALUE_PREFIX, StringComparison.OrdinalIgnoreCase)) {
-                token = authorization.Substring(BearerTokenOptions.HEADER_VALUE_PREFIX.Length).Trim();
-            }
-
-            // If no token found, no further work possible
-            if (string.IsNullOrEmpty(token)) {
-                return AuthenticateResult.NoResult();
-            }
+            Logger.LogInformation($"token: {token}");
 
             var cp = await _tokenService.ValidateTokenAsync(token);
 
+            Logger.LogInformation($"Claim count: {cp.Claims?.ToArray()?.Length ?? 0}");
+
             if (cp != null) {
-                var ticket = new AuthenticationTicket(cp, new AuthenticationProperties(), 
+                var ticket = new AuthenticationTicket(cp, new AuthenticationProperties(),
                     BearerTokenOptions.AUTHENTICATION_SCHEME);
 
                 ticket.Properties.StoreTokens(new[] {

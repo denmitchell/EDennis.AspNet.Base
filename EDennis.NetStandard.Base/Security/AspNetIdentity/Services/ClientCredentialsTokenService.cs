@@ -1,17 +1,14 @@
 ﻿using IdentityModel.Client;
-using JWT.Builder;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
-using System.Text.Json;
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
-using System.Threading.Tasks;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Threading;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace EDennis.NetStandard.Base {
     public class ClientCredentialsTokenService : ITokenService {
@@ -22,7 +19,6 @@ namespace EDennis.NetStandard.Base {
         private string _token;
         private DateTime _expiresOn;
         private JsonWebKey _jwk;
-        private SigningCredentials _signingCredentials { get; set; }
         private DateTime _jwkLastRefreshed;
 
 
@@ -36,7 +32,7 @@ namespace EDennis.NetStandard.Base {
             _httpClientFactory = httpClientFactory;
             _logger = logger;
 
-            Task.Run(() => GetJsonWebKeyAsync());
+            Task.Run(() => GetJsonWebKeyAsync()).Wait();
         }
 
 
@@ -50,12 +46,6 @@ namespace EDennis.NetStandard.Base {
             } else {
                 var key = response.KeySet.Keys.FirstOrDefault(a => a.Use == "sig");
                 _jwk = new JsonWebKey(JsonSerializer.Serialize(key));
-
-                if (_jwk.Kty == "RSA")
-                    _signingCredentials = new SigningCredentials(_jwk, SecurityAlgorithms.RsaSha256Signature);
-                else if (_jwk.Kty == "oct")
-                    _signingCredentials = new SigningCredentials(_jwk, SecurityAlgorithms.HmacSha256Signature);
-
                 _jwkLastRefreshed = DateTime.Now;
             }
         }
@@ -77,15 +67,15 @@ namespace EDennis.NetStandard.Base {
             await Task.Run(() => { });
             var tokenHandler = new JwtSecurityTokenHandler();
             try {
-                var cp = tokenHandler.ValidateToken(token,
-                    new TokenValidationParameters {
-                        ValidateIssuer = true,
-                        ValidIssuer = _options.Authority,
-                        ValidateAudience = true,
-                        ValidAudience = _options.Audience,
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = _jwk,
-                    }, out SecurityToken _);
+                var parameters = new TokenValidationParameters {
+                    ValidateIssuer = true,
+                    ValidIssuer = _options.Authority,
+                    ValidateAudience = false, //false when using ApiScopes in IdentityServer
+                    //ValidAudience = _options.Audience,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = _jwk
+                };
+                var cp = tokenHandler.ValidateToken(token, parameters, out SecurityToken _);
 
                 return cp;
 
@@ -140,5 +130,6 @@ namespace EDennis.NetStandard.Base {
 
         }
     }
+
 
 }

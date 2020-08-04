@@ -1,8 +1,5 @@
-﻿using EDennis.NetStandard.Base.Middleware.TokenAuthentication;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Options;
 using System;
 
 namespace EDennis.NetStandard.Base {
@@ -19,13 +16,26 @@ namespace EDennis.NetStandard.Base {
             if (typeof(ClientCredentialsTokenService).IsAssignableFrom(typeof(TTokenService))) {
 
                 var options = new ClientCredentialsOptions();
-                config.GetSection("tokenServiceConfigKey").Bind(options);
+                var configSection = config.GetSection(tokenServiceConfigKey);
+                configSection.Bind(options);
+
+                services.Configure<ClientCredentialsOptions>(opt => {
+                    opt.Authority = options.Authority;
+                    opt.ClientId = options.ClientId;
+                    opt.ClientSecret = options.ClientSecret;
+                    opt.Scope = options.Scope;
+                });
 
                 if (options.Authority == null)
                     throw new Exception($"Not able to bind Configuration[\"{tokenServiceConfigKey}\"] to ClientCredentialsOptions");
 
+                services.AddHttpClient("ClientCredentialsTokenService", configure =>
+                {
+                    configure.BaseAddress = new Uri(options.Authority);
+                });
+
                 services.AddAuthentication("Bearer")
-                    .AddScheme<BearerTokenOptions, BearerTokenHandler>("Bearer", options => { });
+                    .AddScheme<BearerTokenOptions, BearerTokenHandler>("Bearer", opt => { });
             }
 
             return services;
