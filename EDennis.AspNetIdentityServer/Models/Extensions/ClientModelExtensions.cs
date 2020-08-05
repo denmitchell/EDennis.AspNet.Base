@@ -1,4 +1,7 @@
-﻿using IdentityModel;
+﻿using EDennis.NetStandard.Base;
+using IdentityModel;
+using IdentityServer4;
+using IdentityServer4.Models;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
@@ -8,6 +11,32 @@ using M = IdentityServer4.Models;
 
 namespace EDennis.AspNetIdentityServer {
     public static class ClientModelExtensions {
+
+        public static M.Client ToModel(this ClientCredentialsOptions options) {
+            return new M.Client {
+                 ClientId = options.ClientId,
+                 ClientSecrets = new List<M.Secret> { new M.Secret { Value =  options.ClientSecret.Sha256() } },
+                 AllowedGrantTypes = GrantTypes.ClientCredentials,
+                 AllowedScopes = options.Scopes,
+                 Enabled = true
+            };
+        }
+
+        public static M.Client ToModel(this OidcOptions options) {
+            return new M.Client {
+                ClientId = options.ClientId,
+                ClientSecrets = { new M.Secret { Value = options.ClientSecret.Sha256() } },
+                AllowedGrantTypes = GrantTypes.Code,
+                RequirePkce = true,
+                AllowedScopes = options.Scopes,
+                RedirectUris = { options.RedirectUri },
+                AllowOfflineAccess = options.AllowOfflineAccess,
+                Enabled = true,
+                ClientClaimsPrefix = ""
+            };
+        }
+
+
 
         public static void Patch(this M.Client model, JsonElement partialModel,
             ModelStateDictionary modelState,  bool mergeCollections = true) {

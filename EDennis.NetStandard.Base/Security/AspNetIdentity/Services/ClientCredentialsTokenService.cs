@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace EDennis.NetStandard.Base {
     public class ClientCredentialsTokenService : ITokenService {
 
-        private readonly ClientCredentialsOptions _options;
+        public ClientCredentialsOptions Options { get; }
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger<ClientCredentialsTokenService> _logger;
         private string _token;
@@ -28,7 +28,7 @@ namespace EDennis.NetStandard.Base {
 
         public ClientCredentialsTokenService(IOptionsMonitor<ClientCredentialsOptions> options,
             IHttpClientFactory httpClientFactory, ILogger<ClientCredentialsTokenService> logger) {
-            _options = options.CurrentValue;
+            Options = options.CurrentValue;
             _httpClientFactory = httpClientFactory;
             _logger = logger;
 
@@ -69,7 +69,7 @@ namespace EDennis.NetStandard.Base {
             try {
                 var parameters = new TokenValidationParameters {
                     ValidateIssuer = true,
-                    ValidIssuer = _options.Authority,
+                    ValidIssuer = Options.Authority,
                     ValidateAudience = false, //false when using ApiScopes in IdentityServer
                     //ValidAudience = _options.Audience,
                     ValidateIssuerSigningKey = true,
@@ -101,7 +101,7 @@ namespace EDennis.NetStandard.Base {
 
         private async Task<DiscoveryDocumentResponse> GetDiscoveryDocumentAsync(HttpClient idpClient) {
             // get metadata
-            var disco = await idpClient.GetDiscoveryDocumentAsync(_options.Authority);
+            var disco = await idpClient.GetDiscoveryDocumentAsync(Options.Authority);
             if (disco.IsError) {
                 _logger.LogError(disco.Error);
                 return null;
@@ -115,9 +115,9 @@ namespace EDennis.NetStandard.Base {
             var tokenResponse = await idpClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest {
                 Address = disco.TokenEndpoint,
 
-                ClientId = _options.ClientId,
-                ClientSecret = _options.ClientSecret,
-                Scope = string.Join(" ", _options.Scope)
+                ClientId = Options.ClientId,
+                ClientSecret = Options.ClientSecret,
+                Scope = string.Join(" ", Options.Scopes)
             });
 
             if (tokenResponse.IsError) {

@@ -75,7 +75,7 @@ namespace EDennis.NetStandard.Base {
                 foreach (var policy in policies)
                     _options.AddPolicy(policy, builder => {
                         var policyPatternCache = PolicyPatternCacheSet.GetOrAdd(policy, new ConcurrentDictionary<string, bool>());
-                        builder.RequireClaimPatternMatch2(policy, policyPatternCache, _logger);
+                        builder.RequireClaimPatternMatch(policy, policyPatternCache, _logger);
                     });
             }
 

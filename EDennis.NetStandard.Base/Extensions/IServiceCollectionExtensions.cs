@@ -37,7 +37,7 @@ namespace EDennis.NetStandard.Base {
                     opt.Authority = options.Authority;
                     opt.ClientId = options.ClientId;
                     opt.ClientSecret = options.ClientSecret;
-                    opt.Scope = options.Scope;
+                    opt.Scopes = options.Scopes;
                 });
 
                 if (options.Authority == null)

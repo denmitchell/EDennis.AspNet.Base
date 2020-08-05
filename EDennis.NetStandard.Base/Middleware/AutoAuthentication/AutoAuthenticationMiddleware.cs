@@ -78,7 +78,7 @@ namespace EDennis.NetStandard.Base {
 
                     ClientId = _oidcOptions.ClientId,
                     ClientSecret = _oidcOptions.ClientSecret,
-                    Scope = string.Join(" ", _oidcOptions.Scope)
+                    Scope = string.Join(" ", _oidcOptions.Scopes)
                 });
                 if (tokenResponse.IsError) {
                     throw new ApplicationException($"Client Credentials flowed failed: {tokenResponse.Error}: {tokenResponse.ErrorDescription}"); ;
@@ -198,7 +198,7 @@ namespace EDennis.NetStandard.Base {
                 state: state,
                 codeChallenge: codeChallenge,
                 codeChallengeMethod: _oidcOptions.CodeChallengeMethod,
-                scope: string.Join(" ", _oidcOptions.Scope)
+                scope: string.Join(" ", _oidcOptions.Scopes)
                 );
 
         }
