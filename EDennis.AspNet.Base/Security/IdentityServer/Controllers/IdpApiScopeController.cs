@@ -10,17 +10,22 @@ using M = IdentityServer4.Models;
 
 namespace EDennis.AspNet.Base {
 
-    public abstract class IdpApiResourceController<TContext> : IdpBaseController
+    /// <summary>
+    /// Controller for managing ApiScopes in IdentityServer.  
+    /// Note that when ApiScopes are used that the "aud" claim is not generated
+    /// </summary>
+    /// <typeparam name="TContext"></typeparam>
+    public abstract class IdpApiScopeController<TContext> : IdpBaseController
         where TContext : ConfigurationDbContext {
 
         private readonly TContext _dbContext;
 
-        public IdpApiResourceController(TContext dbContext) {
+        public IdpApiScopeController(TContext dbContext) {
             _dbContext = dbContext;
         }
 
         /// <summary>
-        /// Returns an instance of IdentityServer4.Models.ApiResource, whose name
+        /// Returns an instance of IdentityServer4.Models.ApiScope, whose name
         /// matches the name route parameter
         /// </summary>
         /// <param name="name"></param>
@@ -28,7 +33,7 @@ namespace EDennis.AspNet.Base {
         [HttpGet("{name}")]
         public async Task<IActionResult> GetAsync([FromRoute] string name) {
 
-            var result = await _dbContext.ApiResources.FirstOrDefaultAsync(a => a.Name == name);
+            var result = await _dbContext.ApiScopes.FirstOrDefaultAsync(a => a.Name == name);
             if (result == null)
                 return NotFound();
             else
@@ -37,14 +42,14 @@ namespace EDennis.AspNet.Base {
 
 
         /// <summary>
-        /// Deletes a ApiResource, whose Name
+        /// Deletes a ApiScope, whose Name
         /// matches the name route parameter
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
         [HttpGet("{name}")]
         public async Task<IActionResult> DeleteAsync([FromRoute] string name) {
-            var result = await _dbContext.ApiResources.FirstOrDefaultAsync(c => c.Name == name);
+            var result = await _dbContext.ApiScopes.FirstOrDefaultAsync(c => c.Name == name);
             if (result == null)
                 return NotFound();
             else {
@@ -55,12 +60,12 @@ namespace EDennis.AspNet.Base {
         }
 
         /// <summary>
-        /// Creates a new ApiResource record
+        /// Creates a new ApiScope record
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] M.ApiResource model) {
+        public async Task<IActionResult> PostAsync([FromBody] M.ApiScope model) {
 
             var client = model.ToEntity();
 
@@ -89,7 +94,7 @@ namespace EDennis.AspNet.Base {
         public async Task<IActionResult> PatchAsync([FromBody] JsonElement partialModel,
             [FromRoute] string name, [FromQuery] bool mergeCollections = true) {
 
-            var existing = _dbContext.ApiResources.FirstOrDefault(a => a.Name == name);
+            var existing = _dbContext.ApiScopes.FirstOrDefault(a => a.Name == name);
             if (existing == null)
                 return NotFound();
 

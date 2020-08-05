@@ -10,6 +10,10 @@ using M = IdentityServer4.Models;
 
 namespace EDennis.AspNet.Base {
 
+    /// <summary>
+    /// Controller for managing Clients in IdentityServer
+    /// </summary>
+    /// <typeparam name="TContext"></typeparam>
     public abstract class IdpClientController<TContext> : IdpBaseController
         where TContext : ConfigurationDbContext {
 

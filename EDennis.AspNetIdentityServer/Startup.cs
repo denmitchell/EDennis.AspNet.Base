@@ -82,14 +82,17 @@ namespace EDennis.AspNetIdentityServer {
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("AdministerIDP", policy =>
+                var settings = new AdministrationSettings();
+                Configuration.GetSection("Administration").Bind(settings);
+                if(settings.PolicyType == PolicyType.Unconfigured && settings.PolicyName == default)
+                    throw new System.Exception("IdentityServer configuration does not contain an Administration section that can bind to an AdministrationSettings object.");
+
+                options.AddPolicy(settings.PolicyName, policy =>
                 {
-                    var openEnvironments = new List<string>();
-                    Configuration.GetSection("Administration:OpenEnvironments").Bind(openEnvironments);
-                    if (openEnvironments.Contains(Environment.EnvironmentName))
+                    if (settings.PolicyType == PolicyType.Open)
                         policy.RequireAssertion(context => true); //open
-                    else
-                        policy.RequireRole("AdministerIDP");
+                    else if (settings.PolicyType == PolicyType.Role)
+                        policy.RequireRole(settings.RoleName);
                 });
             });
                 

@@ -7,8 +7,6 @@ namespace EDennis.NetStandard.Base {
 
         public string SysUser { get; set; }
 
-        public SysStatus SysStatus { get; set; }
-
 
         /// <summary>
         /// By default, use reflection to update an object.  If performance is

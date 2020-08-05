@@ -5,7 +5,7 @@ using System;
 using System.Collections.Concurrent;
 
 namespace EDennis.NetStandard.Base {
-    public static class AuthorizationPolicyBuilderExtensions {
+    public static class AuthorizationPolicyBuilderExtensions2 {
 
         /// <summary>
         /// Adds a <see cref="PositiveClaimsAuthorizationRequirement"/>
@@ -14,7 +14,7 @@ namespace EDennis.NetStandard.Base {
         /// <param name="claimType">The claim type that must be present and, if specified, have one ore more allowed values.</param>
         /// <param name="allowedValues">Values the claim must process one or more of for evaluation to succeed.</param>
         /// <returns>A reference to this instance after the operation has completed.</returns>
-        public static AuthorizationPolicyBuilder RequireClaimPatternMatch(
+        public static AuthorizationPolicyBuilder RequireClaimPatternMatch2(
             this AuthorizationPolicyBuilder builder, string requirementScope,
             ConcurrentDictionary<string, bool> policyPatternCache, ILogger logger) {
             if (requirementScope == null) {
