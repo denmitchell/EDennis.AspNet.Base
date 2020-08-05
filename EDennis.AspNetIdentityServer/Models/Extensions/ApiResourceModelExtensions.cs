@@ -16,8 +16,7 @@ namespace EDennis.AspNetIdentityServer {
                 Name = options.Name,
                 Description = options.Name,
                 Scopes = options.Scopes,
-                UserClaims = options.UserClaims,
-                ApiSecrets = { new M.Secret { Value = options.Secret.Sha256() } }
+                UserClaims = options.UserClaims
             };
             return resource;
         }
