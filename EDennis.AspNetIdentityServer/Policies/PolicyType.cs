@@ -1,4 +1,4 @@
-﻿namespace EDennis.AspNet.Base {
+﻿namespace EDennis.AspNetIdentityServer {
     public enum PolicyType {
         Unconfigured,
         Role,

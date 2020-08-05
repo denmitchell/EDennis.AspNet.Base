@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EDennis.AspNet.Base\EDennis.AspNet.Base.csproj" />
     <ProjectReference Include="..\EDennis.NetStandard.Base\EDennis.NetStandard.Base.csproj" />
     <ProjectReference Include="..\EDennis.Samples.ColorApp\Shared\EDennis.Samples.ColorApp.Shared.csproj" />
   </ItemGroup>

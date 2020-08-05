@@ -1,4 +1,4 @@
-using EDennis.AspNet.Base;
+using EDennis.AspNetIdentityServer;
 using EDennis.NetStandard.Base;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;

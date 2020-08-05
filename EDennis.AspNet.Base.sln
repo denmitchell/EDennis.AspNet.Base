@@ -3,19 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30105.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.AspNet.Base", "EDennis.AspNet.Base\EDennis.AspNet.Base.csproj", "{C0B97A30-0DB5-43CE-B735-EDDB9FB9BB8E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.AspNetIdentityServer", "EDennis.AspNetIdentityServer\EDennis.AspNetIdentityServer.csproj", "{B127C1A2-9201-46F6-BD7A-8DE9D50F132E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.Samples.ColorApi", "EDennis.Samples.ColorApi\EDennis.Samples.ColorApi.csproj", "{8333618D-32B8-4D98-A14F-52B461F9FB29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDennis.Samples.ColorApp.Server", "EDennis.Samples.ColorApp\Server\EDennis.Samples.ColorApp.Server.csproj", "{03A04F99-05DE-4FCC-8A96-9D973CBC1CBC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.Samples.ColorApp.Server", "EDennis.Samples.ColorApp\Server\EDennis.Samples.ColorApp.Server.csproj", "{03A04F99-05DE-4FCC-8A96-9D973CBC1CBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDennis.Samples.ColorApp.Client", "EDennis.Samples.ColorApp\Client\EDennis.Samples.ColorApp.Client.csproj", "{2D726535-F774-409B-AD24-FB21C66578C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.Samples.ColorApp.Client", "EDennis.Samples.ColorApp\Client\EDennis.Samples.ColorApp.Client.csproj", "{2D726535-F774-409B-AD24-FB21C66578C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDennis.Samples.ColorApp.Shared", "EDennis.Samples.ColorApp\Shared\EDennis.Samples.ColorApp.Shared.csproj", "{29E8F922-5EE4-4893-A7C4-A20C27C43DF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.Samples.ColorApp.Shared", "EDennis.Samples.ColorApp\Shared\EDennis.Samples.ColorApp.Shared.csproj", "{29E8F922-5EE4-4893-A7C4-A20C27C43DF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDennis.NetStandard.Base", "EDennis.NetStandard.Base\EDennis.NetStandard.Base.csproj", "{B5191F45-2A1D-4CDA-9E68-BD4624D71F17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.NetStandard.Base", "EDennis.NetStandard.Base\EDennis.NetStandard.Base.csproj", "{B5191F45-2A1D-4CDA-9E68-BD4624D71F17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C0B97A30-0DB5-43CE-B735-EDDB9FB9BB8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C0B97A30-0DB5-43CE-B735-EDDB9FB9BB8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C0B97A30-0DB5-43CE-B735-EDDB9FB9BB8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C0B97A30-0DB5-43CE-B735-EDDB9FB9BB8E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B127C1A2-9201-46F6-BD7A-8DE9D50F132E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B127C1A2-9201-46F6-BD7A-8DE9D50F132E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B127C1A2-9201-46F6-BD7A-8DE9D50F132E}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -9,7 +9,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace EDennis.AspNet.Base {
+namespace EDennis.AspNetIdentityServer {
 
     /// <summary>
     /// Gets all roles associated with the ClientId, as well as 

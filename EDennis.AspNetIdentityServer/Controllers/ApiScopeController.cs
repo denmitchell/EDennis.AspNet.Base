@@ -1,5 +1,4 @@
-﻿using EDennis.AspNet.Base;
-using IdentityServer4.EntityFramework.DbContexts;
+﻿using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.AspNetCore.Authorization;
 
 namespace EDennis.AspNetIdentityServer {

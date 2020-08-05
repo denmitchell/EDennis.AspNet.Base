@@ -1,4 +1,4 @@
-﻿namespace EDennis.AspNet.Base {
+﻿namespace EDennis.AspNetIdentityServer {
     public class AdministrationSettings {
         public PolicyType PolicyType { get; set; }
         public string PolicyName { get; set; }

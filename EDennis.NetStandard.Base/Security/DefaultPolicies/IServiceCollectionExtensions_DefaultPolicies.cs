@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace EDennis.AspNet.Base {
+namespace EDennis.AspNetIdentityServer {
     public static class IServiceCollectionExtensions_DefaultPolicies {
         public static IMvcCoreBuilder AddControllersWithDefaultPolicies(this IServiceCollection services,
             IConfiguration config, IHostEnvironment env) {

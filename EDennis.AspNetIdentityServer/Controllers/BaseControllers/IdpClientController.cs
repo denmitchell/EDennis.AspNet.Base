@@ -8,31 +8,31 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using M = IdentityServer4.Models;
 
-namespace EDennis.AspNet.Base {
+namespace EDennis.AspNetIdentityServer {
 
     /// <summary>
-    /// Controller for managing IdentityResources in IdentityServer
+    /// Controller for managing Clients in IdentityServer
     /// </summary>
     /// <typeparam name="TContext"></typeparam>
-    public abstract class IdpIdentityResourceController<TContext> : IdpBaseController
+    public abstract class IdpClientController<TContext> : IdpBaseController
         where TContext : ConfigurationDbContext {
 
         private readonly TContext _dbContext;
 
-        public IdpIdentityResourceController(TContext dbContext) {
+        public IdpClientController(TContext dbContext) {
             _dbContext = dbContext;
         }
 
         /// <summary>
-        /// Returns an instance of IdentityServer4.Models.IdentityResource, whose name
-        /// matches the name route parameter
+        /// Returns an instance of IdentityServer4.Models.Client, whose ClientId
+        /// matches the clientId route parameter
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="clientId"></param>
         /// <returns></returns>
-        [HttpGet("{name}")]
-        public async Task<IActionResult> GetAsync([FromRoute] string name) {
+        [HttpGet("{clientId}")]
+        public async Task<IActionResult> GetAsync([FromRoute] string clientId) {
 
-            var result = await _dbContext.IdentityResources.FirstOrDefaultAsync(a => a.Name == name);
+            var result = await _dbContext.Clients.FirstOrDefaultAsync(a => a.ClientId == clientId);
             if (result == null)
                 return NotFound();
             else
@@ -41,14 +41,14 @@ namespace EDennis.AspNet.Base {
 
 
         /// <summary>
-        /// Deletes a IdentityResource, whose Name
-        /// matches the name route parameter
+        /// Deletes a Client, whose ClientId
+        /// matches the clientId route parameter
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="clientId"></param>
         /// <returns></returns>
-        [HttpGet("{name}")]
-        public async Task<IActionResult> DeleteAsync([FromRoute] string name) {
-            var result = await _dbContext.IdentityResources.FirstOrDefaultAsync(c => c.Name == name);
+        [HttpGet("{clientId}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute] string clientId) {
+            var result = await _dbContext.Clients.FirstOrDefaultAsync(c => c.ClientId == clientId);
             if (result == null)
                 return NotFound();
             else {
@@ -59,12 +59,12 @@ namespace EDennis.AspNet.Base {
         }
 
         /// <summary>
-        /// Creates a new IdentityResource record
+        /// Creates a new Client record
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] M.IdentityResource model) {
+        public async Task<IActionResult> PostAsync([FromBody] M.Client model) {
 
             var client = model.ToEntity();
 
@@ -79,21 +79,20 @@ namespace EDennis.AspNet.Base {
             return Ok();
         }
 
-
         /// <summary>
-        /// Patch-updates an IdentityResource record with data from the provided partialModel
+        /// Patch-updates a Client record with data from the provided partialModel
         /// (JSON body).
         /// </summary>
         /// <param name="partialModel">JSON object with properties to update</param>
-        /// <param name="name">The Name of the IdentityResource to update</param>
+        /// <param name="clientId">The ID of the client to update</param>
         /// <param name="mergeCollections">for each collection property, whether to merge 
         /// (default=true) or replace (false) provided items with existing items</param>
         /// <returns></returns>
-        [HttpPatch("{name}")]
-        public async Task<IActionResult> PatchAsync([FromBody] JsonElement partialModel,
-            [FromRoute] string name, [FromQuery] bool mergeCollections = true) {
+        [HttpPatch("{clientId}")]
+        public async Task<IActionResult> PatchAsync([FromBody] JsonElement partialModel, 
+            [FromRoute] string clientId, [FromQuery] bool mergeCollections = true) {
 
-            var existing = _dbContext.IdentityResources.FirstOrDefault(a => a.Name == name);
+            var existing = _dbContext.Clients.FirstOrDefault(a => a.ClientId == clientId);
             if (existing == null)
                 return NotFound();
 

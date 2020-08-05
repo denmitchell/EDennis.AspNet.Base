@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.Json;
 using M = IdentityServer4.Models;
 
-namespace EDennis.AspNet.Base {
+namespace EDennis.AspNetIdentityServer {
     public static class IdentityResourceModelExtensions {
 
         public static void Patch(this M.IdentityResource model, JsonElement partialModel,

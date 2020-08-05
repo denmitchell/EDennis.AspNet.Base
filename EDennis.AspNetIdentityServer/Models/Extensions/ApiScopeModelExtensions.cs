@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.Json;
 using M = IdentityServer4.Models;
 
-namespace EDennis.AspNet.Base {
+namespace EDennis.AspNetIdentityServer {
     public static class ApiScopeModelExtensions {
 
         public static void Patch(this M.ApiScope model, JsonElement partialModel,
