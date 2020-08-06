@@ -1,8 +1,9 @@
 ﻿namespace EDennis.NetStandard.Base {
-    public class OidcOptions : ClientCredentialsOptions {
+    public class AuthorizationCodeOptions : ClientCredentialsOptions {
         public string ResponseType { get; set; }
         public string GrantType { get; set; }
         public string RedirectUri { get; set; }
+        public string PostLogoutRedirectUri { get; set; }
         public string CodeChallengeMethod { get; set; } = "S256";
         public bool RequireHttpsMetadata { get; set; } = false;
         public bool SaveTokens { get; set; } = true;

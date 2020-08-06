@@ -6,5 +6,8 @@ namespace EDennis.NetStandard.Base {
         public string OrganizationName { get; set; }
         public List<string> Roles { get; set; }
         public Dictionary<string, List<string>> Claims { get; set; }
+
+        public string PlainTextPassword { get; set; }
+
     }
 }

@@ -1,13 +1,23 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text.Json;
 
 namespace EDennis.NetStandard.Base {
     public class DomainIdentityDbContext 
         : IdentityDbContext<DomainUser, DomainRole, Guid, DomainUserClaim, 
             DomainUserRole, DomainUserLogin, IdentityRoleClaim<Guid>, DomainUserToken> {
+
+
+        public DomainIdentityDbContext(DbContextOptions<DomainIdentityDbContext> options) :
+            base(options) { }
+
 
         public DbSet<DomainApplication> Applications { get; set; }
         public DbSet<DomainOrganization> Organizations { get; set; }
@@ -21,60 +31,88 @@ namespace EDennis.NetStandard.Base {
 
 
             builder.Entity<DomainUser>(e => {
+                e.HasAnnotation("SystemVersioned", true);
+
                 e.Property(u => u.Id)
-                    .HasDefaultValue(CombGuid.Create());
+                    .HasValueGenerator<GuidValueGenerator>();
 
                 e.HasIndex(i => i.UserName)
                     .IsUnique(true);
+
+                e.Property(p => p.SysUser)
+                    .IsUnicode(false)
+                    .HasMaxLength(150);
             });
 
             builder.Entity<DomainRole>(e => {
+                e.HasAnnotation("SystemVersioned", true);
+
                 e.Property(u => u.Id)
-                    .HasDefaultValue(CombGuid.Create());
+                    .HasValueGenerator<GuidValueGenerator>();
 
                 e.HasIndex(i => new { i.ApplicationId, i.Name })
                     .IsUnique(true);
+
+                e.Property(p => p.Name)
+                    .IsUnicode(false)
+                    .HasMaxLength(256);
+
+                e.Property(p => p.SysUser)
+                    .IsUnicode(false)
+                    .HasMaxLength(150);
+                    
             });
 
             builder.Entity<DomainApplication>(e => {
-                e.ToTable("AspNetIdentityApplications")
+                e.HasAnnotation("SystemVersioned", true);
+
+                e.ToTable("AspNetApplications")
                     .HasKey(p => p.Id);
 
                 e.Property(u => u.Id)
-                    .HasDefaultValue(CombGuid.Create());
+                    .HasValueGenerator<GuidValueGenerator>();
 
                 e.HasIndex(i => i.Name)
                     .IsUnique(true);
 
+                e.Property(p => p.Name)
+                    .IsUnicode(false)
+                    .HasMaxLength(200);
+
+                e.Property(p => p.SysUser)
+                    .IsUnicode(false)
+                    .HasMaxLength(150);
             });
 
             builder.Entity<DomainOrganization>(e => {
-                e.ToTable("AspNetIdentityOrganizations")
+                e.HasAnnotation("SystemVersioned", true);
+
+                e.ToTable("AspNetOrganizations")
                     .HasKey(p => p.Id);
 
                 e.Property(u => u.Id)
-                    .HasDefaultValue(CombGuid.Create());
+                    .HasValueGenerator<GuidValueGenerator>();
 
                 e.HasIndex(i => i.Name)
                     .IsUnique(true);
+
+                e.Property(p => p.Name)
+                    .IsUnicode(false)
+                    .HasMaxLength(200);
+
+                e.Property(p => p.SysUser)
+                    .IsUnicode(false)
+                    .HasMaxLength(150);
             });
 
 
             builder.Entity<ExpandedDomainUser>(e => {
-                e.ToView("AspNetIdentityExpandedUsers")
-                    .HasKey(p => p.Id);
-
-                e.Property(p => p.ClaimsDictionary)
-                    .HasConversion(new SerializerConverter<Dictionary<string, List<string>>>());
-
-                e.Property(p => p.RolesDictionary)
-                    .HasConversion(new SerializerConverter<Dictionary<string, List<string>>>());
+                e.ToView("AspNetExpandedUsers");
             });
 
 
             builder.Entity<ExpandedDomainRole>(e => {
-                e.ToView("AspNetIdentityExpandedRoles")
-                    .HasKey(p => p.Id);
+                e.ToView("AspNetExpandedRoles");
             });
 
 

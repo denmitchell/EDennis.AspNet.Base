@@ -242,6 +242,7 @@ namespace EDennis.NetStandard.Base {
 
 
 
+        [NonAction]
         /// <summary>
         /// Builds a dynamic linq query
         /// </summary>
@@ -287,6 +288,7 @@ namespace EDennis.NetStandard.Base {
         }
 
 
+        [NonAction]
         /// <summary>
         /// Builds a dynamic linq query
         /// </summary>

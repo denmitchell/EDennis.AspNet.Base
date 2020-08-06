@@ -29,13 +29,13 @@ namespace EDennis.NetStandard.Base {
 
         private readonly RequestDelegate _next;
         private readonly AutoAuthenticationOptions _options;
-        private readonly OidcOptions _oidcOptions;
+        private readonly AuthorizationCodeOptions _oidcOptions;
         private readonly IHttpClientFactory _factory;
 
 
         public AutoAuthenticationMiddleware(RequestDelegate next, 
             IOptionsMonitor<AutoAuthenticationOptions> options,
-            IOptionsMonitor<OidcOptions> oidcOptions,
+            IOptionsMonitor<AuthorizationCodeOptions> oidcOptions,
             IHttpClientFactory factory) {
             _next = next;
             _factory = factory;

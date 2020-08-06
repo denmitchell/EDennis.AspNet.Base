@@ -1,4 +1,5 @@
 using EDennis.AspNetIdentityServer;
+using EDennis.MigrationsExtensions;
 using EDennis.NetStandard.Base;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -29,11 +31,6 @@ namespace EDennis.AspNetIdentityServer {
 
             //Debugger.Launch();
 
-            string cxnAspNetIdentity = Configuration["DbContexts:AspNetIdentityDbContext:ConnectionString"];
-            services.AddDbContext<DomainIdentityDbContext>(options =>
-                options.UseSqlServer(cxnAspNetIdentity));
-
-
             services.AddIdentity<DomainUser, DomainRole>(options => options.SignIn.RequireConfirmedAccount = true)
                            .AddEntityFrameworkStores<DomainIdentityDbContext>()
                            .AddDefaultTokenProviders();
@@ -44,8 +41,7 @@ namespace EDennis.AspNetIdentityServer {
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
             string cxnConfiguration = Configuration["DbContexts:ConfigurationDbContext:ConnectionString"];
             string cxnPersistedGrant = Configuration["DbContexts:PersistedGrantDbContext:ConnectionString"];
-
-            services.AddTransient<IEmailSender, MockEmailSender>();
+            string cxnAspNetIdentity = Configuration["DbContexts:AspNetIdentityDbContext:ConnectionString"];
 
             services.AddIdentityServer()
                 .AddConfigurationStore(options => {
@@ -60,6 +56,13 @@ namespace EDennis.AspNetIdentityServer {
                 .AddAspNetIdentity<DomainUser>()
                 .AddProfileService<DomainIdentityProfileService>();
 
+            services.AddDbContext<DomainIdentityDbContext>(options =>
+                    options.UseSqlServer(cxnAspNetIdentity,
+                        sql => sql.MigrationsAssembly(migrationsAssembly))
+                    .ReplaceService<IMigrationsSqlGenerator,MigrationsExtensionsSqlGenerator>());
+
+
+            services.AddTransient<IEmailSender, MockEmailSender>();
 
             //replace Identity Server's ProfileService with a profile service that determines
             //which claims to retrieve for a user/client as configured in the database

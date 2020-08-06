@@ -1,0 +1,68 @@
+{
+  "ApiResources": [
+    {
+      "Name": "EDennis.Samples.ColorApi",
+      "Scopes": [
+        "EDennis.Samples.ColorApi.*",
+        "EDennis.Samples.ColorApi.*.Get*",
+        "EDennis.Samples.ColorApi.*.Create*",
+        "EDennis.Samples.ColorApi.*.Update*",
+        "EDennis.Samples.ColorApi.*.Patch*",
+        "EDennis.Samples.ColorApi.*.Delete*",
+        "EDennis.Samples.ColorApi.Rgb.*",
+        "EDennis.Samples.ColorApi.Rgb.Get*",
+        "EDennis.Samples.ColorApi.Rgb.Create*",
+        "EDennis.Samples.ColorApi.Rgb.Update*",
+        "EDennis.Samples.ColorApi.Rgb.Patch*",
+        "EDennis.Samples.ColorApi.Rgb.Delete*"
+      ],
+      "UserClaims": [ "email", "role" ]
+    }
+  ],
+  "Clients": [
+    {
+      "ClientId": "EDennis.Samples.ColorApi",
+      "PlainTextSecret": [ "secret" ],
+      "AllowedGrantTypes": "Code",
+      "RequireConsent": false,
+      "RequirePkce": true,
+      "AllowOfflineAccess": true,
+      "ClientClaimsPrefix": "",
+      "RedirectUris": [ "https://localhost:44338/authentication/login-callback" ],
+      "PostLogoutRedirectUris": [ "https://localhost:44338/authentication/logout-callback" ],
+      "AllowedScopes": [ "openid", "profile", "role", "EDennis.Samples.ColorApi.*" ]
+    }
+  ],
+  "TestUsers": [
+    {
+      "Email": "maria@a.Test",
+      "PlainTextPassword": "test",
+      "OrganizationName": "a.Test",
+      "Roles": [ "Admin" ],
+      "Claims": {
+        "name": [ "Maria" ],
+        "phone": [ "999.555.1212"]
+        }
+    },
+    {
+      "Email": "darius@b.Test",
+      "PlainTextPassword": "test",
+      "OrganizationName": "b.Test",
+      "Roles": [ "User" ],
+      "Claims": {
+        "name": [ "Darius" ],
+        "phone": [ "888.555.1212" ]
+      }
+    },
+    {
+      "Email": "pat@c.Test",
+      "PlainTextPassword": "test",
+      "OrganizationName": "c.Test",
+      "Roles": [ "Readonly" ],
+      "Claims": {
+        "name": [ "Pat" ],
+        "phone": [ "777.555.1212" ]
+      }
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -12,27 +13,39 @@ namespace EDennis.NetStandard.Base {
         public const int SHA512_LENGTH = 128; //"f3bf9aa70169e4ab5339f20758986538fe6c96d7be3d184a036cde8161105fcf53516428fa096ac56247bb88085b0587d5ec8e56a6807b1af351305b2103d74b";
 
 
-        [NotMapped]
-        public override bool LockoutEnabled {
-            get => LockoutBegin <= DateTime.Now && LockoutEnd > DateTime.Now;
+        public override bool LockoutEnabled { get; set; }
+
+        public DateTimeOffset? _lockoutBegin;
+        public DateTimeOffset? _lockoutEnd;
+
+
+        public DateTimeOffset? LockoutBegin {
+            get => _lockoutBegin; 
             set {
-                if (value) {
-                    LockoutBegin = DateTime.Now;
-                    if (LockoutEnd == null || LockoutEnd < DateTime.Now)
-                        LockoutEnd = DateTime.MaxValue;
-                } else {
-                    LockoutBegin = null;
-                    LockoutEnd = null;
-                }
+                _lockoutBegin = value;
+                if (_lockoutBegin <= DateTime.Now && _lockoutEnd > DateTime.Now)
+                    LockoutEnabled = true;
+                else
+                    LockoutEnabled = false;
+            } 
+        }
+
+        public override DateTimeOffset? LockoutEnd {
+            get => _lockoutEnd;
+            set {
+                _lockoutEnd = value;
+                if (_lockoutBegin <= DateTime.Now && _lockoutEnd > DateTime.Now)
+                    LockoutEnabled = true;
+                else
+                    LockoutEnabled = false;
             }
         }
 
-
-        public DateTimeOffset? LockoutBegin { get; set; }
         public Guid OrganizationId { get; set; }
         public DateTime SysEnd { get; set; }
         public DateTime SysStart { get; set; }
         public SysStatus SysStatus { get; set; }
+        [MaxLength(150)]
         public string SysUser { get; set; }
         public string Properties { get; set; }
         

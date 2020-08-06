@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace EDennis.NetStandard.Base {
+
+    [JsonConverter(typeof(ExpandedDomainUser))]
     public class ExpandedDomainUser {
         public Guid Id { get; set; }
         public string UserName { get; set; }
@@ -12,8 +15,8 @@ namespace EDennis.NetStandard.Base {
         public string PhoneNumber { get; set; }
         public bool PhoneNumberConfirmed { get; set; }
         public bool TwoFactorEnabled { get; set; }
-        public DateTimeOffset LockoutBegin { get; set; }
-        public DateTimeOffset LockoutEnd { get; set; }
+        public DateTimeOffset? LockoutBegin { get; set; }
+        public DateTimeOffset? LockoutEnd { get; set; }
         public bool LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; }
         public int OrganizationId { get; set; }
@@ -23,8 +26,8 @@ namespace EDennis.NetStandard.Base {
         public DateTime SysStart { get; set; }
         public DateTime SysEnd { get; set; }
         public string Properties { get; set; }
-        public Dictionary<string,List<string>> RolesDictionary { get; set; }
-        public Dictionary<string,List<string>> ClaimsDictionary { get; set; }
+        public string RolesDictionary { get; set; }
+        public string ClaimsDictionary { get; set; }
 
     }
 }

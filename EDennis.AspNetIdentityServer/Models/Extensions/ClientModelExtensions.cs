@@ -22,7 +22,7 @@ namespace EDennis.AspNetIdentityServer {
             };
         }
 
-        public static M.Client ToModel(this OidcOptions options) {
+        public static M.Client ToModel(this AuthorizationCodeOptions options) {
             return new M.Client {
                 ClientId = options.ClientId,
                 ClientSecrets = { new M.Secret { Value = options.ClientSecret.Sha256() } },

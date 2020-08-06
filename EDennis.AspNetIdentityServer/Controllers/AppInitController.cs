@@ -58,7 +58,7 @@ namespace EDennis.AspNetIdentityServer {
         /// <param name="options"></param>
         /// <returns></returns>
         [HttpPost("/client/oidc")]
-        public async Task LoadClientAsync(OidcOptions options) {
+        public async Task LoadClientAsync(AuthorizationCodeOptions options) {
             var entity = options.ToModel().ToEntity();
             await LoadClientAsync(entity);
         }

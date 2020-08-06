@@ -47,7 +47,7 @@ namespace EDennis.NetStandard.Base {
         }
 
         public void LoadClientFromOidcOptions(string configKey) {
-            OidcOptions options = new OidcOptions();
+            AuthorizationCodeOptions options = new AuthorizationCodeOptions();
             _config.GetSection(configKey).Bind(options);
             if (options.ClientId == default)
                 throw new Exception($"Could not bind {configKey} in Configuration to OidcOptions.");

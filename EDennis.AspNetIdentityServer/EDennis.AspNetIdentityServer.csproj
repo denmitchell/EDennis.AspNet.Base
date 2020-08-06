@@ -41,9 +41,4 @@
 	  <ProjectReference Include="..\EDennis.NetStandard.Base\EDennis.NetStandard.Base.csproj" />
 	</ItemGroup>
 
-
-	<ItemGroup>
-	  <Folder Include="Data\Migrations\AspNetIdentity\" />
-	</ItemGroup>
-
 </Project>
