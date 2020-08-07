@@ -1,38 +1,40 @@
-[
-  {
-    "Name": "openid",
-    "DisplayName": "Your user identifier",
-    "UserClaims": [ "sub" ],
-    "Required": true,
-    "Emphasize": false
-  },
-  {
-    "Name": "profile",
-    "DisplayName": "User profile",
-    "UserClaims": [
-      "name",
-      "family_name",
-      "given_name",
-      "middle_name",
-      "nickname",
-      "preferred_username",
-      "profile",
-      "picture",
-      "website",
-      "gender",
-      "birthdate",
-      "zoneinfo",
-      "locale",
-      "updated_at"
-    ],
-    "Required": false,
-    "Emphasize": true
-  },
-  {
-    "Name": "role",
-    "DisplayName": "Your role(s)",
-    "UserClaims": [ "role" ],
-    "Required": false,
-    "Emphasize": false
-  }
-]
+{
+  "IdentityResources": [
+    {
+      "Name": "openid",
+      "DisplayName": "Your user identifier",
+      "UserClaims": [ "sub" ],
+      "Required": true,
+      "Emphasize": false
+    },
+    {
+      "Name": "profile",
+      "DisplayName": "User profile",
+      "UserClaims": [
+        "name",
+        "family_name",
+        "given_name",
+        "middle_name",
+        "nickname",
+        "preferred_username",
+        "profile",
+        "picture",
+        "website",
+        "gender",
+        "birthdate",
+        "zoneinfo",
+        "locale",
+        "updated_at"
+      ],
+      "Required": false,
+      "Emphasize": true
+    },
+    {
+      "Name": "role",
+      "DisplayName": "Your role(s)",
+      "UserClaims": [ "role" ],
+      "Required": false,
+      "Emphasize": false
+    }
+  ]
+}

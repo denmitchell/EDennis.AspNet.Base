@@ -9,7 +9,15 @@
     },
     "EDennis.AspNet.Base": {
       "commandName": "Project",
-      "commandLineArgs": "/EDennis.Samples.ColorApi.json",
+      "commandLineArgs": "/EDennis.Samples.ColorApi /dump",
+      "applicationUrl": "https://localhost:5000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "All": {
+      "commandName": "Project",
+      "commandLineArgs": "/all /dump",
       "applicationUrl": "https://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

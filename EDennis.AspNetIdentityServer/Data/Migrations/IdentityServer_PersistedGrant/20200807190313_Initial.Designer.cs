@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EDennis.AspNetIdentityServer.Data.Migrations.IdentityServer_PersistedGrant
 {
     [DbContext(typeof(PersistedGrantDbContext))]
-    [Migration("20200310191509_IdpPersistedGrant")]
-    partial class IdpPersistedGrant
+    [Migration("20200807190313_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.1")
+                .HasAnnotation("ProductVersion", "3.1.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -40,6 +40,10 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.IdentityServer_PersistedG
                         .HasColumnType("nvarchar(max)")
                         .HasMaxLength(50000);
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
+
                     b.Property<string>("DeviceCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(200)")
@@ -48,6 +52,10 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.IdentityServer_PersistedG
                     b.Property<DateTime?>("Expiration")
                         .IsRequired()
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("SessionId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("SubjectId")
                         .HasColumnType("nvarchar(200)")
@@ -74,6 +82,9 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.IdentityServer_PersistedG
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
+                    b.Property<DateTime?>("ConsumedTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
 
@@ -82,8 +93,16 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.IdentityServer_PersistedG
                         .HasColumnType("nvarchar(max)")
                         .HasMaxLength(50000);
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
+
                     b.Property<DateTime?>("Expiration")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("SessionId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("SubjectId")
                         .HasColumnType("nvarchar(200)")
@@ -99,6 +118,8 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.IdentityServer_PersistedG
                     b.HasIndex("Expiration");
 
                     b.HasIndex("SubjectId", "ClientId", "Type");
+
+                    b.HasIndex("SubjectId", "SessionId", "Type");
 
                     b.ToTable("PersistedGrants");
                 });

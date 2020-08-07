@@ -1,6 +1,7 @@
 using EDennis.AspNetIdentityServer;
 using EDennis.MigrationsExtensions;
 using EDennis.NetStandard.Base;
+using IdentityServer4.EntityFramework.Options;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,12 +41,16 @@ namespace EDennis.AspNetIdentityServer {
             string cxnPersistedGrant = Configuration["DbContexts:PersistedGrantDbContext:ConnectionString"];
             string cxnAspNetIdentity = Configuration["DbContexts:AspNetIdentityDbContext:ConnectionString"];
 
+            services.AddScoped<IUserClaimsPrincipalFactory<DomainUser>, DomainUserClaimsPrincipalFactory>();
+
             services.AddIdentityServer()
                 .AddConfigurationStore(options => {
+                    new DefaultConfigurationStoreOptions().Load(options);
                     options.ConfigureDbContext = b => b.UseSqlServer(cxnConfiguration,
                         sql => sql.MigrationsAssembly(migrationsAssembly));
                 })
                 .AddOperationalStore(options => {
+                    new DefaultOperationalStoreOptions().Load(options);
                     options.ConfigureDbContext = b => b.UseSqlServer(cxnPersistedGrant,
                         sql => sql.MigrationsAssembly(migrationsAssembly));
                 })

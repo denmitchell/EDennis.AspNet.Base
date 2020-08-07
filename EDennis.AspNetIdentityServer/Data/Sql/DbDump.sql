@@ -1,10 +1,11 @@
 ﻿CREATE VIEW DbDump AS
-SELECT
+SELECT(STUFF((
+SELECT 
 	JSON_QUERY(
 		STUFF((
 			SELECT ar.Name,
-				JSON_QUERY('[' + stuff((SELECT ', "' + s.Name + '"' FROM ApiScopes s WHERE s.ApiResourceId = 1 FOR XML PATH('')),1,1,'') + ']') Scopes,
-				JSON_QUERY('[' + stuff((SELECT ', "' + c.Type + '"' FROM ApiClaims c WHERE c.ApiResourceId = 1 FOR XML PATH('')),1,1,'') + ']') Claims
+				JSON_QUERY('[' + stuff((SELECT ', "' + s.Scope + '"' FROM ApiResourceScopes s WHERE s.ApiResourceId = 1 FOR XML PATH('')),1,1,'') + ']') Scopes,
+				JSON_QUERY('[' + stuff((SELECT ', "' + c.Type + '"' FROM ApiResourceClaims c WHERE c.ApiResourceId = 1 FOR XML PATH('')),1,1,'') + ']') Claims
 				FROM ApiResources ar
 				FOR JSON PATH),1,1,'')) ApiResources,
 	JSON_QUERY(
@@ -80,3 +81,4 @@ SELECT
 	
 				FOR JSON PATH),1,1,'')) Users
 	FOR JSON PATH
+),1,1,'')) as json
