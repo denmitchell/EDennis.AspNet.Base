@@ -1,5 +1,5 @@
 ﻿create view AspNetExpandedUsers as
-	select u.Id, u.UserName, u.NormalizedUserName, u.Email NormalizedEmail, u.EmailConfirmed, u.PhoneNumber, u.PhoneNumberConfirmed,
+	select u.Id, u.UserName, u.NormalizedUserName, u.Email, u.NormalizedEmail, u.EmailConfirmed, u.PhoneNumber, u.PhoneNumberConfirmed,
 	u.TwoFactorEnabled, u.LockoutBegin, u.LockoutEnd, u.LockoutEnabled, u.AccessFailedCount,
 	o.Id OrganizationId, o.Name OrganizationName,  
 	u.SysUser, u.SysStatus, u.SysStart, u.SysEnd, u.Properties,

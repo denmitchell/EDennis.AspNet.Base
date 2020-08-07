@@ -4,6 +4,7 @@ using IdentityServer4.EntityFramework.Mappers;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Transactions;
 
 
@@ -23,6 +25,7 @@ namespace EDennis.AspNetIdentityServer {
     public class Program {
 
         public const string CONFIGS_DIR = "Configs";
+        public const string DUMP_FILE = "DbDump.json";
 
         public static void Main(string[] args) {
 
@@ -51,16 +54,43 @@ namespace EDennis.AspNetIdentityServer {
                     activeConfigs = configs.Where(c => args.Contains($"/{c}.json"));
 
                 using var trans = new TransactionScope();
-                LoadConfigs(host, activeConfigs);
-                if (args.Contains("/commit"))
-                    trans.Complete();
-                host.Run();
+                {
+                    LoadConfigs(host, activeConfigs);
+                    if (args.Contains("/commit"))
+                        trans.Complete();
+                    host.Run();
 
+                    if (args.Contains("/dbdump"))
+                        DumpDb(host);
+                }
             } catch (Exception ex) {
                 Log.Fatal(ex, "Host terminated unexpectedly.");
             }
 
 
+        }
+
+        private static void DumpDb(IHost host) {
+            using var scope = host.Services.CreateScope();
+
+            var context = scope.ServiceProvider.GetRequiredService<DomainIdentityDbContext>();
+            var cxn = context.Database.GetDbConnection();
+            var cmd = new SqlCommand("select * from DbDump");
+            var result = cmd.ExecuteScalar();
+            if (result != null) {
+
+                if (!Directory.Exists(CONFIGS_DIR))
+                    Directory.CreateDirectory(CONFIGS_DIR);
+
+                var path = $"{CONFIGS_DIR}\\{DUMP_FILE}";
+
+                if (File.Exists(path))
+                    File.Delete(path);
+
+                using var fs = new FileStream(path,FileMode.CreateNew);
+                using var jw = new Utf8JsonWriter(fs, new JsonWriterOptions { Indented = true, SkipValidation = true });
+                JsonDocument.Parse(result.ToString(), default).WriteTo(jw);
+            }
         }
 
 
