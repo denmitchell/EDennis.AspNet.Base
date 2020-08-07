@@ -1,39 +1,43 @@
 {
-  "ApiResource": {
-    "Name": "EDennis.Samples.ColorApi",
-    "Scopes": [
-      "EDennis.Samples.ColorApi.*",
-      "EDennis.Samples.ColorApi.*.Get*",
-      "EDennis.Samples.ColorApi.*.Post*",
-      "EDennis.Samples.ColorApi.*.Put*",
-      "EDennis.Samples.ColorApi.*.Patch*",
-      "EDennis.Samples.ColorApi.*.Delete*",
-      "EDennis.Samples.ColorApi.RgbController.*",
-      "EDennis.Samples.ColorApi.RgbController.Get*",
-      "EDennis.Samples.ColorApi.RgbController.Post*",
-      "EDennis.Samples.ColorApi.RgbController.Put*",
-      "EDennis.Samples.ColorApi.RgbController.Patch*",
-      "EDennis.Samples.ColorApi.RgbController.Delete*",
-      "EDennis.Samples.ColorApi.RgbController.Check"
-    ],
-    "UserClaims": [
-      "name",
-      "phone",
-      "role"
-    ]
-  },
-  "Clients": {
-    "Authority": "https://localhost:5000",
-    "ClientId": "EDennis.Samples.ColorApi",
-    "PlainTextSecret": "secret",
-    "AllowedGrantTypes": [
-      "client_credentials"
-    ],
-    "ClientClaimsPrefix": "",
-    "AllowedScopes": [
-      "EDennis.Samples.ColorApi.*"
-    ]
-  },
+  "ApiResources": [
+    {
+      "Name": "EDennis.Samples.ColorApi",
+      "Scopes": [
+        "EDennis.Samples.ColorApi.*",
+        "EDennis.Samples.ColorApi.*.Get*",
+        "EDennis.Samples.ColorApi.*.Post*",
+        "EDennis.Samples.ColorApi.*.Put*",
+        "EDennis.Samples.ColorApi.*.Patch*",
+        "EDennis.Samples.ColorApi.*.Delete*",
+        "EDennis.Samples.ColorApi.RgbController.*",
+        "EDennis.Samples.ColorApi.RgbController.Get*",
+        "EDennis.Samples.ColorApi.RgbController.Post*",
+        "EDennis.Samples.ColorApi.RgbController.Put*",
+        "EDennis.Samples.ColorApi.RgbController.Patch*",
+        "EDennis.Samples.ColorApi.RgbController.Delete*",
+        "EDennis.Samples.ColorApi.RgbController.Check"
+      ],
+      "UserClaims": [
+        "name",
+        "phone",
+        "role"
+      ]
+    }
+  ],
+  "Clients": [
+    {
+      "Authority": "https://localhost:5000",
+      "ClientId": "EDennis.Samples.ColorApi",
+      "PlainTextSecret": "secret",
+      "AllowedGrantTypes": [
+        "client_credentials"
+      ],
+      "ClientClaimsPrefix": "",
+      "AllowedScopes": [
+        "EDennis.Samples.ColorApi.*"
+      ]
+    }
+  ],
   "TestUsers": [
     {
       "Email": "admin1@.test",

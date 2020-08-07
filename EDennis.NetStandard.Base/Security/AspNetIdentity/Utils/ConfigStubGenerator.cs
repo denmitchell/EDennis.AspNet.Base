@@ -91,7 +91,7 @@ namespace EDennis.NetStandard.Base.Security.AspNetIdentity.Utils {
 
             jw.WriteStartObject();
             {
-                WriteApiResourceSection(jw, project, idpUrl, scopes, userClaims);
+                WriteApiResourceSection(jw, project, scopes, userClaims);
 
                 if (idpConfigType == IdpConfigType.ClientCredentials)
                     WriteClientCredentialsSection(jw, project, idpUrl);
@@ -142,53 +142,64 @@ namespace EDennis.NetStandard.Base.Security.AspNetIdentity.Utils {
             jw.WriteEndArray();
         }
 
-            private static void WriteApiResourceSection(Utf8JsonWriter jw, string project, string idpUrl, List<string> scopes, List<string> userClaims) {
-            jw.WriteStartObject("ApiResource");
-            {
-                jw.WriteString("Name", project);
-                jw.WriteStartArray("Scopes");
-                {
-                    foreach (var scope in scopes)
-                        jw.WriteStringValue(scope);
-                }
-                jw.WriteEndArray();
-                jw.WriteStartArray("UserClaims");
-                {
-                    foreach (var claim in userClaims)
-                        jw.WriteStringValue(claim);
-                }
-                jw.WriteEndArray();
+            private static void WriteApiResourceSection(Utf8JsonWriter jw, string project, List<string> scopes, List<string> userClaims) {
 
+            jw.WriteStartArray("ApiResources");
+            {
+                jw.WriteStartObject();
+                {
+                    jw.WriteString("Name", project);
+                    jw.WriteStartArray("Scopes");
+                    {
+                        foreach (var scope in scopes)
+                            jw.WriteStringValue(scope);
+                    }
+                    jw.WriteEndArray();
+                    jw.WriteStartArray("UserClaims");
+                    {
+                        foreach (var claim in userClaims)
+                            jw.WriteStringValue(claim);
+                    }
+                    jw.WriteEndArray();
+
+                }
+                jw.WriteEndObject();
             }
-            jw.WriteEndObject();
+            jw.WriteEndArray();
         }
 
 
         private static void WriteClientCredentialsSection(Utf8JsonWriter jw, string project, string idpUrl) {
-            jw.WriteStartObject("Clients");
+            jw.WriteStartArray("Clients");
             {
-                jw.WriteString("Authority", idpUrl);
-                jw.WriteString("ClientId", project);
-                jw.WriteString("PlainTextSecret", DEFAULT_SECRET);
-                jw.WriteStartArray("AllowedGrantTypes");
+                jw.WriteStartObject();
                 {
-                    jw.WriteStringValue("client_credentials");
+                    jw.WriteString("Authority", idpUrl);
+                    jw.WriteString("ClientId", project);
+                    jw.WriteString("PlainTextSecret", DEFAULT_SECRET);
+                    jw.WriteStartArray("AllowedGrantTypes");
+                    {
+                        jw.WriteStringValue("client_credentials");
+                    }
+                    jw.WriteEndArray();
+                    jw.WriteString("ClientClaimsPrefix", DEFAULT_CLIENT_CLAIMS_PREFIX);
+                    jw.WriteStartArray("AllowedScopes");
+                    {
+                        jw.WriteStringValue($"{project}.*");
+                    }
+                    jw.WriteEndArray();
                 }
-                jw.WriteEndArray();
-                jw.WriteString("ClientClaimsPrefix", DEFAULT_CLIENT_CLAIMS_PREFIX);
-                jw.WriteStartArray("AllowedScopes");
-                {
-                    jw.WriteStringValue($"{project}.*");
-                }
-                jw.WriteEndArray();
+                jw.WriteEndObject();
             }
-            jw.WriteEndObject();
+            jw.WriteEndArray();
         }
 
         private static void WriteAuthorizationCodeSection(Utf8JsonWriter jw, string project, string idpUrl, string apiUrl) {
-            jw.WriteStartObject("Clients");
+            jw.WriteStartArray("Clients");
             {
-                jw.WriteString("Authority", idpUrl);
+                jw.WriteStartObject();
+                {
+                    jw.WriteString("Authority", idpUrl);
                 jw.WriteString("ClientId", project);
                 jw.WriteString("PlainTextSecret", DEFAULT_SECRET);
                 jw.WriteStartArray("AllowedGrantTypes");
@@ -218,8 +229,10 @@ namespace EDennis.NetStandard.Base.Security.AspNetIdentity.Utils {
                 {
                     jw.WriteStringValue($"http://localhost:{apiUrl}/signout-callback-oidc");
                 }
+                }
+                jw.WriteEndObject();
             }
-            jw.WriteEndObject();
+            jw.WriteEndArray();
         }
 
 
