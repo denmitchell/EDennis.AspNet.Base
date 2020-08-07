@@ -6,7 +6,8 @@ using System.Reflection;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
-
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace EDennis.NetStandard.Base.Security.AspNetIdentity.Utils {
 
@@ -25,6 +26,7 @@ namespace EDennis.NetStandard.Base.Security.AspNetIdentity.Utils {
             = new List<TestUser> {
                 new TestUser {
                     Email = "admin1@.test",
+                    PlainTextPassword = "test",
                     OrganizationName = "a.test",
                     Claims = new Dictionary<string, List<string>> {
                         { "name", new List<string>() { "Maria" } },
@@ -34,6 +36,7 @@ namespace EDennis.NetStandard.Base.Security.AspNetIdentity.Utils {
                 },
                 new TestUser {
                     Email = "darius@b.test",
+                    PlainTextPassword = "test",
                     OrganizationName = "b.test",
                     Claims = new Dictionary<string, List<string>> {
                         { "name", new List<string>() { "Darius" } },
@@ -43,6 +46,7 @@ namespace EDennis.NetStandard.Base.Security.AspNetIdentity.Utils {
                 },
                 new TestUser {
                     Email = "pat@c.test",
+                    PlainTextPassword = "test",
                     OrganizationName = "c.test",
                     Claims = new Dictionary<string, List<string>> {
                         { "name", new List<string>() { "Pat" } },
@@ -53,11 +57,13 @@ namespace EDennis.NetStandard.Base.Security.AspNetIdentity.Utils {
             };
 
         public static void GenerateIdpConfigStub<TStartup>(
+            dynamic idpPortOrUrl,
+            dynamic apiPortOrUrl,
             IdpConfigType idpConfigType = IdpConfigType.ClientCredentials,
-            string idpPortOrUrl = "5001",
-            string apiPortOrUrl = "6001",
             IEnumerable<TestUser> testUsers = null) {
 
+
+            testUsers ??= DEFAULT_USERS;
 
             if (!Directory.Exists(OUTPUT_DIR))
                 Directory.CreateDirectory(OUTPUT_DIR);
@@ -66,13 +72,21 @@ namespace EDennis.NetStandard.Base.Security.AspNetIdentity.Utils {
             var scopes = GenerateScopes(assembly, out string project);
 
             var users = testUsers ?? DEFAULT_USERS;
-            var userClaims = users.SelectMany(u => u.Claims).Select(u => u.Key).Distinct().ToList();
+            var userClaims = users.SelectMany(u => u.Claims)
+                .Select(u => u.Key)
+                .Distinct()
+                .Union(new string[]{ "role" })
+                .ToList();
 
-            using var fs = new FileStream($"{OUTPUT_DIR}\\{project}\\.json", FileMode.CreateNew);
+            var path = $"{OUTPUT_DIR}\\{project}.json";
+            if (File.Exists(path))
+                File.Delete(path);
+
+            using var fs = new FileStream(path, FileMode.CreateNew);
             using var jw = new Utf8JsonWriter(fs, new JsonWriterOptions { Indented = true });
 
-            var idpUrl = idpPortOrUrl.StartsWith("http") ? idpPortOrUrl : $"https://localhost:{idpPortOrUrl}";
-            var apiUrl = apiPortOrUrl.StartsWith("http") ? apiPortOrUrl : $"https://localhost:{apiPortOrUrl}";
+            var idpUrl = typeof(int) == idpPortOrUrl.GetType() ? $"https://localhost:{idpPortOrUrl}" : $"{idpPortOrUrl}";
+            var apiUrl = typeof(int) == apiPortOrUrl.GetType() ? $"https://localhost:{apiPortOrUrl}" : $"{apiPortOrUrl}";
 
 
             jw.WriteStartObject();
@@ -99,6 +113,7 @@ namespace EDennis.NetStandard.Base.Security.AspNetIdentity.Utils {
                     jw.WriteStartObject();
                     {
                         jw.WriteString("Email", user.Email);
+                        jw.WriteString("PlainTextPassword", user.PlainTextPassword);
                         jw.WriteString("OrganizationName", user.OrganizationName);
                         jw.WriteStartArray("Roles");
                         {
@@ -107,7 +122,7 @@ namespace EDennis.NetStandard.Base.Security.AspNetIdentity.Utils {
                             }
                         }
                         jw.WriteEndArray();
-                        jw.WriteStartArray("Claims");
+                        jw.WriteStartObject("Claims");
                         {
                             foreach (var claimType in user.Claims.Keys) {
                                 jw.WriteStartArray(claimType);
@@ -119,7 +134,7 @@ namespace EDennis.NetStandard.Base.Security.AspNetIdentity.Utils {
                                 jw.WriteEndArray();
                             }
                         }
-                        jw.WriteEndArray();
+                        jw.WriteEndObject();
                     }
                     jw.WriteEndObject();
                 }
@@ -150,13 +165,18 @@ namespace EDennis.NetStandard.Base.Security.AspNetIdentity.Utils {
 
 
         private static void WriteClientCredentialsSection(Utf8JsonWriter jw, string project, string idpUrl) {
-            jw.WriteStartObject("ClientCredentials");
+            jw.WriteStartObject("Clients");
             {
                 jw.WriteString("Authority", idpUrl);
                 jw.WriteString("ClientId", project);
-                jw.WriteString("ClientSecret", DEFAULT_SECRET);
+                jw.WriteString("PlainTextSecret", DEFAULT_SECRET);
+                jw.WriteStartArray("AllowedGrantTypes");
+                {
+                    jw.WriteStringValue("client_credentials");
+                }
+                jw.WriteEndArray();
                 jw.WriteString("ClientClaimsPrefix", DEFAULT_CLIENT_CLAIMS_PREFIX);
-                jw.WriteStartArray("Scopes");
+                jw.WriteStartArray("AllowedScopes");
                 {
                     jw.WriteStringValue($"{project}.*");
                 }
@@ -166,13 +186,21 @@ namespace EDennis.NetStandard.Base.Security.AspNetIdentity.Utils {
         }
 
         private static void WriteAuthorizationCodeSection(Utf8JsonWriter jw, string project, string idpUrl, string apiUrl) {
-            jw.WriteStartObject("AuthorizationCode");
+            jw.WriteStartObject("Clients");
             {
                 jw.WriteString("Authority", idpUrl);
                 jw.WriteString("ClientId", project);
-                jw.WriteString("ClientSecret", DEFAULT_SECRET);
+                jw.WriteString("PlainTextSecret", DEFAULT_SECRET);
+                jw.WriteStartArray("AllowedGrantTypes");
+                {
+                    jw.WriteStringValue("code");
+                }
+                jw.WriteEndArray();
+                jw.WriteBoolean("RequireConsent", false);
+                jw.WriteBoolean("RequirePkce", true);
+                jw.WriteBoolean("AllowOfflineAccess", true);
                 jw.WriteString("ClientClaimsPrefix", DEFAULT_CLIENT_CLAIMS_PREFIX);
-                jw.WriteStartArray("Scopes");
+                jw.WriteStartArray("AllowedScopes");
                 {
                     jw.WriteStringValue($"{project}.*");
                     jw.WriteStringValue("openid");
@@ -182,10 +210,14 @@ namespace EDennis.NetStandard.Base.Security.AspNetIdentity.Utils {
                     jw.WriteStringValue("role");
                 }
                 jw.WriteEndArray();
-                jw.WriteString("GrantType", "code");
-                jw.WriteString("RedirectUri", $"http://localhost:{apiUrl}/signin-oidc");
-                jw.WriteString("PostLogoutRedirectUri", $"http://localhost:{apiUrl}/signout-callback-oidc");
-                jw.WriteBoolean("AllowOfflineAccess", true);
+                jw.WriteStartArray("RedirectUris");
+                {
+                    jw.WriteStringValue($"http://localhost:{apiUrl}/signin-oidc");
+                }
+                jw.WriteStartArray("PostLogoutRedirectUris");
+                {
+                    jw.WriteStringValue($"http://localhost:{apiUrl}/signout-callback-oidc");
+                }
             }
             jw.WriteEndObject();
         }
@@ -205,9 +237,28 @@ namespace EDennis.NetStandard.Base.Security.AspNetIdentity.Utils {
             var scopes = new List<string>();
             project = assembly.GetName().Name;
             scopes.Add($"{project}.*");
+
+            scopes.Add($"{project}.*.Get*");
+            scopes.Add($"{project}.*.Post*");
+            scopes.Add($"{project}.*.Put*");
+            scopes.Add($"{project}.*.Patch*");
+            scopes.Add($"{project}.*.Delete*");
+
             foreach (var controller in models.Keys) {
                 scopes.Add($"{project}.{controller}.*");
-                foreach (var action in models.Values) {
+                scopes.Add($"{project}.{controller}.Get*");
+                scopes.Add($"{project}.{controller}.Post*");
+                scopes.Add($"{project}.{controller}.Put*");
+                scopes.Add($"{project}.{controller}.Patch*");
+                scopes.Add($"{project}.{controller}.Delete*");
+                var actions = models[controller].Where(a => 
+                    !a.StartsWith("Get") && 
+                    !a.StartsWith("Post") &&
+                    !a.StartsWith("Put") &&
+                    !a.StartsWith("Patch") &&
+                    !a.StartsWith("Delete"))
+                    ;
+                foreach (var action in actions) {
                     scopes.Add($"{project}.{controller}.{action}");
                 }
             }

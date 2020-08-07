@@ -7,9 +7,9 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Seed": {
+    "EDennis.AspNet.Base": {
       "commandName": "Project",
-      "commandLineArgs": "/seed",
+      "commandLineArgs": "/EDennis.Samples.ColorApi.json",
       "applicationUrl": "https://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

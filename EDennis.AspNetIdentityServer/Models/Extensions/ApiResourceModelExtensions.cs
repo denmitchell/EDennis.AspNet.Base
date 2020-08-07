@@ -11,15 +11,6 @@ using M = IdentityServer4.Models;
 namespace EDennis.AspNetIdentityServer {
     public static class ApiResourceModelExtensions {
 
-        public static M.ApiResource ToModel(this ApiResourceOptions options) {
-            var resource = new M.ApiResource {
-                Name = options.Name,
-                Description = options.Name,
-                Scopes = options.Scopes,
-                UserClaims = options.UserClaims
-            };
-            return resource;
-        }
 
         public static void Patch(this M.ApiResource model, JsonElement partialModel,
             ModelStateDictionary modelState, bool mergeCollections = true) {

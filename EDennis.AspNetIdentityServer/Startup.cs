@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -30,10 +31,6 @@ namespace EDennis.AspNetIdentityServer {
         public void ConfigureServices(IServiceCollection services) {
 
             //Debugger.Launch();
-
-            services.AddIdentity<DomainUser, DomainRole>(options => options.SignIn.RequireConfirmedAccount = true)
-                           .AddEntityFrameworkStores<DomainIdentityDbContext>()
-                           .AddDefaultTokenProviders();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -61,6 +58,10 @@ namespace EDennis.AspNetIdentityServer {
                         sql => sql.MigrationsAssembly(migrationsAssembly))
                     .ReplaceService<IMigrationsSqlGenerator,MigrationsExtensionsSqlGenerator>());
 
+
+            services.AddIdentity<DomainUser, DomainRole>(options => options.SignIn.RequireConfirmedAccount = true)
+                           .AddEntityFrameworkStores<DomainIdentityDbContext>()
+                           .AddDefaultTokenProviders();
 
             services.AddTransient<IEmailSender, MockEmailSender>();
 
@@ -98,7 +99,12 @@ namespace EDennis.AspNetIdentityServer {
                         policy.RequireRole(settings.RoleName);
                 });
             });
-                
+
+            services.AddSwaggerGen(c => {
+                c.SwaggerDoc("IdentityServer", new OpenApiInfo { Title = "IdentityServer", Version = "v4" });
+            });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -130,6 +136,13 @@ namespace EDennis.AspNetIdentityServer {
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "IdentityServer V4");
+            });
+
         }
 
 
