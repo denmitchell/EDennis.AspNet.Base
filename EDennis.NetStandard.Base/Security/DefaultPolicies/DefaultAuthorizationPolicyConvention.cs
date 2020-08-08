@@ -15,11 +15,13 @@ namespace EDennis.NetStandard.Base {
         private readonly string _appName;
         private readonly IConfiguration _config;
 
-        public const string DEFAULT_POLICIES_KEY = "DefaultPolicies";
+        private readonly string _defaultPoliciesKey = "DefaultPolicies";
 
-        public DefaultAuthorizationPolicyConvention(string appName, IConfiguration config) {
+        public DefaultAuthorizationPolicyConvention(string appName, IConfiguration config, 
+                string defaultPoliciesKey) {
             _appName = appName;
             _config = config;
+            _defaultPoliciesKey = defaultPoliciesKey;
         }
 
         public void Apply(ControllerModel controller) {
@@ -31,15 +33,15 @@ namespace EDennis.NetStandard.Base {
             var controllerPath = _appName + '.' + controller.ControllerName;
 
             int i = 0;
-            if (_config.ContainsKey(DEFAULT_POLICIES_KEY)) {
+            if (_config.ContainsKey(_defaultPoliciesKey)) {
                 var dfCurr = new List<string>();
-                _config.GetSection(DEFAULT_POLICIES_KEY).Bind(dfCurr);
+                _config.GetSection(_defaultPoliciesKey).Bind(dfCurr);
                 i = dfCurr.Count();
             }
             foreach (var action in controller.Actions) {
                 var actionPath = controllerPath + '.' + action.ActionName;
                 action.Filters.Add(new AuthorizeFilter(actionPath));
-                _config[$"{DEFAULT_POLICIES_KEY}:{i}"] = actionPath;
+                _config[$"{_defaultPoliciesKey}:{i}"] = actionPath;
                 i++;
             }
         }
@@ -52,7 +54,7 @@ namespace EDennis.NetStandard.Base {
 
             var pagePath = _appName.Replace(".Lib", "") + model.ViewEnginePath.Replace('/','.');
             model.Filters.Add(new AuthorizeFilter(pagePath));
-            _config[$"{DEFAULT_POLICIES_KEY}:{pagePath}"] = "page";
+            _config[$"{_defaultPoliciesKey}:{pagePath}"] = "page";
         }
 
 

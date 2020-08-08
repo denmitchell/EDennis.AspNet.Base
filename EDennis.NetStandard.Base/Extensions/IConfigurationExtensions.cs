@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.CommandLine;
 using Microsoft.Extensions.Configuration.Json;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,176 @@ namespace EDennis.NetStandard.Base
     public static partial class IConfigurationExtensions {
 
 
-        public static bool ContainsKey(this IConfiguration config, string key) => config.GetSection(key) != null;
+        public static void BindSectionOrThrow<T>(this IConfiguration config, string key, T instance, ILogger logger = null) {
+            if (config.TryGetSection(key, out IConfigurationSection section))
+                section.Bind(instance);
+            else {
+                Throw(key, typeof(T), logger);
+            }
+        }
+
+
+        public static T GetValueOrThrow<T>(this IConfiguration config, string key, ILogger logger = null) {
+            if (config.TryGetValue(key, out T value))
+                return value;
+            else
+                Throw(key, typeof(T), logger);
+
+            return default;
+        }
+
+        private static string Throw(string key, Type type, ILogger logger = null) {
+            var ex = new ApplicationException($"Could not bind key '{key}' in Configuration to object of type {CSharpName(type)}");
+            
+            if (logger != null)
+                logger.LogError(ex, ex.Message);
+
+            throw ex;
+        }
+
+
+        public static bool TryGetSection(this IConfiguration config, string key, out IConfigurationSection targetSection) {
+            targetSection = null;
+            var children = config.GetChildren().ToList();
+            foreach (var child in children)
+                if (child.TryGetSection(key, out IConfigurationSection childSection, "")) {
+                    targetSection = childSection;
+                    return true;
+                }
+            return false;
+        }
+
+        public static bool TryGetSection(this IConfigurationSection section, string key, out IConfigurationSection targetSection, string parentKey = "") {
+            //Console.WriteLine($"{parentKey}{section.Key}");
+            targetSection = null;
+            if (section.Value == null) {
+                var children = section.GetChildren().ToList();
+                foreach (var child in children)
+                    if (child.TryGetSection(key, out IConfigurationSection childSection, $"{parentKey}{section.Key}:")) {
+                        targetSection = childSection;
+                        return true;
+                    }
+            } else if ($"{parentKey}{section.Key}" == key) {
+                targetSection = section;
+                return true;
+            }
+            return false;
+        }
+
+
+        public static bool TryGetValue<T>(this IConfiguration config, string key, out T targetValue) {
+            targetValue = default;
+
+            var value = config[key];
+            if (value != null) {
+                try {
+                    targetValue = (T)Convert.ChangeType(value, typeof(T));
+                } catch (Exception) {
+                    Throw(key, typeof(T));
+                }
+                return true;
+            }
+
+            targetValue = default;
+            var children = config.GetChildren().ToList();
+            foreach (var child in children)
+                if (child.ContainsKey(key, "")) {
+                    targetValue = default;
+                    return true;
+                }
+            return false;
+        }
+
+
+        public static bool TryGetValue<T>(this IConfigurationSection config, string key, out T targetValue) {
+            targetValue = default;
+
+            var value = config[key];
+            if (value != null) {
+                try {
+                    targetValue = (T)Convert.ChangeType(value, typeof(T));
+                } catch (Exception) {
+                    Throw(key, typeof(T));
+                }
+                return true;
+            }
+
+            targetValue = default;
+            var children = config.GetChildren().ToList();
+            foreach (var child in children)
+                if (child.ContainsKey(key, "")) {
+                    targetValue = default;
+                    return true;
+                }
+            return false;
+        }
+
+
+        public static bool ContainsKey(this IConfiguration config, string key) {
+            if (config[key] != null) {
+                return true;
+            } else {
+                var children = config.GetChildren().ToList();
+                foreach (var child in children)
+                    if (child.ContainsKey(key, ""))
+                        return true;
+            }
+
+            return false;
+        }
+
+        public static bool ContainsKey(this IConfigurationSection section, string key, string parentKey = "") {
+            if ($"{parentKey}{section.Key}" == key) {
+                return true;
+            } else if (section.Value == null) {
+                var children = section.GetChildren().ToList();
+                foreach (var child in children)
+                    if (child.ContainsKey(key, $"{parentKey}{section.Key}:"))
+                        return true;
+            }
+
+            return false;
+        }
+
+
+        /// <summary>
+        /// from https://stackoverflow.com/a/21269486
+        /// Get full type name with full namespace names
+        /// </summary>
+        /// <param name="type">
+        /// The type to get the C# name for (may be a generic type or a nullable type).
+        /// </param>
+        /// <returns>
+        /// Full type name, fully qualified namespaces
+        /// </returns>
+        public static string CSharpName(this Type type) {
+            Type nullableType = Nullable.GetUnderlyingType(type);
+            string nullableText;
+            if (nullableType != null) {
+                type = nullableType;
+                nullableText = "?";
+            } else {
+                nullableText = string.Empty;
+            }
+
+            if (type.IsGenericType) {
+                return string.Format(
+                    "{0}<{1}>{2}",
+                    type.Name.Substring(0, type.Name.IndexOf('`')),
+                    string.Join(", ", type.GetGenericArguments().Select(ga => ga.CSharpName())),
+                    nullableText);
+            }
+
+            return type.Name switch
+            {
+                "String" => "string",
+                "Int32" => "int" + nullableText,
+                "Decimal" => "decimal" + nullableText,
+                "Object" => "object" + nullableText,
+                "Void" => "void" + nullableText,
+                _ => (string.IsNullOrWhiteSpace(type.FullName) ? type.Name : type.FullName) + nullableText,
+            };
+        }
 
 
 

@@ -36,11 +36,12 @@ namespace EDennis.NetStandard.Base {
         /// the claim must NOT match.</param>
         public ClaimPatternAuthorizationHandler(
                 string requirementScope, ConcurrentDictionary<string, bool> policyPatternCache,
-                ILogger logger) {
+                ILogger logger, string claimType ) {
 
             RequirementScope = requirementScope;
             PolicyPatternCache = policyPatternCache;
             Logger = logger;
+            ClaimType = claimType;
         }
 
 
@@ -50,6 +51,9 @@ namespace EDennis.NetStandard.Base {
         public string RequirementScope { get; }
 
         public ILogger Logger { get; set; }
+
+
+        public string ClaimType;
 
         /// <summary>
         /// NOTE: Exclusions are evaluated after all included scopes.
@@ -93,14 +97,12 @@ namespace EDennis.NetStandard.Base {
             bool isSuccess = false;
             List<string> scopeClaims;
 
-            var scopeClaimType = JwtClaimTypes.Scope;
-
             //only process if there are any claims
             if (claimsPrincipal.Claims != null && claimsPrincipal.Claims.Count() > 0) {
 
                 //get relevant claims (case-insensitve match on this)
                 scopeClaims = claimsPrincipal.Claims
-                        .Where(c => c.Type.Equals(scopeClaimType, StringComparison.OrdinalIgnoreCase))
+                        .Where(c => c.Type.Equals(ClaimType, StringComparison.OrdinalIgnoreCase))
                         .Select(c => c.Value)
                         .ToList();
 
