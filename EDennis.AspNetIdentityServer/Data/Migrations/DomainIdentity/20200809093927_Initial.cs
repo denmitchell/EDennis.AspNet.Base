@@ -286,7 +286,6 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
             migrationBuilder.Sql(File.ReadAllText("Data/Sql/AspNetExpandedRoles.sql"));
             migrationBuilder.Sql(File.ReadAllText("Data/Sql/AspNetExpandedUsers.sql"));
             migrationBuilder.Sql(File.ReadAllText("Data/Sql/UserClientApplicationRoles.sql"));
-            migrationBuilder.Sql(File.ReadAllText("Data/Sql/DbDump.sql"));
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

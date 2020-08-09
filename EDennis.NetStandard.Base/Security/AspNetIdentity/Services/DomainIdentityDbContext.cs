@@ -34,7 +34,13 @@ namespace EDennis.NetStandard.Base {
                 e.HasAnnotation("SystemVersioned", true);
 
                 e.Property(u => u.Id)
-                    .HasValueGenerator<GuidValueGenerator>();
+                    .ValueGeneratedNever();
+
+                e.Property(u => u.SysStart)
+                    .ValueGeneratedOnAddOrUpdate();
+
+                e.Property(u => u.SysEnd)
+                    .ValueGeneratedOnAddOrUpdate();
 
                 e.HasIndex(i => i.UserName)
                     .IsUnique(true);
@@ -48,7 +54,13 @@ namespace EDennis.NetStandard.Base {
                 e.HasAnnotation("SystemVersioned", true);
 
                 e.Property(u => u.Id)
-                    .HasValueGenerator<GuidValueGenerator>();
+                    .ValueGeneratedNever();
+
+                e.Property(u => u.SysStart)
+                    .ValueGeneratedOnAddOrUpdate();
+
+                e.Property(u => u.SysEnd)
+                    .ValueGeneratedOnAddOrUpdate();
 
                 e.HasIndex(i => new { i.ApplicationId, i.Name })
                     .IsUnique(true);
@@ -70,7 +82,13 @@ namespace EDennis.NetStandard.Base {
                     .HasKey(p => p.Id);
 
                 e.Property(u => u.Id)
-                    .HasValueGenerator<GuidValueGenerator>();
+                    .ValueGeneratedNever();
+
+                e.Property(u => u.SysStart)
+                    .ValueGeneratedOnAddOrUpdate();
+
+                e.Property(u => u.SysEnd)
+                    .ValueGeneratedOnAddOrUpdate();
 
                 e.HasIndex(i => i.Name)
                     .IsUnique(true);
@@ -91,7 +109,13 @@ namespace EDennis.NetStandard.Base {
                     .HasKey(p => p.Id);
 
                 e.Property(u => u.Id)
-                    .HasValueGenerator<GuidValueGenerator>();
+                    .ValueGeneratedNever();
+
+                e.Property(u => u.SysStart)
+                    .ValueGeneratedOnAddOrUpdate();
+
+                e.Property(u => u.SysEnd)
+                    .ValueGeneratedOnAddOrUpdate();
 
                 e.HasIndex(i => i.Name)
                     .IsUnique(true);

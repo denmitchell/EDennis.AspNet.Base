@@ -22,7 +22,6 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
             modelBuilder.Entity("EDennis.NetStandard.Base.DomainApplication", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -34,9 +33,11 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("SysEnd")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("SysStart")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<int>("SysStatus")
@@ -61,7 +62,6 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
             modelBuilder.Entity("EDennis.NetStandard.Base.DomainOrganization", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -73,9 +73,11 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("SysEnd")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("SysStart")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<int>("SysStatus")
@@ -100,7 +102,6 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
             modelBuilder.Entity("EDennis.NetStandard.Base.DomainRole", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ApplicationId")
@@ -123,9 +124,11 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("SysEnd")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("SysStart")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<int>("SysStatus")
@@ -155,7 +158,6 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
             modelBuilder.Entity("EDennis.NetStandard.Base.DomainUser", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AccessFailedCount")
@@ -208,9 +210,11 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("SysEnd")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("SysStart")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<int>("SysStatus")

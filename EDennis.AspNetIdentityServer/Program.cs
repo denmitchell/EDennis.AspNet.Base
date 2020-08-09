@@ -93,15 +93,15 @@ namespace EDennis.AspNetIdentityServer {
             var cContext = GetContext<ConfigurationDbContext>(cxn, trans);
             var pContext = GetContext<PersistedGrantDbContext>(cxn, trans);
 
-            LoadConfigs(host, projects, cContext, diContext);
+            LoadConfigs(projects, cContext, diContext);
 
             if (commit)
                 trans.Commit();
 
-            host.Run();
-
             if (dump)
-                DumpDb(host, diContext);
+                DumpDb(host, diContext, trans);
+
+            host.Run();
 
             if (!commit)
                 trans.Rollback();
@@ -161,14 +161,14 @@ namespace EDennis.AspNetIdentityServer {
 
 
 
-        private static void DumpDb(IHost host, DomainIdentityDbContext context) {
+        private static void DumpDb(IHost host, DomainIdentityDbContext context, SqlTransaction trans) {
 
             Log.Information($"Dumping ApiResources, Clients, and Users to JSON file ...");
 
             using var scope = host.Services.CreateScope();
 
-            var cxn = context.Database.GetDbConnection();
-            var cmd = new SqlCommand("select * from DbDump");
+            var cxn = context.Database.GetDbConnection() as SqlConnection;
+            var cmd = new SqlCommand("select * from DbDump", cxn, trans);
             var result = cmd.ExecuteScalar();
             if (result != null) {
 
@@ -187,7 +187,7 @@ namespace EDennis.AspNetIdentityServer {
         }
 
 
-        private static void LoadConfigs(IHost host, IEnumerable<string> projects,
+        private static void LoadConfigs(IEnumerable<string> projects,
             ConfigurationDbContext cContext, DomainIdentityDbContext diContext) {
 
             Log.Information($"Loading {CONFIGS_DIR}\\{IDENTITY_RESOURCES_FILE} ...");
@@ -216,7 +216,6 @@ namespace EDennis.AspNetIdentityServer {
             Log.Information($"Loading project configs from {CONFIGS_DIR} ...");
 
             foreach (var project in projects) {
-
 
                 var config = new ConfigurationBuilder()
                     .AddJsonFile($"{CONFIGS_DIR}\\{project}.json")
@@ -264,13 +263,13 @@ namespace EDennis.AspNetIdentityServer {
                     return;
                 } else {
                     Log.Information($"\tLoading TestUsers for {project} ...");
-                    LoadUsers(diContext, project, users);
+                    LoadTestUsers(diContext, project, users);
                 }
             }
 
         }
 
-        private static void LoadUsers(DomainIdentityDbContext context, string project, List<TestUser> users) {
+        private static void LoadTestUsers(DomainIdentityDbContext context, string project, List<TestUser> users) {
 
             Log.Information($"\t\tChecking application record for {project} ...");
             Guid appId;
@@ -281,12 +280,12 @@ namespace EDennis.AspNetIdentityServer {
             } else {
                 Log.Information($"\t\tAdding application record for {project} ...");
                 appId = CombGuid.Create();
-                context.Applications.Add(
-                    new DomainApplication {
-                        Id = appId,
-                        Name = project,
-                        SysUser = Environment.UserName
-                    });
+                app = new DomainApplication {
+                    Id = appId,
+                    Name = project,
+                    SysUser = Environment.UserName
+                };
+                context.Applications.Add(app);
                 context.SaveChanges();
             }
 
@@ -296,22 +295,25 @@ namespace EDennis.AspNetIdentityServer {
             var roles = users.SelectMany(u => u.Roles)
                 .ToDictionary(r => r, r => default(Guid));
 
-            foreach (var entry in roles) {
-                var role = context.Roles.FirstOrDefault(a =>
-                    a.Name == entry.Key && a.ApplicationId == appId);
+            var keys = roles.Keys.ToArray();
+            for (int i=0; i<keys.Length; i++) {
+                var roleName = keys[i];
+                var role = context.Roles.FirstOrDefault(r =>
+                    r.Name == roleName && r.ApplicationId == appId);
                 if (role != null) {
-                    Log.Information($"\t\tRole {entry.Key} record found for {project} ...");
-                    roles[entry.Key] = role.Id;
+                    Log.Information($"\t\tRole {roleName} record found for {project} ...");
+                    roles[roleName] = role.Id;
                 } else {
-                    Log.Information($"\t\tAdding role {entry.Key} record for {project} ...");
-                    roles[entry.Key] = CombGuid.Create();
-                    context.Roles.Add(new DomainRole {
-                        Id = roles[entry.Key],
+                    Log.Information($"\t\tAdding role {roleName} record for {project} ...");
+                    roles[roleName] = CombGuid.Create();
+                    role = new DomainRole {
+                        Id = roles[roleName],
                         ApplicationId = appId,
-                        Name = entry.Key,
-                        NormalizedName = entry.Key.ToUpper(),
+                        Name = roleName,
+                        NormalizedName = roleName.ToUpper(),
                         SysUser = Environment.UserName
-                    });
+                    };
+                    context.Roles.Add(role);
                     context.SaveChanges();
                 }
             }
@@ -331,12 +333,12 @@ namespace EDennis.AspNetIdentityServer {
                 } else {
                     Log.Information($"\t\t\tAdding Organization {entry.OrganizationName} record for {entry.Email} ...");
                     orgId = CombGuid.Create();
-                    context.Organizations.Add(
-                        new DomainOrganization {
-                            Id = orgId,
-                            Name = entry.OrganizationName,
-                            SysUser = Environment.UserName
-                        });
+                    org = new DomainOrganization {
+                        Id = orgId,
+                        Name = entry.OrganizationName,
+                        SysUser = Environment.UserName
+                    };
+                    context.Organizations.Add(org);
                     context.SaveChanges();
                 }
 

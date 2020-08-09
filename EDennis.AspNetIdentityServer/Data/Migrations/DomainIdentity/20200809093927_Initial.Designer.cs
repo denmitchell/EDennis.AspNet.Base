@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
 {
     [DbContext(typeof(DomainIdentityDbContext))]
-    [Migration("20200806182957_Initial")]
+    [Migration("20200809093927_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,6 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
             modelBuilder.Entity("EDennis.NetStandard.Base.DomainApplication", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -36,9 +35,11 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("SysEnd")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("SysStart")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<int>("SysStatus")
@@ -63,7 +64,6 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
             modelBuilder.Entity("EDennis.NetStandard.Base.DomainOrganization", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -75,9 +75,11 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("SysEnd")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("SysStart")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<int>("SysStatus")
@@ -102,7 +104,6 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
             modelBuilder.Entity("EDennis.NetStandard.Base.DomainRole", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ApplicationId")
@@ -125,9 +126,11 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("SysEnd")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("SysStart")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<int>("SysStatus")
@@ -157,7 +160,6 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
             modelBuilder.Entity("EDennis.NetStandard.Base.DomainUser", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AccessFailedCount")
@@ -210,9 +212,11 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("SysEnd")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("SysStart")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<int>("SysStatus")

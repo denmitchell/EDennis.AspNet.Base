@@ -14,6 +14,9 @@ using System.Linq;
 using EDennis.Samples.ColorApp.Server.Data;
 using EDennis.Samples.ColorApp.Server.Models;
 using Microsoft.OpenApi.Models;
+using EDennis.AspNetIdentityServer;
+using EDennis.NetStandard.Base;
+using IdentityServer4.EntityFramework.DbContexts;
 
 namespace EDennis.Samples.ColorApp.Server {
     public class Startup {
@@ -26,15 +29,24 @@ namespace EDennis.Samples.ColorApp.Server {
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services) {
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<DomainIdentityDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddDefaultIdentity<DomainUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<DomainIdentityDbContext>();
 
-            services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+            //add reference to EDennis.AspNetIdentityServer
+
+            services.AddIdentityServer(config => { })
+                //.AddAspNetIdentity<DomainUser>() //may need to replace default UserClaimsPrincipalFactory with mine
+                //.AddApiResources() //from Configuration["IdentityServer:Resources"]
+                //.AddClients() //from Configuration["IdentityServer:Clients"]
+                //.AddIdentityResources() //from Configuration["IdentityServer:IdentityResources"]
+                .AddConfigurationStore(options => {new DefaultConfigurationStoreOptions().Load(options); }) //Need to configure the db context and set table names here just like DefaultConfigurationStoreOptions
+                .AddOperationalStore(options => { new DefaultOperationalStoreOptions().Load(options); })//Need to configure the db context and set table names here just like DefaultOperationalStoreOptions
+                .AddProfileService<DomainIdentityProfileService>()
+                .AddApiAuthorization<DomainUser, PersistedGrantDbContext>();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();

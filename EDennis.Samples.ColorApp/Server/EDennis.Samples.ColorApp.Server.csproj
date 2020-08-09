@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\EDennis.AspNetIdentityServer\EDennis.AspNetIdentityServer.csproj" />
     <ProjectReference Include="..\Client\EDennis.Samples.ColorApp.Client.csproj" />
     <ProjectReference Include="..\Shared\EDennis.Samples.ColorApp.Shared.csproj" />
   </ItemGroup>
