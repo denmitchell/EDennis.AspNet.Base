@@ -1,66 +1,63 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.ValueGeneration;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text.Json;
 
 namespace EDennis.NetStandard.Base {
-    public class DomainIdentityDbContext 
-        : IdentityDbContext<DomainUser, DomainRole, Guid, DomainUserClaim, 
-            DomainUserRole, DomainUserLogin, IdentityRoleClaim<Guid>, DomainUserToken> {
+    public abstract class TeDbContext<U, O, UC, UL, UT, R, A, RC, UR>
 
+        : IdentityDbContext<
+            TeUser<U, O, UC, UL, UT, R, A, RC, UR>,
+            TeRole<U, O, UC, UL, UT, R, A, RC, UR>, 
+            Guid,
+            TeUserClaim<U, O, UC, UL, UT, R, A, RC, UR>, 
+            TeUserRole<U, O, UC, UL, UT, R, A, RC, UR>, 
+            TeUserLogin<U, O, UC, UL, UT, R, A, RC, UR>, 
+            TeRoleClaim<U, O, UC, UL, UT, R, A, RC, UR>, 
+            TeUserToken<U, O, UC, UL, UT, R, A, RC, UR>>
 
-        public DomainIdentityDbContext(DbContextOptions<DomainIdentityDbContext> options) :
+        where U : TeUser<U, O, UC, UL, UT, R, A, RC, UR>
+        where O : TeOrganization<U, O, UC, UL, UT, R, A, RC, UR>
+        where UC : TeUserClaim<U, O, UC, UL, UT, R, A, RC, UR>
+        where UL : TeUserLogin<U, O, UC, UL, UT, R, A, RC, UR>
+        where UT : TeUserToken<U, O, UC, UL, UT, R, A, RC, UR>
+        where R : TeRole<U, O, UC, UL, UT, R, A, RC, UR>
+        where A : TeApplication<U, O, UC, UL, UT, R, A, RC, UR>
+        where RC : TeRoleClaim<U, O, UC, UL, UT, R, A, RC, UR>
+        where UR : TeUserRole<U, O, UC, UL, UT, R, A, RC, UR> {        
+        
+
+        public TeDbContext(DbContextOptions<TeDbContext<U, O, UC, UL, UT, R, A, RC, UR>> options) :
             base(options) { }
 
 
-        public DbSet<IdentityApplication> Applications { get; set; }
-        public DbSet<DomainOrganization> Organizations { get; set; }
+        public DbSet<TeApplication<U, O, UC, UL, UT, R, A, RC, UR>> Applications { get; set; }
+        public DbSet<TeOrganization<U, O, UC, UL, UT, R, A, RC, UR>> Organizations { get; set; }
         public DbSet<UserClientApplicationRole> UserClientApplicationRoles { get; set; }
         public DbSet<ExpandedDomainUser> ExpandedUsers { get; set; }
         public DbSet<ExpandedDomainRole> ExpandedRoles { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder) {
             base.OnModelCreating(builder);
 
 
+            builder.Entity<TeUser<U, O, UC, UL, UT, R, A, RC, UR>>(e => {
 
-            builder.Entity<DomainUser>(e => {
-                e.HasAnnotation("SystemVersioned", true);
+                e.ConfigureTemporalEntity(builder, u => u.Id, false, true);
 
                 e.Property(u => u.Id)
                     .ValueGeneratedNever();
-
-                e.Property(u => u.SysStart)
-                    .ValueGeneratedOnAddOrUpdate();
-
-                e.Property(u => u.SysEnd)
-                    .ValueGeneratedOnAddOrUpdate();
 
                 e.HasIndex(i => i.UserName)
                     .IsUnique(true);
-
-                e.Property(p => p.SysUser)
-                    .IsUnicode(false)
-                    .HasMaxLength(150);
             });
 
-            builder.Entity<DomainRole>(e => {
-                e.HasAnnotation("SystemVersioned", true);
 
-                e.Property(u => u.Id)
-                    .ValueGeneratedNever();
+            builder.Entity<TeRole<U, O, UC, UL, UT, R, A, RC, UR>>(e => {
 
-                e.Property(u => u.SysStart)
-                    .ValueGeneratedOnAddOrUpdate();
-
-                e.Property(u => u.SysEnd)
-                    .ValueGeneratedOnAddOrUpdate();
+                e.ConfigureTemporalEntity(builder, u => u.Id, false, true);
 
                 e.HasIndex(i => new { i.ApplicationId, i.Name })
                     .IsUnique(true);
@@ -68,12 +65,9 @@ namespace EDennis.NetStandard.Base {
                 e.Property(p => p.Name)
                     .IsUnicode(false)
                     .HasMaxLength(256);
-
-                e.Property(p => p.SysUser)
-                    .IsUnicode(false)
-                    .HasMaxLength(150);
                     
             });
+
 
             builder.Entity<IdentityApplication>(e => {
                 e.HasAnnotation("SystemVersioned", true);
@@ -152,4 +146,5 @@ namespace EDennis.NetStandard.Base {
 
 
     }
+
 }

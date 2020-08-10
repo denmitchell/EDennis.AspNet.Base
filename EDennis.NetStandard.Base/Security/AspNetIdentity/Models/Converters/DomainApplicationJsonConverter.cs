@@ -11,12 +11,12 @@ namespace EDennis.NetStandard.Base {
     /// <summary>
     /// Used to handle serialization/deserialization of Properties property
     /// </summary>
-    public class DomainApplicationJsonConverter : JsonConverter<DomainApplication> {
+    public class DomainApplicationJsonConverter : JsonConverter<IdentityApplication> {
 
         private OtherProperties _otherProperties;
 
-        public override DomainApplication Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
-            var obj = new DomainApplication();
+        public override IdentityApplication Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
+            var obj = new IdentityApplication();
             DeserializeInto(obj, reader);
             return obj;
         }
@@ -28,14 +28,14 @@ namespace EDennis.NetStandard.Base {
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="request"></param>
-        public void DeserializeInto(DomainApplication obj, HttpRequest request) {
+        public void DeserializeInto(IdentityApplication obj, HttpRequest request) {
             using var reader = new StreamReader(request.Body, Encoding.UTF8);
             var str = Encoding.UTF8.GetBytes(Task.Run(() => reader.ReadToEndAsync()).Result);
             var bytes = new ReadOnlySpan<byte>(str);
             DeserializeInto(obj,new Utf8JsonReader(bytes));
         }
 
-        public void DeserializeInto(DomainApplication obj, Utf8JsonReader reader) {
+        public void DeserializeInto(IdentityApplication obj, Utf8JsonReader reader) {
             while (reader.Read()) {
                 switch (reader.TokenType) {
                     case JsonTokenType.PropertyName:
@@ -83,7 +83,7 @@ namespace EDennis.NetStandard.Base {
 
         }
 
-        public override void Write(Utf8JsonWriter writer, DomainApplication value, JsonSerializerOptions options) {
+        public override void Write(Utf8JsonWriter writer, IdentityApplication value, JsonSerializerOptions options) {
             writer.WriteStartObject();
             {
                 writer.WriteString("Id", value.Id.ToString());

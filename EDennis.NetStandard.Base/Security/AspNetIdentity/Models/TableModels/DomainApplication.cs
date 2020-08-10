@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace EDennis.NetStandard.Base {
 
     [JsonConverter(typeof(DomainApplicationJsonConverter))]
-    public class DomainApplication : IDomainEntity, IHasStringProperties {
+    public class IdentityApplication : IDomainEntity, IHasStringProperties {
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string SysUser { get; set; }

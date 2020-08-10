@@ -56,7 +56,7 @@ namespace EDennis.NetStandard.Base {
             var skip = (pageNumber ?? 1 - 1) * pageSize ?? 100;
             var take = pageSize ?? 100;
 
-            var qry = _dbContext.Applications as IQueryable<DomainApplication>;
+            var qry = _dbContext.Applications as IQueryable<IdentityApplication>;
 
             qry = qry.Skip(skip)
                 .Take(take)
@@ -114,7 +114,7 @@ namespace EDennis.NetStandard.Base {
         public async Task<ObjectResult> CreateAsync(JsonElement jsonElement, 
             ModelStateDictionary modelState, string sysUser) {
 
-            var inputApp = new DomainApplication();
+            var inputApp = new IdentityApplication();
             DeserializeInto(inputApp, jsonElement, modelState, sysUser);
 
             if (inputApp.Id == default)
@@ -253,11 +253,11 @@ namespace EDennis.NetStandard.Base {
         /// </summary>
         /// <param name="pathParameter">Id, Email, or UserName</param>
         /// <returns>DomainApplication record</returns>
-        private async Task<DomainApplication> FindAsync(string pathParameter) {
+        private async Task<IdentityApplication> FindAsync(string pathParameter) {
             if (idPattern.IsMatch(pathParameter))
-                return await _dbContext.FindAsync<DomainApplication>(Guid.Parse(pathParameter));
+                return await _dbContext.FindAsync<IdentityApplication>(Guid.Parse(pathParameter));
             else
-                return await _dbContext.Set<DomainApplication>()
+                return await _dbContext.Set<IdentityApplication>()
                     .FirstOrDefaultAsync(a => a.Name == pathParameter);
         }
 
@@ -269,7 +269,7 @@ namespace EDennis.NetStandard.Base {
         /// <param name="jsonElement">Parsed JSON object</param>
         /// <param name="modelState">Object to hold errors</param>
         /// <param name="sysUser">SysUser to update in user record</param>
-        private void DeserializeInto(DomainApplication app, JsonElement jsonElement, ModelStateDictionary modelState, string sysUser) {
+        private void DeserializeInto(IdentityApplication app, JsonElement jsonElement, ModelStateDictionary modelState, string sysUser) {
 
             OtherProperties otherProperties = null;
             foreach (var prop in jsonElement.EnumerateObject()) {

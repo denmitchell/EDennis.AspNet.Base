@@ -280,7 +280,7 @@ namespace EDennis.AspNetIdentityServer {
             } else {
                 Log.Information($"\t\tAdding application record for {project} ...");
                 appId = CombGuid.Create();
-                app = new DomainApplication {
+                app = new IdentityApplication {
                     Id = appId,
                     Name = project,
                     SysUser = Environment.UserName
