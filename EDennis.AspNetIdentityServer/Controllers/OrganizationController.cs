@@ -1,11 +1,13 @@
-﻿using EDennis.NetStandard.Base;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
+using EDennis.NetStandard.Base;
+using Microsoft.Extensions.Logging;
 
 namespace EDennis.AspNetIdentityServer {
 
     [Authorize(Policy = "AdministerIDP")]
-    public class OrganizationController : IdpOrganizationController {
-        public OrganizationController(DomainOrganizationRepo repo) : base(repo) {
+    public class OrganizationController : DomainOrganizationController {
+        public OrganizationController(DbContextProvider<DomainIdentityDbContext> provider,
+            ILogger<QueryController<DomainIdentityDbContext, DomainOrganization>> logger) : base(provider, logger) {
         }
     }
 }

@@ -728,16 +728,16 @@ select u.*
         /// <item>string Email</item>
         /// </list>
         /// <returns>ExpandedDomainUser record</returns>
-        private async Task<ExpandedDomainUser> FindExpandedAsync(string pathParameter) {
+        private async Task<OLDExpandedDomainUser> FindExpandedAsync(string pathParameter) {
             if (pathParameter.Contains("@"))
-                return await _dbContext.Set<ExpandedDomainUser>()
+                return await _dbContext.Set<OLDExpandedDomainUser>()
                     .SingleAsync(u => u.NormalizedEmail == pathParameter.ToUpper());
 
             else if (idPattern.IsMatch(pathParameter))
-                return await _dbContext.Set<ExpandedDomainUser>()
+                return await _dbContext.Set<OLDExpandedDomainUser>()
                     .SingleAsync(u => u.Id == Guid.Parse(pathParameter));
             else
-                return await _dbContext.Set<ExpandedDomainUser>()
+                return await _dbContext.Set<OLDExpandedDomainUser>()
                     .SingleAsync(u => u.NormalizedUserName == pathParameter.ToUpper());
         }
 
@@ -750,7 +750,6 @@ select u.*
         /// <param name="sysUser">SysUser to update in user record</param>
         private void DeserializeInto(DomainUser user, JsonElement jsonElement, 
             ModelStateDictionary modelState, string sysUser) {
-            OtherProperties otherProperties = null;
             foreach (var prop in jsonElement.EnumerateObject()) {
                 try {
                     switch (prop.Name) {
@@ -832,25 +831,11 @@ select u.*
                         case "organizationId":
                             user.OrganizationId = prop.Value.GetGuid();
                             break;
-                        case "ConcurrencyStamp":
-                        case "concurrencyStamp":
-                        case "SecurityStamp":
-                        case "securityStamp":
-                        case "LockoutEnabled":
-                        case "lockoutEnabled":
-                        case "OrganizationName":
-                        case "organizationName":
-                        default:
-                            if (otherProperties == null)
-                                otherProperties = new OtherProperties();
-                            otherProperties.Add(prop);
-                            break;
                     }
                 } catch (Exception ex) {
                     modelState.AddModelError(prop.Name, $"Parsing error: {ex.Message}");
                 }
             }
-            user.Properties = otherProperties.ToString();
         }
 
         #endregion

@@ -34,7 +34,8 @@ namespace EDennis.Samples.ColorApp.Server {
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<DomainUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<DomainIdentityDbContext>();
+                .AddEntityFrameworkStores<DomainIdentityDbContext>()
+                .AddRoleValidator<DomainRoleValidator>();
 
             //add reference to EDennis.AspNetIdentityServer
 

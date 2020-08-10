@@ -22,11 +22,11 @@ namespace EDennis.NetStandard.Base {
         /// <param name="useSequence">Whether to configure a (SQL Server) sequence</param>
         /// <returns></returns>
         public static ModelBuilder ConfigureCrudEntity<TEntity>(this ModelBuilder modelBuilder,
-            Expression<Func<TEntity, object>> keyExpression, bool useSequence = true)
+            Expression<Func<TEntity, object>> keyExpression, bool useSequence = true, string tableName = null)
             where TEntity : class, ICrudEntity {
 
             modelBuilder.Entity<TEntity>(e => {
-                e.ConfigureTable(modelBuilder, keyExpression, useSequence);
+                e.ConfigureTable(modelBuilder, keyExpression, useSequence, tableName);
                 e.ConfigureSysUser();
                 e.ConfigureSysStatus();
             });
@@ -49,14 +49,14 @@ namespace EDennis.NetStandard.Base {
         /// <returns></returns>
         public static ModelBuilder ConfigureTemporalEntity<TEntity>(this ModelBuilder modelBuilder,                 
                 Expression<Func<TEntity,object>> keyExpression, bool useSequence = true,
-                bool isSqlServerTemporal = true)
+                bool isSqlServerTemporal = true, string tableName = null)
             where TEntity : class, ITemporalEntity {
 
 
             modelBuilder.Entity<TEntity>(e => {
                 if (isSqlServerTemporal)
                     e.HasAnnotation("SystemVersioned", true);
-                e.ConfigureTable(modelBuilder, keyExpression, useSequence);
+                e.ConfigureTable(modelBuilder, keyExpression, useSequence, tableName);
                 e.ConfigureSysUser();
                 e.ConfigureSysStatus();
                 e.ConfigureSysStart();
@@ -87,10 +87,10 @@ namespace EDennis.NetStandard.Base {
         /// <returns></returns>
         public static EntityTypeBuilder<TEntity> ConfigureCrudEntity<TEntity>(this EntityTypeBuilder<TEntity> builder,
             ModelBuilder modelBuilder,
-            Expression<Func<TEntity, object>> keyExpression, bool useSequence = true)
+            Expression<Func<TEntity, object>> keyExpression, bool useSequence = true, string tableName = null)
             where TEntity : class, ICrudEntity {
 
-            builder.ConfigureTable(modelBuilder, keyExpression, useSequence)
+            builder.ConfigureTable(modelBuilder, keyExpression, useSequence, tableName)
                 .ConfigureSysUser()
                 .ConfigureSysStatus();
 
@@ -114,13 +114,13 @@ namespace EDennis.NetStandard.Base {
         public static EntityTypeBuilder<TEntity> ConfigureTemporalEntity<TEntity>(this EntityTypeBuilder<TEntity> builder,
                 ModelBuilder modelBuilder,
                 Expression<Func<TEntity, object>> keyExpression, bool useSequence = true,
-                bool isSqlServerTemporal = true)
+                bool isSqlServerTemporal = true, string tableName = null)
             where TEntity : class, ITemporalEntity {
 
 
             if (isSqlServerTemporal)
                 builder.HasAnnotation("SystemVersioned", true);
-            builder.ConfigureTable(modelBuilder, keyExpression, useSequence);
+            builder.ConfigureTable(modelBuilder, keyExpression, useSequence, tableName);
             builder.ConfigureSysUser();
             builder.ConfigureSysStatus();
             builder.ConfigureSysStart();
@@ -142,11 +142,11 @@ namespace EDennis.NetStandard.Base {
         /// <returns></returns>
         public static EntityTypeBuilder<TEntity> ConfigureTable<TEntity>(this EntityTypeBuilder<TEntity> e, 
             ModelBuilder modelBuilder, 
-            Expression<Func<TEntity, object>> keyExpression, bool useSequence = true )
+            Expression<Func<TEntity, object>> keyExpression, bool useSequence = true, string tableName = null )
             
             where TEntity : class, ICrudEntity {
 
-            var tableName = typeof(TEntity).Name;
+            tableName ??= typeof(TEntity).Name;
 
             e.ToTable(tableName)
              .HasKey(keyExpression);

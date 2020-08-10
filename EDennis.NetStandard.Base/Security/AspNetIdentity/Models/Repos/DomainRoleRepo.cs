@@ -384,12 +384,12 @@ select r.*
         /// <item>string Email</item>
         /// </list>
         /// <returns>ExpandedDomainRole record</returns>
-        private async Task<ExpandedDomainRole> FindExpandedAsync(string pathParameter) {
+        private async Task<OLDExpandedDomainRole> FindExpandedAsync(string pathParameter) {
             if (idPattern.IsMatch(pathParameter))
-                return await _dbContext.Set<ExpandedDomainRole>()
+                return await _dbContext.Set<OLDExpandedDomainRole>()
                     .SingleAsync(u => u.Id == Guid.Parse(pathParameter));
             else
-                return await _dbContext.Set<ExpandedDomainRole>()
+                return await _dbContext.Set<OLDExpandedDomainRole>()
                     .SingleAsync(u => u.Name == pathParameter);
         }
 
