@@ -132,6 +132,7 @@ namespace EDennis.NetStandard.Base {
                 [FromQuery] string where = null,
                 [FromQuery] string orderBy = null,
                 [FromQuery] string select = null,
+                [FromQuery] string include = null,
                 [FromQuery] int? skip = null,
                 [FromQuery] int? take = null,
                 [FromQuery] int? totalRecords = null
@@ -140,7 +141,7 @@ namespace EDennis.NetStandard.Base {
             try {
                 if (select != null) {
 
-                    IQueryable qry = BuildLinqQuery(select, where, orderBy, skip, take, totalRecords,
+                    IQueryable qry = BuildLinqQuery(select, include, where, orderBy, skip, take, totalRecords,
                         out DynamicLinqResult dynamicLinqResult);
 
                     var result = qry.ToDynamicList();
@@ -148,7 +149,7 @@ namespace EDennis.NetStandard.Base {
                     var json = JsonSerializer.Serialize(dynamicLinqResult);
                     return new ContentResult { Content = json, ContentType = "application/json" };
                 } else {
-                    IQueryable<TEntity> qry = BuildLinqQuery(where, orderBy, skip, take, totalRecords,
+                    IQueryable<TEntity> qry = BuildLinqQuery(include, where, orderBy, skip, take, totalRecords,
                         out DynamicLinqResult<TEntity> dynamicLinqResult);
 
                     var result = qry.ToDynamicList<TEntity>();
@@ -184,6 +185,7 @@ namespace EDennis.NetStandard.Base {
                 [FromQuery] string where = null,
                 [FromQuery] string orderBy = null,
                 [FromQuery] string select = null,
+                [FromQuery] string include = null,
                 [FromQuery] int? skip = null,
                 [FromQuery] int? take = null,
                 [FromQuery] int? totalRecords = null
@@ -191,7 +193,7 @@ namespace EDennis.NetStandard.Base {
             try {
                 if (select != null) {
 
-                    IQueryable qry = BuildLinqQuery(select, where, orderBy, skip, take, totalRecords,
+                    IQueryable qry = BuildLinqQuery(select, include, where, orderBy, skip, take, totalRecords,
                         out DynamicLinqResult dynamicLinqResult);
 
                     var result = await qry.ToDynamicListAsync();
@@ -199,7 +201,7 @@ namespace EDennis.NetStandard.Base {
                     var json = JsonSerializer.Serialize(dynamicLinqResult);
                     return new ContentResult { Content = json, ContentType = "application/json" };
                 } else {
-                    IQueryable<TEntity> qry = BuildLinqQuery(where, orderBy, skip, take, totalRecords,
+                    IQueryable<TEntity> qry = BuildLinqQuery(include, where, orderBy, skip, take, totalRecords,
                         out DynamicLinqResult<TEntity> dynamicLinqResult);
 
                     var result = await qry.ToDynamicListAsync<TEntity>();
@@ -253,11 +255,16 @@ namespace EDennis.NetStandard.Base {
         /// <param name="totalRecords">the total number of records across all pages</param>
         /// <param name="pagedResult">paging metadata</param>
         /// <returns></returns>
-        private IQueryable<TEntity> BuildLinqQuery(string where, string orderBy, int? skip, int? take, int? totalRecords, out DynamicLinqResult<TEntity> pagedResult) {
+        private IQueryable<TEntity> BuildLinqQuery(string include, string where, string orderBy, int? skip, int? take, int? totalRecords, out DynamicLinqResult<TEntity> pagedResult) {
 
             var qry = GetQuery();
 
             try {
+                if (!string.IsNullOrWhiteSpace(include)) {
+                    var includes = include.Split(";");
+                    foreach (var incl in includes)
+                        qry = qry.Include(incl);
+                }
                 if (!string.IsNullOrWhiteSpace(where))
                     qry = qry.Where(where);
                 if (!string.IsNullOrWhiteSpace(orderBy))
@@ -300,9 +307,9 @@ namespace EDennis.NetStandard.Base {
         /// <param name="totalRecords">the total number of records across all pages</param>
         /// <param name="pagedResult">paging metadata</param>
         /// <returns></returns>
-        private IQueryable BuildLinqQuery(string select, string where, string orderBy, int? skip, int? take, int? totalRecords, out DynamicLinqResult pagedResult) {
+        private IQueryable BuildLinqQuery(string select, string include, string where, string orderBy, int? skip, int? take, int? totalRecords, out DynamicLinqResult pagedResult) {
 
-            IQueryable<TEntity> qry = BuildLinqQuery(where, orderBy, skip, take, totalRecords, out DynamicLinqResult<TEntity> pagedResultInner);
+            IQueryable<TEntity> qry = BuildLinqQuery(include, where, orderBy, skip, take, totalRecords, out DynamicLinqResult<TEntity> pagedResultInner);
 
             pagedResult = new DynamicLinqResult {
                 CurrentPage = pagedResultInner.CurrentPage,

@@ -35,12 +35,12 @@ namespace EDennis.AspNetIdentityServer {
         
         public async Task GetProfileDataAsync(ProfileDataRequestContext context) {
 
-            var userId = Guid.Parse(context.Subject.GetSubjectId());
+            var userId = int.Parse(context.Subject.GetSubjectId());
             var clientId = context.Client.ClientId;
 
 
             //add roles
-            var roles = await _dbContext.UserClientApplicationRoles
+            var roles = await _dbContext.Set<UserClientApplicationRole>()
                 .Where(x => x.UserId == userId && x.ClientId == clientId)
                 .ToListAsync();
 

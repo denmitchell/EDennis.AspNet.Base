@@ -56,7 +56,7 @@ namespace EDennis.NetStandard.Base {
             var skip = (pageNumber ?? 1 - 1) * pageSize ?? 100;
             var take = pageSize ?? 100;
 
-            var qry = _dbContext.Organizations as IQueryable<DomainOrganization>;
+            var qry = _dbContext.Set<DomainOrganization>() as IQueryable<DomainOrganization>;
 
             qry = qry.Skip(skip)
                 .Take(take)
@@ -116,9 +116,6 @@ namespace EDennis.NetStandard.Base {
 
             var inputOrg = new DomainOrganization();
             DeserializeInto(inputOrg, jsonElement, modelState, sysUser);
-
-            if (inputOrg.Id == default)
-                inputOrg.Id = CombGuid.Create();
 
             if (modelState.ErrorCount > 0)
                 return new ObjectResult(modelState) { StatusCode = StatusCodes.Status409Conflict };
@@ -271,13 +268,12 @@ namespace EDennis.NetStandard.Base {
         /// <param name="sysUser">SysUser to update in user record</param>
         private void DeserializeInto(DomainOrganization org, JsonElement jsonElement, ModelStateDictionary modelState, string sysUser) {
 
-            OtherProperties otherProperties = null;
             foreach (var prop in jsonElement.EnumerateObject()) {
                 try {
                     switch (prop.Name) {
                         case "Id":
                         case "id":
-                            org.Id = prop.Value.GetGuid();
+                            org.Id = prop.Value.GetInt32();
                             break;
                         case "Name":
                         case "name":
@@ -299,17 +295,11 @@ namespace EDennis.NetStandard.Base {
                         case "sysEnd":
                             org.SysEnd = prop.Value.GetDateTime();
                             break;
-                        default:
-                            if (otherProperties == null)
-                                otherProperties = new OtherProperties();
-                            otherProperties.Add(prop);
-                            break;
                     }
                 } catch (Exception ex) {
                     modelState.AddModelError(prop.Name, $"Parsing error: {ex.Message}");
                 }
             }
-            org.Properties = otherProperties.ToString();
         }
 
 

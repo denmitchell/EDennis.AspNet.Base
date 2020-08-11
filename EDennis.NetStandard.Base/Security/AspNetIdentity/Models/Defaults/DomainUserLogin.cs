@@ -12,7 +12,7 @@ namespace EDennis.NetStandard.Base {
                 switch (prop.Name) {
                     case "UserId":
                     case "userId":
-                        UserId = prop.Value.GetGuid();
+                        UserId = prop.Value.GetInt32();
                         break;
                     case "LoginProvider":
                     case "loginProvider":
@@ -58,7 +58,7 @@ namespace EDennis.NetStandard.Base {
         public override void Write(Utf8JsonWriter writer, DomainUserLogin value, JsonSerializerOptions options) {
             writer.WriteStartObject();
             {
-                writer.WriteString("UserId", value.UserId.ToString());
+                writer.WriteNumber("UserId", value.UserId);
                 writer.WriteString("LoginProvider", value.LoginProvider.ToString());
                 writer.WriteString("ProviderKey", value.ProviderKey.ToString());
                 writer.WriteString("ProviderDisplayName", value.ProviderDisplayName.ToString());
@@ -71,5 +71,4 @@ namespace EDennis.NetStandard.Base {
         }
     }
 
-}
 }

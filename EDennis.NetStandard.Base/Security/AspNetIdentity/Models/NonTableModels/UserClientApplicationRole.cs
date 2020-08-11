@@ -9,7 +9,7 @@ namespace EDennis.NetStandard.Base {
     /// ClientApplications and UserApplicationRoles.
     /// </summary>
     public class UserClientApplicationRole {
-        public Guid UserId { get; set; }
+        public int UserId { get; set; }
         public string ClientId { get; set; }
         public string ApplicationName { get; set; }
         public string RoleName { get; set; }

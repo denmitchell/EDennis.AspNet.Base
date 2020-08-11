@@ -1,6 +1,4 @@
 ﻿using System.Linq;
-using System;
-using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,8 +18,6 @@ namespace EDennis.NetStandard.Base {
         where TUserRole : DomainUserRole<TUser, TOrganization, TUserClaim, TUserLogin, TUserToken, TRole, TApplication, TRoleClaim, TUserRole>, new() {        
 
 
-        public static Regex idPattern = new Regex("[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}");
-
         public DomainUserController(DbContextProvider<TContext> provider, 
             ILogger<QueryController<TContext, TUser>> logger
             ) : base(provider, logger) {
@@ -30,10 +26,10 @@ namespace EDennis.NetStandard.Base {
 
         [NonAction]
         public override IQueryable<TUser> Find(string pathParameter) {
-            if (pathParameter.Contains("@"))
-                return _dbContext.Set<TUser>().Where(e => e.Id == Guid.Parse(pathParameter));
-            else if (idPattern.IsMatch(pathParameter))
-                return _dbContext.Set<TUser>().Where(e => e.Id == Guid.Parse(pathParameter));
+            if (int.TryParse(pathParameter, out int id))
+                return _dbContext.Set<TUser>().Where(e => e.Id == id);
+            else if (pathParameter.Contains("@"))
+                return _dbContext.Set<TUser>().Where(e => e.NormalizedEmail == pathParameter.ToUpper());
             else
                 return _dbContext.Set<TUser>().Where(a => a.NormalizedUserName == pathParameter.ToUpper());
         }

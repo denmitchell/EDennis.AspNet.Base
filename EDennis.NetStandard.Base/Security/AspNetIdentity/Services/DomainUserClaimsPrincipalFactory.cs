@@ -5,52 +5,48 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace EDennis.NetStandard.Base {
+
     public class DomainUserClaimsPrincipalFactory : IUserClaimsPrincipalFactory<DomainUser> {
         
         private readonly DomainIdentityDbContext _context;
+        private readonly IAppClaimComposer _composer;
 
-
-        public DomainUserClaimsPrincipalFactory(DomainIdentityDbContext context) {
+        public DomainUserClaimsPrincipalFactory(DomainIdentityDbContext context, 
+            IAppClaimComposer composer) {
             _context = context;
+            _composer = composer;
         }
 
         public async Task<ClaimsPrincipal> CreateAsync(DomainUser user) {
             var principal = new ClaimsPrincipal();
             var identity = new ClaimsIdentity();
 
-            identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName ?? user.Email ?? user.Id.ToString()));
-            identity.AddClaim(new Claim(JwtClaimTypes.Name, user.UserName ?? user.Email ?? user.Id.ToString()));
+            var userClaims = user.ToClaims();
+            foreach (var claim in userClaims)
+                identity.AddClaim(claim);
 
-            if (!string.IsNullOrWhiteSpace(user.Email)) {
-                identity.AddClaim(new Claim(ClaimTypes.Email, user.Email));
-                identity.AddClaim(new Claim(JwtClaimTypes.Email, user.Email));
-            }
-
-            if (!string.IsNullOrWhiteSpace(user.PhoneNumber)) {
-                identity.AddClaim(new Claim(JwtClaimTypes.PhoneNumber, user.PhoneNumber));
-            }
-
-            if (user.OrganizationId != default) {
-                var organizationName = (await _context.Organizations.FirstOrDefaultAsync(o => o.Id == user.OrganizationId))?.Name;
+            if (user.OrganizationId != default && !userClaims.Any(c=>c.Type =="organization")) {
+                var organizationName = (await _context.Set<DomainOrganization>().FirstOrDefaultAsync(o => o.Id == user.OrganizationId))?.Name;
                 if (organizationName != null)
                     identity.AddClaim(new Claim("organization", organizationName));
             }
 
             var query =
                     from r in _context.Roles
-                    join a in _context.Applications
+                    join a in _context.Set<DomainApplication>()
                         on r.ApplicationId equals a.Id
                     join ur in _context.UserRoles
                             on r.Id equals ur.RoleId
                     where ur.UserId == user.Id
-                    select new { ApplicationName = a.Name, RoleName = r.Name };
+                    select new AppClaim{ ApplicationName = a.Name, ClaimType = JwtClaimTypes.Role, ClaimValue = r.Name };
 
-            var roles = await query.ToListAsync();
+            var appClaims = await query.ToListAsync();
 
-            foreach(var role in roles) {
-                identity.AddClaim(new Claim(role.ApplicationName, role.RoleName));
+            foreach(var appClaim in appClaims) {
+                identity.AddClaim(_composer.Compose(appClaim));
             }
 
             principal.AddIdentity(identity);

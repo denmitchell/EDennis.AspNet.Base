@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace EDennis.NetStandard.Base {
-    public abstract class DomainUser<TUser, TOrganization, TUserClaim, TUserLogin, TUserToken, TRole, TApplication, TRoleClaim, TUserRole> : IdentityUser<Guid>, ITemporalEntity
+    public abstract class DomainUser<TUser, TOrganization, TUserClaim, TUserLogin, TUserToken, TRole, TApplication, TRoleClaim, TUserRole> : IdentityUser<int>, ITemporalEntity
         where TUser : DomainUser<TUser, TOrganization, TUserClaim, TUserLogin, TUserToken, TRole, TApplication, TRoleClaim, TUserRole>, new()
         where TOrganization : DomainOrganization<TUser, TOrganization, TUserClaim, TUserLogin, TUserToken, TRole, TApplication, TRoleClaim, TUserRole>, new()
         where TUserClaim : DomainUserClaim<TUser, TOrganization, TUserClaim, TUserLogin, TUserToken, TRole, TApplication, TRoleClaim, TUserRole>, new()
@@ -54,7 +55,7 @@ namespace EDennis.NetStandard.Base {
         public DateTime SysStart { get; set; }
         public DateTime SysEnd { get; set; }
 
-        public Guid OrganizationId { get; set; }
+        public int OrganizationId { get; set; }
         public TOrganization Organization { get; set; }
 
         public ICollection<TUserClaim> Claims { get; set; }
@@ -67,6 +68,6 @@ namespace EDennis.NetStandard.Base {
 
         public abstract void Update(object updated);
 
-
+        public abstract ICollection<Claim> ToClaims();
     }
 }

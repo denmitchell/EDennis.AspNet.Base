@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json;
 
 namespace EDennis.NetStandard.Base {
-    public abstract class DomainRole<TUser, TOrganization, TUserClaim, TUserLogin, TUserToken, TRole, TApplication, TRoleClaim, TUserRole> : IdentityRole<Guid>, ITemporalEntity
+    public abstract class DomainRole<TUser, TOrganization, TUserClaim, TUserLogin, TUserToken, TRole, TApplication, TRoleClaim, TUserRole> : IdentityRole<int>, ITemporalEntity
         where TUser : DomainUser<TUser, TOrganization, TUserClaim, TUserLogin, TUserToken, TRole, TApplication, TRoleClaim, TUserRole>, new()
         where TOrganization : DomainOrganization<TUser, TOrganization, TUserClaim, TUserLogin, TUserToken, TRole, TApplication, TRoleClaim, TUserRole>, new()
         where TUserClaim : DomainUserClaim<TUser, TOrganization, TUserClaim, TUserLogin, TUserToken, TRole, TApplication, TRoleClaim, TUserRole>, new()
@@ -22,7 +22,7 @@ namespace EDennis.NetStandard.Base {
         public DateTime SysStart { get; set; }
         public DateTime SysEnd { get; set; }
 
-        public Guid ApplicationId { get; set; }
+        public int ApplicationId { get; set; }
         public TApplication Application { get; set; }
 
         public ICollection<TRoleClaim> Claims { get; set; }

@@ -13,11 +13,11 @@ namespace EDennis.NetStandard.Base {
                 switch (prop.Name) {
                     case "UserId":
                     case "userId":
-                        UserId = prop.Value.GetGuid();
+                        UserId = prop.Value.GetInt32();
                         break;
                     case "RoleId":
                     case "roleId":
-                        RoleId = prop.Value.GetGuid();
+                        RoleId = prop.Value.GetInt32();
                         break;
                     case "SysUser":
                     case "sysUser":
@@ -49,8 +49,8 @@ namespace EDennis.NetStandard.Base {
         public override void Write(Utf8JsonWriter writer, DomainUserRole value, JsonSerializerOptions options) {
             writer.WriteStartObject();
             {
-                writer.WriteString("UserId", value.UserId.ToString());
-                writer.WriteString("RoleId", value.RoleId.ToString());
+                writer.WriteNumber("UserId", value.UserId);
+                writer.WriteNumber("RoleId", value.RoleId);
                 if (value.User != null && value.Role != null && value.Role.Application != null) {
                     writer.WriteString("UserName", value.User.UserName);
                     writer.WriteString("ApplicationName", value.Role.Application.Name);

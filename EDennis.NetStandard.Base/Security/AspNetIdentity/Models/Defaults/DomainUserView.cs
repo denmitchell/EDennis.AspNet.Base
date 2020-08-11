@@ -19,7 +19,7 @@ namespace EDennis.NetStandard.Base {
         public override void Write(Utf8JsonWriter writer, DomainUserView value, JsonSerializerOptions options) {
             writer.WriteStartObject();
             {
-                writer.WriteString("Id", value.Id.ToString());
+                writer.WriteNumber("Id", value.Id);
                 writer.WriteString("UserName", value.UserName);
                 writer.WriteString("NormalizedUserName", value.NormalizedUserName);
                 if (value.AccessFailedCount != default)

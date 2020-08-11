@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 
@@ -18,9 +17,6 @@ namespace EDennis.NetStandard.Base {
     public class DomainUserRepo {
 
         public DomainIdentityDbContext _dbContext;
-
-        public static Regex idPattern = new Regex("[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}");
-        public static Regex lpPattern = new Regex("(?:\\(\\s*loginProvider\\s*=\\s*'?)([^,']+)(?:'?\\s*,\\s*providerKey\\s*=\\s*'?)([^)']+)(?:'?\\s*\\))");
 
 
         public DomainUserRepo(DomainIdentityDbContext dbContext) {
@@ -151,7 +147,7 @@ select u.*
         /// </list>
         /// </returns>
         public async Task<ObjectResult> GetExpandedAsync(string pathParameter) {
-            var user = await FindExpandedAsync(pathParameter);
+            var user = await FindViewAsync(pathParameter);
             if (user == null)
                 return new ObjectResult(null) { StatusCode = StatusCodes.Status404NotFound };
             else {
@@ -230,7 +226,7 @@ select u.*
     fetch next {take} rows only
 ";
             #endregion
-            var result = await _dbContext.ExpandedUsers
+            var result = await _dbContext.Set<DomainUserView>()
                             .FromSqlInterpolated(sql)
                             .AsNoTracking()
                             .ToListAsync();
@@ -286,14 +282,11 @@ select u.*
             var inputUser = new DomainUser();
             DeserializeInto(inputUser, jsonElement, modelState, sysUser);
 
-            if (inputUser.Id == default)
-                inputUser.Id = CombGuid.Create();
-
             //allow OrganizationName to be passed in and resolved to OrganizationId, when OrganizationId = default
             if (inputUser.OrganizationId == default && jsonElement.TryGetProperty("OrganizationName", out JsonElement orgNameElement)) {
                 var orgName = orgNameElement.GetString();
                 try {
-                    var orgId = (await _dbContext.Organizations.FirstOrDefaultAsync(o => o.Name == orgName)).Id;
+                    var orgId = (await _dbContext.Set<DomainOrganization>().FirstOrDefaultAsync(o => o.Name == orgName)).Id;
                     inputUser.OrganizationId = orgId;
                 } catch (Exception ex) {
                     modelState.AddModelError("", ex.Message);
@@ -696,49 +689,42 @@ select u.*
         #region Private Helper Methods
 
         /// <summary>
-        /// Finds DomainUsers by the provided path parameter
+        /// Finds DomainUser records by the provided path parameter
         /// </summary>
         /// <param name="pathParameter">One of the following:
         /// <list type="bullet">
-        /// <item>GUID Id</item>
+        /// <item>int Id</item>
         /// <item>string UserName</item>
         /// <item>string Email</item>
         /// </list>
         /// <returns>DomainUser record</returns>
         private async Task<DomainUser> FindAsync(string pathParameter) {
-            if (pathParameter.Contains("@"))
-                return await _dbContext.Set<DomainUser>()
-                    .SingleAsync(u => u.NormalizedEmail == pathParameter.ToUpper());
 
-            else if (idPattern.IsMatch(pathParameter))
-                return await _dbContext.Set<DomainUser>()
-                    .SingleAsync(u => u.Id == Guid.Parse(pathParameter));
+            if (int.TryParse(pathParameter, out int id))
+                return await _dbContext.Set<DomainUser>().SingleAsync(e => e.Id == id);
+            else if (pathParameter.Contains("@"))
+                return await _dbContext.Set<DomainUser>().SingleAsync(e => e.NormalizedEmail == pathParameter.ToUpper());
             else
-                return await _dbContext.Set<DomainUser>()
-                    .SingleAsync(u => u.NormalizedUserName == pathParameter.ToUpper());
+                return await _dbContext.Set<DomainUser>().SingleAsync(a => a.NormalizedUserName == pathParameter.ToUpper());
         }
 
         /// <summary>
-        /// Finds ExpandedDomainUsers by the provided path parameter
+        /// Finds DomainUserView records by the provided path parameter
         /// </summary>
         /// <param name="pathParameter">One of the following:
         /// <list type="bullet">
-        /// <item>GUID Id</item>
+        /// <item>int Id</item>
         /// <item>string UserName</item>
         /// <item>string Email</item>
         /// </list>
         /// <returns>ExpandedDomainUser record</returns>
-        private async Task<OLDExpandedDomainUser> FindExpandedAsync(string pathParameter) {
-            if (pathParameter.Contains("@"))
-                return await _dbContext.Set<OLDExpandedDomainUser>()
-                    .SingleAsync(u => u.NormalizedEmail == pathParameter.ToUpper());
-
-            else if (idPattern.IsMatch(pathParameter))
-                return await _dbContext.Set<OLDExpandedDomainUser>()
-                    .SingleAsync(u => u.Id == Guid.Parse(pathParameter));
+        private async Task<DomainUserView> FindViewAsync(string pathParameter) {
+            if (int.TryParse(pathParameter, out int id))
+                return await _dbContext.Set<DomainUserView>().SingleAsync(e => e.Id == id);
+            else if (pathParameter.Contains("@"))
+                return await _dbContext.Set<DomainUserView>().SingleAsync(e => e.NormalizedEmail == pathParameter.ToUpper());
             else
-                return await _dbContext.Set<OLDExpandedDomainUser>()
-                    .SingleAsync(u => u.NormalizedUserName == pathParameter.ToUpper());
+                return await _dbContext.Set<DomainUserView>().SingleAsync(a => a.NormalizedUserName == pathParameter.ToUpper());
         }
 
         /// <summary>
@@ -764,7 +750,7 @@ select u.*
                             break;
                         case "Id":
                         case "id":
-                            user.Id = prop.Value.GetGuid();
+                            user.Id = prop.Value.GetInt32();
                             break;
                         case "AccessFailedCount":
                         case "accessFailedCount":
@@ -829,7 +815,7 @@ select u.*
                             break;
                         case "OrganizationId":
                         case "organizationId":
-                            user.OrganizationId = prop.Value.GetGuid();
+                            user.OrganizationId = prop.Value.GetInt32();
                             break;
                     }
                 } catch (Exception ex) {

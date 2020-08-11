@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using IdentityModel;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -8,6 +10,22 @@ namespace EDennis.NetStandard.Base {
 
     [JsonConverter(typeof(DomainUserJsonConverter))]
     public class DomainUser : DomainUser<DomainUser, DomainOrganization, DomainUserClaim, DomainUserLogin, DomainUserToken, DomainRole, DomainApplication, DomainRoleClaim, DomainUserRole> {
+
+        public override ICollection<Claim> ToClaims() {
+            var claims = new List<Claim> {
+                new Claim(JwtClaimTypes.Name, UserName),
+                new Claim(ClaimTypes.Name, UserName),
+
+                new Claim(JwtClaimTypes.Email, Email),
+                new Claim(ClaimTypes.Email, Email)
+            };
+            if (Organization != null)
+                claims.Add(new Claim("organization", Organization.Name));
+
+            return claims;
+        }
+
+
         public override void Patch(JsonElement jsonElement, ModelStateDictionary modelState) {
             bool normalizedUserNameProvided = false;
             bool normalizedEmailProvided = false;
@@ -62,7 +80,7 @@ namespace EDennis.NetStandard.Base {
                         break;
                     case "OrganizationId":
                     case "organizationId":
-                        OrganizationId = prop.Value.GetGuid();
+                        OrganizationId = prop.Value.GetInt32();
                         break;
                     case "PasswordHash":
                     case "passwordHash":
@@ -104,7 +122,7 @@ namespace EDennis.NetStandard.Base {
                                 switch (prop2.Name) {
                                     case "UserId":
                                     case "userId":
-                                        claim.UserId = prop2.Value.GetGuid();
+                                        claim.UserId = prop2.Value.GetInt32();
                                         break;
                                     case "ClaimType":
                                     case "claimType":
@@ -135,11 +153,11 @@ namespace EDennis.NetStandard.Base {
                                 switch (prop2.Name) {
                                     case "UserId":
                                     case "userId":
-                                        userRole.UserId = prop2.Value.GetGuid();
+                                        userRole.UserId = prop2.Value.GetInt32();
                                         break;
                                     case "RoleId":
                                     case "roleId":
-                                        userRole.RoleId = prop2.Value.GetGuid();
+                                        userRole.RoleId = prop2.Value.GetInt32();
                                         break;
                                     case "SysUser":
                                     case "sysUser":
@@ -210,7 +228,7 @@ namespace EDennis.NetStandard.Base {
         public override void Write(Utf8JsonWriter writer, DomainUser value, JsonSerializerOptions options) {
             writer.WriteStartObject();
             {
-                writer.WriteString("Id", value.Id.ToString());
+                writer.WriteNumber("Id", value.Id);
                 writer.WriteString("UserName", value.UserName);
                 writer.WriteString("NormalizedUserName", value.NormalizedUserName);
                 if (value.AccessFailedCount != default)
@@ -224,7 +242,7 @@ namespace EDennis.NetStandard.Base {
                 if (value.LockoutEnd != default)
                     writer.WriteString("LockoutEnd", value.LockoutEnd.Value.ToString("u"));
                 if (value.OrganizationId != default)
-                    writer.WriteString("OrganizationId", value.OrganizationId.ToString());
+                    writer.WriteNumber("OrganizationId", value.OrganizationId);
                 if (value.Organization != null)
                     writer.WriteString("OrganizationName", value.Organization.Name);
                 if (value.PhoneNumber != default)
@@ -263,7 +281,7 @@ namespace EDennis.NetStandard.Base {
                         foreach (var role in value.UserRoles) {
                             writer.WriteStartObject();
                             {
-                                writer.WriteString("RoleId", role.RoleId);
+                                writer.WriteNumber("RoleId", role.RoleId);
                                 if (role.Role != null) {
                                     if (role.Role.Application != null)
                                         writer.WriteString("ApplicationName", role.Role.Application.Name);

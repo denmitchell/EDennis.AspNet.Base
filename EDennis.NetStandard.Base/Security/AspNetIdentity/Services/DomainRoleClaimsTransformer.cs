@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using IdentityModel;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,10 +24,19 @@ namespace EDennis.NetStandard.Base {
 
         private readonly DomainRoleClaimCache _cache;
         private readonly IHostEnvironment _env;
+        private readonly IAppClaimComposer _composer;
 
-        public DomainRoleClaimsTransformer(DomainRoleClaimCache cache, IHostEnvironment env) {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cache">Singleton holding cached RoleClaimView</param>
+        /// <param name="env"></param>
+        /// <param name="composer">Implementation of AppRoleClaimValueConstructor</param>
+        public DomainRoleClaimsTransformer(DomainRoleClaimCache cache, IHostEnvironment env,
+            IAppClaimComposer composer) {
             _cache = cache;
             _env = env;
+            _composer = composer;
         }
 
         public async Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal) {
@@ -34,9 +44,13 @@ namespace EDennis.NetStandard.Base {
                 await Task.Run(() =>
                 {
                     return
-                    (from a in principal.Claims.Where(c => c.Type == _env.ApplicationName)
+                    (from a in principal.Claims
+                        .Select(c => _composer.Decompose(c))
+                        .Where(c => c.ClaimType == JwtClaimTypes.Role 
+                            && c.ApplicationName == _env.ApplicationName)
+                        .Select(c=> new { c.ClaimType, c.ClaimValue})
                      join c in _cache
-                         on a.Value equals c.RoleName
+                         on a.ClaimValue equals c.RoleName
                      select new Claim(c.ClaimType, c.ClaimValue)
                     ).ToList();
                 });

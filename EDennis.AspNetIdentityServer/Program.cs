@@ -272,20 +272,18 @@ namespace EDennis.AspNetIdentityServer {
         private static void LoadTestUsers(DomainIdentityDbContext context, string project, List<TestUser> users) {
 
             Log.Information($"\t\tChecking application record for {project} ...");
-            Guid appId;
-            var app = context.Applications.FirstOrDefault(a => a.Name == project);
+            int appId = default;
+            var app = context.Set<DomainApplication>().FirstOrDefault(a => a.Name == project);
             if (app != null) {
                 Log.Information($"\t\tApplication record found for {project} ...");
                 appId = app.Id;
             } else {
                 Log.Information($"\t\tAdding application record for {project} ...");
-                appId = CombGuid.Create();
-                app = new IdentityApplication {
-                    Id = appId,
+                app = new DomainApplication {
                     Name = project,
                     SysUser = Environment.UserName
                 };
-                context.Applications.Add(app);
+                context.Set<DomainApplication>().Add(app);
                 context.SaveChanges();
             }
 
@@ -293,7 +291,7 @@ namespace EDennis.AspNetIdentityServer {
 
             Log.Information($"\t\tChecking role records for {project} ...");
             var roles = users.SelectMany(u => u.Roles)
-                .ToDictionary(r => r, r => default(Guid));
+                .ToDictionary(r => r, r => default(int));
 
             var keys = roles.Keys.ToArray();
             for (int i=0; i<keys.Length; i++) {
@@ -305,9 +303,7 @@ namespace EDennis.AspNetIdentityServer {
                     roles[roleName] = role.Id;
                 } else {
                     Log.Information($"\t\tAdding role {roleName} record for {project} ...");
-                    roles[roleName] = CombGuid.Create();
                     role = new DomainRole {
-                        Id = roles[roleName],
                         ApplicationId = appId,
                         Name = roleName,
                         NormalizedName = roleName.ToUpper(),
@@ -315,6 +311,7 @@ namespace EDennis.AspNetIdentityServer {
                     };
                     context.Roles.Add(role);
                     context.SaveChanges();
+                    roles[roleName] = role.Id;
                 }
             }
 
@@ -325,37 +322,34 @@ namespace EDennis.AspNetIdentityServer {
 
                 Log.Information($"\t\t\tChecking organization record for {entry.Email} ...");
 
-                Guid orgId;
-                var org = context.Organizations.FirstOrDefault(a => a.Name == entry.OrganizationName);
+                int orgId = default;
+                var org = context.Set<DomainOrganization>().FirstOrDefault(a => a.Name == entry.OrganizationName);
                 if (org != null) {
                     Log.Information($"\t\t\tOrganization {entry.OrganizationName} record found for {entry.Email} ...");
                     orgId = org.Id;
                 } else {
                     Log.Information($"\t\t\tAdding Organization {entry.OrganizationName} record for {entry.Email} ...");
-                    orgId = CombGuid.Create();
                     org = new DomainOrganization {
-                        Id = orgId,
                         Name = entry.OrganizationName,
                         SysUser = Environment.UserName
                     };
-                    context.Organizations.Add(org);
+                    context.Set<DomainOrganization>().Add(org);
                     context.SaveChanges();
+                    orgId = org.Id;
                 }
 
 
 
                 Log.Information($"\t\t\tChecking user record for {entry.Email} ...");
 
-                Guid userId;
+                int userId = default;
                 var user = context.Users.FirstOrDefault(a => a.Email == entry.Email);
                 if (user != null) {
                     userId = user.Id;
                     Log.Information($"\t\t\tUser record found for {entry.Email} ...");
                 } else {
                     Log.Information($"\t\t\tAdding user record for {entry.Email} ...");
-                    userId = CombGuid.Create();
                     user = new DomainUser {
-                        Id = userId,
                         Email = entry.Email,
                         NormalizedEmail = entry.Email.ToUpper(),
                         UserName = entry.Email,
@@ -366,6 +360,7 @@ namespace EDennis.AspNetIdentityServer {
                     user.PasswordHash = HashPassword(entry.PlainTextPassword);
                     context.Users.Add(user);
                     context.SaveChanges();
+                    userId = user.Id;
                 }
 
                 Log.Information($"\t\t\tChecking user role records for {entry.Email} ...");

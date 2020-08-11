@@ -20,9 +20,6 @@ namespace EDennis.NetStandard.Base {
         where TRoleClaim : DomainRoleClaim<TUser, TOrganization, TUserClaim, TUserLogin, TUserToken, TRole, TApplication, TRoleClaim, TUserRole>, new()
         where TUserRole : DomainUserRole<TUser, TOrganization, TUserClaim, TUserLogin, TUserToken, TRole, TApplication, TRoleClaim, TUserRole>, new() {        
 
-
-        public static Regex idPattern = new Regex("[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}");
-
         public DomainOrganizationController(DbContextProvider<TContext> provider, 
             ILogger<QueryController<TContext, TOrganization>> logger
             ) : base(provider, logger) {
@@ -31,9 +28,9 @@ namespace EDennis.NetStandard.Base {
 
         [NonAction]
         public override IQueryable<TOrganization> Find(string pathParameter) {
-            if (idPattern.IsMatch(pathParameter))
-                return _dbContext.Set<TOrganization>().Where(e => e.Id == Guid.Parse(pathParameter));
-            else
+            if (int.TryParse(pathParameter, out int id)) {
+                return _dbContext.Set<TOrganization>().Where(e => e.Id == id);
+            } else
                 return _dbContext.Set<TOrganization>().Where(a => a.Name == pathParameter);
         }
 

@@ -8,7 +8,7 @@ namespace EDennis.NetStandard.Base {
         : IdentityDbContext<
             DomainUser<TUser, TOrganization, TUserClaim, TUserLogin, TUserToken, TRole, TApplication, TRoleClaim, TUserRole>,
             DomainRole<TUser, TOrganization, TUserClaim, TUserLogin, TUserToken, TRole, TApplication, TRoleClaim, TUserRole>, 
-            Guid,
+            int,
             DomainUserClaim<TUser, TOrganization, TUserClaim, TUserLogin, TUserToken, TRole, TApplication, TRoleClaim, TUserRole>, 
             DomainUserRole<TUser, TOrganization, TUserClaim, TUserLogin, TUserToken, TRole, TApplication, TRoleClaim, TUserRole>, 
             DomainUserLogin<TUser, TOrganization, TUserClaim, TUserLogin, TUserToken, TRole, TApplication, TRoleClaim, TUserRole>, 
@@ -34,10 +34,7 @@ namespace EDennis.NetStandard.Base {
             //base.OnModelCreating(builder);
 
             builder.Entity<TUser>(e => {
-                e.ConfigureTemporalEntity(builder, u => u.Id, false, true, "AspNetUsers");
-                
-                e.Property(u => u.Id)
-                    .ValueGeneratedNever();
+                e.ConfigureTemporalEntity(builder, u => u.Id, true, true, "AspNetUsers");
                 
                 e.Property(u => u.UserName)
                     .HasMaxLength(150)
@@ -118,9 +115,7 @@ namespace EDennis.NetStandard.Base {
             });
 
             builder.Entity<TOrganization>(e => {
-                e.ConfigureTemporalEntity(builder, u => u.Id, false, true, "AspNetOrganizations");
-                e.Property(u => u.Id)
-                    .ValueGeneratedNever();
+                e.ConfigureTemporalEntity(builder, u => u.Id, true, true, "AspNetOrganizations");
                 e.HasIndex(i => i.Name)
                     .IsUnique(true);
                 e.Property(p => p.Name)
@@ -128,8 +123,9 @@ namespace EDennis.NetStandard.Base {
                     .HasMaxLength(200);
             });
 
+
             builder.Entity<TUserClaim>(e => {
-                e.ConfigureTemporalEntity(builder, u => u.Id, false, true, "AspNetUserClaims");
+                e.ConfigureTemporalEntity(builder, u => u.Id, true, true, "AspNetUserClaims");
                 e.HasIndex(i => new { i.UserId, i.ClaimType, i.ClaimValue } )
                     .IsUnique(true);
                 e.Property(e => e.ClaimType)
@@ -146,6 +142,7 @@ namespace EDennis.NetStandard.Base {
                     .OnDelete(DeleteBehavior.ClientCascade);
             });
 
+
             builder.Entity<TUserLogin>(e => {
                 e.ConfigureTemporalEntity(builder, u => new { u.LoginProvider, u.ProviderKey }, false, true, "AspNetUserLogins");
                 e.Property(e => e.LoginProvider)
@@ -161,6 +158,7 @@ namespace EDennis.NetStandard.Base {
                     .HasForeignKey(ul => ul.UserId)
                     .OnDelete(DeleteBehavior.ClientCascade);
             });
+
 
             builder.Entity<TUserToken>(e => {
                 e.ConfigureTemporalEntity(builder, u => new { u.UserId, u.LoginProvider, u.Name }, false, true, "AspNetUserTokens");
@@ -179,10 +177,11 @@ namespace EDennis.NetStandard.Base {
                     .OnDelete(DeleteBehavior.ClientCascade);
             });
 
+
             builder.Entity<TRole>(e => {
                 //remove unique index on NormalizedName;
-                e.Metadata.RemoveIndex(new[] { e.Property(r => r.NormalizedName).Metadata });
-                e.ConfigureTemporalEntity(builder, u => u.Id, false, true, "AspNetRoles");
+                //e.Metadata.RemoveIndex(new[] { e.Property(r => r.NormalizedName).Metadata });
+                e.ConfigureTemporalEntity(builder, u => u.Id, true, true, "AspNetRoles");
                 e.HasIndex(i => new { i.ApplicationId, i.Name })
                     .IsUnique(true);
                 e.Property(p => p.Name)
@@ -203,10 +202,9 @@ namespace EDennis.NetStandard.Base {
                     .OnDelete(DeleteBehavior.ClientCascade);
             });
 
+
             builder.Entity<TApplication>(e => {
-                e.ConfigureTemporalEntity(builder, u => u.Id, false, true, "AspNetApplications");
-                e.Property(u => u.Id)
-                    .ValueGeneratedNever();
+                e.ConfigureTemporalEntity(builder, u => u.Id, true, true, "AspNetApplications");
                 e.HasIndex(i => i.Name)
                     .IsUnique(true);
                 e.Property(p => p.Name)
@@ -219,8 +217,9 @@ namespace EDennis.NetStandard.Base {
                     .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
+
             builder.Entity<TRoleClaim>(e => {
-                e.ConfigureTemporalEntity(builder, u => u.Id, false, true, "AspNetRoleClaims");
+                e.ConfigureTemporalEntity(builder, u => u.Id, true, true, "AspNetRoleClaims");
                 e.HasIndex(i => new { i.RoleId, i.ClaimType, i.ClaimValue })
                     .IsUnique(true);
                 e.Property(e => e.ClaimType)

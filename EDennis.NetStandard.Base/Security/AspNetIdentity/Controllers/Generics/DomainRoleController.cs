@@ -1,6 +1,4 @@
 ﻿using System.Linq;
-using System;
-using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,8 +19,6 @@ namespace EDennis.NetStandard.Base {
         where TUserRole : DomainUserRole<TUser, TOrganization, TUserClaim, TUserLogin, TUserToken, TRole, TApplication, TRoleClaim, TUserRole>, new() {        
 
 
-        public static Regex idPattern = new Regex("[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}");
-
         public DomainRoleController(DbContextProvider<TContext> provider, 
             ILogger<QueryController<TContext, TRole>> logger
             ) : base(provider, logger) {
@@ -31,9 +27,9 @@ namespace EDennis.NetStandard.Base {
 
         [NonAction]
         public override IQueryable<TRole> Find(string pathParameter) {
-            if (idPattern.IsMatch(pathParameter))
-                return _dbContext.Set<TRole>().Where(e => e.Id == Guid.Parse(pathParameter));
-            else
+            if (int.TryParse(pathParameter, out int id)) {
+                return _dbContext.Set<TRole>().Where(e => e.Id == id);
+            } else
                 return _dbContext.Set<TRole>().Where(a => a.Name == pathParameter);
         }
 

@@ -15,7 +15,7 @@ namespace EDennis.NetStandard.Base {
                         break;
                     case "UserId":
                     case "userId":
-                        UserId = prop.Value.GetGuid();
+                        UserId = prop.Value.GetInt32();
                         break;
                     case "ClaimType":
                     case "claimType":
@@ -59,7 +59,7 @@ namespace EDennis.NetStandard.Base {
         public override void Write(Utf8JsonWriter writer, DomainUserClaim value, JsonSerializerOptions options) {
             writer.WriteStartObject();
             {
-                writer.WriteString("Id", value.Id.ToString());
+                writer.WriteNumber("Id", value.Id);
                 writer.WriteString("ClaimType", value.ClaimType);
                 writer.WriteString("ClaimValue", value.ClaimValue);
                 writer.WriteString("SysUser", value.SysUser);

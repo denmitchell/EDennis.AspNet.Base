@@ -28,7 +28,7 @@ namespace EDennis.NetStandard.Base {
         public override IQueryable<TUserToken> Find(string pathParameter) {
             try { 
                 var parms = pathParameter.Split("/");
-                var userId = Guid.Parse(parms[0]);
+                var userId = int.Parse(parms[0]);
                 var loginProvider = parms[1];
                 var name = parms[2];
                 return _dbContext.Set<TUserToken>().Where(e => e.UserId == userId && e.LoginProvider == loginProvider && e.Name == name);

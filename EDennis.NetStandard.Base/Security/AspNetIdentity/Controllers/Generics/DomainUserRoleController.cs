@@ -28,8 +28,8 @@ namespace EDennis.NetStandard.Base {
         public override IQueryable<TUserRole> Find(string pathParameter) {
             try { 
             var parms = pathParameter.Split("/");
-            var userId = Guid.Parse(parms[0]);
-            var roleId = Guid.Parse(parms[1]);
+            var userId = int.Parse(parms[0]);
+            var roleId = int.Parse(parms[1]);
                 return _dbContext.Set<TUserRole>().Where(e => e.UserId == userId && e.RoleId == roleId);
             } catch (Exception ex) {
                 var aex = new ArgumentException($"Could not parse {pathParameter} into userId and roleId: {ex.Message}");

@@ -1,16 +1,9 @@
-﻿using IdentityModel;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 
@@ -18,9 +11,6 @@ namespace EDennis.NetStandard.Base {
     public class DomainRoleRepo {
 
         public DomainIdentityDbContext _dbContext;
-
-        public static Regex idPattern = new Regex("[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}");
-        public static Regex lpPattern = new Regex("(?:\\(\\s*loginProvider\\s*=\\s*'?)([^,']+)(?:'?\\s*,\\s*providerKey\\s*=\\s*'?)([^)']+)(?:'?\\s*\\))");
 
 
         public DomainRoleRepo(DomainIdentityDbContext dbContext) {
@@ -112,7 +102,7 @@ select r.*
         /// </list>
         /// </returns>
         public async Task<ObjectResult> GetExpandedAsync(string pathParameter) {
-            var role = await FindExpandedAsync(pathParameter);
+            var role = await FindViewAsync(pathParameter);
             if (role == null)
                 return new ObjectResult(null) { StatusCode = StatusCodes.Status404NotFound };
             else {
@@ -152,7 +142,7 @@ select r.*
     fetch next {take} rows only
 ";
             #endregion
-            var result = await _dbContext.ExpandedRoles
+            var result = await _dbContext.Set<DomainRoleView>()
                             .FromSqlInterpolated(sql)
                             .AsNoTracking()
                             .ToListAsync();
@@ -208,14 +198,11 @@ select r.*
             var inputUser = new DomainRole();
             DeserializeInto(inputUser, jsonElement, modelState, sysUser);
 
-            if (inputUser.Id == default)
-                inputUser.Id = CombGuid.Create();
-
             //allow OrganizationName to be passed in and resolved to OrganizationId, when OrganizationId = default
             if (inputUser.ApplicationId == default && jsonElement.TryGetProperty("ApplicationName", out JsonElement appNameElement)) {
                 var appName = appNameElement.GetString();
                 try {
-                    var appId = (await _dbContext.Applications.FirstOrDefaultAsync(o => o.Name == appName)).Id;
+                    var appId = (await _dbContext.Set<DomainApplication>().FirstOrDefaultAsync(o => o.Name == appName)).Id;
                     inputUser.ApplicationId = appId;
                 } catch (Exception ex) {
                     modelState.AddModelError("ApplicationName", ex.Message);
@@ -360,37 +347,31 @@ select r.*
         /// </summary>
         /// <param name="pathParameter">One of the following:
         /// <list type="bullet">
-        /// <item>GUID Id</item>
-        /// <item>string UserName</item>
-        /// <item>string Email</item>
+        /// <item>int Id</item>
+        /// <item>string Name</item>
         /// </list>
         /// <returns>DomainRole record</returns>
         private async Task<DomainRole> FindAsync(string pathParameter) {
-            if (idPattern.IsMatch(pathParameter))
-                return await _dbContext.Set<DomainRole>()
-                    .SingleAsync(u => u.Id == Guid.Parse(pathParameter));
+            if (int.TryParse(pathParameter, out int id))
+                return await _dbContext.Set<DomainRole>().SingleAsync(e => e.Id == id);
             else
-                return await _dbContext.Set<DomainRole>()
-                    .SingleAsync(u => u.Name == pathParameter);
+                return await _dbContext.Set<DomainRole>().SingleAsync(a => a.NormalizedName == pathParameter.ToUpper());
         }
 
         /// <summary>
-        /// Finds ExpandedDomainRoles by the provided path parameter
+        /// Finds DomainRoleView records by the provided path parameter
         /// </summary>
         /// <param name="pathParameter">One of the following:
         /// <list type="bullet">
-        /// <item>GUID Id</item>
-        /// <item>string UserName</item>
-        /// <item>string Email</item>
+        /// <item>int Id</item>
+        /// <item>string Name</item>
         /// </list>
-        /// <returns>ExpandedDomainRole record</returns>
-        private async Task<OLDExpandedDomainRole> FindExpandedAsync(string pathParameter) {
-            if (idPattern.IsMatch(pathParameter))
-                return await _dbContext.Set<OLDExpandedDomainRole>()
-                    .SingleAsync(u => u.Id == Guid.Parse(pathParameter));
+        /// <returns>DomainRoleView record</returns>
+        private async Task<DomainRoleView> FindViewAsync(string pathParameter) {
+            if (int.TryParse(pathParameter, out int id))
+                return await _dbContext.Set<DomainRoleView>().SingleAsync(e => e.Id == id);
             else
-                return await _dbContext.Set<OLDExpandedDomainRole>()
-                    .SingleAsync(u => u.Name == pathParameter);
+                return await _dbContext.Set<DomainRoleView>().SingleAsync(a => a.NormalizedName == pathParameter.ToUpper());
         }
 
         /// <summary>
@@ -402,7 +383,6 @@ select r.*
         /// <param name="sysUser">SysUser to update in user record</param>
         private void DeserializeInto(DomainRole role, JsonElement jsonElement,
             ModelStateDictionary modelState, string sysUser) {
-            OtherProperties otherProperties = null;
             foreach (var prop in jsonElement.EnumerateObject()) {
                 try {
                     switch (prop.Name) {
@@ -417,7 +397,7 @@ select r.*
                             break;
                         case "Id":
                         case "id":
-                            role.Id = prop.Value.GetGuid();
+                            role.Id = prop.Value.GetInt32();
                             break;
                         case "SysUser":
                         case "sysUser":
@@ -437,27 +417,15 @@ select r.*
                             break;
                         case "ApplicationId":
                         case "applicationId":
-                            role.ApplicationId = prop.Value.GetGuid();
+                            role.ApplicationId = prop.Value.GetInt32();
                             break;
-                        case "ConcurrencyStamp":
-                        case "concurrencyStamp":
-                        case "SecurityStamp":
-                        case "securityStamp":
-                        case "LockoutEnabled":
-                        case "lockoutEnabled":
-                        case "ApplicationName":
-                        case "applicationName":
                         default:
-                            if (otherProperties == null)
-                                otherProperties = new OtherProperties();
-                            otherProperties.Add(prop);
                             break;
                     }
                 } catch (Exception ex) {
                     modelState.AddModelError(prop.Name, $"Parsing error: {ex.Message}");
                 }
             }
-            role.Properties = otherProperties.ToString();
         }
 
         #endregion
