@@ -65,8 +65,10 @@ namespace EDennis.AspNetIdentityServer {
 
 
             services.AddIdentity<DomainUser, DomainRole>(options => options.SignIn.RequireConfirmedAccount = true)
-                           .AddEntityFrameworkStores<DomainIdentityDbContext>()
-                           .AddDefaultTokenProviders();
+                .AddEntityFrameworkStores<DomainIdentityDbContext>()
+                //.AddUserManager<>
+                //.AddRoleManager<>
+                .AddDefaultTokenProviders();
 
             services.AddTransient<IEmailSender, MockEmailSender>();
 
