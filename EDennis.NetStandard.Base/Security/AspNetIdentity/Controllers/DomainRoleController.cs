@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace EDennis.NetStandard.Base {
@@ -59,6 +62,50 @@ namespace EDennis.NetStandard.Base {
             else
                 return Conflict(result.Errors);
         }
+
+
+
+
+        [HttpPut("{pathParameter}/claims")]
+        public async Task UpdateClaimsAsync([FromRoute] string pathParameter, [FromBody] IEnumerable<ClaimView> claims) {
+            var role = await FindAsync(pathParameter);
+            var existingClaims = (await _roleManager.GetClaimsAsync(role)).Select(c => new ClaimView { Type = c.Type, Value = c.Value });
+            var claimsToAdd = claims.Except(existingClaims).Select(c => new Claim(c.Type, c.Value));
+            var claimsToRemove = existingClaims.Except(claims).Select(c => new Claim(c.Type, c.Value));
+            await _roleManager.RemoveClaimsAsync(role, claimsToRemove);
+            await _roleManager.AddClaimsAsync(role, claimsToAdd);
+        }
+
+
+        [HttpPost("{pathParameter}/claim")]
+        public async Task AddClaimAsync([FromRoute] string pathParameter, [FromBody] ClaimView claim) {
+            var role = await FindAsync(pathParameter);
+            await _roleManager.AddClaimAsync(role, new Claim(claim.Type, claim.Value));
+        }
+
+
+        [HttpPost("{pathParameter}/claims")]
+        public async Task AddClaimsAsync([FromRoute] string pathParameter, [FromBody] IEnumerable<ClaimView> claims) {
+            var role = await FindAsync(pathParameter);
+            await _roleManager.AddClaimsAsync(role, claims.Select(c => new Claim(c.Type, c.Value)));
+        }
+
+
+        [HttpDelete("{pathParameter}/claim")]
+        public async Task RemoveClaimAsync([FromRoute] string pathParameter, [FromBody] ClaimView claim) {
+            var role = await FindAsync(pathParameter);
+            await _roleManager.RemoveClaimAsync(role, new Claim(claim.Type, claim.Value));
+        }
+
+
+        [HttpDelete("{pathParameter}/claims")]
+        public async Task RemoveFromClaimsAsync([FromRoute] string pathParameter, [FromBody] IEnumerable<ClaimView> claims) {
+            var role = await FindAsync(pathParameter);
+            await _roleManager.RemoveClaimsAsync(role, claims.Select(c => new Claim(c.Type, c.Value)));
+        }
+
+
+
 
         private async Task<TRole> FindAsync(string pathParameter) {
             if (int.TryParse(pathParameter, out int id))

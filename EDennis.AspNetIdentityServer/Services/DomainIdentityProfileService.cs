@@ -44,7 +44,7 @@ namespace EDennis.AspNetIdentityServer {
                 .Where(x => x.UserId == userId && x.ClientId == clientId)
                 .ToListAsync();
 
-            context.IssuedClaims.AddRange(roles.Select(r => new Claim(r.ApplicationName, r.RoleName)));
+            context.IssuedClaims.AddRange(roles.Select(r => new Claim(r.Application, r.Role)));
 
 
             //add requested user claims

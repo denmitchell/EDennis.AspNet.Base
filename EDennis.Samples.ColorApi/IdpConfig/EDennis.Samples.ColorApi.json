@@ -42,7 +42,7 @@
     {
       "Email": "admin1@.test",
       "PlainTextPassword": "test",
-      "OrganizationName": "a.test",
+      "Organization": "a.test",
       "Roles": [
         "Admin"
       ],
@@ -58,7 +58,7 @@
     {
       "Email": "darius@b.test",
       "PlainTextPassword": "test",
-      "OrganizationName": "b.test",
+      "Organization": "b.test",
       "Roles": [
         "User"
       ],
@@ -74,7 +74,7 @@
     {
       "Email": "pat@c.test",
       "PlainTextPassword": "test",
-      "OrganizationName": "c.test",
+      "Organization": "c.test",
       "Roles": [
         "Readonly"
       ],

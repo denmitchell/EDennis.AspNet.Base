@@ -272,11 +272,9 @@ namespace EDennis.AspNetIdentityServer {
         private static void LoadTestUsers(DomainIdentityDbContext context, string project, List<TestUser> users) {
 
             Log.Information($"\t\tChecking application record for {project} ...");
-            int appId = default;
             var app = context.Set<DomainApplication>().FirstOrDefault(a => a.Name == project);
             if (app != null) {
                 Log.Information($"\t\tApplication record found for {project} ...");
-                appId = app.Id;
             } else {
                 Log.Information($"\t\tAdding application record for {project} ...");
                 app = new DomainApplication {
@@ -297,17 +295,15 @@ namespace EDennis.AspNetIdentityServer {
             for (int i=0; i<keys.Length; i++) {
                 var roleName = keys[i];
                 var role = context.Roles.FirstOrDefault(r =>
-                    r.Name == roleName && r.ApplicationId == appId);
+                    r.Name == roleName && r.Application == project);
                 if (role != null) {
                     Log.Information($"\t\tRole {roleName} record found for {project} ...");
                     roles[roleName] = role.Id;
                 } else {
                     Log.Information($"\t\tAdding role {roleName} record for {project} ...");
                     role = new DomainRole {
-                        ApplicationId = appId,
                         Name = roleName,
-                        NormalizedName = roleName.ToUpper(),
-                        SysUser = Environment.UserName
+                        NormalizedName = roleName.ToUpper()
                     };
                     context.Roles.Add(role);
                     context.SaveChanges();
@@ -322,20 +318,17 @@ namespace EDennis.AspNetIdentityServer {
 
                 Log.Information($"\t\t\tChecking organization record for {entry.Email} ...");
 
-                int orgId = default;
-                var org = context.Set<DomainOrganization>().FirstOrDefault(a => a.Name == entry.OrganizationName);
+                var org = context.Set<DomainOrganization>().FirstOrDefault(a => a.Name == entry.Organization);
                 if (org != null) {
-                    Log.Information($"\t\t\tOrganization {entry.OrganizationName} record found for {entry.Email} ...");
-                    orgId = org.Id;
+                    Log.Information($"\t\t\tOrganization {entry.Organization} record found for {entry.Email} ...");
                 } else {
-                    Log.Information($"\t\t\tAdding Organization {entry.OrganizationName} record for {entry.Email} ...");
+                    Log.Information($"\t\t\tAdding Organization {entry.Organization} record for {entry.Email} ...");
                     org = new DomainOrganization {
-                        Name = entry.OrganizationName,
+                        Name = entry.Organization,
                         SysUser = Environment.UserName
                     };
                     context.Set<DomainOrganization>().Add(org);
                     context.SaveChanges();
-                    orgId = org.Id;
                 }
 
 
@@ -354,8 +347,7 @@ namespace EDennis.AspNetIdentityServer {
                         NormalizedEmail = entry.Email.ToUpper(),
                         UserName = entry.Email,
                         NormalizedUserName = entry.Email.ToUpper(),
-                        EmailConfirmed = true,
-                        SysUser = Environment.UserName
+                        EmailConfirmed = true
                     };
                     user.PasswordHash = HashPassword(entry.PlainTextPassword);
                     context.Users.Add(user);
@@ -367,10 +359,9 @@ namespace EDennis.AspNetIdentityServer {
 
                 foreach (var role in entry.Roles) {
                     if (!context.UserRoles.Any(ur => ur.UserId == userId && ur.RoleId == roles[role])) {
-                        context.UserRoles.Add(new DomainUserRole {
+                        context.UserRoles.Add(new IdentityUserRole<int> {
                             UserId = userId,
-                            RoleId = roles[role],
-                            SysUser = Environment.UserName
+                            RoleId = roles[role]
                         });
                         context.SaveChanges();
                     }
@@ -381,11 +372,10 @@ namespace EDennis.AspNetIdentityServer {
                 foreach (var claim in entry.Claims)
                     foreach (var value in claim.Value) {
                         if (!context.UserClaims.Any(ur => ur.UserId == userId && ur.ClaimType == claim.Key && ur.ClaimValue == value)) {
-                            context.UserClaims.Add(new DomainUserClaim {
+                            context.UserClaims.Add(new IdentityUserClaim<int> {
                                 UserId = userId,
                                 ClaimType = claim.Key,
-                                ClaimValue = value,
-                                SysUser = Environment.UserName
+                                ClaimValue = value
                             });
                             context.SaveChanges();
                         }

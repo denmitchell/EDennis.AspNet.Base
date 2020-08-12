@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
-using System.Reflection;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text.Json;
 
 namespace EDennis.NetStandard.Base.Security.AspNetIdentity.Utils {
 
@@ -27,7 +24,7 @@ namespace EDennis.NetStandard.Base.Security.AspNetIdentity.Utils {
                 new TestUser {
                     Email = "admin1@.test",
                     PlainTextPassword = "test",
-                    OrganizationName = "a.test",
+                    Organization = "a.test",
                     Claims = new Dictionary<string, List<string>> {
                         { "name", new List<string>() { "Maria" } },
                         { "phone", new List<string>() { "999.555.1212" } }
@@ -37,7 +34,7 @@ namespace EDennis.NetStandard.Base.Security.AspNetIdentity.Utils {
                 new TestUser {
                     Email = "darius@b.test",
                     PlainTextPassword = "test",
-                    OrganizationName = "b.test",
+                    Organization = "b.test",
                     Claims = new Dictionary<string, List<string>> {
                         { "name", new List<string>() { "Darius" } },
                         { "phone", new List<string>() { "888.555.1212" } }
@@ -47,7 +44,7 @@ namespace EDennis.NetStandard.Base.Security.AspNetIdentity.Utils {
                 new TestUser {
                     Email = "pat@c.test",
                     PlainTextPassword = "test",
-                    OrganizationName = "c.test",
+                    Organization = "c.test",
                     Claims = new Dictionary<string, List<string>> {
                         { "name", new List<string>() { "Pat" } },
                         { "phone", new List<string>() { "777.555.1212" } }
@@ -114,7 +111,7 @@ namespace EDennis.NetStandard.Base.Security.AspNetIdentity.Utils {
                     {
                         jw.WriteString("Email", user.Email);
                         jw.WriteString("PlainTextPassword", user.PlainTextPassword);
-                        jw.WriteString("OrganizationName", user.OrganizationName);
+                        jw.WriteString("Organization", user.Organization);
                         jw.WriteStartArray("Roles");
                         {
                             foreach(var role in user.Roles) {

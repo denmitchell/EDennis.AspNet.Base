@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace EDennis.NetStandard.Base {
@@ -142,10 +143,10 @@ namespace EDennis.NetStandard.Base {
         }
 
 
-        [HttpDelete("{pathParameter}/role")]
-        public async Task RemoveFromRoleAsync([FromRoute] string pathParameter, [FromBody] string role) {
+        [HttpDelete("{pathParameter}/role/{roleString}")]
+        public async Task RemoveFromRoleAsync([FromRoute] string pathParameter, [FromRoute] string roleString) {
             var user = await FindAsync(pathParameter);
-            await _userManager.RemoveFromRoleAsync(user, role);
+            await _userManager.RemoveFromRoleAsync(user, roleString);
         }
 
         [HttpDelete("{pathParameter}/roles")]
@@ -153,6 +154,48 @@ namespace EDennis.NetStandard.Base {
             var user = await FindAsync(pathParameter);
             await _userManager.RemoveFromRolesAsync(user, roleStrings);
         }
+
+
+
+
+        [HttpPut("{pathParameter}/claims")]
+        public async Task UpdateClaimsAsync([FromRoute] string pathParameter, [FromBody] IEnumerable<ClaimView> claims) {
+            var user = await FindAsync(pathParameter);
+            var existingClaims = (await _userManager.GetClaimsAsync(user)).Select(c=> new ClaimView { Type = c.Type, Value = c.Value });
+            var claimsToAdd = claims.Except(existingClaims).Select(c => new Claim(c.Type, c.Value));
+            var claimsToRemove = existingClaims.Except(claims).Select(c => new Claim(c.Type, c.Value));
+            await _userManager.RemoveClaimsAsync(user, claimsToRemove);
+            await _userManager.AddClaimsAsync(user, claimsToAdd);
+        }
+
+
+        [HttpPost("{pathParameter}/claim")]
+        public async Task AddClaimAsync([FromRoute] string pathParameter, [FromBody] ClaimView claim) {
+            var user = await FindAsync(pathParameter);
+            await _userManager.AddClaimAsync(user, new Claim(claim.Type,claim.Value));
+        }
+
+
+        [HttpPost("{pathParameter}/claims")]
+        public async Task AddClaimsAsync([FromRoute] string pathParameter, [FromBody] IEnumerable<ClaimView> claims) {
+            var user = await FindAsync(pathParameter);
+            await _userManager.AddClaimsAsync(user, claims.Select(c => new Claim(c.Type, c.Value)));
+        }
+
+
+        [HttpDelete("{pathParameter}/claim")]
+        public async Task RemoveClaimAsync([FromRoute] string pathParameter, [FromBody] ClaimView claim) {
+            var user = await FindAsync(pathParameter);
+            await _userManager.RemoveClaimAsync(user, new Claim(claim.Type, claim.Value));
+        }
+
+
+        [HttpDelete("{pathParameter}/claims")]
+        public async Task RemoveFromClaimsAsync([FromRoute] string pathParameter, [FromBody] IEnumerable<ClaimView> claims) {
+            var user = await FindAsync(pathParameter);
+            await _userManager.RemoveClaimsAsync(user, claims.Select(c => new Claim(c.Type, c.Value)));
+        }
+
 
 
 

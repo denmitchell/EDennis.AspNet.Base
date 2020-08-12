@@ -12,7 +12,16 @@ namespace EDennis.NetStandard.Base {
 
 
     public class DomainUserManager : DomainUserManager<DomainUser, DomainRole> {
-        public DomainUserManager(IUserStore<DomainUser> store, IOptions<IdentityOptions> optionsAccessor, IPasswordHasher<DomainUser> passwordHasher, IEnumerable<IUserValidator<DomainUser>> userValidators, IEnumerable<IPasswordValidator<DomainUser>> passwordValidators, ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors, IServiceProvider services, ILogger<UserManager<DomainUser>> logger, DomainIdentityDbContext<DomainUser, DomainRole> dbContext) : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger, dbContext) {
+        public DomainUserManager(IUserStore<DomainUser> store, 
+            IOptions<IdentityOptions> optionsAccessor, IPasswordHasher<DomainUser> passwordHasher, 
+            IEnumerable<IUserValidator<DomainUser>> userValidators, 
+            IEnumerable<IPasswordValidator<DomainUser>> passwordValidators, 
+            ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors, 
+            IServiceProvider services, ILogger<UserManager<DomainUser>> logger, 
+            DomainIdentityDbContext<DomainUser, DomainRole> dbContext,
+            IAppClaimEncoder encoder) 
+            : base(store, optionsAccessor, passwordHasher, userValidators, 
+                  passwordValidators, keyNormalizer, errors, services, logger, dbContext, encoder) {
         }
     }
 
