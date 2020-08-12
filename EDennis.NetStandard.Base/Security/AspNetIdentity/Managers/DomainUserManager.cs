@@ -112,10 +112,59 @@ SELECT u.* FROM AspNetUsers u
         }
 
 
+        /// <summary>
+        /// Adds a user to a role.  This method is overriden from the base class
+        /// to take into consideration application name.  To work with this method,
+        /// application name must be incorporated into role name to produce a roleString.
+        /// The nature of the incorporation is defined by the IAppClaimEncoder implementation
+        /// </summary>
+        /// <param name="user">the user to whom to add the role</param>
+        /// <param name="roleString">Combined application name and role name</param>
+        /// <returns>ASP.NET IdentityResult</returns>
+        public override async Task<IdentityResult> AddToRoleAsync(TUser user, string roleString) {
+            var appRole = _encoder.Decode(roleString);
+            var role = await _dbContext.Set<TRole>()
+                .FirstOrDefaultAsync(r => r.Application == appRole.Application 
+                && r.NormalizedName == appRole.Application.ToUpper());
 
-        public override Task<IdentityResult> AddToRoleAsync(TUser user, string roleString) {
-            var AppRole = _encoder.Decode(roleString);
-            return base.AddToRoleAsync(user, role);
+            if (role == null)
+                return IdentityResult.Failed(new IdentityErrorDescriber()
+                    .RoleNotFoundError(appRole.Application, appRole.Role));
+            else {
+                var exists = _dbContext.Set<IdentityUserRole<int>>().Any(ur => ur.UserId == user.Id && ur.RoleId == role.Id);
+                if (exists)
+                    return IdentityResult.Failed(new IdentityErrorDescriber()
+                        .UserAlreadyInRole(roleString));
+                else {
+                    _dbContext.Set<IdentityUserRole<int>>().Add(new IdentityUserRole<int> { UserId = user.Id, RoleId = role.Id });
+                    return IdentityResult.Success;
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Adds a user to a set of roles.  This method is overriden from the base class
+        /// to take into consideration application name.  To work with this method,
+        /// application name must be incorporated into role name to produce a roleString.
+        /// The nature of the incorporation is defined by the IAppClaimEncoder implementation
+        /// </summary>
+        /// <param name="user">the user to whom to add the role</param>
+        /// <param name="roleString">Combined application name and role name</param>
+        /// <returns>ASP.NET IdentityResult</returns>
+        public override async Task<IdentityResult> AddToRolesAsync(TUser user, IEnumerable<string> roleStrings) {
+            var errors = new List<IdentityError>();
+
+            foreach(var roleString in roleStrings) {
+                var result = await AddToRoleAsync(user, roleString);
+                if (!result.Succeeded)
+                    errors.AddRange(result.Errors);
+            }
+            if (errors.Count > 0)
+                return IdentityResult.Failed(errors.ToArray());
+            else
+                return IdentityResult.Success;
+
         }
 
 
