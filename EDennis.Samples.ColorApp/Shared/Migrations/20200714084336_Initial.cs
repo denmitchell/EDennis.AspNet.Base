@@ -2,7 +2,7 @@
 using System.IO;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace EDennis.Samples.ColorApi.Migrations
+namespace EDennis.Samples.ColorApp.Migrations
 {
     public partial class Initial : Migration
     {

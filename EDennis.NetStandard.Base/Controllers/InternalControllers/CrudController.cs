@@ -9,7 +9,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace EDennis.NetStandard.Base {
-    [Route("api/[controller]")]
+    [Route(ApiConstants.ROUTE_PREFIX + "[controller]")]
     [ApiController]
     public abstract class CrudController<TContext, TEntity> : QueryController<TContext, TEntity>, ICrudController<TEntity> where TContext : DbContext
         where TEntity : class, ICrudEntity {

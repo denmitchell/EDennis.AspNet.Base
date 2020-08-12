@@ -1,0 +1,78 @@
+﻿@page
+@model EDennis.Samples.ColorApp.Razor.Pages.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Rgb[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rgb[0].Red)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rgb[0].Green)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rgb[0].Blue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rgb[0].SysStart)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rgb[0].SysEnd)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rgb[0].SysUser)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rgb[0].SysStatus)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Rgb) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Red)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Green)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Blue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SysStart)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SysEnd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SysUser)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SysStatus)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

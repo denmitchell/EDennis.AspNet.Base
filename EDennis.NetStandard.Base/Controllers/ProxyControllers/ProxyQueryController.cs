@@ -1,5 +1,4 @@
-﻿using EDennis.NetStandard.Base;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +10,15 @@ namespace EDennis.NetStandard.Base {
     /// <summary>
     /// Base proxy ("external") controller for communicating with an
     /// internal controller via secure HttpClient.
+    /// Note: in the ProxyClients configuration section, each proxy client
+    /// should have a key equal to the name of the corresponding proxy controller
+    /// minus the word 'controller'
     /// Note: setup the DependencyInjection to include:
     /// <list type="bullet">
-    /// <item>AddHttpClient("{name of the controller class}", config=> { config.BaseAddress = ... ;});</item>
-    /// <item>AddSingleton<ITokenService,ClientCredentialsTokenService>(); //or use MockTokenService to bypass token generation</item>
+    /// <item>AddSecureTokenService<TTokenService>(Configuration,"Security:ClientCredentials")</item>
+    /// <item>AddProxyClients(Configuration,"ProxyClients");</item>
     /// </list>
-    [Route("api/[controller]")]
+    [Route(ApiConstants.ROUTE_PREFIX + "[controller]")]
     [ApiController]
     public abstract class ProxyQueryController<TEntity> : ControllerBase, IQueryController<TEntity>
         where TEntity : class {
@@ -61,9 +63,9 @@ namespace EDennis.NetStandard.Base {
             throw new System.NotImplementedException();
         }
 
-        protected string ControllerPath {
+        public virtual string ControllerPath {
             get {
-                return $"api/{ControllerName}";
+                return $"{ApiConstants.ROUTE_PREFIX}{ControllerName}";
             }
         }
 

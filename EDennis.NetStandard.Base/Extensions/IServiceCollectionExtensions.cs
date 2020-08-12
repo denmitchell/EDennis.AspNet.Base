@@ -63,11 +63,8 @@ namespace EDennis.NetStandard.Base {
         /// section called "ProxyClients" that binds to a Dictionary<string,ProxyClient>
         /// and whose key is the name of the Proxy Controller, minus the word Controller.
         /// </summary>
-        public static IServiceCollection AddProxyClients<TTokenService>(this IServiceCollection services,
-            IConfiguration config, string proxyClientsConfigKey = "ProxyClients")
-            where TTokenService : class, ITokenService {
-
-            services.AddSingleton<ITokenService, TTokenService>();
+        public static IServiceCollection AddProxyClients(this IServiceCollection services,
+            IConfiguration config, string proxyClientsConfigKey = "ProxyClients") {
 
             var clients = new ProxyClients();
             config.GetSection(proxyClientsConfigKey).Bind(clients);
@@ -81,5 +78,31 @@ namespace EDennis.NetStandard.Base {
 
             return services;
         }
+
+
+        /// <summary>
+        /// Configures the TokenService and the HttpClient for all QueryApiClients
+        /// and CrudApiClients.
+        /// Note: This extension method requires the existence of a top-level configuration
+        /// section called "ApiClients" that binds to a Dictionary<string,ApiClient>
+        /// and whose key is the name of the Proxy Controller, minus the word Controller.
+        /// </summary>
+        public static IServiceCollection AddApiClients(this IServiceCollection services,
+            IConfiguration config, string apiClientsConfigKey = "ApiClients") {
+
+            var clients = new ApiClients();
+            config.GetSection(apiClientsConfigKey).Bind(clients);
+
+            foreach (var client in clients) {
+                var clientName = client.Key;
+                services.AddHttpClient(clientName, options => {
+                    options.BaseAddress = new Uri(client.Value.TargetUrl);
+                });
+            }
+
+            return services;
+        }
+
+
     }
 }

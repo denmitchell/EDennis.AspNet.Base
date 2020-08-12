@@ -1,6 +1,6 @@
 ﻿using EDennis.NetStandard.Base;
 
-namespace EDennis.Samples.ColorApp.Shared
+namespace EDennis.Samples.ColorApp
 {
     public class RgbHistory : Rgb { }
     public class Rgb: TemporalEntity

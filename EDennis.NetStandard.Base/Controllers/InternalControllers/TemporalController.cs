@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EDennis.NetStandard.Base {
 
-    [Route("api/[controller]")]
+    [Route(ApiConstants.ROUTE_PREFIX + "[controller]")]
     [ApiController]
     public abstract class TemporalController<TContext, TEntity, THistoryEntity> : CrudController<TContext, TEntity>
         where TContext : DbContext

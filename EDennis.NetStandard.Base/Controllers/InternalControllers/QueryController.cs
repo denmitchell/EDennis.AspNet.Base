@@ -14,16 +14,22 @@ using Microsoft.Extensions.Logging;
 
 namespace EDennis.NetStandard.Base {
 
+    public static class ApiConstants {
+        public const string ROUTE_PREFIX = "api/";
+    }
+
+
     /// <summary>
     /// A base controller with flexible read operations, 
     /// supporting Dynamic Linq and DevExtreme DataSourceLoader
     /// </summary>
     /// <typeparam name="TContext">A DbContext subclass</typeparam>
     /// <typeparam name="TEntity">A model class</typeparam>
-    [Route("api/[controller]")]
+    [Route(ApiConstants.ROUTE_PREFIX + "[controller]")]
     [ApiController]
     public class QueryController<TContext, TEntity> : ControllerBase, IQueryController<TEntity> where TContext : DbContext
         where TEntity : class {
+
 
         protected readonly TContext _dbContext;
         protected ILogger _logger;
