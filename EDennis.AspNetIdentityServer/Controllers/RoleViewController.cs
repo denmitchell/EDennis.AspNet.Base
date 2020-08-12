@@ -7,7 +7,7 @@ namespace EDennis.AspNetIdentityServer {
     [Authorize(Policy = "AdministerIDP")]
     public class RoleViewController : DomainRoleViewController {
         public RoleViewController(DbContextProvider<DomainIdentityDbContext> provider,
-            ILogger<QueryController<DomainIdentityDbContext, DomainRoleView>> logger) : base(provider, logger) {
+            ILogger<QueryController<DomainIdentityDbContext, DomainApplicationView>> logger) : base(provider, logger) {
         }
     }
 }

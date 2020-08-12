@@ -24,19 +24,19 @@ namespace EDennis.NetStandard.Base {
 
         private readonly DomainRoleClaimCache _cache;
         private readonly IHostEnvironment _env;
-        private readonly IAppClaimComposer _composer;
+        private readonly IAppClaimEncoder _encoder;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="cache">Singleton holding cached RoleClaimView</param>
         /// <param name="env"></param>
-        /// <param name="composer">Implementation of AppRoleClaimValueConstructor</param>
+        /// <param name="encoder">Implementation of IAppClaimEncoder</param>
         public DomainRoleClaimsTransformer(DomainRoleClaimCache cache, IHostEnvironment env,
-            IAppClaimComposer composer) {
+            IAppClaimEncoder encoder) {
             _cache = cache;
             _env = env;
-            _composer = composer;
+            _encoder = encoder;
         }
 
         public async Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal) {
@@ -45,9 +45,9 @@ namespace EDennis.NetStandard.Base {
                 {
                     return
                     (from a in principal.Claims
-                        .Select(c => _composer.Decompose(c))
+                        .Select(c => _encoder.Decode(c))
                         .Where(c => c.ClaimType == JwtClaimTypes.Role 
-                            && c.ApplicationName == _env.ApplicationName)
+                            && c.Application == _env.ApplicationName)
                         .Select(c=> new { c.ClaimType, c.ClaimValue})
                      join c in _cache
                          on a.ClaimValue equals c.RoleName

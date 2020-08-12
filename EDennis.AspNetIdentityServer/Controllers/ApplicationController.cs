@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 namespace EDennis.AspNetIdentityServer {
 
     [Authorize(Policy = "AdministerIDP")]
-    public class ApplicationController : DomainApplicationController {
+    public class ApplicationController : DomainApplicationController<DomainIdentityDbContext,DomainUser,DomainRole>{
         public ApplicationController(DbContextProvider<DomainIdentityDbContext> provider, 
             ILogger<QueryController<DomainIdentityDbContext, DomainApplication>> logger) : base(provider, logger) {
         }
