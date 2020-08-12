@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.Extensions;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -120,19 +118,27 @@ namespace EDennis.NetStandard.Base {
 
 
         [HttpPut("{pathParameter}/roles")]
-        public async Task UpdateRolesAsync([FromRoute] string pathParameter, [FromBody] IEnumerable<string> roles) {
+        public async Task UpdateRolesAsync([FromRoute] string pathParameter, [FromBody] IEnumerable<string> roleStrings) {
             var user = await FindAsync(pathParameter);
             var existingRoles = (await _userManager.GetRolesAsync(user));
-            var rolesToAdd = roles.Except(existingRoles);
-            var rolesToRemove = existingRoles.Except(roles);
+            var rolesToAdd = roleStrings.Except(existingRoles);
+            var rolesToRemove = existingRoles.Except(roleStrings);
             await _userManager.RemoveFromRolesAsync(user,rolesToRemove);
             await _userManager.AddToRolesAsync(user,rolesToAdd);
         }
 
-        [HttpPost("{pathParameter}/role/{role}")]
-        public async Task AddToRoleAsync([FromRoute] string pathParameter, [FromBody] string role) {
+
+        [HttpPost("{pathParameter}/role/{roleString}")]
+        public async Task AddToRoleAsync([FromRoute] string pathParameter, [FromRoute] string roleString) {
             var user = await FindAsync(pathParameter);
-            await _userManager.AddToRoleAsync(user, role);
+            await _userManager.AddToRoleAsync(user, roleString);
+        }
+
+
+        [HttpPost("{pathParameter}/roles")]
+        public async Task AddToRolesAsync([FromRoute] string pathParameter, [FromBody] IEnumerable<string> roleStrings) {
+            var user = await FindAsync(pathParameter);
+            await _userManager.AddToRolesAsync(user, roleStrings);
         }
 
 
@@ -142,6 +148,11 @@ namespace EDennis.NetStandard.Base {
             await _userManager.RemoveFromRoleAsync(user, role);
         }
 
+        [HttpDelete("{pathParameter}/roles")]
+        public async Task RemoveFromRolesAsync([FromRoute] string pathParameter, [FromBody] IEnumerable<string> roleStrings) {
+            var user = await FindAsync(pathParameter);
+            await _userManager.RemoveFromRolesAsync(user, roleStrings);
+        }
 
 
 

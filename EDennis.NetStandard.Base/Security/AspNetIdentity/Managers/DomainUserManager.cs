@@ -137,6 +137,7 @@ SELECT u.* FROM AspNetUsers u
                         .UserAlreadyInRole(roleString));
                 else {
                     _dbContext.Set<IdentityUserRole<int>>().Add(new IdentityUserRole<int> { UserId = user.Id, RoleId = role.Id });
+                    await _dbContext.SaveChangesAsync();
                     return IdentityResult.Success;
                 }
             }
@@ -169,6 +170,86 @@ SELECT u.* FROM AspNetUsers u
 
 
 
+        /// <summary>
+        /// Removes a user from a role.  This method is overriden from the base class
+        /// to take into consideration application name.  To work with this method,
+        /// application name must be incorporated into role name to produce a roleString.
+        /// The nature of the incorporation is defined by the IAppClaimEncoder implementation
+        /// </summary>
+        /// <param name="user">the user to whom to add the role</param>
+        /// <param name="roleString">Combined application name and role name</param>
+        /// <returns>ASP.NET IdentityResult</returns>
+        public override async Task<IdentityResult> RemoveFromRoleAsync(TUser user, string roleString) {
+            var appRole = _encoder.Decode(roleString);
+            var role = await _dbContext.Set<TRole>()
+                .FirstOrDefaultAsync(r => r.Application == appRole.Application
+                && r.NormalizedName == appRole.Application.ToUpper());
+
+            if (role == null)
+                return IdentityResult.Failed(new IdentityErrorDescriber()
+                    .RoleNotFoundError(appRole.Application, appRole.Role));
+            else {
+                var exists = _dbContext.Set<IdentityUserRole<int>>().Any(ur => ur.UserId == user.Id && ur.RoleId == role.Id);
+                if (!exists)
+                    return IdentityResult.Failed(new IdentityErrorDescriber()
+                        .UserNotInRole(roleString));
+                else {
+                    _dbContext.Set<IdentityUserRole<int>>().Remove(new IdentityUserRole<int> { UserId = user.Id, RoleId = role.Id });
+                    await _dbContext.SaveChangesAsync();
+                    return IdentityResult.Success;
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Removes a user from a set of roles.  This method is overriden from the base class
+        /// to take into consideration application name.  To work with this method,
+        /// application name must be incorporated into role name to produce a roleString.
+        /// The nature of the incorporation is defined by the IAppClaimEncoder implementation
+        /// </summary>
+        /// <param name="user">the user to whom to add the role</param>
+        /// <param name="roleString">Combined application name and role name</param>
+        /// <returns>ASP.NET IdentityResult</returns>
+        public override async Task<IdentityResult> RemoveFromRolesAsync(TUser user, IEnumerable<string> roleStrings) {
+            var errors = new List<IdentityError>();
+
+            foreach (var roleString in roleStrings) {
+                var result = await RemoveFromRoleAsync(user, roleString);
+                if (!result.Succeeded)
+                    errors.AddRange(result.Errors);
+            }
+            if (errors.Count > 0)
+                return IdentityResult.Failed(errors.ToArray());
+            else
+                return IdentityResult.Success;
+
+        }
+
+
+
+        /// <summary>
+        /// Returns a list of roles (as roleStrings) for a given user.
+        /// Each role string is combination of application name and role name
+        /// as implemented by the IAppClaimEncoder.Encode(AppRole) method
+        /// </summary>
+        /// <param name="user">The user for whom roles are returned</param>
+        /// <returns>a list of role strings that represent role name and application name</returns>
+        public override async Task<IList<string>> GetRolesAsync(TUser user) {
+
+            var roles = _dbContext.Set<TRole>().FromSqlInterpolated($@"
+SELECT r.* 
+    FROM AspNetRoles r
+    WHERE EXISTS (
+        SELECT 0  
+            FROM AspNetUserRoles ur
+            WHERE ur.UserId = {user.Id}
+                and ur.RoleId = r.Id
+)");
+            return (await roles.ToListAsync())
+                .Select(r => _encoder.Encode(new AppRole { Application = r.Application, Role = r.Name }))
+                .ToList();
+        }
 
 
 
