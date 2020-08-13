@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
 using static Dapper.SqlMapper;
 
@@ -40,6 +41,26 @@ namespace EDennis.NetStandard.Base {
 			return string.Join(";", list);
 		}
 
+
+		public static string Pack(this Dictionary<string,string> dict, 
+			(char KeyValue, char ValueKey) separators) {
+			var list = new List<string>();
+			foreach (var key in dict.Keys)
+				list.Add($"{key}{separators.KeyValue}{dict[key]}");
+			return string.Join(separators.ValueKey,list);
+		}
+
+		public static Dictionary<string, string> UnPackDictionary(this string str,
+			(char KeyValue, char ValueKey) separators) {
+			var list = str.Split(separators.ValueKey);
+			var dict = new Dictionary<string, string>();
+			foreach(var item in list) {
+				var kv = item.Split(separators.KeyValue);
+				if (!dict.ContainsKey(kv[0]))
+					dict.Add(kv[0], kv[1]);
+			}
+			return dict;
+		}
 
 		/// <summary>
 		/// Parses a packed string representation of key value pairs into an

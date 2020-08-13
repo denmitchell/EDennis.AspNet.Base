@@ -3,6 +3,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
@@ -16,8 +18,8 @@ namespace EDennis.NetStandard.Base {
         public ClientCredentialsOptions Options { get; }
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger<ClientCredentialsTokenService> _logger;
-        private string _token;
-        private DateTime _expiresOn;
+        private readonly ConcurrentDictionary<string,CachedToken> _tokenCache 
+            = new ConcurrentDictionary<string, CachedToken>();
         private JsonWebKey _jwk;
         private DateTime _jwkLastRefreshed;
 
@@ -54,13 +56,17 @@ namespace EDennis.NetStandard.Base {
 
         public async Task AssignTokenAsync(HttpClient client) {
 
-            if (DateTime.Now.AddSeconds(EXPIRATION_BUFFER_IN_SECONDS) >= _expiresOn) {
+            var baseAddress = client.BaseAddress.ToString();
+
+            // update cached token if key (base address) doesn't exist or token is expired or almost expired
+            if (!_tokenCache.TryGetValue(baseAddress, out CachedToken cachedToken)
+                    || DateTime.Now.AddSeconds(EXPIRATION_BUFFER_IN_SECONDS) >= cachedToken.ExpiresOn) {
                 var idpClient = GetIdpClient();
                 var disco = await GetDiscoveryDocumentAsync(idpClient);
-                await UpdateCachedTokenAsync(idpClient, disco);
+                await UpdateCachedTokenAsync(baseAddress, idpClient, disco);
             }
 
-            client.SetBearerToken(_token);
+            client.SetBearerToken(_tokenCache[baseAddress].TokenResponse.AccessToken);
         }
 
         public async Task<ClaimsPrincipal> ValidateTokenAsync(string token) {
@@ -109,7 +115,7 @@ namespace EDennis.NetStandard.Base {
             return disco;
         }
 
-        private async Task UpdateCachedTokenAsync(HttpClient idpClient, DiscoveryDocumentResponse disco) {
+        private async Task UpdateCachedTokenAsync(string baseAddress, HttpClient idpClient, DiscoveryDocumentResponse disco) {
 
             // get token
             var tokenResponse = await idpClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest {
@@ -125,8 +131,13 @@ namespace EDennis.NetStandard.Base {
                 return;
             }
 
-            _token = tokenResponse.AccessToken;
-            _expiresOn = DateTime.Now.AddSeconds(tokenResponse.ExpiresIn);
+            var cachedToken = new CachedToken {
+                TokenResponse = tokenResponse,
+                ExpiresOn = DateTime.Now.AddSeconds(tokenResponse.ExpiresIn)
+            };
+
+            _tokenCache.AddOrUpdate(baseAddress, cachedToken, (k, v) => _tokenCache[k] = v);
+
 
         }
     }

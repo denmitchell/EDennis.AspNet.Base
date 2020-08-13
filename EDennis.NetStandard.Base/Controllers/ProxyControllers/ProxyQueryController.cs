@@ -25,15 +25,17 @@ namespace EDennis.NetStandard.Base {
 
         protected readonly HttpClient _client;
 
-
-        public ProxyQueryController(IHttpClientFactory clientFactory, ITokenService tokenService) {
+        public ProxyQueryController(IHttpClientFactory clientFactory, 
+            ITokenService tokenService) {
             _client = clientFactory.CreateClient(GetType().Name);
             tokenService.AssignTokenAsync(_client).Wait();
         }
 
+
+
+
         [NonAction]
         public virtual void AdjustQuery(ref IQueryable<TEntity> query) { }
-
 
 
         [HttpGet("devextreme")]
@@ -50,13 +52,13 @@ namespace EDennis.NetStandard.Base {
 
         [HttpGet("linq")]
         public IActionResult GetWithDynamicLinq([FromQuery] string where = null, [FromQuery] string orderBy = null, [FromQuery] string select = null, [FromQuery] string include = null, [FromQuery] int? skip = null, [FromQuery] int? take = null, [FromQuery] int? totalRecords = null) {
-            return _client.Forward<TEntity>(HttpContext.Request, $"{ControllerPath}/linq");
+            return _client.Forward<DynamicLinqResult<TEntity>>(HttpContext.Request, $"{ControllerPath}/linq");
         }
 
 
         [HttpGet("linq/async")]
         public async Task<IActionResult> GetWithDynamicLinqAsync([FromQuery] string where = null, [FromQuery] string orderBy = null, [FromQuery] string select = null, [FromQuery] string include = null, [FromQuery] int? skip = null, [FromQuery] int? take = null, [FromQuery] int? totalRecords = null) {
-            return await _client.ForwardAsync<TEntity>(HttpContext.Request, $"{ControllerPath}/linq/async");
+            return await _client.ForwardAsync<DynamicLinqResult<TEntity>>(HttpContext.Request, $"{ControllerPath}/linq/async");
         }
 
         public IEnumerable<TEntity> GetWithOData([FromQuery] string select, [FromQuery] string orderBy, [FromQuery] string filter, [FromQuery] string expand, [FromQuery] int skip, [FromQuery] int top) {

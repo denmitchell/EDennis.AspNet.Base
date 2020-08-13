@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
+using System.Net.Http;
 
 namespace EDennis.NetStandard.Base {
     
@@ -73,6 +76,8 @@ namespace EDennis.NetStandard.Base {
                 var clientName = client.Key;
                 services.AddHttpClient(clientName, options => {
                     options.BaseAddress = new Uri(client.Value.TargetUrl);
+                }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler {
+                    UseCookies = false
                 });
             }
 
@@ -90,6 +95,8 @@ namespace EDennis.NetStandard.Base {
         public static IServiceCollection AddApiClients(this IServiceCollection services,
             IConfiguration config, string apiClientsConfigKey = "ApiClients") {
 
+            services.TryAddScoped<ScopedRequestMessage>();
+
             var clients = new ApiClients();
             config.GetSection(apiClientsConfigKey).Bind(clients);
 
@@ -97,6 +104,8 @@ namespace EDennis.NetStandard.Base {
                 var clientName = client.Key;
                 services.AddHttpClient(clientName, options => {
                     options.BaseAddress = new Uri(client.Value.TargetUrl);
+                }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler {
+                    UseCookies = false
                 });
             }
 

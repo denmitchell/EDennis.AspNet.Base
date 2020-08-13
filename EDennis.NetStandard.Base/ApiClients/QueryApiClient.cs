@@ -1,7 +1,4 @@
-﻿using EDennis.NetStandard.Base;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -20,36 +17,46 @@ namespace EDennis.NetStandard.Base {
         where TEntity : class {
 
         protected readonly HttpClient _client;
+        protected readonly ScopedRequestMessage _scopedRequestMessage;
 
-
-        public QueryApiClient(IHttpClientFactory clientFactory, ITokenService tokenService) {
+        public QueryApiClient(IHttpClientFactory clientFactory, ITokenService tokenService,
+            ScopedRequestMessage scopedRequestMessage) {
             _client = clientFactory.CreateClient(GetType().Name);
             tokenService.AssignTokenAsync(_client).Wait();
+            _scopedRequestMessage = scopedRequestMessage;
         }
 
-        [NonAction]
+
         public virtual void AdjustQuery(ref IQueryable<TEntity> query) { }
 
 
-        public ObjectResult<DeserializableLoadResult<TEntity>> GetWithDevExtreme(HttpRequest request, [FromQuery] string select, [FromQuery] string sort, [FromQuery] string filter, [FromQuery] int skip, [FromQuery] int take, [FromQuery] string totalSummary, [FromQuery] string group, [FromQuery] string groupSummary) {
-            return _client.Forward<DeserializableLoadResult<TEntity>>(request, $"{ControllerPath}/devextreme");
+        public ObjectResult<DeserializableLoadResult<TEntity>> GetWithDevExtreme(string select, string sort, string filter, int skip, int take, string totalSummary, string group, string groupSummary) {
+            var qString = BuildDevExtremeQueryString(select, sort, filter, skip, take, totalSummary, group, groupSummary);
+            _scopedRequestMessage.AddQueryString(qString);
+            return _client.Get<DeserializableLoadResult<TEntity>>($"{ControllerPath}/devextreme", _scopedRequestMessage);
         }
 
-        public async Task<ObjectResult<DeserializableLoadResult<TEntity>>> GetWithDevExtremeAsync(HttpRequest request, [FromQuery] string select, [FromQuery] string sort, [FromQuery] string filter, [FromQuery] int skip, [FromQuery] int take, [FromQuery] string totalSummary, [FromQuery] string group, [FromQuery] string groupSummary) {
-            return await _client.ForwardAsync<DeserializableLoadResult<TEntity>>(request, $"{ControllerPath}/devextreme/async");
+        public async Task<ObjectResult<DeserializableLoadResult<TEntity>>> GetWithDevExtremeAsync(string select, string sort, string filter, int skip, int take, string totalSummary, string group, string groupSummary) {
+            var qString = BuildDevExtremeQueryString(select, sort, filter, skip, take, totalSummary, group, groupSummary);
+            _scopedRequestMessage.AddQueryString(qString);
+            return await _client.GetAsync<DeserializableLoadResult<TEntity>>($"{ControllerPath}/devextreme", _scopedRequestMessage);
         }
 
 
-        public ObjectResult<DynamicLinqResult<TEntity>> GetWithDynamicLinq(HttpRequest request, [FromQuery] string where = null, [FromQuery] string orderBy = null, [FromQuery] string select = null, [FromQuery] string include = null, [FromQuery] int? skip = null, [FromQuery] int? take = null, [FromQuery] int? totalRecords = null) {
-            return _client.Forward<DynamicLinqResult<TEntity>>(request, $"{ControllerPath}/linq");
+        public ObjectResult<DynamicLinqResult<TEntity>> GetWithDynamicLinq(string where = null, string orderBy = null, string select = null, string include = null, int? skip = null, int? take = null, int? totalRecords = null) {
+            var qString = BuildDynamicLinqQueryString(where, orderBy, select, include, skip, take, totalRecords);
+            _scopedRequestMessage.AddQueryString(qString);
+            return _client.Get<DynamicLinqResult<TEntity>>($"{ControllerPath}/linq", _scopedRequestMessage );
         }
 
 
-        public async Task<ObjectResult<DynamicLinqResult<TEntity>>> GetWithDynamicLinqAsync(HttpRequest request, [FromQuery] string where = null, [FromQuery] string orderBy = null, [FromQuery] string select = null, [FromQuery] string include = null, [FromQuery] int? skip = null, [FromQuery] int? take = null, [FromQuery] int? totalRecords = null) {
-            return await _client.ForwardAsync<DynamicLinqResult<TEntity>>(request, $"{ControllerPath}/linq/async");
+        public async Task<ObjectResult<DynamicLinqResult<TEntity>>> GetWithDynamicLinqAsync(string where = null, string orderBy = null, string select = null, string include = null, int? skip = null, int? take = null, int? totalRecords = null) {
+            var qString = BuildDynamicLinqQueryString(where, orderBy, select, include, skip, take, totalRecords);
+            _scopedRequestMessage.AddQueryString(qString);
+            return await _client.GetAsync<DynamicLinqResult<TEntity>>($"{ControllerPath}/linq", _scopedRequestMessage);
         }
 
-        public IEnumerable<TEntity> GetWithOData([FromQuery] string select, [FromQuery] string orderBy, [FromQuery] string filter, [FromQuery] string expand, [FromQuery] int skip, [FromQuery] int top) {
+        public IEnumerable<TEntity> GetWithOData(string select, string orderBy, string filter, string expand, int skip, int top) {
             throw new System.NotImplementedException();
         }
 
@@ -60,5 +67,56 @@ namespace EDennis.NetStandard.Base {
         }
 
         public abstract string ControllerName { get; } 
+
+
+        private static string BuildDevExtremeQueryString(string select, string sort, string filter, int skip, int take, string totalSummary, string group, string groupSummary) {
+            var list = new List<string>();
+            if (select != default)
+                list.Add($"select={select}");
+            if (sort != default)
+                list.Add($"sort={sort}");
+            if (filter != default)
+                list.Add($"filter={filter}");
+            if (skip != default)
+                list.Add($"skip={skip}");
+            if (take != default)
+                list.Add($"take={take}");
+            if (totalSummary != default)
+                list.Add($"totalSummary={totalSummary}");
+            if (group != default)
+                list.Add($"group={group}");
+            if (groupSummary != default)
+                list.Add($"groupSummary={groupSummary}");
+
+            if (list.Count == 0)
+                return "";
+
+            return "?" + string.Join('&',list);
+        }
+
+
+        private static string BuildDynamicLinqQueryString(string where = null, string orderBy = null, string select = null, string include = null, int? skip = null, int? take = null, int? totalRecords = null) {
+            var list = new List<string>();
+            if (where != default)
+                list.Add($"where={where}");
+            if (select != default)
+                list.Add($"select={select}");
+            if (include != default)
+                list.Add($"include={include}");
+            if (orderBy != default)
+                list.Add($"orderBy={orderBy}");
+            if (skip != default)
+                list.Add($"skip={skip}");
+            if (take != default)
+                list.Add($"take={take}");
+            if (totalRecords != default)
+                list.Add($"totalRecords={totalRecords}");
+
+            if (list.Count == 0)
+                return "";
+
+            return "?" + string.Join('&', list);
+        }
+
     }
 }

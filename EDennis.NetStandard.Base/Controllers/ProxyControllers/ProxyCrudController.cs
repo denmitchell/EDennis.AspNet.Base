@@ -31,22 +31,22 @@ namespace EDennis.NetStandard.Base {
 
         [HttpPost]
         public IActionResult Create([FromBody] TEntity input) {
-            return _client.Post($"{ControllerPath}",input);
+            return _client.Forward(HttpContext.Request, $"{ControllerPath}", input);
         }
 
         [HttpPost("async")]
         public async Task<IActionResult> CreateAsync([FromBody] TEntity input) {
-            return await _client.PostAsync($"{ControllerPath}/async", input);
+            return await _client.ForwardAsync(HttpContext.Request, $"{ControllerPath}/async", input);
         }
 
         [HttpDelete("{**key}")]
         public IActionResult Delete([FromRoute] string key) {
-            return _client.Delete<TEntity>($"{ControllerPath}/{key}");
+            return _client.Forward<StatusCodeResult>(HttpContext.Request, $"{ControllerPath}/{key}");
         }
 
         [HttpDelete("async/{**key}")]
         public async Task<IActionResult> DeleteAsync([FromRoute] string key) {
-            return await _client.DeleteAsync<TEntity>($"{ControllerPath}/async/{key}");
+            return await _client.ForwardAsync<StatusCodeResult>(HttpContext.Request, $"{ControllerPath}/{key}");
         }
 
         [NonAction]
@@ -57,36 +57,36 @@ namespace EDennis.NetStandard.Base {
 
         [HttpGet("{**key}")]
         public IActionResult GetById([FromRoute] string key) {
-            return _client.Get<TEntity>($"{ControllerPath}/{key}");
+            return _client.Forward<TEntity>(HttpContext.Request, $"{ControllerPath}/{key}");
         }
 
 
         [HttpGet("async/{**key}")]
         public async Task<IActionResult> GetByIdAsync([FromRoute] string key) {
-            return await _client.GetAsync<TEntity>($"{ControllerPath}/async/{key}");
+            return await _client.ForwardAsync<TEntity>(HttpContext.Request, $"{ControllerPath}/{key}");
         }
 
 
         [HttpPatch("{**key}")]
         public IActionResult Patch([FromRoute] string key, [FromBody] JsonElement input) {
-            return _client.Patch($"{ControllerPath}/{key}", input);
+            return _client.Forward<JsonElement,TEntity>(HttpContext.Request, $"{ControllerPath}/{key}", input);
         }
 
 
         [HttpPatch("async/{**key}")]
         public async Task<IActionResult> PatchAsync([FromRoute] string key, [FromBody] JsonElement input) {
-            return await _client.PatchAsync($"{ControllerPath}/async/{key}", input);
+            return await _client.ForwardAsync<JsonElement, TEntity>(HttpContext.Request, $"{ControllerPath}/{key}", input);
         }
 
 
         [HttpPut("{**key}")]
         public IActionResult Update([FromRoute] string key, [FromBody] TEntity input) {
-            return _client.Put($"{ControllerPath}/{key}", input);
+            return _client.Forward(HttpContext.Request, $"{ControllerPath}/{key}", input);
         }
 
         [HttpPut("async/{**key}")]
         public async Task<IActionResult> UpdateAsync([FromRoute] string key, [FromBody] TEntity input) {
-            return await _client.PutAsync($"{ControllerPath}/async/{key}", input);
+            return await _client.ForwardAsync(HttpContext.Request, $"{ControllerPath}/{key}", input);
         }
     }
 }
