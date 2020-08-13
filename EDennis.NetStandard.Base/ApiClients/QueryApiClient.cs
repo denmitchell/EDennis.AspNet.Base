@@ -31,22 +31,22 @@ namespace EDennis.NetStandard.Base {
         public virtual void AdjustQuery(ref IQueryable<TEntity> query) { }
 
 
-        public IActionResult GetWithDevExtreme(HttpRequest request, [FromQuery] string select, [FromQuery] string sort, [FromQuery] string filter, [FromQuery] int skip, [FromQuery] int take, [FromQuery] string totalSummary, [FromQuery] string group, [FromQuery] string groupSummary) {
+        public ObjectResult<DeserializableLoadResult<TEntity>> GetWithDevExtreme(HttpRequest request, [FromQuery] string select, [FromQuery] string sort, [FromQuery] string filter, [FromQuery] int skip, [FromQuery] int take, [FromQuery] string totalSummary, [FromQuery] string group, [FromQuery] string groupSummary) {
             return _client.Forward<DeserializableLoadResult<TEntity>>(request, $"{ControllerPath}/devextreme");
         }
 
-        public async Task<IActionResult> GetWithDevExtremeAsync(HttpRequest request, [FromQuery] string select, [FromQuery] string sort, [FromQuery] string filter, [FromQuery] int skip, [FromQuery] int take, [FromQuery] string totalSummary, [FromQuery] string group, [FromQuery] string groupSummary) {
+        public async Task<ObjectResult<DeserializableLoadResult<TEntity>>> GetWithDevExtremeAsync(HttpRequest request, [FromQuery] string select, [FromQuery] string sort, [FromQuery] string filter, [FromQuery] int skip, [FromQuery] int take, [FromQuery] string totalSummary, [FromQuery] string group, [FromQuery] string groupSummary) {
             return await _client.ForwardAsync<DeserializableLoadResult<TEntity>>(request, $"{ControllerPath}/devextreme/async");
         }
 
 
-        public IActionResult GetWithDynamicLinq(HttpRequest request, [FromQuery] string where = null, [FromQuery] string orderBy = null, [FromQuery] string select = null, [FromQuery] string include = null, [FromQuery] int? skip = null, [FromQuery] int? take = null, [FromQuery] int? totalRecords = null) {
-            return _client.Forward<TEntity>(request, $"{ControllerPath}/linq");
+        public ObjectResult<DynamicLinqResult<TEntity>> GetWithDynamicLinq(HttpRequest request, [FromQuery] string where = null, [FromQuery] string orderBy = null, [FromQuery] string select = null, [FromQuery] string include = null, [FromQuery] int? skip = null, [FromQuery] int? take = null, [FromQuery] int? totalRecords = null) {
+            return _client.Forward<DynamicLinqResult<TEntity>>(request, $"{ControllerPath}/linq");
         }
 
 
-        public async Task<IActionResult> GetWithDynamicLinqAsync(HttpRequest request, [FromQuery] string where = null, [FromQuery] string orderBy = null, [FromQuery] string select = null, [FromQuery] string include = null, [FromQuery] int? skip = null, [FromQuery] int? take = null, [FromQuery] int? totalRecords = null) {
-            return await _client.ForwardAsync<TEntity>(request, $"{ControllerPath}/linq/async");
+        public async Task<ObjectResult<DynamicLinqResult<TEntity>>> GetWithDynamicLinqAsync(HttpRequest request, [FromQuery] string where = null, [FromQuery] string orderBy = null, [FromQuery] string select = null, [FromQuery] string include = null, [FromQuery] int? skip = null, [FromQuery] int? take = null, [FromQuery] int? totalRecords = null) {
+            return await _client.ForwardAsync<DynamicLinqResult<TEntity>>(request, $"{ControllerPath}/linq/async");
         }
 
         public IEnumerable<TEntity> GetWithOData([FromQuery] string select, [FromQuery] string orderBy, [FromQuery] string filter, [FromQuery] string expand, [FromQuery] int skip, [FromQuery] int top) {

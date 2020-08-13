@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using EDennis.Samples.ColorApp;
+using System.Net;
+using System.Threading.Tasks;
 
-namespace EDennis.Samples.ColorApp.Razor.Pages
-{
+namespace EDennis.Samples.ColorApp.Razor.Pages {
     public class DetailsModel : PageModel
     {
-        private readonly EDennis.Samples.ColorApp.ColorContext _context;
+        private readonly RgbApiClient _apiClient;
 
-        public DetailsModel(EDennis.Samples.ColorApp.ColorContext context)
+        public DetailsModel(RgbApiClient apiClient)
         {
-            _context = context;
+            _apiClient = apiClient;
         }
 
         public Rgb Rgb { get; set; }
@@ -23,16 +18,13 @@ namespace EDennis.Samples.ColorApp.Razor.Pages
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            Rgb = await _context.Rgb.FirstOrDefaultAsync(m => m.Id == id);
-
-            if (Rgb == null)
-            {
+            var result = await _apiClient.GetByIdAsync(id.ToString());
+            if(result.StatusCode == (int)HttpStatusCode.NotFound)
                 return NotFound();
-            }
+
+            Rgb = result.TypedValue;
             return Page();
         }
     }

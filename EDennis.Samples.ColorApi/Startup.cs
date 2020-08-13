@@ -1,4 +1,5 @@
 using EDennis.NetStandard.Base;
+using EDennis.Samples.ColorApp;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;

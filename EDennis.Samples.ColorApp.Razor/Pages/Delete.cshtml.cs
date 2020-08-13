@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using EDennis.Samples.ColorApp;
+using System.Net;
+using System.Threading.Tasks;
 
-namespace EDennis.Samples.ColorApp.Razor.Pages
-{
+namespace EDennis.Samples.ColorApp.Razor.Pages {
     public class DeleteModel : PageModel
     {
-        private readonly EDennis.Samples.ColorApp.ColorContext _context;
+        private readonly RgbApiClient _apiClient;
 
-        public DeleteModel(EDennis.Samples.ColorApp.ColorContext context)
+        public DeleteModel(RgbApiClient apiClient)
         {
-            _context = context;
+            _apiClient = apiClient;
         }
 
         [BindProperty]
@@ -24,33 +19,22 @@ namespace EDennis.Samples.ColorApp.Razor.Pages
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            Rgb = await _context.Rgb.FirstOrDefaultAsync(m => m.Id == id);
-
-            if (Rgb == null)
-            {
+            var result = await _apiClient.GetByIdAsync(id.ToString());
+            if (result.StatusCode == (int)HttpStatusCode.NotFound)
                 return NotFound();
-            }
+   
+            Rgb = result.TypedValue;
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            Rgb = await _context.Rgb.FindAsync(id);
-
-            if (Rgb != null)
-            {
-                _context.Rgb.Remove(Rgb);
-                await _context.SaveChangesAsync();
-            }
+            await _apiClient.DeleteAsync(id.ToString());
 
             return RedirectToPage("./Index");
         }

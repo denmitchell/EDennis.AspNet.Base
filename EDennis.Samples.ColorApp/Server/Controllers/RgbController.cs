@@ -1,5 +1,5 @@
 ﻿using EDennis.NetStandard.Base;
-using EDennis.Samples.ColorApp.Shared;
+using EDennis.Samples.ColorApp;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
 
