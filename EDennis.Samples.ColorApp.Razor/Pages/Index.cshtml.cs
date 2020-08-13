@@ -16,7 +16,7 @@ namespace EDennis.Samples.ColorApp.Razor.Pages {
 
         public async Task OnGetAsync()
         {
-            var dynamicLinqResult = (await _apiClient.GetWithDynamicLinqAsync(HttpContext.Request)).TypedValue;
+            var dynamicLinqResult = (await _apiClient.GetWithDynamicLinqAsync()).TypedValue;
             Rgb = dynamicLinqResult.Data;
         }
     }
