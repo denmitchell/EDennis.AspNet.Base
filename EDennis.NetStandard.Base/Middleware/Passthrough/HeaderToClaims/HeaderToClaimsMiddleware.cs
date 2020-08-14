@@ -35,7 +35,7 @@ namespace EDennis.NetStandard.Base {
             _settings = settings.CurrentValue;
         }
 
-        public async Task InvokeAsync(HttpContext context, ScopeProperties scopeProperties,
+        public async Task InvokeAsync(HttpContext context,
             ILogger<ClaimsToHeaderMiddleware> logger) {
 
             var req = context.Request;
@@ -68,7 +68,6 @@ namespace EDennis.NetStandard.Base {
 
     public static class IServiceCollectionExtensions_HeaderToClaimsMiddleware {
         public static IServiceCollection AddHeaderToClaims(this IServiceCollection services, IConfiguration config) {
-            services.TryAddScoped<ScopeProperties>();
             services.Configure<MockUserOptions>(config.GetSection("Security:HeaderToClaims"));
             return services;
         }

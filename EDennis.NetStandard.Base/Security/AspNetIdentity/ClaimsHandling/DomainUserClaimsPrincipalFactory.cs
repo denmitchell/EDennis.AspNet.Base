@@ -19,6 +19,11 @@ namespace EDennis.NetStandard.Base {
     }
 
 
+    /// <summary>
+    /// TODO: Determine if materialized views can make this more efficient
+    /// </summary>
+    /// <typeparam name="TUser"></typeparam>
+    /// <typeparam name="TRole"></typeparam>
     public class DomainUserClaimsPrincipalFactory<TUser,TRole> : IUserClaimsPrincipalFactory<TUser> 
         where TUser: DomainUser
         where TRole: DomainRole {

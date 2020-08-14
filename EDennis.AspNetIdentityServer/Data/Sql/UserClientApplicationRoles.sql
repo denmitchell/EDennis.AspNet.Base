@@ -17,14 +17,12 @@ create nonclustered index
 go
 create view UserApplicationRoles
 	with schemabinding as 
-	select u.Id UserId, a.Name [Application], r.Name [Role] 
+	select u.Id UserId, r.ApplicationName [Application], r.Name [Role] 
 		from dbo.AspNetUsers u
         inner join dbo.AspNetUserRoles ur
 			on ur.UserId = u.Id
 		inner join dbo.AspNetRoles r
 			on ur.RoleId = r.Id
-        inner join dbo.AspNetApplications a
-            on r.ApplicationId = a.Id
 go
 create unique clustered index 
 	ucidx_UserApplicationRoles

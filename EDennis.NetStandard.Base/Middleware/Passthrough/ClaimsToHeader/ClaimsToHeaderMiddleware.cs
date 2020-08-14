@@ -1,16 +1,13 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Primitives;
-using System;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using Microsoft.OpenApi.Writers;
-using System.Security;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using System;
+using System.Security;
+using System.Threading.Tasks;
 
 namespace EDennis.NetStandard.Base {
 
@@ -35,7 +32,7 @@ namespace EDennis.NetStandard.Base {
             _settings = settings.CurrentValue;
         }
 
-        public async Task InvokeAsync(HttpContext context, ScopeProperties scopeProperties,
+        public async Task InvokeAsync(HttpContext context,
             ILogger<ClaimsToHeaderMiddleware> logger) {
 
             var req = context.Request;
@@ -65,7 +62,6 @@ namespace EDennis.NetStandard.Base {
 
     public static class IServiceCollectionExtensions_ClaimsToHeaderMiddleware {
         public static IServiceCollection AddClaimsToHeader(this IServiceCollection services, IConfiguration config) {
-            services.TryAddScoped<ScopeProperties>();
             services.Configure<MockUserOptions>(config.GetSection("Security:ClaimsToHeader"));
             return services;
         }

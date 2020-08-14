@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Net;
 using System.Threading.Tasks;
+using S = EDennis.Samples.ColorApp;
 
-namespace EDennis.Samples.ColorApp.Razor.Pages {
+namespace EDennis.Samples.ColorApp.Razor.Pages.Rgb {
     public class DetailsModel : PageModel
     {
         private readonly RgbApiClient _apiClient;
@@ -13,7 +14,7 @@ namespace EDennis.Samples.ColorApp.Razor.Pages {
             _apiClient = apiClient;
         }
 
-        public Rgb Rgb { get; set; }
+        public S.Rgb Rgb { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
