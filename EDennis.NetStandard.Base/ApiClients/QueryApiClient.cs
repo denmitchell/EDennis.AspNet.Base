@@ -30,6 +30,16 @@ namespace EDennis.NetStandard.Base {
         public virtual void AdjustQuery(ref IQueryable<TEntity> query) { }
 
 
+        public virtual ObjectResult<List<TEntity>> GetAll() {
+            return _client.Get<List<TEntity>>($"{ControllerPath}");
+        }
+
+
+        public virtual async Task<ObjectResult<List<TEntity>>> GetAllAsync() {
+            return await _client.GetAsync<List<TEntity>>($"{ControllerPath}");
+        }
+
+
         public ObjectResult<DeserializableLoadResult<TEntity>> GetWithDevExtreme(string select, string sort, string filter, int skip, int take, string totalSummary, string group, string groupSummary) {
             var qString = BuildDevExtremeQueryString(select, sort, filter, skip, take, totalSummary, group, groupSummary);
             _scopedRequestMessage.AddQueryString(qString);

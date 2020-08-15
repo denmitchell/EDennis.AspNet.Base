@@ -49,6 +49,16 @@ namespace EDennis.NetStandard.Base {
         public virtual void AdjustQuery(ref IQueryable<TEntity> query) { }
 
 
+        [HttpGet]
+        public virtual IActionResult GetAll() {
+            return Ok(_dbContext.Set<TEntity>().ToList());
+        }
+
+        [HttpGet("async")]
+        public virtual async Task<IActionResult> GetAllAsync() {
+            return Ok(await _dbContext.Set<TEntity>().ToListAsync());
+        }
+
         /// <summary>
         /// Gets a DevExtreme LoadResult from a DataSourceLoader query string
         /// </summary>

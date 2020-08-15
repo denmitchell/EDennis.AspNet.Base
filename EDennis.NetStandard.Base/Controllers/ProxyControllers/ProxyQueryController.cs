@@ -38,6 +38,19 @@ namespace EDennis.NetStandard.Base {
         public virtual void AdjustQuery(ref IQueryable<TEntity> query) { }
 
 
+        [HttpGet]
+        public virtual IActionResult GetAll() {
+            return _client.Get<List<TEntity>>($"{ControllerPath}");
+        }
+
+
+        [HttpGet("async")]
+        public virtual async Task<IActionResult> GetAllAsync() {
+            return await _client.GetAsync<List<TEntity>>($"{ControllerPath}");
+        }
+
+
+
         [HttpGet("devextreme")]
         public IActionResult GetWithDevExtreme([FromQuery] string select, [FromQuery] string sort, [FromQuery] string filter, [FromQuery] int skip, [FromQuery] int take, [FromQuery] string totalSummary, [FromQuery] string group, [FromQuery] string groupSummary) {
             return _client.Forward<DeserializableLoadResult<TEntity>>(HttpContext.Request, $"{ControllerPath}/devextreme");
