@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 
-namespace EDennis.Samples.ColorApp {
-    public class SearchTable<TSearchRow> : List<TSearchRow> 
-        where TSearchRow : ISearchRow {
+namespace EDennis.NetStandard.Base {
+    public class SearchTable : List<SearchRow> {
         
         public string Where {
             get {
                 var list = new List<string>();
                 foreach (var row in this)
-                    list.AddRange(row.WhereList);
+                    list.Add(row.Expression);
 
                 return string.Join(" and ", list);
             }

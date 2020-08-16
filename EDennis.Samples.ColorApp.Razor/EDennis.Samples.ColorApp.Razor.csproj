@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EDennis.NetStandard.Base\EDennis.NetStandard.Base.csproj" />
+    <ProjectReference Include="..\EDennis.RazorComponents\EDennis.RazorComponents.csproj" />
     <ProjectReference Include="..\EDennis.Samples.ColorApp\Shared\EDennis.Samples.ColorApp.Shared.csproj" />
   </ItemGroup>
 

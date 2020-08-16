@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mvc", "mvc\mvc.csproj", "{8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.Samples.ColorApp.Razor", "EDennis.Samples.ColorApp.Razor\EDennis.Samples.ColorApp.Razor.csproj", "{5CA41857-AC8D-45C5-AE49-CA9DDFD3E3AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDennis.RazorComponents", "EDennis.RazorComponents\EDennis.RazorComponents.csproj", "{0437E611-102E-47FE-B808-963772D3E4AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{5CA41857-AC8D-45C5-AE49-CA9DDFD3E3AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CA41857-AC8D-45C5-AE49-CA9DDFD3E3AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5CA41857-AC8D-45C5-AE49-CA9DDFD3E3AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0437E611-102E-47FE-B808-963772D3E4AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0437E611-102E-47FE-B808-963772D3E4AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0437E611-102E-47FE-B808-963772D3E4AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0437E611-102E-47FE-B808-963772D3E4AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

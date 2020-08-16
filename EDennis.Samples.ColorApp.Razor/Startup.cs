@@ -23,6 +23,8 @@ namespace EDennis.Samples.ColorApp.Mvc {
             services.AddRazorPages();
             services.AddSecureTokenService<MockTokenService>(Configuration);
             services.AddApiClients(Configuration);
+
+            services.AddServerSideBlazor(); //for .razor components
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,6 +47,7 @@ namespace EDennis.Samples.ColorApp.Mvc {
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapBlazorHub(); //for .razor components
             });
         }
     }

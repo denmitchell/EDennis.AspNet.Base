@@ -1,0 +1,41 @@
+﻿@using Microsoft.AspNetCore.Components;
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="@Url"
+   asp-route-fld1="@Model.SearchTable[0].FieldName"
+   asp-route-op1="@OperatorValue(0)"
+   asp-route-val1="@Model.SearchTable[0].FieldValue"
+   asp-route-fld2="@Model.SearchTable[1].FieldName"
+   asp-route-op2="@OperatorValue(1)"
+   asp-route-val2="@Model.SearchTable[1].FieldValue"
+   asp-route-pageNumber="@(Model.CurrentPage - 1)"
+   asp-route-totalRecords="@Model.RowCount"
+   class="btn btn-primary @prevDisabled">
+    Previous
+</a>
+<a asp-page="@Url"
+   asp-route-fld1="@Model.SearchTable[0].FieldName"
+   asp-route-op1="@OperatorValue(0)"
+   asp-route-val1="@Model.SearchTable[0].FieldValue"
+   asp-route-fld2="@Model.SearchTable[1].FieldName"
+   asp-route-op2="@OperatorValue(1)"
+   asp-route-val2="@Model.SearchTable[1].FieldValue"
+   asp-route-pageNumber="@(Model.CurrentPage + 1)"
+   asp-route-totalRecords="@Model.RowCount"
+   class="btn btn-primary @nextDisabled">
+    Next
+</a>
+@code {
+
+    [Parameter]
+    public string Url { get; set; }
+
+    [Parameter]
+    public EDennis.NetStandard.Base.ISearchablePageableModel Model { get; set; }
+
+    public int OperatorValue(int index)
+        => (int)Model.SearchTable[index].Operator;
+}

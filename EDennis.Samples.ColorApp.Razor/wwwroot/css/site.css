@@ -1,6 +1,33 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+.form-control {
+    padding: 2px;
+    height: 33px;
+}
+
+.filter-row {
+    padding: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px; /* Reduced from whatever it currently is */
+    margin-top: 0px; /* Reduced from whatever it currently is */
+}
+
+hr.sep-small {
+    padding: 0px;
+    margin: 0px;
+    border-top: 2px solid rgb(230,230,230);
+}
+
+hr.sep-big {
+    padding: 0px;
+    margin: 0px;
+    border-top: 15px solid rgb(230,230,230);
+}
+
+
+
 a.navbar-brand {
   white-space: normal;
   text-align: center;
