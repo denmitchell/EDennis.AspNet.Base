@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace EDennis.NetStandard.Base {
-    public abstract class DynamicLinqPageModel<TEntity> : PageModel, ISearchablePageableModel {
+    public abstract class DynamicLinqPageModel<TEntity> : PageModel, ISearchablePageableModel <TEntity>
+        where TEntity : class {
 
 
         public DynamicLinqPageModel(){
-            SearchTable = new SearchTable();
+            SearchTable = new SearchTable<TEntity>();
             for (int i = 0; i < SearchTableRowCount; i++)
-                SearchTable.Add(new SearchRow());
+                SearchTable.Add(new SearchRow<TEntity>());
         }
 
 
@@ -22,7 +23,7 @@ namespace EDennis.NetStandard.Base {
         public int PageSize { get; set; }
         public int RowCount { get; set; } = -1;
 
-        public SearchTable SearchTable { get; set; }
+        public SearchTable<TEntity> SearchTable { get; set; }
 
         public bool HasPreviousPage => CurrentPage > 1;
         public bool HasNextPage => CurrentPage != default && CurrentPage < PageCount;

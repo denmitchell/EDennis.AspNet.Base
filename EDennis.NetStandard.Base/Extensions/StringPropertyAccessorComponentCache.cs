@@ -33,5 +33,8 @@ namespace EDennis.NetStandard.Base {
             return _cache.TryGetValue(propertyName, out MemberExpression result) ? (_parameterExpression,result) : (default,default);
         }
 
+        public static bool IsStringProperty(string propertyName)
+            => _cache.ContainsKey(propertyName);
+
     }
 }

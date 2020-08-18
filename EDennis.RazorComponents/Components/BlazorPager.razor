@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Components;
+﻿@typeparam TEntity
 @{
     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
@@ -28,14 +28,3 @@
    class="btn btn-primary @nextDisabled">
     Next
 </a>
-@code {
-
-    [Parameter]
-    public string Url { get; set; }
-
-    [Parameter]
-    public EDennis.NetStandard.Base.ISearchablePageableModel Model { get; set; }
-
-    public int OperatorValue(int index)
-        => (int)Model.SearchTable[index].Operator;
-}

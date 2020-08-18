@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Components;
+﻿@typeparam TEntity
 <a asp-page="@Url"
    asp-route-fld1="@Model.SearchTable[0].FieldName"
    asp-route-op1="@OperatorValue(0)"
@@ -10,13 +10,3 @@
    class="btn btn-light btn-sm btn-block">
     Search
 </a>
-@code {
-    [Parameter]
-    public string Url { get; set; }
-
-    [Parameter]
-    public EDennis.NetStandard.Base.ISearchablePageableModel Model { get; set; }
-
-    public int OperatorValue(int index)
-        => (int)Model.SearchTable[index].Operator;
-}

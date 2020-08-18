@@ -2,7 +2,8 @@
 using System.Linq;
 
 namespace EDennis.NetStandard.Base {
-    public class SearchTable : List<SearchRow> {
+    public class SearchTable<TEntity> : List<SearchRow<TEntity>> 
+        where TEntity : class {
         
         public string Where {
             get {
