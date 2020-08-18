@@ -2,11 +2,13 @@ using EDennis.NetStandard.Base;
 using EDennis.Samples.ColorApp;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System;
 
 namespace EDennis.Samples.ColorApi {
     public class Startup {
@@ -18,9 +20,10 @@ namespace EDennis.Samples.ColorApi {
         public IConfiguration Configuration { get; }
         public IHostEnvironment HostEnvironment {get; }
 
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
-            services.AddControllersWithDefaultPolicies(Configuration,HostEnvironment,"Security:DefaultPolicies:ClaimTypes");
+            services.AddControllers(options=>options.AddDefaultPolicies(services,HostEnvironment,Configuration));
             
             //System.Diagnostics.Debugger.Launch();
 

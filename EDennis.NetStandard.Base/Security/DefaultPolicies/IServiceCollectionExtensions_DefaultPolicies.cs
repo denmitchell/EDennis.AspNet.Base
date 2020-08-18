@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,6 +15,25 @@ namespace EDennis.NetStandard.Base {
     /// </summary>
     public static class IServiceCollectionExtensions_DefaultPolicies {
 
+
+
+        public static void AddDefaultPolicies(this MvcOptions options, IServiceCollection services, IHostEnvironment env, IConfiguration config, 
+            string policiesKey = DefaultPolicies.DEFAULT_POLICIES_KEY,
+            string claimTypesKey = DefaultPolicies.DEFAULT_CLAIMTYPES_KEY) {
+
+            options.Conventions.Add(new DefaultAuthorizationPolicyConvention(env.ApplicationName, config, policiesKey));
+
+            services.AddSingleton<IAuthorizationPolicyProvider>((container) => {
+                var logger = container.GetRequiredService<ILogger<DefaultPoliciesAuthorizationPolicyProvider>>();
+                return new DefaultPoliciesAuthorizationPolicyProvider(
+                    config, logger, policiesKey, claimTypesKey);
+            });
+
+        }
+
+
+
+
         /// <summary>
         /// Configures "Default Policies" -- policies that require values of one or more 
         /// claim types to wildcard match one of the defined acceptable patterns.  
@@ -25,7 +45,7 @@ namespace EDennis.NetStandard.Base {
         /// <param name="services">IServiceCollection instance</param>
         /// <param name="config">IConfiguration instance</param>
         /// <param name="env">IHostEnvironment instance</param>
-        /// <param name="defaultPoliciesKey">Configuration key that will hold the generated Default Policies</param>
+        /// <param name="defaultPoliciesPoliciesKey">Configuration key that will hold the generated Default Policies</param>
         /// <param name="defaultPoliciesClaimTypesKey">Configuration key that holds the claim types 
         ///   (e.g., scope, user_scope, client_scope) used for policy evaluation.  Note: all listed claim types
         ///   must each match the policy pattern.  If you provide user_scope and client_scope, values from
@@ -33,22 +53,23 @@ namespace EDennis.NetStandard.Base {
         /// <returns>An IMvcCoreBuilder, which can be used to add other conventions or perform other configurations.</returns>
         /// <see cref="DefaultAuthorizationPolicyConvention"/>
         /// <see cref="ClaimPatternAuthorizationHandler"/>
-        public static IMvcCoreBuilder AddControllersWithDefaultPolicies(this IServiceCollection services,
-            IConfiguration config, IHostEnvironment env,
-            string defaultPoliciesClaimTypesKey = "Security:DefaultPolicies:ClaimTypes",
-            string defaultPoliciesKey = "Security:DefaultPolicies:Policies"
-            ) {
-            var builder = services.AddMvcCore(options=> {
-                options.Conventions.Add(new DefaultAuthorizationPolicyConvention(env.ApplicationName, config, defaultPoliciesKey));
-            });
+        //public static IMvcCoreBuilder AddControllersWithDefaultPolicies(this IServiceCollection services,
+        //    IConfiguration config, IHostEnvironment env,
+        //    string defaultPoliciesClaimTypesKey = DefaultPolicies.DEFAULT_CLAIMTYPES_KEY,
+        //    string defaultPoliciesPoliciesKey = DefaultPolicies.DEFAULT_POLICIES_KEY
+        //    ) {
 
-            services.AddSingleton<IAuthorizationPolicyProvider>((container) => {
-                var logger = container.GetRequiredService<ILogger<DefaultPoliciesAuthorizationPolicyProvider>>();
-                return new DefaultPoliciesAuthorizationPolicyProvider(
-                    config, logger, defaultPoliciesKey, defaultPoliciesClaimTypesKey);
-            });
+        //    var builder = services.AddMvcCore(options=> {
+        //        options.Conventions.Add(new DefaultAuthorizationPolicyConvention(env.ApplicationName, config, defaultPoliciesPoliciesKey));
+        //    });
 
-            return builder;
-        }
+        //    services.AddSingleton<IAuthorizationPolicyProvider>((container) => {
+        //        var logger = container.GetRequiredService<ILogger<DefaultPoliciesAuthorizationPolicyProvider>>();
+        //        return new DefaultPoliciesAuthorizationPolicyProvider(
+        //            config, logger, defaultPoliciesPoliciesKey, defaultPoliciesClaimTypesKey);
+        //    });
+
+        //    return builder;
+        //}
     }
 }

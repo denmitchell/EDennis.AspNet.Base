@@ -15,13 +15,13 @@ namespace EDennis.NetStandard.Base {
         private readonly string _appName;
         private readonly IConfiguration _config;
 
-        private readonly string _defaultPoliciesKey = "DefaultPolicies";
+        private readonly string _defaultPoliciesPoliciesKey;
 
         public DefaultAuthorizationPolicyConvention(string appName, IConfiguration config, 
-                string defaultPoliciesKey) {
+                string defaultPoliciesPoliciesKey = DefaultPolicies.DEFAULT_POLICIES_KEY) {
             _appName = appName;
             _config = config;
-            _defaultPoliciesKey = defaultPoliciesKey;
+            _defaultPoliciesPoliciesKey = defaultPoliciesPoliciesKey;
         }
 
         public void Apply(ControllerModel controller) {
@@ -33,15 +33,15 @@ namespace EDennis.NetStandard.Base {
             var controllerPath = _appName + '.' + controller.ControllerName;
 
             int i = 0;
-            if (_config.ContainsKey(_defaultPoliciesKey)) {
+            if (_config.ContainsKey(_defaultPoliciesPoliciesKey)) {
                 var dfCurr = new List<string>();
-                _config.GetSection(_defaultPoliciesKey).Bind(dfCurr);
+                _config.GetSection(_defaultPoliciesPoliciesKey).Bind(dfCurr);
                 i = dfCurr.Count();
             }
             foreach (var action in controller.Actions) {
                 var actionPath = controllerPath + '.' + action.ActionName;
                 action.Filters.Add(new AuthorizeFilter(actionPath));
-                _config[$"{_defaultPoliciesKey}:{i}"] = actionPath;
+                _config[$"{_defaultPoliciesPoliciesKey}:{i}"] = actionPath;
                 i++;
             }
         }
@@ -54,7 +54,7 @@ namespace EDennis.NetStandard.Base {
 
             var pagePath = _appName.Replace(".Lib", "") + model.ViewEnginePath.Replace('/','.');
             model.Filters.Add(new AuthorizeFilter(pagePath));
-            _config[$"{_defaultPoliciesKey}:{pagePath}"] = "page";
+            _config[$"{_defaultPoliciesPoliciesKey}:{pagePath}"] = "page";
         }
 
 
