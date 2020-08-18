@@ -20,12 +20,11 @@ namespace EDennis.NetStandard.Base {
     /// </list>
     [Route(ApiConstants.ROUTE_PREFIX + "[controller]")]
     [ApiController]
-    public abstract class ProxyQueryController<TEntity> : ControllerBase, IQueryController<TEntity>
-        where TEntity : class {
+    public abstract class ProxyQueryController<TEntity> : ControllerBase, IQueryController<TEntity> where TEntity : class {
 
         protected readonly HttpClient _client;
 
-        public ProxyQueryController(IHttpClientFactory clientFactory, 
+        public ProxyQueryController(IHttpClientFactory clientFactory,
             ITokenService tokenService) {
             _client = clientFactory.CreateClient(GetType().Name);
             tokenService.AssignTokenAsync(_client).Wait();
@@ -84,10 +83,10 @@ namespace EDennis.NetStandard.Base {
             }
         }
 
-        protected string ControllerName { 
+        protected string ControllerName {
             get {
                 return ControllerContext.ActionDescriptor.ControllerName;
-            } 
+            }
         }
     }
 }

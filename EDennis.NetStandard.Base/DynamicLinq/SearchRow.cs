@@ -8,6 +8,9 @@
 
         public string Expression {
             get {
+                if (FieldValue == null)
+                    return "";
+
                 return Operator switch
                 {
                     ComparisonOperator.Equals => $"{FieldName} eq {FieldValue}",
@@ -17,8 +20,10 @@
                     ComparisonOperator.LessOrEqual => $"{FieldName} le {FieldValue}",
                     ComparisonOperator.GreaterThan => $"{FieldName} gt {FieldValue}",
                     ComparisonOperator.GreaterOrEqual => $"{FieldName} ge {FieldValue}",
-                    ComparisonOperator.StartsWith => $"{FieldName}.StartsWith({FieldValue},StringComparison.OrdinalIgnoreCase)",
-                    ComparisonOperator.Contains => $"{FieldName}.Contains({FieldValue},StringComparison.OrdinalIgnoreCase)",
+                    ComparisonOperator.StartsWith => $"{FieldName}.StartsWith({FieldValue})",
+                    ComparisonOperator.EndsWith => $"{FieldName}.EndsWith({FieldValue})",
+                    ComparisonOperator.Contains => $"{FieldName}.Contains({FieldValue})",
+                    ComparisonOperator.Like => $"{FieldName}.Like({FieldValue})",
                     _ => default,
                 };
 

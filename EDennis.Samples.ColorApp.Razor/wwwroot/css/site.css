@@ -14,6 +14,10 @@ for details on configuring this project to bundle and minify static web assets. 
     margin-top: 0px; /* Reduced from whatever it currently is */
 }
 
+.button-column {
+    padding: 2px;
+}
+
 hr.sep-small {
     padding: 0px;
     margin: 0px;

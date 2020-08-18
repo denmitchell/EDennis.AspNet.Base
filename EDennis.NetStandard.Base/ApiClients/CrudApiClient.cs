@@ -16,15 +16,14 @@ namespace EDennis.NetStandard.Base {
     /// </list>
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public abstract class CrudApiClient<TEntity> : QueryApiClient<TEntity>
-        where TEntity : class, ICrudEntity {
-        
-        protected CrudApiClient(IHttpClientFactory clientFactory, ITokenService tokenService, ScopedRequestMessage scopedRequestMessage) 
+    public abstract class CrudApiClient<TEntity> : QueryApiClient<TEntity>, ICrudApiClient<TEntity> where TEntity : class, ICrudEntity {
+
+        protected CrudApiClient(IHttpClientFactory clientFactory, ITokenService tokenService, ScopedRequestMessage scopedRequestMessage)
             : base(clientFactory, tokenService, scopedRequestMessage) {
         }
 
         public ObjectResult<TEntity> Create([FromBody] TEntity input) {
-            return _client.Post($"{ControllerPath}",input, _scopedRequestMessage);
+            return _client.Post($"{ControllerPath}", input, _scopedRequestMessage);
         }
 
         public async Task<ObjectResult<TEntity>> CreateAsync([FromBody] TEntity input) {
@@ -55,7 +54,7 @@ namespace EDennis.NetStandard.Base {
 
 
         public ObjectResult<TEntity> Patch([FromRoute] string key, [FromBody] JsonElement input) {
-            return _client.Patch<JsonElement,TEntity>($"{ControllerPath}/{key}", input, _scopedRequestMessage);
+            return _client.Patch<JsonElement, TEntity>($"{ControllerPath}/{key}", input, _scopedRequestMessage);
         }
 
 

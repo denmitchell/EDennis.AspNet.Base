@@ -10,18 +10,29 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace EDennis.NetStandard.Base {
-    public class CachedTransactionMiddleware<TContext>
-        where TContext : DbContext {
+
+    /// <summary>
+    /// In combination with CachedTransactionMiddleware, used by a Child API,
+    /// this middleware allows database transactions to remain uncommitted
+    /// for multiple HTTP requests and to roll back after these requests
+    /// (helpful for testing).
+    /// This middleware gets or adds an "X-CachedTransaction" Cookie with a
+    /// random guid.  Unlike CachedTransactionMiddleware, which manages
+    /// a cache of SqlConnection and SqlTransaction objects for specific 
+    /// DbContexts, CachedTransactionCookieMiddleware only creates cookies.
+    /// This middleware is designed for applications that have indirect 
+    /// access to a database via another API, which in turn uses the 
+    /// CachedTransactionMiddleware.
+    /// </summary>
+    public class CachedTransactionCookieMiddleware {
 
         private readonly RequestDelegate _next;
-        private readonly TransactionCache<TContext> _cache;
         private readonly IOptionsMonitor<CachedTransactionOptions> _options;
         private string[] _enabledForClaims;
 
-        public CachedTransactionMiddleware(RequestDelegate next, TransactionCache<TContext> cache,
+        public CachedTransactionCookieMiddleware(RequestDelegate next, 
             IOptionsMonitor<CachedTransactionOptions> options) {
             _next = next;
-            _cache = cache;
             _options = options;
             UpdateEnabledForClaims(options.CurrentValue.EnabledForClaims);
             _options.OnChange(e => UpdateEnabledForClaims(e.EnabledForClaims));
@@ -34,9 +45,6 @@ namespace EDennis.NetStandard.Base {
             if (claims != null && _enabledForClaims.Any(e => claims.Any(c => $"{c.Type}|{c.Value}" == e))) {
                 var cookieValue = GetOrAddCookie(context, out bool cookieAdded);
 
-                var dbContextProvider = context.RequestServices.GetRequiredService<DbContextProvider<TContext>>();
-                _cache.ReplaceDbContext(Guid.Parse(cookieValue), dbContextProvider);
-
                 if (cookieAdded)
                     context.Response.OnStarting(state => {
                         var httpContext = (HttpContext)state;
@@ -44,18 +52,10 @@ namespace EDennis.NetStandard.Base {
                         return Task.CompletedTask;
                     }, context);
 
-                if (context.Request.Path.Value.EndsWith(CachedTransactionOptions.ROLLBACK_PATH)) {
-                    await _cache.RollbackAsync(Guid.Parse(cookieValue));
-                    return;
-                } else if (context.Request.Path.Value.EndsWith(CachedTransactionOptions.COMMIT_PATH)) { 
-                    await _cache.CommitAsync(Guid.Parse(cookieValue));
-                    return;
-                }
-
                 await _next(context);
 
             } else
-                await _next(context); 
+                await _next(context);
 
         }
 
@@ -80,24 +80,22 @@ namespace EDennis.NetStandard.Base {
     }
 
 
-    public static class IServiceCollectionExtensions_CachedTransactionMiddleware {
-        public static IServiceCollection AddCachedTransaction(this IServiceCollection services, IConfiguration config,
+    public static class IServiceCollectionExtensions_CachedTransactionCookieMiddleware {
+        public static IServiceCollection AddCachedTransactionCookie(this IServiceCollection services, IConfiguration config,
             string configKey = CachedTransactionOptions.DEFAULT_CONFIG_KEY) {
             services.Configure<CachedTransactionOptions>(config.GetSection(configKey));
             return services;
         }
     }
 
-    public static class IApplicationBuilderExtensions_CachedTransactionMiddleware {
-        public static IApplicationBuilder UseCachedTransaction<TContext>(this IApplicationBuilder app)
-            where TContext: DbContext {
-            app.UseMiddleware<CachedTransactionMiddleware<TContext>>();
+    public static class IApplicationBuilderExtensions_CachedTransactionCookieMiddleware {
+        public static IApplicationBuilder UseCachedTransactionCookie(this IApplicationBuilder app) {
+            app.UseMiddleware<CachedTransactionCookieMiddleware>();
             return app;
         }
 
-        public static IApplicationBuilder UseCachedTransactionFor<TContext>(this IApplicationBuilder app,
-            params string[] startsWithSegments)
-            where TContext : DbContext {
+        public static IApplicationBuilder UseCachedTransactionCookieFor(this IApplicationBuilder app,
+            params string[] startsWithSegments) {
             app.UseWhen(context =>
             {
                 foreach (var partialPath in startsWithSegments)
@@ -105,7 +103,7 @@ namespace EDennis.NetStandard.Base {
                         return true;
                 return false;
             },
-                app => app.UseCachedTransaction<TContext>()
+                app => app.UseCachedTransactionCookie()
             );
             return app;
         }
@@ -113,7 +111,7 @@ namespace EDennis.NetStandard.Base {
         public static IApplicationBuilder UseCachedTransactionWhen<TContext>(this IApplicationBuilder app,
             Func<HttpContext, bool> predicate)
             where TContext : DbContext {
-                app.UseWhen(predicate, app => app.UseCachedTransaction<TContext>());
+            app.UseWhen(predicate, app => app.UseCachedTransaction<TContext>());
             return app;
         }
 

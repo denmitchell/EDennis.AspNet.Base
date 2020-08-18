@@ -8,7 +8,7 @@ using System.Net;
 
 namespace EDennis.Samples.ColorApi.Controllers {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class RgbController : CrudController<ColorContext, Rgb> {
 
         public RgbController(DbContextProvider<ColorContext> provider, ILogger<QueryController<ColorContext, Rgb>> logger) 

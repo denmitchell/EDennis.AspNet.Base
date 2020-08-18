@@ -6,8 +6,8 @@ using System;
 using System.Net.Http;
 
 namespace EDennis.NetStandard.Base {
-    
-    
+
+
     public static class IServiceCollectionExtensions_Security {
 
         /// <summary>
@@ -36,7 +36,8 @@ namespace EDennis.NetStandard.Base {
                 var configSection = config.GetSection(tokenServiceConfigKey);
                 configSection.Bind(options);
 
-                services.Configure<ClientCredentialsOptions>(opt => {
+                services.Configure<ClientCredentialsOptions>(opt =>
+                {
                     opt.Authority = options.Authority;
                     opt.ClientId = options.ClientId;
                     opt.ClientSecret = options.ClientSecret;
@@ -58,58 +59,45 @@ namespace EDennis.NetStandard.Base {
             return services;
         }
 
-
-        /// <summary>
-        /// Configures the TokenService and the HttpClient for all ProxyQueryControllers
-        /// and ProxyCrudControllers.
-        /// Note: This extension method requires the existence of a top-level configuration
-        /// section called "ProxyClients" that binds to a Dictionary<string,ProxyClient>
-        /// and whose key is the name of the Proxy Controller, minus the word Controller.
-        /// </summary>
-        public static IServiceCollection AddProxyClients(this IServiceCollection services,
-            IConfiguration config, string proxyClientsConfigKey = "ProxyClients") {
-
-            var clients = new ProxyClients();
-            config.GetSection(proxyClientsConfigKey).Bind(clients);
-
-            foreach(var client in clients) {
-                var clientName = client.Key;
-                services.AddHttpClient(clientName, options => {
-                    options.BaseAddress = new Uri(client.Value.TargetUrl);
-                }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler {
-                    UseCookies = false
-                });
-            }
-
-            return services;
-        }
+        private const string DEFAULT_DEPENDPOINTS_CONFIG_KEY = "DepEndpoints";
 
 
-        /// <summary>
-        /// Configures the TokenService and the HttpClient for all QueryApiClients
-        /// and CrudApiClients.
-        /// Note: This extension method requires the existence of a top-level configuration
-        /// section called "ApiClients" that binds to a Dictionary<string,ApiClient>
-        /// and whose key is the name of the Proxy Controller, minus the word Controller.
-        /// </summary>
-        public static IServiceCollection AddApiClients(this IServiceCollection services,
-            IConfiguration config, string apiClientsConfigKey = "ApiClients") {
+        public static TypedClientBuilder AddProxyClient<TClientImplementation>(this IServiceCollection services,
+                IConfiguration config, string configKey = DEFAULT_DEPENDPOINTS_CONFIG_KEY)
+            where TClientImplementation : class
+                => AddApiClient<TClientImplementation, TClientImplementation>(services, config, configKey);
+
+
+        public static TypedClientBuilder AddProxyClient<TClientInterface, TClientImplementation>(this IServiceCollection services,
+                IConfiguration config, string configKey = DEFAULT_DEPENDPOINTS_CONFIG_KEY)
+            where TClientInterface : class
+            where TClientImplementation : class, TClientInterface
+                => AddApiClient<TClientInterface, TClientImplementation>(services, config, configKey);
+
+
+        public static TypedClientBuilder AddApiClient<TClientImplementation>(this IServiceCollection services,
+                IConfiguration config, string configKey = DEFAULT_DEPENDPOINTS_CONFIG_KEY)
+            where TClientImplementation : class
+                => AddApiClient<TClientImplementation, TClientImplementation>(services, config, configKey);
+
+
+
+        public static TypedClientBuilder AddApiClient<TClientInterface, TClientImplementation>(this IServiceCollection services,
+                IConfiguration config, string configKey = DEFAULT_DEPENDPOINTS_CONFIG_KEY)
+            where TClientInterface : class
+            where TClientImplementation : class, TClientInterface {
 
             services.TryAddScoped<ScopedRequestMessage>();
 
-            var clients = new ApiClients();
-            config.GetSection(apiClientsConfigKey).Bind(clients);
+            configKey ??= DEFAULT_DEPENDPOINTS_CONFIG_KEY;
+            var dependPoints = new DepEndpoints();
+            config.BindSectionOrThrow(configKey, dependPoints);
 
-            foreach (var client in clients) {
-                var clientName = client.Key;
-                services.AddHttpClient(clientName, options => {
-                    options.BaseAddress = new Uri(client.Value.TargetUrl);
-                }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler {
-                    UseCookies = false
-                });
-            }
+            var clientBuilder = new TypedClientBuilder { DepEndpoints = dependPoints, Services = services };
 
-            return services;
+            clientBuilder.AddClient<TClientInterface, TClientImplementation>();
+
+            return clientBuilder;
         }
 
 

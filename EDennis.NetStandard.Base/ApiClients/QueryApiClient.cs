@@ -13,8 +13,7 @@ namespace EDennis.NetStandard.Base {
     /// <item>AddSecureTokenService<TTokenService>(Configuration,"Security:ClientCredentials")</item>
     /// <item>AddApiClients(Configuration,"ApiClients");</item>
     /// </list>
-    public abstract class QueryApiClient<TEntity>
-        where TEntity : class {
+    public abstract class QueryApiClient<TEntity> : IQueryApiClient<TEntity> where TEntity : class {
 
         protected readonly HttpClient _client;
         protected readonly ScopedRequestMessage _scopedRequestMessage;
@@ -49,21 +48,21 @@ namespace EDennis.NetStandard.Base {
         public async Task<ObjectResult<DeserializableLoadResult<TEntity>>> GetWithDevExtremeAsync(string select, string sort, string filter, int skip, int take, string totalSummary, string group, string groupSummary) {
             var qString = BuildDevExtremeQueryString(select, sort, filter, skip, take, totalSummary, group, groupSummary);
             _scopedRequestMessage.AddQueryString(qString);
-            return await _client.GetAsync<DeserializableLoadResult<TEntity>>($"{ControllerPath}/devextreme", _scopedRequestMessage);
+            return await _client.GetAsync<DeserializableLoadResult<TEntity>>($"{ControllerPath}/devextreme/async", _scopedRequestMessage);
         }
 
 
         public ObjectResult<DynamicLinqResult<TEntity>> GetWithDynamicLinq(string where = null, string orderBy = null, string select = null, string include = null, int? skip = null, int? take = null, int? totalRecords = null) {
             var qString = BuildDynamicLinqQueryString(where, orderBy, select, include, skip, take, totalRecords);
             _scopedRequestMessage.AddQueryString(qString);
-            return _client.Get<DynamicLinqResult<TEntity>>($"{ControllerPath}/linq", _scopedRequestMessage );
+            return _client.Get<DynamicLinqResult<TEntity>>($"{ControllerPath}/linq", _scopedRequestMessage);
         }
 
 
         public async Task<ObjectResult<DynamicLinqResult<TEntity>>> GetWithDynamicLinqAsync(string where = null, string orderBy = null, string select = null, string include = null, int? skip = null, int? take = null, int? totalRecords = null) {
             var qString = BuildDynamicLinqQueryString(where, orderBy, select, include, skip, take, totalRecords);
             _scopedRequestMessage.AddQueryString(qString);
-            return await _client.GetAsync<DynamicLinqResult<TEntity>>($"{ControllerPath}/linq", _scopedRequestMessage);
+            return await _client.GetAsync<DynamicLinqResult<TEntity>>($"{ControllerPath}/linq/async", _scopedRequestMessage);
         }
 
         public IEnumerable<TEntity> GetWithOData(string select, string orderBy, string filter, string expand, int skip, int top) {
@@ -76,7 +75,7 @@ namespace EDennis.NetStandard.Base {
             }
         }
 
-        public abstract string ControllerName { get; } 
+        public abstract string ControllerName { get; }
 
 
         private static string BuildDevExtremeQueryString(string select, string sort, string filter, int skip, int take, string totalSummary, string group, string groupSummary) {
@@ -101,7 +100,7 @@ namespace EDennis.NetStandard.Base {
             if (list.Count == 0)
                 return "";
 
-            return "?" + string.Join('&',list);
+            return "?" + string.Join('&', list);
         }
 
 

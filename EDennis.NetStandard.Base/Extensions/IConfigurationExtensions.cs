@@ -53,16 +53,16 @@ namespace EDennis.NetStandard.Base
         public static bool TryGetSection(this IConfigurationSection section, string key, out IConfigurationSection targetSection, string parentKey = "") {
             //Console.WriteLine($"{parentKey}{section.Key}");
             targetSection = null;
-            if (section.Value == null) {
+            if ($"{parentKey}{section.Key}" == key) {
+                targetSection = section;
+                return true;
+            } else if (section.Value == null) {
                 var children = section.GetChildren().ToList();
                 foreach (var child in children)
                     if (child.TryGetSection(key, out IConfigurationSection childSection, $"{parentKey}{section.Key}:")) {
                         targetSection = childSection;
                         return true;
                     }
-            } else if ($"{parentKey}{section.Key}" == key) {
-                targetSection = section;
-                return true;
             }
             return false;
         }

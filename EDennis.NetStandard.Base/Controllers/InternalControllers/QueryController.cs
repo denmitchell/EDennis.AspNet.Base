@@ -5,11 +5,13 @@ using System.Linq.Dynamic.Core;
 using System.Linq.Dynamic.Core.Exceptions;
 using System.Reflection;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DevExtreme.AspNet.Data;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
 
 namespace EDennis.NetStandard.Base {
@@ -281,8 +283,9 @@ namespace EDennis.NetStandard.Base {
                     foreach (var incl in includes)
                         qry = qry.Include(incl);
                 }
-                if (!string.IsNullOrWhiteSpace(where))
-                    qry = qry.Where(where);
+                if (!string.IsNullOrWhiteSpace(where)) {
+                    qry = ApplyWhere(qry,where);
+                }
                 if (!string.IsNullOrWhiteSpace(orderBy))
                     qry = qry.OrderBy(orderBy);
             } catch (ParseException ex) {
@@ -341,36 +344,48 @@ namespace EDennis.NetStandard.Base {
         }
 
 
+        private IQueryable<TEntity> ApplyWhere(IQueryable<TEntity> qry, string where) {
+
+            (qry, where) = DynamicLinqCaseInsensitiveConditionBuilder<TEntity>.ParseApplyStringConditions(qry, where);
+
+            if (!string.IsNullOrEmpty(where))
+                qry = qry.Where(where);
+
+            return qry;
+        }
+
+
+
         /// <summary>
         /// Returns an AsNoTracking IQueryable, but
         /// also applies AdjustQuery
         /// </summary>
         /// <returns></returns>
         private IQueryable<TEntity> GetQuery() {
-            var qry = _dbContext
-                .Set<TEntity>()
-                .AsNoTracking();
+                var qry = _dbContext
+                    .Set<TEntity>()
+                    .AsNoTracking();
 
-            AdjustQuery(ref qry);
-            return qry;
+                AdjustQuery(ref qry);
+                return qry;
+            }
+
+
+            /// <summary>
+            /// Creates the State argument for using Logger.BeginScope(State)
+            /// </summary>
+            /// <param name="parameters">a dynamic object with key-value pairs</param>
+            /// <returns></returns>
+            protected KeyValuePair<string, object>[] GetLoggerScope(dynamic parameters) {
+
+                var scope = new List<KeyValuePair<string, object>>();
+
+                foreach (PropertyInfo prop in parameters.GetType().GetProperties())
+                    scope.Add(new KeyValuePair<string, object>(prop.Name, (object)prop.GetValue(parameters)));
+
+                return scope.ToArray();
+            }
+
+
         }
-
-
-        /// <summary>
-        /// Creates the State argument for using Logger.BeginScope(State)
-        /// </summary>
-        /// <param name="parameters">a dynamic object with key-value pairs</param>
-        /// <returns></returns>
-        protected KeyValuePair<string, object>[] GetLoggerScope(dynamic parameters) {
-
-            var scope = new List<KeyValuePair<string, object>>();
-
-            foreach (PropertyInfo prop in parameters.GetType().GetProperties())
-                scope.Add(new KeyValuePair<string, object>(prop.Name, (object)prop.GetValue(parameters)));
-
-            return scope.ToArray();
-        }
-
-
     }
-}

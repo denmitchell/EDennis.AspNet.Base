@@ -1,16 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using EDennis.NetStandard.Base;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using EDennis.NetStandard.Base;
 
-namespace EDennis.Samples.ColorApp.Mvc {
+namespace EDennis.Samples.ColorApp.Razor {
     public class Startup {
         public Startup(IConfiguration configuration) {
             Configuration = configuration;
@@ -22,9 +17,12 @@ namespace EDennis.Samples.ColorApp.Mvc {
         public void ConfigureServices(IServiceCollection services) {
             services.AddRazorPages();
             services.AddSecureTokenService<MockTokenService>(Configuration);
-            services.AddApiClients(Configuration);
+            services.AddApiClient<RgbApiClient>(Configuration);
 
-            services.AddServerSideBlazor(); //for .razor components
+            services.AddMockUser(Configuration);
+            services.AddCachedTransactionCookie(Configuration);
+
+            //services.AddServerSideBlazor(); //for .razor components
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,12 +40,15 @@ namespace EDennis.Samples.ColorApp.Mvc {
 
             app.UseRouting();
 
+            app.UseMockUserFor("/Rgb");
+            app.UseAuthentication();
             app.UseAuthorization();
+            app.UseCachedTransactionCookieFor("/Rgb");
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
-                endpoints.MapBlazorHub(); //for .razor components
+                //endpoints.MapBlazorHub(); //for .razor components
             });
         }
     }

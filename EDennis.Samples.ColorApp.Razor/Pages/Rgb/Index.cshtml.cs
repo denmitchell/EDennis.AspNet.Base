@@ -10,6 +10,8 @@ namespace EDennis.Samples.ColorApp.Razor.Pages.Rgb {
         public const int PAGE_SIZE = 10;
         private readonly RgbApiClient _apiClient;
 
+        public const string ORDER_BY = "Name";
+
 
         public IndexModel(RgbApiClient apiClient)
         {
@@ -17,33 +19,27 @@ namespace EDennis.Samples.ColorApp.Razor.Pages.Rgb {
             PageSize = PAGE_SIZE;
         }
 
+        public override int SearchTableRowCount => 2;
+
 
         public async Task OnGetAsync(
-                string fld1, int op1, string val1,
-                string fld2, int op2, string val2,
+                string fld0, ComparisonOperator op0, string val0,
+                string fld1, ComparisonOperator op1, string val1,
                 int pageNumber = 1, int? totalRecords = null) {
 
 
-            var searchTable = new SearchTable();
+            SearchTable[0].FieldName = fld0;
+            SearchTable[0].Operator = op0;
+            SearchTable[0].FieldValue = val0;
 
-            if (fld1 != null)
-                searchTable.Add(new SearchRow {
-                    FieldName = fld1,
-                    Operator = (ComparisonOperator)op1,
-                    FieldValue = val1
-                });
+            SearchTable[1].FieldName = fld1;
+            SearchTable[1].Operator = op1;
+            SearchTable[1].FieldValue = val1;
 
-            if (fld2 != null)
-                searchTable.Add(new SearchRow {
-                    FieldName = fld2,
-                    Operator = (ComparisonOperator)op2,
-                    FieldValue = val2
-                });
-
-            var where = searchTable.Where;
+            var where = SearchTable.Where;
             var skip = (pageNumber - 1) * PAGE_SIZE;
 
-            var result = (await _apiClient.GetWithDynamicLinqAsync(where:where,skip:skip,take:PAGE_SIZE,totalRecords:totalRecords));
+            var result = (await _apiClient.GetWithDynamicLinqAsync(where:where,orderBy:ORDER_BY,skip:skip,take:PAGE_SIZE,totalRecords:totalRecords));
 
             if (result.StatusCode == (int)HttpStatusCode.OK)
                 Load(result.TypedValue);

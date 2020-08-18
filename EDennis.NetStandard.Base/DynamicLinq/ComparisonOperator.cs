@@ -9,6 +9,8 @@
         GreaterThan,
         GreaterOrEqual,
         StartsWith,
-        Contains
+        EndsWith,
+        Contains,
+        Like
     }
 }

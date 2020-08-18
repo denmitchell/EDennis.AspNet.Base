@@ -6,7 +6,17 @@ using System.Text;
 namespace EDennis.NetStandard.Base {
     public abstract class DynamicLinqPageModel<TEntity> : PageModel, ISearchablePageableModel {
 
-        public virtual List<TEntity> Data { get; set; }
+
+        public DynamicLinqPageModel(){
+            SearchTable = new SearchTable();
+            for (int i = 0; i < SearchTableRowCount; i++)
+                SearchTable.Add(new SearchRow());
+        }
+
+
+        public abstract int SearchTableRowCount { get; }
+
+        public virtual List<TEntity> Data { get; set; } = new List<TEntity>();
         public int CurrentPage { get; set; }
         public int PageCount { get; set; }
         public int PageSize { get; set; }
@@ -15,7 +25,7 @@ namespace EDennis.NetStandard.Base {
         public SearchTable SearchTable { get; set; }
 
         public bool HasPreviousPage => CurrentPage > 1;
-        public bool HasNextPage => CurrentPage != default && CurrentPage == PageCount;
+        public bool HasNextPage => CurrentPage != default && CurrentPage < PageCount;
 
         public void Load(DynamicLinqResult<TEntity> result) {
             Data = result.Data;
