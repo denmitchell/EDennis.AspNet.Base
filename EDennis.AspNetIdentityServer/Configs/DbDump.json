@@ -1,0 +1,103 @@
+{
+  "ApiResources": {
+    "Name": "EDennis.Samples.ColorApi",
+    "Scopes": [
+      "EDennis.Samples.ColorApi.RgbController.Check",
+      "EDennis.Samples.ColorApi.RgbController.Delete*",
+      "EDennis.Samples.ColorApi.RgbController.Patch*",
+      "EDennis.Samples.ColorApi.RgbController.Put*",
+      "EDennis.Samples.ColorApi.RgbController.Post*",
+      "EDennis.Samples.ColorApi.RgbController.Get*",
+      "EDennis.Samples.ColorApi.RgbController.*",
+      "EDennis.Samples.ColorApi.*.Delete*",
+      "EDennis.Samples.ColorApi.*.Patch*",
+      "EDennis.Samples.ColorApi.*.Put*",
+      "EDennis.Samples.ColorApi.*.Post*",
+      "EDennis.Samples.ColorApi.*.Get*",
+      "EDennis.Samples.ColorApi.*"
+    ],
+    "Claims": [
+      "role",
+      "phone",
+      "name"
+    ]
+  },
+  "Clients": [
+    {
+      "ClientId": "EDennis.Samples.ColorApi",
+      "RequireConsent": false,
+      "RequirePkce": true,
+      "AllowAccessTokensViaBrowser": false,
+      "AllowOfflineAccess": false,
+      "ClientClaimsPrefix": "",
+      "GrantTypes": [
+        "client_credentials"
+      ],
+      "Scopes": [
+        "EDennis.Samples.ColorApi.*"
+      ]
+    }
+  ],
+  "Users": [
+    {
+      "Id": 1,
+      "UserName": "admin1@.test",
+      "Email": "admin1@.test",
+      "EmailConfirmed": true,
+      "LockoutEnabled": false,
+      "Roles": {
+        "EDennis.Samples.ColorApi": [
+          "Admin"
+        ]
+      },
+      "Claims": {
+        "name": [
+          "Maria"
+        ],
+        "phone": [
+          "999.555.1212"
+        ]
+      }
+    },
+    {
+      "Id": 2,
+      "UserName": "darius@b.test",
+      "Email": "darius@b.test",
+      "EmailConfirmed": true,
+      "LockoutEnabled": false,
+      "Roles": {
+        "EDennis.Samples.ColorApi": [
+          "User"
+        ]
+      },
+      "Claims": {
+        "name": [
+          "Darius"
+        ],
+        "phone": [
+          "888.555.1212"
+        ]
+      }
+    },
+    {
+      "Id": 3,
+      "UserName": "pat@c.test",
+      "Email": "pat@c.test",
+      "EmailConfirmed": true,
+      "LockoutEnabled": false,
+      "Roles": {
+        "EDennis.Samples.ColorApi": [
+          "Readonly"
+        ]
+      },
+      "Claims": {
+        "name": [
+          "Pat"
+        ],
+        "phone": [
+          "777.555.1212"
+        ]
+      }
+    }
+  ]
+}

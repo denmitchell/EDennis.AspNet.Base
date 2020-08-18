@@ -1,6 +1,6 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
 using System.IO;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
 {
@@ -49,7 +49,7 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                     Name = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
-                    Application = table.Column<string>(nullable: true)
+                    Application = table.Column<string>(unicode: false, maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -77,7 +77,7 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     LockoutBegin = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    Organization = table.Column<string>(nullable: true)
+                    Organization = table.Column<string>(unicode: false, maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -234,6 +234,8 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
             migrationBuilder.Sql(File.ReadAllText("Data/Sql/UserClientApplicationRoles.sql"));
             migrationBuilder.Sql(File.ReadAllText("Data/Sql/FkRolesApplications.sql"));
             migrationBuilder.Sql(File.ReadAllText("Data/Sql/FkUsersOrganizations.sql"));
+            migrationBuilder.Sql(File.ReadAllText("Data/Sql/DbDump.sql"));
+
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

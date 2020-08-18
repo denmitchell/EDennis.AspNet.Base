@@ -38,7 +38,9 @@ namespace EDennis.NetStandard.Base {
                     .IsRequired(false);
 
                 e.Property(u => u.Organization)
-                    .IsRequired(false);
+                    .IsRequired(false)
+                    .IsUnicode(false)
+                    .HasMaxLength(200);
             });
 
 
@@ -56,6 +58,10 @@ namespace EDennis.NetStandard.Base {
                 e.Metadata.RemoveIndex(new[] { e.Property(r => r.NormalizedName).Metadata });
                 e.HasIndex(i => new { i.Application, i.Name })
                     .IsUnique(true);
+                e.Property(p => p.Application)
+                    .IsRequired(true)
+                    .IsUnicode(false)
+                    .HasMaxLength(200);
             });
 
 

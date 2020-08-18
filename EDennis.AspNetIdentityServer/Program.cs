@@ -295,13 +295,14 @@ namespace EDennis.AspNetIdentityServer {
             for (int i=0; i<keys.Length; i++) {
                 var roleName = keys[i];
                 var role = context.Roles.FirstOrDefault(r =>
-                    r.Name == roleName && r.Application == project);
+                    r.Application == project && r.Name == roleName);
                 if (role != null) {
                     Log.Information($"\t\tRole {roleName} record found for {project} ...");
                     roles[roleName] = role.Id;
                 } else {
                     Log.Information($"\t\tAdding role {roleName} record for {project} ...");
                     role = new DomainRole {
+                        Application = project,
                         Name = roleName,
                         NormalizedName = roleName.ToUpper()
                     };

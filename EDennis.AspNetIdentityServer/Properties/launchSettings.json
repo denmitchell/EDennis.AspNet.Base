@@ -7,9 +7,17 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "EDennis.AspNet.Base": {
+    "Rollback": {
       "commandName": "Project",
       "commandLineArgs": "/EDennis.Samples.ColorApi /dump",
+      "applicationUrl": "https://localhost:5000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "Commit": {
+      "commandName": "Project",
+      "commandLineArgs": "/EDennis.Samples.ColorApi /commit",
       "applicationUrl": "https://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
 {
     [DbContext(typeof(DomainIdentityDbContext))]
-    [Migration("20200818143753_Initial")]
+    [Migration("20200818165611_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -77,7 +77,10 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Application")
-                        .HasColumnType("nvarchar(450)");
+                        .IsRequired()
+                        .HasColumnType("varchar(200)")
+                        .HasMaxLength(200)
+                        .IsUnicode(false);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -139,7 +142,9 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                         .HasMaxLength(256);
 
                     b.Property<string>("Organization")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(200)")
+                        .HasMaxLength(200)
+                        .IsUnicode(false);
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
