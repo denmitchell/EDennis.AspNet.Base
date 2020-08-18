@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace EDennis.AspNetIdentityServer.Data.Migrations.IdentityServer_PersistedGrant
+namespace EDennis.AspNetIdentityServer.Data.Migrations.IS4_PersistedGrantDbContext
 {
     [DbContext(typeof(PersistedGrantDbContext))]
-    [Migration("20200807190313_Initial")]
+    [Migration("20200818144238_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

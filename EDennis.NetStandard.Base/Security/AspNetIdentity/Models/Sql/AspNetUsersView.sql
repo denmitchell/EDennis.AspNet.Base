@@ -1,7 +1,7 @@
 ﻿create view AspNetUsersView as
 	select u.Id, u.UserName, u.NormalizedUserName, u.Email NormalizedEmail, u.EmailConfirmed, u.PhoneNumber, u.PhoneNumberConfirmed,
 	u.TwoFactorEnabled, u.LockoutBegin, u.LockoutEnd, u.LockoutEnabled, u.AccessFailedCount,
-	u.Organization, u.SysUser, u.SysStatus, u.SysStart, u.SysEnd, u.Properties,
+	u.Organization,
 
 	JSON_QUERY('{' 
 		+ STUFF((

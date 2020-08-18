@@ -146,7 +146,7 @@ namespace EDennis.AspNetIdentityServer {
                     .Options;
                 context = (TContext)Activator.CreateInstance(typeof(TContext), new object[] { options, new OperationalStoreOptions() });
             } else {
-                var options = new DbContextOptionsBuilder<DomainIdentityDbContext>()
+                var options = new DbContextOptionsBuilder()
                     .UseSqlServer(cxn)
                     .Options;
                 context = (TContext)Activator.CreateInstance(typeof(TContext), new object[] { options });

@@ -41,6 +41,8 @@ namespace EDennis.AspNetIdentityServer {
             string cxnPersistedGrant = Configuration["DbContexts:PersistedGrantDbContext:ConnectionString"];
             string cxnAspNetIdentity = Configuration["DbContexts:AspNetIdentityDbContext:ConnectionString"];
 
+            services.AddScoped<IAppClaimEncoder, DefaultAppClaimEncoder>();
+
             services.AddScoped<IUserClaimsPrincipalFactory<DomainUser>, DomainUserClaimsPrincipalFactory>();
 
             services.AddIdentityServer()

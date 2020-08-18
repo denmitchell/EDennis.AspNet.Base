@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace EDennis.AspNetIdentityServer.Data.Migrations.IdentityServer_Configuration
+namespace EDennis.AspNetIdentityServer.Data.Migrations.IS4_ConfigurationDbContext
 {
     public partial class Initial : Migration
     {

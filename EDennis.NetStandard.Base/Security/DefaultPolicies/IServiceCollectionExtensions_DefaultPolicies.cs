@@ -1,12 +1,10 @@
-﻿using EDennis.NetStandard.Base;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace EDennis.AspNetIdentityServer {
+namespace EDennis.NetStandard.Base {
 
     /// <summary>
     /// Configures "Default Policies" -- policies that require values of one or more 
@@ -36,9 +34,10 @@ namespace EDennis.AspNetIdentityServer {
         /// <see cref="DefaultAuthorizationPolicyConvention"/>
         /// <see cref="ClaimPatternAuthorizationHandler"/>
         public static IMvcCoreBuilder AddControllersWithDefaultPolicies(this IServiceCollection services,
-            IConfiguration config, IHostEnvironment env, 
-            string defaultPoliciesKey = "Security:DefaultPolicies:Policies",
-            string defaultPoliciesClaimTypesKey = "Security:DefaultPolicies:ClaimTypes") {
+            IConfiguration config, IHostEnvironment env,
+            string defaultPoliciesClaimTypesKey = "Security:DefaultPolicies:ClaimTypes",
+            string defaultPoliciesKey = "Security:DefaultPolicies:Policies"
+            ) {
             var builder = services.AddMvcCore(options=> {
                 options.Conventions.Add(new DefaultAuthorizationPolicyConvention(env.ApplicationName, config, defaultPoliciesKey));
             });

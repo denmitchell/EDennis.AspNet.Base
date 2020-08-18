@@ -8,7 +8,7 @@ namespace EDennis.NetStandard.Base {
     /// AppClaim values, where the application name is embedded into
     /// either the ClaimType or ClaimValue
     /// </summary>
-    public class DefaultAppClaimParser : IAppClaimEncoder {
+    public class DefaultAppClaimEncoder : IAppClaimEncoder {
 
         /// <summary>
         /// Combines application name, claim type, and claim value into

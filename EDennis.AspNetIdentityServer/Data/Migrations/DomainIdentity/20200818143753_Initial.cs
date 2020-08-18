@@ -1,6 +1,6 @@
 ﻿using System;
-using System.IO;
 using Microsoft.EntityFrameworkCore.Migrations;
+using System.IO;
 
 namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
 {
@@ -8,54 +8,48 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateSequence<int>(
+                name: "seqAspNetApplications");
+
+            migrationBuilder.CreateSequence<int>(
+                name: "seqAspNetOrganizations");
+
             migrationBuilder.CreateTable(
                 name: "AspNetApplications",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(unicode: false, maxLength: 200, nullable: true),
-                    SysUser = table.Column<string>(unicode: false, maxLength: 150, nullable: true),
-                    SysStatus = table.Column<int>(nullable: false),
-                    SysStart = table.Column<DateTime>(nullable: false),
-                    SysEnd = table.Column<DateTime>(nullable: false),
-                    Properties = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(unicode: false, maxLength: 200, nullable: false, defaultValueSql: "next value for seqAspNetApplications"),
+                    SysUser = table.Column<string>(maxLength: 150, nullable: true),
+                    SysStatus = table.Column<byte>(type: "tinyint", nullable: false, defaultValue: (byte)0)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetApplications", x => x.Id);
+                    table.PrimaryKey("PK_AspNetApplications", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
                 name: "AspNetOrganizations",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(unicode: false, maxLength: 200, nullable: true),
-                    SysUser = table.Column<string>(unicode: false, maxLength: 150, nullable: true),
-                    SysStatus = table.Column<int>(nullable: false),
-                    SysStart = table.Column<DateTime>(nullable: false),
-                    SysEnd = table.Column<DateTime>(nullable: false),
-                    Properties = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(unicode: false, maxLength: 200, nullable: false, defaultValueSql: "next value for seqAspNetOrganizations"),
+                    SysUser = table.Column<string>(maxLength: 150, nullable: true),
+                    SysStatus = table.Column<byte>(type: "tinyint", nullable: false, defaultValue: (byte)0)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetOrganizations", x => x.Id);
+                    table.PrimaryKey("PK_AspNetOrganizations", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(unicode: false, maxLength: 256, nullable: true),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
-                    ApplicationId = table.Column<Guid>(nullable: true),
-                    SysStatus = table.Column<int>(nullable: false),
-                    SysUser = table.Column<string>(unicode: false, maxLength: 150, nullable: true),
-                    SysStart = table.Column<DateTime>(nullable: false),
-                    SysEnd = table.Column<DateTime>(nullable: false),
-                    Properties = table.Column<string>(nullable: true)
+                    Application = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -66,7 +60,8 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
@@ -82,12 +77,7 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     LockoutBegin = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    OrganizationId = table.Column<Guid>(nullable: false),
-                    SysEnd = table.Column<DateTime>(nullable: false),
-                    SysStart = table.Column<DateTime>(nullable: false),
-                    SysStatus = table.Column<int>(nullable: false),
-                    SysUser = table.Column<string>(unicode: false, maxLength: 150, nullable: true),
-                    Properties = table.Column<string>(nullable: true)
+                    Organization = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -100,7 +90,7 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<Guid>(nullable: false),
+                    RoleId = table.Column<int>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
                 },
@@ -121,13 +111,9 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<int>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true),
-                    SysStatus = table.Column<int>(nullable: false),
-                    SysUser = table.Column<string>(nullable: true),
-                    SysStart = table.Column<DateTime>(nullable: false),
-                    SysEnd = table.Column<DateTime>(nullable: false)
+                    ClaimValue = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -147,11 +133,7 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                     LoginProvider = table.Column<string>(nullable: false),
                     ProviderKey = table.Column<string>(nullable: false),
                     ProviderDisplayName = table.Column<string>(nullable: true),
-                    UserId = table.Column<Guid>(nullable: false),
-                    SysStatus = table.Column<int>(nullable: false),
-                    SysUser = table.Column<string>(nullable: true),
-                    SysStart = table.Column<DateTime>(nullable: false),
-                    SysEnd = table.Column<DateTime>(nullable: false)
+                    UserId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -168,12 +150,8 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(nullable: false),
-                    RoleId = table.Column<Guid>(nullable: false),
-                    SysStatus = table.Column<int>(nullable: false),
-                    SysUser = table.Column<string>(nullable: true),
-                    SysStart = table.Column<DateTime>(nullable: false),
-                    SysEnd = table.Column<DateTime>(nullable: false)
+                    UserId = table.Column<int>(nullable: false),
+                    RoleId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -196,14 +174,10 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<int>(nullable: false),
                     LoginProvider = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: false),
-                    Value = table.Column<string>(nullable: true),
-                    SysStatus = table.Column<int>(nullable: false),
-                    SysUser = table.Column<string>(nullable: true),
-                    SysStart = table.Column<DateTime>(nullable: false),
-                    SysEnd = table.Column<DateTime>(nullable: false)
+                    Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -217,37 +191,16 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetApplications_Name",
-                table: "AspNetApplications",
-                column: "Name",
-                unique: true,
-                filter: "[Name] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetOrganizations_Name",
-                table: "AspNetOrganizations",
-                column: "Name",
-                unique: true,
-                filter: "[Name] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "RoleNameIndex",
+                name: "IX_AspNetRoles_Application_Name",
                 table: "AspNetRoles",
-                column: "NormalizedName",
+                columns: new[] { "Application", "Name" },
                 unique: true,
-                filter: "[NormalizedName] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetRoles_ApplicationId_Name",
-                table: "AspNetRoles",
-                columns: new[] { "ApplicationId", "Name" },
-                unique: true,
-                filter: "[ApplicationId] IS NOT NULL AND [Name] IS NOT NULL");
+                filter: "[Application] IS NOT NULL AND [Name] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -276,16 +229,11 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_UserName",
-                table: "AspNetUsers",
-                column: "UserName",
-                unique: true,
-                filter: "[UserName] IS NOT NULL");
-
-            migrationBuilder.Sql(File.ReadAllText("Data/Sql/AspNetExpandedRoles.sql"));
-            migrationBuilder.Sql(File.ReadAllText("Data/Sql/AspNetExpandedUsers.sql"));
+            migrationBuilder.Sql(File.ReadAllText("Data/Sql/AspNetApplicationsView.sql"));
+            migrationBuilder.Sql(File.ReadAllText("Data/Sql/AspNetUsersView.sql"));
             migrationBuilder.Sql(File.ReadAllText("Data/Sql/UserClientApplicationRoles.sql"));
+            migrationBuilder.Sql(File.ReadAllText("Data/Sql/FkRolesApplications.sql"));
+            migrationBuilder.Sql(File.ReadAllText("Data/Sql/FkUsersOrganizations.sql"));
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -316,6 +264,12 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropSequence(
+                name: "seqAspNetApplications");
+
+            migrationBuilder.DropSequence(
+                name: "seqAspNetOrganizations");
         }
     }
 }

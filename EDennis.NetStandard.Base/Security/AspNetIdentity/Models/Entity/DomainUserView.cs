@@ -1,16 +1,48 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace EDennis.NetStandard.Base {
 
     [JsonConverter(typeof(DomainUserViewJsonConverter))]
-    public class DomainUserView : DomainUser {
+    public class DomainUserView : IdentityUser<int> {
+
+        public override bool LockoutEnabled { get; set; }
+
+        public DateTimeOffset? _lockoutBegin;
+        public DateTimeOffset? _lockoutEnd;
+
+
+        public DateTimeOffset? LockoutBegin {
+            get => _lockoutBegin;
+            set {
+                _lockoutBegin = value;
+                if (_lockoutBegin <= DateTime.Now && _lockoutEnd > DateTime.Now)
+                    LockoutEnabled = true;
+                else
+                    LockoutEnabled = false;
+            }
+        }
+
+        public override DateTimeOffset? LockoutEnd {
+            get => _lockoutEnd;
+            set {
+                _lockoutEnd = value;
+                if (_lockoutBegin <= DateTime.Now && _lockoutEnd > DateTime.Now)
+                    LockoutEnabled = true;
+                else
+                    LockoutEnabled = false;
+            }
+        }
+
+        public string Organization { get; set; }
 
         public string RolesDictionary { get; set; }
         public string ClaimsDictionary { get; set; }
 
     }
+
 
     public class DomainUserViewJsonConverter : JsonConverter<DomainUserView> {
 

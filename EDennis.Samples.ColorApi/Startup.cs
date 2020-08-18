@@ -10,15 +10,17 @@ using Microsoft.OpenApi.Models;
 
 namespace EDennis.Samples.ColorApi {
     public class Startup {
-        public Startup(IConfiguration configuration) {
+        public Startup(IConfiguration configuration, IHostEnvironment env) {
             Configuration = configuration;
+            HostEnvironment = env;
         }
 
         public IConfiguration Configuration { get; }
+        public IHostEnvironment HostEnvironment {get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
-            services.AddControllers();
+            services.AddControllersWithDefaultPolicies(Configuration,HostEnvironment,"Security:DefaultPolicies:ClaimTypes");
             
             //System.Diagnostics.Debugger.Launch();
 

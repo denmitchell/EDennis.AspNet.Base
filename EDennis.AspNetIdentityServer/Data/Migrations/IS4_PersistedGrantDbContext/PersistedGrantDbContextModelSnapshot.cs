@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace EDennis.AspNetIdentityServer.Data.Migrations.IdentityServer_PersistedGrant
+namespace EDennis.AspNetIdentityServer.Data.Migrations.IS4_PersistedGrantDbContext
 {
     [DbContext(typeof(PersistedGrantDbContext))]
     partial class PersistedGrantDbContextModelSnapshot : ModelSnapshot

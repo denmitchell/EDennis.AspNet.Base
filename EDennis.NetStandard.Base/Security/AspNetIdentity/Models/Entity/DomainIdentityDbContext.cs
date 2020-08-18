@@ -8,7 +8,7 @@ namespace EDennis.NetStandard.Base {
 
     public class DomainIdentityDbContext : DomainIdentityDbContext<DomainUser, DomainRole>{
 
-        public DomainIdentityDbContext(DbContextOptions<DomainIdentityDbContext<DomainUser, DomainRole>> options) :
+        public DomainIdentityDbContext(DbContextOptions options) :
             base(options) { }
     }
 
@@ -26,7 +26,7 @@ namespace EDennis.NetStandard.Base {
         where TRole : DomainRole{        
         
 
-        public DomainIdentityDbContext(DbContextOptions<DomainIdentityDbContext<TUser,TRole>> options) :
+        public DomainIdentityDbContext(DbContextOptions options) :
             base(options) { }
 
 
@@ -44,7 +44,7 @@ namespace EDennis.NetStandard.Base {
 
 
             builder.Entity<DomainOrganization>(e => {
-                e.ConfigureCrudEntity(builder, u => u.Name, false, "AspNetOrganizations");
+                e.ConfigureCrudEntity(builder, u => u.Name, true, "AspNetOrganizations");
                 e.Property(p => p.Name)
                     .IsUnicode(false)
                     .HasMaxLength(200);
@@ -60,7 +60,7 @@ namespace EDennis.NetStandard.Base {
 
 
             builder.Entity<DomainApplication>(e => {
-                e.ConfigureCrudEntity(builder, u => u.Name, false, "AspNetApplications");
+                e.ConfigureCrudEntity(builder, u => u.Name, true, "AspNetApplications");
                 e.Property(p => p.Name)
                     .IsRequired(true)
                     .IsUnicode(false)
@@ -68,18 +68,20 @@ namespace EDennis.NetStandard.Base {
             });
 
             builder.Entity<DomainUserView>(e => {
-                e.ToView("AspNetUsersView");
+                e.ToView("AspNetUsersView")
+                .HasNoKey();
             });
 
 
             builder.Entity<DomainApplicationView>(e => {
-                e.ToView("AspNetApplicationsView");
+                e.ToView("AspNetApplicationsView")
+                .HasNoKey();
             });
 
 
             builder.Entity<UserClientApplicationRole>(e => {
                 e.ToView("UserClientApplicationRoles")
-                    .HasKey(p => new { p.UserId, p.ClientId, p.Application, p.Role });
+                    .HasNoKey();
             });
 
 
