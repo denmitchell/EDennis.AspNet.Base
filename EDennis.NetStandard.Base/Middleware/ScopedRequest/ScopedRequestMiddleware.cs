@@ -46,9 +46,10 @@ namespace EDennis.NetStandard.Base {
 
     public static class IServiceCollectionExtensions_ScopeddRequestMessageMiddleware {
         public static IServiceCollection AddScopedRequestMessage(this IServiceCollection services, IConfiguration config,
-            string configkey = "ScopedRequestMessage") {
+            string configkey = "ScopedRequestMessage") {                       
             services.Configure<ScopedRequestMessageOptions>(config.GetSection(configkey));
 
+            services.AddScoped<ScopedRequestMessage>();
             return services;
         }
     }

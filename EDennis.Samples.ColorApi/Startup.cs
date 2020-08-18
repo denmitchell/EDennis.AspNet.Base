@@ -35,6 +35,7 @@ namespace EDennis.Samples.ColorApi {
             services.AddHeaderToClaims(Configuration);
             services.AddCachedTransaction(Configuration);
             services.AddHttpLogging(Configuration);
+            services.AddScopedRequestMessage(Configuration);
 
 
             services.AddSwaggerGen(c => {
@@ -53,12 +54,13 @@ namespace EDennis.Samples.ColorApi {
 
             app.UseRouting();
 
-            app.UseMockUserFor("/Rgb");
-            app.UseHeaderToClaimsFor("/Rgb");
+            app.UseMockUserFor("/api/Rgb");
+            app.UseHeaderToClaimsFor("/api/Rgb");
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseCachedTransactionFor<ColorContext>("/Rgb");
-            app.UseHttpLoggingFor("/Rgb");            
+            app.UseCachedTransactionFor<ColorContext>("/api/Rgb");
+            app.UseHttpLoggingFor("/api/Rgb");
+            app.UseScopedRequestMessageFor("/api/Rgb");
 
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();
