@@ -32,6 +32,7 @@ namespace EDennis.Samples.ColorApi {
             services.AddSingleton(new TransactionCache<ColorContext>());
 
             services.AddMockUser(Configuration);
+            services.AddHeaderToClaims(Configuration);
             services.AddCachedTransaction(Configuration);
             services.AddHttpLogging(Configuration);
 
@@ -53,6 +54,7 @@ namespace EDennis.Samples.ColorApi {
             app.UseRouting();
 
             app.UseMockUserFor("/Rgb");
+            app.UseHeaderToClaimsFor("/Rgb");
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseCachedTransactionFor<ColorContext>("/Rgb");

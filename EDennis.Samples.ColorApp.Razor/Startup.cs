@@ -17,9 +17,10 @@ namespace EDennis.Samples.ColorApp.Razor {
         public void ConfigureServices(IServiceCollection services) {
             services.AddRazorPages();
             services.AddSecureTokenService<MockTokenService>(Configuration);
+            services.AddScopedRequestMessage(Configuration);
             services.AddApiClient<RgbApiClient>(Configuration);
-
             services.AddMockUser(Configuration);
+            services.AddClaimsToHeader(Configuration);
             services.AddCachedTransactionCookie(Configuration);
 
             //services.AddServerSideBlazor(); //for .razor components
@@ -43,7 +44,9 @@ namespace EDennis.Samples.ColorApp.Razor {
             app.UseMockUserFor("/Rgb");
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseClaimsToHeaderFor("/Rgb");
             app.UseCachedTransactionCookieFor("/Rgb");
+            app.UseScopedRequestMessageFor("/Rgb");
 
             app.UseEndpoints(endpoints =>
             {

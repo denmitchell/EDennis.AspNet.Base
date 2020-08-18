@@ -87,8 +87,6 @@ namespace EDennis.NetStandard.Base {
             where TClientInterface : class
             where TClientImplementation : class, TClientInterface {
 
-            services.TryAddScoped<ScopedRequestMessage>();
-
             configKey ??= DEFAULT_DEPENDPOINTS_CONFIG_KEY;
             var dependPoints = new DepEndpoints();
             config.BindSectionOrThrow(configKey, dependPoints);

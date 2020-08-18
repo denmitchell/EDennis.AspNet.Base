@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
@@ -18,9 +19,9 @@ namespace EDennis.NetStandard.Base {
     public class ScopedRequestMiddleware {
 
         private readonly RequestDelegate _next;
-        private readonly RequestForwardingOptions _options;
+        private readonly ScopedRequestMessageOptions _options;
 
-        public ScopedRequestMiddleware(RequestDelegate next, IOptionsMonitor<RequestForwardingOptions> options) {
+        public ScopedRequestMiddleware(RequestDelegate next, IOptionsMonitor<ScopedRequestMessageOptions> options) {
             _options = options.CurrentValue;
             _next = next;
         }
@@ -28,12 +29,12 @@ namespace EDennis.NetStandard.Base {
         public async Task InvokeAsync(HttpContext context, ScopedRequestMessage scopedRequestMessage) {
 
             context.Request.Cookies
-                .Where(c => _options.CookiesToForward.Contains(c.Key, StringComparer.OrdinalIgnoreCase))
+                .Where(c => _options.CookiesToCapture.Contains(c.Key, StringComparer.OrdinalIgnoreCase))
                 .ToList()
                 .ForEach(c => scopedRequestMessage.AddCookie(c.Key, c.Value));
 
             context.Request.Headers
-                .Where(h => _options.HeadersToForward.Contains(h.Key, StringComparer.OrdinalIgnoreCase))
+                .Where(h => _options.HeadersToCapture.Contains(h.Key, StringComparer.OrdinalIgnoreCase))
                 .ToList()
                 .ForEach(h => scopedRequestMessage.AddHeader(h.Key, h.Value));
  
@@ -43,14 +44,24 @@ namespace EDennis.NetStandard.Base {
 
     }
 
-    public static class IApplicationBuilderExtensions_ScopePropertiesMiddleware {
-        public static IApplicationBuilder UseScopeProperties(this IApplicationBuilder app) {
+    public static class IServiceCollectionExtensions_ScopeddRequestMessageMiddleware {
+        public static IServiceCollection AddScopedRequestMessage(this IServiceCollection services, IConfiguration config,
+            string configkey = "ScopedRequestMessage") {
+            services.Configure<ScopedRequestMessageOptions>(config.GetSection(configkey));
+
+            return services;
+        }
+    }
+
+
+    public static class IApplicationBuilderExtensions_ScopedRequestMessageMiddleware {
+        public static IApplicationBuilder UseScopedRequestMessage(this IApplicationBuilder app) {
             app.UseMiddleware<ScopedRequestMiddleware>();
             return app;
         }
 
 
-        public static IApplicationBuilder UseScopePropertiesFor(this IApplicationBuilder app,
+        public static IApplicationBuilder UseScopedRequestMessageFor(this IApplicationBuilder app,
             params string[] startsWithSegments) {
             app.UseWhen(context =>
             {
@@ -59,14 +70,14 @@ namespace EDennis.NetStandard.Base {
                         return true;
                 return false;
             },
-                app => app.UseScopeProperties()
+                app => app.UseScopedRequestMessage()
             );
             return app;
         }
 
-        public static IApplicationBuilder UseScopePropertiesWhen(this IApplicationBuilder app,
+        public static IApplicationBuilder UseScopedRequestMessageWhen(this IApplicationBuilder app,
             Func<HttpContext, bool> predicate) {
-            app.UseWhen(predicate, app => app.UseScopeProperties());
+            app.UseWhen(predicate, app => app.UseScopedRequestMessage());
             return app;
         }
 
