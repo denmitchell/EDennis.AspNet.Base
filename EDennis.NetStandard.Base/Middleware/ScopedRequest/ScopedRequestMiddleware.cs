@@ -26,7 +26,8 @@ namespace EDennis.NetStandard.Base {
             _next = next;
         }
 
-        public async Task InvokeAsync(HttpContext context, ScopedRequestMessage scopedRequestMessage) {
+        public async Task InvokeAsync(HttpContext context, ScopedRequestMessage scopedRequestMessage,
+            IConfiguration config) {
 
             context.Request.Cookies
                 .Where(c => _options.CookiesToCapture.Contains(c.Key, StringComparer.OrdinalIgnoreCase))

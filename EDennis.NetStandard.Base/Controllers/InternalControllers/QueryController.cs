@@ -29,7 +29,7 @@ namespace EDennis.NetStandard.Base {
     /// <typeparam name="TEntity">A model class</typeparam>
     [Route(ApiConstants.ROUTE_PREFIX + "[controller]")]
     [ApiController]
-    public class QueryController<TContext, TEntity> : ControllerBase, IQueryController<TEntity> where TContext : DbContext
+    public abstract class QueryController<TContext, TEntity> : ControllerBase, IQueryController<TEntity> where TContext : DbContext
         where TEntity : class {
 
 

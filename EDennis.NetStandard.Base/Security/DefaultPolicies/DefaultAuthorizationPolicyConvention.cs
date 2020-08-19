@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace EDennis.NetStandard.Base {
@@ -13,15 +11,9 @@ namespace EDennis.NetStandard.Base {
     public class DefaultAuthorizationPolicyConvention : IControllerModelConvention, IPageApplicationModelConvention {
 
         private readonly string _appName;
-        private readonly IConfiguration _config;
 
-        private readonly string _defaultPoliciesPoliciesKey;
-
-        public DefaultAuthorizationPolicyConvention(string appName, IConfiguration config, 
-                string defaultPoliciesPoliciesKey = DefaultPolicies.DEFAULT_POLICIES_KEY) {
+        public DefaultAuthorizationPolicyConvention(string appName) {
             _appName = appName;
-            _config = config;
-            _defaultPoliciesPoliciesKey = defaultPoliciesPoliciesKey;
         }
 
         public void Apply(ControllerModel controller) {
@@ -32,17 +24,9 @@ namespace EDennis.NetStandard.Base {
 
             var controllerPath = _appName + '.' + controller.ControllerName;
 
-            int i = 0;
-            if (_config.ContainsKey(_defaultPoliciesPoliciesKey)) {
-                var dfCurr = new List<string>();
-                _config.GetSection(_defaultPoliciesPoliciesKey).Bind(dfCurr);
-                i = dfCurr.Count();
-            }
             foreach (var action in controller.Actions) {
-                var actionPath = controllerPath + '.' + action.ActionName;
+                var actionPath = controllerPath + '.' + action.ActionMethod.Name;
                 action.Filters.Add(new AuthorizeFilter(actionPath));
-                _config[$"{_defaultPoliciesPoliciesKey}:{i}"] = actionPath;
-                i++;
             }
         }
 
@@ -52,9 +36,8 @@ namespace EDennis.NetStandard.Base {
             if (model.Filters.Any(f => f.GetType() == typeof(AllowAnonymousFilter)))
                 return;
 
-            var pagePath = _appName.Replace(".Lib", "") + model.ViewEnginePath.Replace('/','.');
+            var pagePath = _appName + model.ViewEnginePath.Replace('/','.');
             model.Filters.Add(new AuthorizeFilter(pagePath));
-            _config[$"{_defaultPoliciesPoliciesKey}:{pagePath}"] = "page";
         }
 
 

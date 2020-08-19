@@ -35,12 +35,10 @@ namespace EDennis.NetStandard.Base {
         /// <param name="AllowedValues">The optional list of claim values, which, if present, 
         /// the claim must NOT match.</param>
         public ClaimPatternAuthorizationHandler(
-                string requirementScope, ConcurrentDictionary<string, bool> policyPatternCache,
-                ILogger logger, string claimType ) {
+                string requirementScope, 
+                string claimType ) {
 
             RequirementScope = requirementScope;
-            PolicyPatternCache = policyPatternCache;
-            Logger = logger;
             ClaimType = claimType;
         }
 
@@ -49,8 +47,6 @@ namespace EDennis.NetStandard.Base {
         /// Gets the scope/policy value a scope claim pattern must match
         /// </summary>
         public string RequirementScope { get; }
-
-        public ILogger Logger { get; set; }
 
 
         public string ClaimType;
@@ -62,9 +58,14 @@ namespace EDennis.NetStandard.Base {
         /// </summary>
         public const string EXCLUSION_PREFIX = "-";
 
-        //within a singleton, holds all previously matched patterns
+
+        //holds all previously matched patterns
         //that indicate success or failure against the policy
-        public ConcurrentDictionary<string, bool> PolicyPatternCache { get; set; }
+        private static readonly ConcurrentDictionary<string, bool> _policyPatternCache;
+
+        static ClaimPatternAuthorizationHandler() {
+            _policyPatternCache = new ConcurrentDictionary<string, bool>();
+        }
 
 
         /// <summary>
@@ -110,20 +111,20 @@ namespace EDennis.NetStandard.Base {
                 foreach (var scopeClaim in scopeClaims) {
 
                     //if scope claim exists in cache, use the cache result
-                    if (PolicyPatternCache.ContainsKey(scopeClaim)) {
-                        isSuccess = PolicyPatternCache[scopeClaim];
-                        Logger.LogTrace("For default policy requirement {PolicyRequirement}, Scope claim pattern {ScopeClaim} is cached, returning {Result}", RequirementScope, scopeClaim, isSuccess);
+                    if (_policyPatternCache.ContainsKey(scopeClaim)) {
+                        isSuccess = _policyPatternCache[scopeClaim];
+                        System.Diagnostics.Debug.WriteLine("For default policy requirement {PolicyRequirement}, Scope claim pattern {ScopeClaim} is cached, returning {Result}", RequirementScope, scopeClaim, isSuccess);
 
                         //otherwise, evaluate the scope's pattern(s)
                     } else {
-                        Logger.LogTrace("For default policy requirement {PolicyRequirement}, evaluating {ScopeClaim} pattern(s)", RequirementScope, scopeClaim, isSuccess);
+                        System.Diagnostics.Debug.WriteLine("For default policy requirement {PolicyRequirement}, evaluating {ScopeClaim} pattern(s)", RequirementScope, scopeClaim, isSuccess);
                         isSuccess = EvaluateScopeClaim(handler.RequirementScope, scopeClaim);
-                        PolicyPatternCache.TryAdd(scopeClaim, isSuccess); //add to cache
+                        _policyPatternCache.TryAdd(scopeClaim, isSuccess); //add to cache
                     }
 
                     //short-circuit if success
                     if (isSuccess) {
-                        Logger.LogTrace("For default policy requirement {PolicyRequirement}, Scope claim pattern {ScopeClaim} matches, returning {Result}", RequirementScope, scopeClaim, isSuccess);
+                        System.Diagnostics.Debug.WriteLine("For default policy requirement {PolicyRequirement}, Scope claim pattern {ScopeClaim} matches, returning {Result}", RequirementScope, scopeClaim, isSuccess);
                         return true;
                     }
                 }

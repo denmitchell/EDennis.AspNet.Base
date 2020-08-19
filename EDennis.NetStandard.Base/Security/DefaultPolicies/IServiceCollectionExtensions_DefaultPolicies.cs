@@ -1,9 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+
 
 namespace EDennis.NetStandard.Base {
 
@@ -15,25 +20,6 @@ namespace EDennis.NetStandard.Base {
     /// </summary>
     public static class IServiceCollectionExtensions_DefaultPolicies {
 
-
-
-        public static void AddDefaultPolicies(this MvcOptions options, IServiceCollection services, IHostEnvironment env, IConfiguration config, 
-            string policiesKey = DefaultPolicies.DEFAULT_POLICIES_KEY,
-            string claimTypesKey = DefaultPolicies.DEFAULT_CLAIMTYPES_KEY) {
-
-            options.Conventions.Add(new DefaultAuthorizationPolicyConvention(env.ApplicationName, config, policiesKey));
-
-            services.AddSingleton<IAuthorizationPolicyProvider>((container) => {
-                var logger = container.GetRequiredService<ILogger<DefaultPoliciesAuthorizationPolicyProvider>>();
-                return new DefaultPoliciesAuthorizationPolicyProvider(
-                    config, logger, policiesKey, claimTypesKey);
-            });
-
-        }
-
-
-
-
         /// <summary>
         /// Configures "Default Policies" -- policies that require values of one or more 
         /// claim types to wildcard match one of the defined acceptable patterns.  
@@ -42,34 +28,139 @@ namespace EDennis.NetStandard.Base {
         /// matching patterns for performance) is provided in the 
         /// ClamPatternAuthorizationHandler class.
         /// </summary>
+        /// <typeparam name="TStartup"></typeparam>
+        /// <param name="options">MvcOptions instance used to invoke AddDefaultPolicies within AddControllers</param>
         /// <param name="services">IServiceCollection instance</param>
-        /// <param name="config">IConfiguration instance</param>
         /// <param name="env">IHostEnvironment instance</param>
-        /// <param name="defaultPoliciesPoliciesKey">Configuration key that will hold the generated Default Policies</param>
-        /// <param name="defaultPoliciesClaimTypesKey">Configuration key that holds the claim types 
-        ///   (e.g., scope, user_scope, client_scope) used for policy evaluation.  Note: all listed claim types
-        ///   must each match the policy pattern.  If you provide user_scope and client_scope, values from
-        ///   each of these claim types must match the policy pattern.</param>
-        /// <returns>An IMvcCoreBuilder, which can be used to add other conventions or perform other configurations.</returns>
-        /// <see cref="DefaultAuthorizationPolicyConvention"/>
-        /// <see cref="ClaimPatternAuthorizationHandler"/>
-        //public static IMvcCoreBuilder AddControllersWithDefaultPolicies(this IServiceCollection services,
-        //    IConfiguration config, IHostEnvironment env,
-        //    string defaultPoliciesClaimTypesKey = DefaultPolicies.DEFAULT_CLAIMTYPES_KEY,
-        //    string defaultPoliciesPoliciesKey = DefaultPolicies.DEFAULT_POLICIES_KEY
-        //    ) {
+        /// <param name="config">IConfiguration instance</param>
+        /// <param name="claimTypesKey">key in IConfiguration for list of claims to apply to policy.  To bypass
+        /// security, set this section to an empty array.</param>
+        public static void AddDefaultPolicies<TStartup>(this MvcOptions options, IServiceCollection services, IHostEnvironment env, IConfiguration config,
+            string claimTypesKey = DefaultPoliciesOptions.DEFAULT_CLAIMTYPES_KEY) {
 
-        //    var builder = services.AddMvcCore(options=> {
-        //        options.Conventions.Add(new DefaultAuthorizationPolicyConvention(env.ApplicationName, config, defaultPoliciesPoliciesKey));
-        //    });
+            options.Conventions.Add(new DefaultAuthorizationPolicyConvention(env.ApplicationName));
 
-        //    services.AddSingleton<IAuthorizationPolicyProvider>((container) => {
-        //        var logger = container.GetRequiredService<ILogger<DefaultPoliciesAuthorizationPolicyProvider>>();
-        //        return new DefaultPoliciesAuthorizationPolicyProvider(
-        //            config, logger, defaultPoliciesPoliciesKey, defaultPoliciesClaimTypesKey);
-        //    });
+            //retrieve claim types for default policies; throw exception
+            //if the relevant config section isn't present or set to empty array or object
+            var claimTypes = new List<string>();
+            config.BindSectionOrThrow(claimTypesKey, claimTypes);
 
-        //    return builder;
-        //}
+            //services.AddAuthorizationCore(options =>
+            //{
+            //    LoadDefaultPolicies<TStartup>(options, claimTypes);
+            //});
+
+            services.AddSingleton<IAuthorizationHandler, ClaimPatternAuthorizationHandler>();
+
+        }
+
+
+
+        /// <summary>
+        /// Builds default policies by reflecting on controller classes
+        /// </summary>
+        /// <typeparam name="TStartup">The startup class for the controllers</typeparam>
+        /// <param name="options">AuthorizationOptions passed in via services.AddAuthorizationCore(options...)</param>
+        /// <param name="claimTypes">The claim types to attach to the policies.  If empty list, only trivial
+        /// authorization requirements are generated. 
+        /// </param>
+        public static void LoadDefaultPolicies<TStartup>(AuthorizationOptions options, List<string> claimTypes) {
+            var assembly = typeof(TStartup).Assembly;
+            var project = assembly.GetName().Name;
+
+            var controllerTypes = assembly.GetTypes()
+                .Where(type => typeof(ControllerBase).IsAssignableFrom(type));
+
+            var baseControllerMethods = GetBaseControllerMethods();
+
+            foreach (var controllerType in controllerTypes) {
+                
+                var controllerName = controllerType.Name;
+                if (controllerName.EndsWith("Controller"))
+                    controllerName = controllerName.Substring(0, controllerName.Length - "Controller".Length);
+
+                var actions = GetControllerMethods(controllerType, baseControllerMethods);
+                foreach (var action in actions) {
+                    var policy = $"{project}.{controllerName}.{action}";
+
+                    options.AddPolicy(policy, builder =>
+                    {
+                        //if no claim types are registered, then add a trivial requirement
+                        //which in effect bypasses security
+                        if (claimTypes.Count == 0)
+                            builder.AddRequirements(new AssertionRequirement(context => true));
+
+                        //otherwise, add claim pattern requirements for each claim type
+                        foreach (var claimType in claimTypes)
+                            builder.Requirements.Add(new ClaimPatternAuthorizationHandler(policy, claimType));
+
+                    });
+                }
+            }
+
+        }
+
+
+        private static List<string> GetControllerMethods(Type controllerType, Dictionary<Type, List<string>> baseControllerMethods) {
+            var methods = GetUninheritedPublicMethods(controllerType).Select(m => m.Name).ToList();
+            foreach (var type in baseControllerMethods.Keys) {
+                if (IsAssignableToGenericType(controllerType, type)) {
+                    methods.AddRange(baseControllerMethods[type]);
+                }
+            }
+            return methods;
+        }
+
+
+        /// <summary>
+        /// from https://stackoverflow.com/a/1075059/1968
+        /// </summary>
+        /// <param name="givenType"></param>
+        /// <param name="genericType"></param>
+        /// <returns></returns>
+        private static bool IsAssignableToGenericType(Type givenType, Type genericType) {
+            var interfaceTypes = givenType.GetInterfaces();
+
+            foreach (var it in interfaceTypes) {
+                if (it.IsGenericType && it.GetGenericTypeDefinition() == genericType)
+                    return true;
+            }
+
+            if (givenType.IsGenericType && givenType.GetGenericTypeDefinition() == genericType)
+                return true;
+
+            Type baseType = givenType.BaseType;
+            if (baseType == null) return false;
+
+            return IsAssignableToGenericType(baseType, genericType);
+        }
+
+
+        public static Dictionary<Type, List<string>> GetBaseControllerMethods() {
+            var types = new List<Type> {
+                typeof(QueryController<,>), typeof(CrudController<,>), typeof(TemporalController<,,>),
+                typeof(ProxyQueryController<>), typeof(ProxyCrudController<>) };
+
+            var dict = new Dictionary<Type, List<string>>();
+
+            foreach (var type in types) {
+                var methods = GetUninheritedPublicMethods(type);
+                var methodList = new List<string>();
+                foreach (var method in methods)
+                    methodList.Add(method.Name);
+
+                dict.Add(type, methodList);
+            }
+            return dict;
+        }
+
+        private static IEnumerable<MethodInfo> GetUninheritedPublicMethods(Type type) {
+            return type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .Where(m => !m.Name.StartsWith("get_") && !m.Name.StartsWith("set_")
+                    && m.IsPublic && !m.IsDefined(typeof(NonActionAttribute)));
+        }
+
+
+
     }
 }

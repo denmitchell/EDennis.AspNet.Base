@@ -1,14 +1,12 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
-using System.Net.Http;
 
 namespace EDennis.NetStandard.Base {
 
 
     public static class IServiceCollectionExtensions_Security {
+
 
         /// <summary>
         /// Sets up the SecureTokenService and BearerTokenHandler via

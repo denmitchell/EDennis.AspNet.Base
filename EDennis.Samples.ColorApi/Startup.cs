@@ -1,14 +1,16 @@
 using EDennis.NetStandard.Base;
 using EDennis.Samples.ColorApp;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System;
+using System.Collections.Generic;
 
 namespace EDennis.Samples.ColorApi {
     public class Startup {
@@ -23,8 +25,10 @@ namespace EDennis.Samples.ColorApi {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
-            services.AddControllers(options=>options.AddDefaultPolicies(services,HostEnvironment,Configuration));
-            
+            services.AddControllers(options=>options.AddDefaultPolicies<Startup>(services,HostEnvironment,Configuration));
+            services.AddAuthorization(options => {
+                IServiceCollectionExtensions_DefaultPolicies.LoadDefaultPolicies<Startup>(options, new List<string> { "scope" });
+                });
             //System.Diagnostics.Debugger.Launch();
 
             var cxnString = Configuration["ConnectionStrings:ColorContext"];
@@ -36,6 +40,16 @@ namespace EDennis.Samples.ColorApi {
 
             services.AddSingleton(new TransactionCache<ColorContext>());
 
+            services.AddAuthentication("Bearer")
+                       .AddJwtBearer("Bearer", options =>
+                       {
+                           options.Authority = "https://localhost:5000";
+
+                           options.TokenValidationParameters = new TokenValidationParameters {
+                               ValidateAudience = false
+                           };
+                       });
+            
             services.AddMockUser(Configuration);
             services.AddHeaderToClaims(Configuration);
             services.AddCachedTransaction(Configuration);
@@ -51,6 +65,8 @@ namespace EDennis.Samples.ColorApi {
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
+
+
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }

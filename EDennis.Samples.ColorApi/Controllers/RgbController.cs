@@ -1,6 +1,7 @@
 ﻿using EDennis.NetStandard.Base;
 using EDennis.Samples.ColorApp;
 using EDennis.Samples.ColorApp.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
