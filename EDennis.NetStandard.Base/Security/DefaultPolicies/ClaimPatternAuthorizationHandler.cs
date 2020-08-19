@@ -113,18 +113,18 @@ namespace EDennis.NetStandard.Base {
                     //if scope claim exists in cache, use the cache result
                     if (_policyPatternCache.ContainsKey(scopeClaim)) {
                         isSuccess = _policyPatternCache[scopeClaim];
-                        System.Diagnostics.Debug.WriteLine("For default policy requirement {PolicyRequirement}, Scope claim pattern {ScopeClaim} is cached, returning {Result}", RequirementScope, scopeClaim, isSuccess);
+                        System.Diagnostics.Debug.WriteLine($"For default policy requirement {RequirementScope}, Scope claim pattern {scopeClaim} is cached, returning {isSuccess}");
 
                         //otherwise, evaluate the scope's pattern(s)
                     } else {
-                        System.Diagnostics.Debug.WriteLine("For default policy requirement {PolicyRequirement}, evaluating {ScopeClaim} pattern(s)", RequirementScope, scopeClaim, isSuccess);
+                        System.Diagnostics.Debug.WriteLine($"For default policy requirement {RequirementScope}, evaluating {scopeClaim} pattern(s)");
                         isSuccess = EvaluateScopeClaim(handler.RequirementScope, scopeClaim);
                         _policyPatternCache.TryAdd(scopeClaim, isSuccess); //add to cache
                     }
 
                     //short-circuit if success
                     if (isSuccess) {
-                        System.Diagnostics.Debug.WriteLine("For default policy requirement {PolicyRequirement}, Scope claim pattern {ScopeClaim} matches, returning {Result}", RequirementScope, scopeClaim, isSuccess);
+                        System.Diagnostics.Debug.WriteLine($"For default policy requirement {RequirementScope}, Scope claim pattern {scopeClaim} matches, returning {isSuccess}");
                         return true;
                     }
                 }

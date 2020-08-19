@@ -25,7 +25,7 @@ namespace EDennis.Samples.ColorApi.Controllers {
         }
 
 
-        [HttpPost("/check")]
+        [HttpPost("check")]
         public StatusCodeResult Check() {
             return new StatusCodeResult((int)HttpStatusCode.OK);
         }
