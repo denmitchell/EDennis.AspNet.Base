@@ -33,8 +33,9 @@ namespace EDennis.NetStandard.Base {
         /// <param name="services">IServiceCollection instance</param>
         /// <param name="env">IHostEnvironment instance</param>
         /// <param name="config">IConfiguration instance</param>
-        /// <param name="claimTypesKey">key in IConfiguration for list of claims to apply to policy.  To bypass
-        /// security, set this section to an empty array.</param>
+        /// <param name="claimTypesKey">key in IConfiguration for list of claims to apply to policy. Note: to bypass security
+        /// during testing, define a MockUser with a scope (or other) claim type that has access to all
+        /// controller methods</param>
         public static void AddDefaultPolicies<TStartup>(this MvcOptions options, IServiceCollection services, IHostEnvironment env, IConfiguration config,
             string claimTypesKey = DefaultPoliciesOptions.DEFAULT_CLAIMTYPES_KEY) {
 
@@ -44,11 +45,6 @@ namespace EDennis.NetStandard.Base {
             //if the relevant config section isn't present or set to empty array or object
             var claimTypes = new List<string>();
             config.BindSectionOrThrow(claimTypesKey, claimTypes);
-
-            //services.AddAuthorizationCore(options =>
-            //{
-            //    LoadDefaultPolicies<TStartup>(options, claimTypes);
-            //});
 
             services.AddSingleton<IAuthorizationHandler, ClaimPatternAuthorizationHandler>();
 
@@ -61,8 +57,9 @@ namespace EDennis.NetStandard.Base {
         /// </summary>
         /// <typeparam name="TStartup">The startup class for the controllers</typeparam>
         /// <param name="options">AuthorizationOptions passed in via services.AddAuthorizationCore(options...)</param>
-        /// <param name="claimTypes">The claim types to attach to the policies.  If empty list, only trivial
-        /// authorization requirements are generated. 
+        /// <param name="claimTypes">The claim types to attach to the policies.  Note: to bypass security
+        /// during testing, define a MockUser with a scope (or other) claim type that has access to all
+        /// controller methods
         /// </param>
         public static void LoadDefaultPolicies<TStartup>(AuthorizationOptions options, List<string> claimTypes) {
             var assembly = typeof(TStartup).Assembly;

@@ -16,16 +16,11 @@ namespace EDennis.NetStandard.Base {
     /// Implements an <see cref="IAuthorizationHandler"/> and <see cref="IAuthorizationRequirement"/>
     /// to evaluate claim patterns (scopes with wildcards) against policy requirements.
     /// 
-    /// NOTE: Breaking change: Remove support for "user_scope" -- now just use
-    /// "scope".  To obtain scope claims from a user, assign the user to a role 
-    /// and specify role-associated claims in the target application, which are
-    /// loaded into the DomainRoleClaimCache and retrieved with the
-    /// DomainRoleClaimsTransformer
+    /// NOTE: Pass in the claim type that will be used to evaluate scope.  This could be
+    /// "scope" or "client_scope" or "user_scope" or something else.  Typically, these
+    /// values would be defined in Configuration (e.g., Security:DefaultPolicies:ClaimTypes:["scope"])
     /// 
     /// NOTE: This is adapted from ... https://github.com/aspnet/Security/blob/master/src/Microsoft.AspNetCore.Authorization/Infrastructure/ClaimsAuthorizationRequirement.cs
-    /// 
-    /// <see cref="DomainRoleClaimCache"/>
-    /// <see cref="DomainRoleClaimsTransformer"/>
     /// </summary>
     public class ClaimPatternAuthorizationHandler : AuthorizationHandler<ClaimPatternAuthorizationHandler>, IAuthorizationRequirement {
         /// <summary>
