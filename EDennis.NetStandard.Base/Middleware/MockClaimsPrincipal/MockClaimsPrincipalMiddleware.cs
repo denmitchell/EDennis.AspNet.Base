@@ -32,10 +32,10 @@ namespace EDennis.NetStandard.Base {
 
         public async Task InvokeAsync(HttpContext context) {
 
-            //bypass if X-Claims header is present, indicating that regular
-            //authentication should proceed and X-Claims will be added 
-            //after authentication
-            if (context.Request.Headers.ContainsKey(HeaderToClaimsOptions.HEADER_KEY))
+            //bypass if _mcp == null or X-Claims header is present.  
+            //The latter indicates that regular authentication should proceed 
+            //  and X-Claims will be added after authentication
+            if (_mcp == null || context.Request.Headers.ContainsKey(HeaderToClaimsOptions.HEADER_KEY))
                 await _next(context);
             else {
                 var claims = _options.CurrentValue[_mcp].ToClaimEnumerable();

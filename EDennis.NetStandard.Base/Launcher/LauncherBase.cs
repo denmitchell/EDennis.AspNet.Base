@@ -38,6 +38,24 @@ namespace EDennis.NetStandard.Base {
     /// as a commandline argument.  This value is used to unblock the "run" threads,
     /// allowing the applications to stop.
     /// 
+    /// If you are launching an end-user application that has static assets, ensure that
+    /// you include those assets in the Launcher app in a way that allows them to be used
+    /// by the end-user application.  One way to accomplish this is to copy the wwwroot
+    /// from the end-user application to the Launcher app.  Another way to accomplish this
+    /// is to create a link to the folder/files and specify that they should be copied to
+    /// the output directory.  For example:
+    /// 
+    /// <code>
+    /// <ItemGroup>
+    ///   <Content Include = "..\EDennis.Samples.ColorApp.Razor\**\*.css">
+    ///      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    ///   </Content>
+    ///   <Content Include="..\EDennis.Samples.ColorApp.Razor\**\*.js">
+    ///     <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    ///   </Content>
+    /// </ItemGroup>
+    /// </code>
+    /// 
     /// SPECIAL NOTE: Launcher propagates configuration settings by packing them
     ///   up into command-line arguments.  Configuration settings that have embedded
     ///   spaces or = in the values (e.g., connection strings) are quoted.  You 

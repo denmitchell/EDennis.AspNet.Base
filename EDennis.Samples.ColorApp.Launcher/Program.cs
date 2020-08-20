@@ -5,6 +5,8 @@ using Serilog.Extensions.Logging;
 using System;
 using IdentityServer = EDennis.AspNetIdentityServer;
 using ColorApi = EDennis.Samples.ColorApi;
+using RazorApp = EDennis.Samples.ColorApp.Razor;
+using BlazorApp = EDennis.Samples.ColorApp.Server;
 
 namespace Hr.Launcher {
     public class Program : LauncherBase {
@@ -43,7 +45,8 @@ namespace Hr.Launcher {
         public override void Launch(string[] args, bool launchBrowser = false, bool blockWithConsole = false) {
             var launchables = Launch(args, blockWithConsole,
                     IdentityServer.Program.Main, 
-                    ColorApi.Program.Main 
+                    ColorApi.Program.Main,
+                    RazorApp.Program.Main
                 );
 
             if (launchBrowser == true)

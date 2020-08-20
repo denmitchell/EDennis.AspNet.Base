@@ -43,8 +43,8 @@ namespace EDennis.Samples.ColorApp.Razor {
 
             app.UseMockClaimsPrincipalFor("/Rgb");
             app.UseAuthentication();
-            app.UseAuthorization();
             app.UseClaimsToHeaderFor("/Rgb");
+            app.UseAuthorization();
             app.UseCachedTransactionCookieFor("/Rgb");
             app.UseScopedRequestMessageFor("/Rgb");
 

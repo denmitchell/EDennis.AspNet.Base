@@ -82,8 +82,8 @@ namespace EDennis.Samples.ColorApi {
             app.UseRouting();
 
             app.UseMockClaimsPrincipalFor("/api/Rgb");
-            app.UseHeaderToClaimsFor("/api/Rgb");
             app.UseAuthentication();
+            app.UseHeaderToClaimsFor("/api/Rgb");
             app.UseAuthorization();
             app.UseCachedTransactionFor<ColorContext>("/api/Rgb");
             app.UseHttpLoggingFor("/api/Rgb");

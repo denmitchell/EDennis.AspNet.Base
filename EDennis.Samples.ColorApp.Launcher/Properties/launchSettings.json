@@ -3,11 +3,11 @@
   "profiles": {
     "Maria": {
       "commandName": "Project",
-      "commandLineArgs": "EDennis.AspNetIdentityServer=Default EDennis.Samples.ColorApi=Maria"
+      "commandLineArgs": "EDennis.AspNetIdentityServer=Default EDennis.Samples.ColorApi=Maria EDennis.Samples.ColorApp.Razor=Maria"
     },
     "Darius": {
       "commandName": "Project",
-      "commandLineArgs": "EDennis.AspNetIdentityServer=Default EDennis.Samples.ColorApi=Darius"
+      "commandLineArgs": "EDennis.AspNetIdentityServer=Default EDennis.Samples.ColorApi=Darius EDennis.Samples.ColorApp.Razor=Darius"
     }
   }
 }

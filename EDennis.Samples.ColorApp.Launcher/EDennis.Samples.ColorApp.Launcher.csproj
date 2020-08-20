@@ -10,6 +10,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="..\EDennis.Samples.ColorApp.Razor\**\*.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\EDennis.Samples.ColorApp.Razor\**\*.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Properties\launchSettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
@@ -25,6 +31,8 @@
     <ProjectReference Include="..\EDennis.NetStandard.Base\EDennis.NetStandard.Base.csproj" />
     <ProjectReference Include="..\EDennis.AspNetIdentityServer\EDennis.AspNetIdentityServer.csproj" />
     <ProjectReference Include="..\EDennis.Samples.ColorApi\EDennis.Samples.ColorApi.csproj" />
+    <ProjectReference Include="..\EDennis.Samples.ColorApp.Razor\EDennis.Samples.ColorApp.Razor.csproj" />
+    <ProjectReference Include="..\EDennis.Samples.ColorApp\Server\EDennis.Samples.ColorApp.Server.csproj" />
   </ItemGroup>
 
 </Project>
