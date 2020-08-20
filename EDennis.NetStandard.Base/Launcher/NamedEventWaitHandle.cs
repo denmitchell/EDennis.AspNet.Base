@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace EDennis.NetStandard.Base.Launcher {
+namespace EDennis.NetStandard.Base {
 
     /// <summary>
     /// This class is used by LauncherBase and LauncherFixture to listen across threads/processes

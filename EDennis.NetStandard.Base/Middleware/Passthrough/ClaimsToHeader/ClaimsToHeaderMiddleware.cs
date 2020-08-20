@@ -63,7 +63,7 @@ namespace EDennis.NetStandard.Base {
     public static class IServiceCollectionExtensions_ClaimsToHeaderMiddleware {
         public static IServiceCollection AddClaimsToHeader(this IServiceCollection services, IConfiguration config,
             string configKey = "Security:ClaimsToHeader") {
-            services.Configure<MockUserOptions>(config.GetSection(configKey));
+            services.Configure<MockClaimsPrincipalOptions>(config.GetSection(configKey));
             return services;
         }
     }

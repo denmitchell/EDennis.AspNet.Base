@@ -2,7 +2,7 @@
 using System;
 using System.Threading;
 
-namespace EDennis.NetStandard.Base.Launcher {
+namespace EDennis.NetStandard.Base {
 
     /// <summary>
     /// This class can be used as an xUnit class fixture, which starts all web apps

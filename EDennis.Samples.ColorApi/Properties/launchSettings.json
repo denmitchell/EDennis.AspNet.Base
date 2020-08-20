@@ -9,8 +9,19 @@
     }
   },
   "profiles": {
-    "EDennis.Samples.ColorApi": {
+    "Maria": {
       "commandName": "Project",
+      "commandLineArgs": "mcp=Maria",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:44341;http://localhost:61244",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "Darius": {
+      "commandName": "Project",
+      "commandLineArgs": "mcp=Darius",
       "launchBrowser": true,
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:44341;http://localhost:61244",

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace EDennis.NetStandard.Base.Launcher {
+namespace EDennis.NetStandard.Base {
     
     /// <summary>
     /// Entry-point for the Launcher.

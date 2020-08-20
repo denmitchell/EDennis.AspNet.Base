@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace EDennis.NetStandard.Base.Launcher {
+namespace EDennis.NetStandard.Base {
 
 	/// <summary>
 	/// A model class that holds relevant information from an individual 

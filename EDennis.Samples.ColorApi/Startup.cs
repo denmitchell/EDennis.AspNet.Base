@@ -31,7 +31,7 @@ namespace EDennis.Samples.ColorApi {
                 });
             //System.Diagnostics.Debugger.Launch();
 
-            var cxnString = Configuration["ConnectionStrings:ColorContext"];
+            var cxnString = Configuration.GetValueOrThrow<string>("ConnectionStrings:ColorContext",null,true);
             services.AddScoped<DbContextProvider<ColorContext>>();
             services.AddDbContext<ColorContext>(options => {
                 options.UseSqlServer(cxnString);
@@ -56,7 +56,7 @@ namespace EDennis.Samples.ColorApi {
                        });
             */
 
-            services.AddMockUser(Configuration);
+            services.AddMockClaimsPrincipal(Configuration);
             services.AddHeaderToClaims(Configuration);
             services.AddCachedTransaction(Configuration);
             services.AddHttpLogging(Configuration);
@@ -81,7 +81,7 @@ namespace EDennis.Samples.ColorApi {
 
             app.UseRouting();
 
-            app.UseMockUserFor("/api/Rgb");
+            app.UseMockClaimsPrincipalFor("/api/Rgb");
             app.UseHeaderToClaimsFor("/api/Rgb");
             app.UseAuthentication();
             app.UseAuthorization();

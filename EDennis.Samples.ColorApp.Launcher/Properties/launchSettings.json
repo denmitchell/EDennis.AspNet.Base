@@ -1,0 +1,13 @@
+﻿{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "Maria": {
+      "commandName": "Project",
+      "commandLineArgs": "EDennis.AspNetIdentityServer=Default EDennis.Samples.ColorApi=Maria"
+    },
+    "Darius": {
+      "commandName": "Project",
+      "commandLineArgs": "EDennis.AspNetIdentityServer=Default EDennis.Samples.ColorApi=Darius"
+    }
+  }
+}

@@ -12,16 +12,16 @@ namespace EDennis.NetStandard.Base
 
 
         public static void BindSectionOrThrow<T>(this IConfiguration config, string key, T instance, ILogger logger = null) {
-            if (config.TryGetSection(key, out IConfigurationSection section))
+            if (config.TryGetSection(key, out IConfigurationSection section)) {
                 section.Bind(instance);
-            else {
+            } else {
                 Throw(key, typeof(T), logger);
             }
         }
 
 
-        public static T GetValueOrThrow<T>(this IConfiguration config, string key, ILogger logger = null) {
-            if (config.TryGetValue(key, out T value))
+        public static T GetValueOrThrow<T>(this IConfiguration config, string key, ILogger logger = null, bool removeQuotesAroundValue = true) {
+            if (config.TryGetValue(key, out T value, removeQuotesAroundValue))
                 return value;
             else
                 Throw(key, typeof(T), logger);
@@ -68,13 +68,16 @@ namespace EDennis.NetStandard.Base
         }
 
 
-        public static bool TryGetValue<T>(this IConfiguration config, string key, out T targetValue) {
+        public static bool TryGetValue<T>(this IConfiguration config, string key, out T targetValue, bool removeQuotesAroundValue = true) {
             targetValue = default;
 
             var value = config[key];
             if (value != null) {
+                
+                if (removeQuotesAroundValue && value.StartsWith("\"") && value.EndsWith("\""))
+                    value = value[1..^1];
                 try {
-                    targetValue = (T)Convert.ChangeType(value, typeof(T));
+                    targetValue = (T)Convert.ChangeType(value, typeof(T));                    
                 } catch (Exception) {
                     Throw(key, typeof(T));
                 }

@@ -15,13 +15,37 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace EDennis.NetStandard.Base.Launcher {
-    
+namespace EDennis.NetStandard.Base {
+
     /// <summary>
-    /// Base class for launching web applications.
+    /// Base class for launching multiple web applications.
     /// 
-    /// SPECIAL NOTE: this does not work for unhosted client-side Blazor apps.  You
-    /// have to launch those apps separately.
+    /// Launcher is helpful for launching multiple projects at the same time, 
+    /// while selecting specific launch profiles for each project -- either
+    /// interactively or from an xUnit test.
+    /// 
+    /// Launcher requires commandline arguments that specify which launch profile is
+    /// to be used for each project.  The launch profile argument is keyed by the
+    /// project name, and the value is the name of the launch profile.
+    /// 
+    /// To use Launcher, you need to create a separate Console project for the launcher,
+    /// create project references to each project that you want to launch, and have the
+    /// console project's Program class extend LauncherBase.  To use Launcher
+    /// interactively, follow the example in EDennis.Samples.ColorApp.Launcher -- 
+    /// paying attention to launchSettings.json and the Program class.  To use
+    /// Launcher from an xUnit test, call the Launch method directly from either
+    /// your unit test or a Fixture and ensure that you pass in ewhAllSuspend={SOME_GUID_VALUE}
+    /// as a commandline argument.  This value is used to unblock the "run" threads,
+    /// allowing the applications to stop.
+    /// 
+    /// SPECIAL NOTE: Launcher propagates configuration settings by packing them
+    ///   up into command-line arguments.  Configuration settings that have embedded
+    ///   spaces or = in the values (e.g., connection strings) are quoted.  You 
+    ///   have to remove the quotes in the target application.  EDennis.NetStandard.Base
+    ///   has an IConfiguration extension method called GetValueOrThrow, which
+    ///   by default removes quotes around configuration values.
+    /// SPECIAL NOTE: Launcher does not work for unhosted client-side Blazor apps.  You
+    ///   have to launch those apps separately.
     /// </summary>
     public abstract class LauncherBase : ILauncher {
 
@@ -209,6 +233,8 @@ namespace EDennis.NetStandard.Base.Launcher {
                 //For now, just store the requested profile name.
                 if (kvpArgs.TryGetValue(projectName, out string requestedProfile))
                     launchable.LaunchProfile.Name = requestedProfile;
+                else
+                    throw new ArgumentException($"Launch profile name not supplied for {projectName}.  Launcher requires a command-line argument like {projectName}=MyLaunchProfile with a valid launch profile name.  This also applies to other launched projects.  They must have a launch profile as a commandline argument, keyed by the project name.");
 
                 //set the project directory.
                 if (dirs.TryGetValue(projectName, out string dir))

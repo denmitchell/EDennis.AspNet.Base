@@ -19,7 +19,7 @@ namespace EDennis.Samples.ColorApp.Razor {
             services.AddSecureTokenService<MockTokenService>(Configuration);
             services.AddScopedRequestMessage(Configuration);
             services.AddApiClient<RgbApiClient>(Configuration);
-            services.AddMockUser(Configuration);
+            services.AddMockClaimsPrincipal(Configuration);
             services.AddClaimsToHeader(Configuration);
             services.AddCachedTransactionCookie(Configuration);
 
@@ -41,7 +41,7 @@ namespace EDennis.Samples.ColorApp.Razor {
 
             app.UseRouting();
 
-            app.UseMockUserFor("/Rgb");
+            app.UseMockClaimsPrincipalFor("/Rgb");
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseClaimsToHeaderFor("/Rgb");

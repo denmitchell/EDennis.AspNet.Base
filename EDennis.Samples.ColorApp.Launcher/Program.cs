@@ -1,10 +1,10 @@
-﻿using EDennis.AspNet.Base.Launcher;
+﻿using EDennis.NetStandard.Base;
 using ME = Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Extensions.Logging;
 using System;
-using IS = EDennis.AspNetIdentityServer;
-using PApi = Hr.PersonApi;
+using IdentityServer = EDennis.AspNetIdentityServer;
+using ColorApi = EDennis.Samples.ColorApi;
 
 namespace Hr.Launcher {
     public class Program : LauncherBase {
@@ -42,8 +42,8 @@ namespace Hr.Launcher {
         /// <param name="blockWithConsole"></param>
         public override void Launch(string[] args, bool launchBrowser = false, bool blockWithConsole = false) {
             var launchables = Launch(args, blockWithConsole,
-                    IS.Program.Main, 
-                    PApi.Program.Main 
+                    IdentityServer.Program.Main, 
+                    ColorApi.Program.Main 
                 );
 
             if (launchBrowser == true)

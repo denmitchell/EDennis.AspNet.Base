@@ -1,4 +1,4 @@
-﻿namespace EDennis.NetStandard.Base.Launcher {
+﻿namespace EDennis.NetStandard.Base {
 	/// <summary>
 	/// Holds parsed URL information for a launchable web application
 	/// </summary>

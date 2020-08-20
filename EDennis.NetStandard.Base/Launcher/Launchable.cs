@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace EDennis.NetStandard.Base.Launcher {
+namespace EDennis.NetStandard.Base {
 
     public class Launchable {
         public int LaunchGroup { get; set; }

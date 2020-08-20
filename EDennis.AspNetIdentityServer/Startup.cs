@@ -37,9 +37,20 @@ namespace EDennis.AspNetIdentityServer {
             services.AddRazorPages();
 
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
-            string cxnConfiguration = Configuration["DbContexts:ConfigurationDbContext:ConnectionString"];
-            string cxnPersistedGrant = Configuration["DbContexts:PersistedGrantDbContext:ConnectionString"];
-            string cxnAspNetIdentity = Configuration["DbContexts:AspNetIdentityDbContext:ConnectionString"];
+
+
+            //get connection strings from configuration;
+            //special note: when using Launcher, configurations are propagated via command-line arguments. Because
+            //   connection string configuration values have embedded "=", the entire connection string is quoted;
+            //   accordingly, you need to remove those quotes before processing.  The GetValueOrThrow extension
+            //   method can remove these quotes for you.  (An alternative is to break up the connection string
+            //   into its constituent parts in configuration -- e.g. have separate configuration settings for 
+            //   Server, Database, Trusted_Connection, and MultipleActiveResultSets; bind these to an
+            //   EDennis.NetStandard.Base.ConnectionString instance; and retrieve the value of the connection 
+            //   string via the SqlServer property
+            string cxnConfiguration = Configuration.GetValueOrThrow<string>("DbContexts:ConfigurationDbContext:ConnectionString",null,true);
+            string cxnPersistedGrant = Configuration.GetValueOrThrow<string>("DbContexts:PersistedGrantDbContext:ConnectionString", null, true);
+            string cxnAspNetIdentity = Configuration.GetValueOrThrow<string>("DbContexts:AspNetIdentityDbContext:ConnectionString", null, true);
 
             services.AddScoped<IAppClaimEncoder, DefaultAppClaimEncoder>();
 
