@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace EDennis.NetStandard.Base
@@ -22,13 +23,13 @@ namespace EDennis.NetStandard.Base
             };
 
             try {
-                loadOptions.Select = (select == null) ? null : JToken.Parse(select).ToObject<string[]>();
+                loadOptions.Select = (select == null) ? null : JsonSerializer.Deserialize<string[]>(select);
             } catch {
                 throw new ArgumentException($"Could not parse provided '{select}' argument into valid DevExtreme select expression");
             }
 
             try {
-                loadOptions.Sort = (sort == null) ? null : JToken.Parse(sort).ToObject<SortingInfo[]>();
+                loadOptions.Sort = (sort == null) ? null : JsonSerializer.Deserialize<SortingInfo[]>(sort);
             } catch {
                 throw new ArgumentException($"Could not parse provided '{sort}' argument into valid DevExtreme SortingInfo[] expression");
             }
@@ -40,19 +41,19 @@ namespace EDennis.NetStandard.Base
             }
 
             try {
-                loadOptions.TotalSummary = (totalSummary == null) ? null : JToken.Parse(totalSummary).ToObject<SummaryInfo[]>();
+                loadOptions.TotalSummary = (totalSummary == null) ? null : JsonSerializer.Deserialize<SummaryInfo[]>(totalSummary);
             } catch {
                 throw new ArgumentException($"Could not parse provided '{totalSummary}' argument into valid DevExtreme SummaryInfo[] expression");
             }
 
             try {
-                loadOptions.Group = (group == null) ? null : JToken.Parse(group).ToObject<GroupingInfo[]>();
+                loadOptions.Group = (group == null) ? null : JsonSerializer.Deserialize<GroupingInfo[]>(group);
             } catch {
                 throw new ArgumentException($"Could not parse provided '{group}' argument into valid DevExtreme GroupingInfo[] expression");
             }
 
             try {
-                loadOptions.GroupSummary = (groupSummary == null) ? null : JToken.Parse(groupSummary).ToObject<SummaryInfo[]>();
+                loadOptions.GroupSummary = (groupSummary == null) ? null : JsonSerializer.Deserialize<SummaryInfo[]>(groupSummary);
             } catch {
                 throw new ArgumentException($"Could not parse provided '{groupSummary}' argument into valid DevExtreme SummaryInfo[] expression");
             }
@@ -63,7 +64,11 @@ namespace EDennis.NetStandard.Base
 
 
     [ModelBinder(BinderType = typeof(DataSourceLoadOptionsBinder))]
-    public class DataSourceLoadOptions : DataSourceLoadOptionsBase { }
+    public class DataSourceLoadOptions : DataSourceLoadOptionsBase { 
+    
+    }
+
+
 
     public class DataSourceLoadOptionsBinder : IModelBinder
     {

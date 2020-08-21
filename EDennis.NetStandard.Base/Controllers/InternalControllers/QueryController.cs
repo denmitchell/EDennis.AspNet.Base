@@ -69,6 +69,7 @@ namespace EDennis.NetStandard.Base {
         [HttpGet("devextreme")]
         public virtual IActionResult GetWithDevExtreme(
                 [FromQuery] string select,
+                [FromQuery] string include,
                 [FromQuery] string sort,
                 [FromQuery] string filter,
                 [FromQuery] int skip,
@@ -90,7 +91,16 @@ namespace EDennis.NetStandard.Base {
                 return new BadRequestObjectResult(ModelState);
             }
             try {
-                var result = DataSourceLoader.Load(GetQuery(), loadOptions);
+                var qry = GetQuery();
+
+                //apply include
+                if (!string.IsNullOrWhiteSpace(include)) {
+                    var includes = include.Split(";");
+                    foreach (var incl in includes)
+                        qry = qry.Include(incl);
+                }
+
+                var result = DataSourceLoader.Load(qry, loadOptions);
                 return Ok(result);
             } catch (ArgumentOutOfRangeException ex) {
                 using (_logger.BeginScope(GetLoggerScope(new { select, sort, filter, skip, take, totalSummary, group, groupSummary })))
@@ -115,6 +125,7 @@ namespace EDennis.NetStandard.Base {
         [HttpGet("devextreme/async")]
         public virtual async Task<IActionResult> GetWithDevExtremeAsync(
                 [FromQuery] string select,
+                [FromQuery] string include,
                 [FromQuery] string sort,
                 [FromQuery] string filter,
                 [FromQuery] int skip,
@@ -122,12 +133,8 @@ namespace EDennis.NetStandard.Base {
                 [FromQuery] string totalSummary,
                 [FromQuery] string group,
                 [FromQuery] string groupSummary
-            ) {
-            var loadOptions = DataSourceLoadOptionsBuilder.Build(
-                select, sort, filter, skip, take, totalSummary,
-                group, groupSummary);
-
-            return await Task.Run(() => GetWithDevExtreme(select, sort, filter, skip, take, totalSummary, group, groupSummary));
+            ) {           
+            return await Task.Run(() => GetWithDevExtreme(select, include, sort, filter, skip, take, totalSummary, group, groupSummary));
         }
 
 
