@@ -34,7 +34,7 @@ namespace EDennis.Samples.ColorApi {
             var cxnString = Configuration.GetValueOrThrow<string>("ConnectionStrings:ColorContext",null,true);
             services.AddScoped<DbContextProvider<ColorContext>>();
             services.AddDbContext<ColorContext>(options => {
-                options.UseSqlServer(cxnString);
+                options.UseSqlServer(cxnString,opt=>opt.MigrationsAssembly(typeof(ColorContext).Assembly.GetName().Name));
                 options.EnableSensitiveDataLogging();
             });
 

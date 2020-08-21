@@ -1,5 +1,6 @@
 ﻿using EDennis.NetStandard.Base;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace EDennis.Samples.ColorApp {
     public class ColorDbContextDesignTimeFactory : SqlServerDbContextDesignTimeFactory<ColorContext>{ }
