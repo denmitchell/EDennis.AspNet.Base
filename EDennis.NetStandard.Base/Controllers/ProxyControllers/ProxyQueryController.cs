@@ -51,13 +51,13 @@ namespace EDennis.NetStandard.Base {
 
 
         [HttpGet("devextreme")]
-        public IActionResult GetWithDevExtreme([FromQuery] string select, [FromQuery] string sort, [FromQuery] string filter, [FromQuery] int skip, [FromQuery] int take, [FromQuery] string totalSummary, [FromQuery] string group, [FromQuery] string groupSummary) {
+        public IActionResult GetWithDevExtreme([FromQuery] string select, [FromQuery] string include, [FromQuery] string sort, [FromQuery] string filter, [FromQuery] int skip, [FromQuery] int take, [FromQuery] string totalSummary, [FromQuery] string group, [FromQuery] string groupSummary) {
             return _client.Forward<DeserializableLoadResult<TEntity>>(HttpContext.Request, $"{ControllerPath}/devextreme");
         }
 
 
         [HttpGet("devextreme/async")]
-        public async Task<IActionResult> GetWithDevExtremeAsync([FromQuery] string select, [FromQuery] string sort, [FromQuery] string filter, [FromQuery] int skip, [FromQuery] int take, [FromQuery] string totalSummary, [FromQuery] string group, [FromQuery] string groupSummary) {
+        public async Task<IActionResult> GetWithDevExtremeAsync([FromQuery] string select, [FromQuery] string include, [FromQuery] string sort, [FromQuery] string filter, [FromQuery] int skip, [FromQuery] int take, [FromQuery] string totalSummary, [FromQuery] string group, [FromQuery] string groupSummary) {
             return await _client.ForwardAsync<DeserializableLoadResult<TEntity>>(HttpContext.Request, $"{ControllerPath}/devextreme/async");
         }
 
