@@ -1,7 +1,7 @@
 @page "/fetchdata"
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-@using EDennis.Samples.ColorApp.Shared
+@*@using EDennis.Samples.ColorApp.Shared*@
 @attribute [Authorize]
 @inject HttpClient Http
 
@@ -9,7 +9,7 @@
 
 <p>This component demonstrates fetching data from the server.</p>
 
-@if (forecasts == null)
+@*@if (forecasts == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -36,21 +36,21 @@ else
             }
         </tbody>
     </table>
-}
+}*@
 
 @code {
-    private WeatherForecast[] forecasts;
+    //private WeatherForecast[] forecasts;
 
-    protected override async Task OnInitializedAsync()
-    {
-        try
-        {
-            forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-    }
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    try
+    //    {
+    //        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+    //    }
+    //    catch (AccessTokenNotAvailableException exception)
+    //    {
+    //        exception.Redirect();
+    //    }
+    //}
 
 }

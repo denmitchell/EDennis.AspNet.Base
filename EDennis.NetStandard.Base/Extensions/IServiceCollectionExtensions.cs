@@ -1,11 +1,17 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 
 namespace EDennis.NetStandard.Base {
 
 
     public static class IServiceCollectionExtensions_Security {
+
+
+
 
 
         /// <summary>

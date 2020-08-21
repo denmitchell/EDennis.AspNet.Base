@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\EDennis.AspNetIdentityServer\EDennis.AspNetIdentityServer.csproj" />
+    <ProjectReference Include="..\..\EDennis.NetStandard.Base\EDennis.NetStandard.Base.csproj" />
     <ProjectReference Include="..\Client\EDennis.Samples.ColorApp.Client.csproj" />
     <ProjectReference Include="..\Shared\EDennis.Samples.ColorApp.Shared.csproj" />
   </ItemGroup>
@@ -19,7 +20,12 @@
     <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="3.1.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.7" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="3.1.7" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>
