@@ -1,5 +1,36 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+
+.form-control {
+    padding: 2px;
+    height: 33px;
+}
+
+.filter-row {
+    padding: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px; /* Reduced from whatever it currently is */
+    margin-top: 0px; /* Reduced from whatever it currently is */
+}
+
+.button-column {
+    padding: 2px;
+}
+
+hr.sep-small {
+    padding: 0px;
+    margin: 0px;
+    border-top: 2px solid rgb(230,230,230);
+}
+
+hr.sep-big {
+    padding: 0px;
+    margin: 0px;
+    border-top: 15px solid rgb(230,230,230);
+}
+
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }

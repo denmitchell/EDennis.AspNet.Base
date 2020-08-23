@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using EDennis.NetStandard.Base;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System.Net;
 using System.Threading.Tasks;
 using M = EDennis.Samples.ColorApp;
 
-namespace EDennis.Samples.ColorApp.Client.Pages.Rgb {
-    public partial class CreateBase : ComponentBase {
+namespace EDennis.Samples.ColorApp.Client.Components {
+    public partial class RgbDetailsBase : ComponentBase {
 
         [Inject] public RgbApiClient Client { get; set; }
         [Inject] public NavigationManager NavigationManager { get; set; }
@@ -30,26 +30,24 @@ namespace EDennis.Samples.ColorApp.Client.Pages.Rgb {
 
 
         protected async Task HandleValidSubmit() {
-            if (Rgb.Id == default) {
-                var addedRecord = await Client.CreateAsync(Rgb);
-                if (addedRecord.StatusCode < 300) {
-                    StatusClass = "alert-success";
-                    Message = "New person added successfully.";
-                    Rgb = addedRecord.TypedValue;
-                    Dirty = false;
-                    Saved = true;
-                } else {
-                    StatusClass = "alert-danger";
-                    Message = "Something went wrong adding the new person.  Please try again.";
-                    Saved = false;
-                }
-            } else {
-                var updatedRecord = await Client.UpdateAsync(Rgb.Id.ToString(),Rgb);
+            ObjectResult<M.Rgb> result;
+            string verb;
+
+            if (Rgb.Id == default)
+                (result, verb) = (await Client.CreateAsync(Rgb), "added");
+            else
+                (result, verb) = (await Client.UpdateAsync(Rgb.Id.ToString(), Rgb), "updated");
+
+            if (result.StatusCode < 300) {
                 StatusClass = "alert-success";
-                Message = "Person updated successfully.";
-                Rgb = updatedRecord.TypedValue;
+                Message = $"New RGB record {verb} successfully.";
+                Rgb = result.TypedValue;
                 Dirty = false;
                 Saved = true;
+            } else {
+                StatusClass = "alert-danger";
+                Message = $"New Rgb could not be {verb}.  Please try again.";
+                Saved = false;
             }
         }
 

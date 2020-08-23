@@ -1,13 +1,21 @@
-﻿@page "/rgb/create"
-@inherits CreateBase
+﻿@page "/Rgb/Details/{Id}"
+@page "/Rgb/Details"
+@inherits RgbDetailsBase
 @using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @attribute [Authorize]
 
-<h1>Create</h1>
+@if (Rgb.Id != default) {
+    <h1>Details for @Rgb.Name</h1>
+} else {
+    <h1>New Rgb Record</h1>
+}
 
-<h4>Rgb</h4>
-<hr />
+<div class="custom-control custom-switch">
+    <input type="checkbox" class="custom-control-input" id="editSwitch"
+           @bind="@Editable">
+    <label class="custom-control-label" for="editSwitch">Edit this record</label>
+</div>
+
 <EditForm Model="Rgb" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
     @if (Editable) {
         <DataAnnotationsValidator />
@@ -31,7 +39,7 @@
             @if (Editable) {
                 <ValidationMessage class="offset-sm-3 col-sm-8" For="@(() => Rgb.Name)" />
             }
-            </div>
+        </div>
     </div>
     <div class="form-group row">
         <label for="Red" class="col-sm-3 col-form-label">Red</label>
@@ -43,7 +51,7 @@
             @if (Editable) {
                 <ValidationMessage class="offset-sm-3 col-sm-8" For="@(() => Rgb.Red)" />
             }
-            </div>
+        </div>
     </div>
     <div class="form-group row">
         <label for="Green" class="col-sm-3 col-form-label">Green</label>
@@ -55,7 +63,7 @@
             @if (Editable) {
                 <ValidationMessage class="offset-sm-3 col-sm-8" For="@(() => Rgb.Green)" />
             }
-            </div>
+        </div>
     </div>
     <div class="form-group row">
         <label for="Blue" class="col-sm-3 col-form-label">Blue</label>
@@ -67,7 +75,7 @@
             @if (Editable) {
                 <ValidationMessage class="offset-sm-3 col-sm-8" For="@(() => Rgb.Blue)" />
             }
-            </div>
+        </div>
     </div>
     <div class="form-group row">
         <label for="sysStart" class="col-sm-3 col-form-label">Last saved on</label>

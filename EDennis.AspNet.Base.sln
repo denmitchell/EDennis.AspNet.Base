@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.RazorComponents", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.Samples.ColorApp.Launcher", "EDennis.Samples.ColorApp.Launcher\EDennis.Samples.ColorApp.Launcher.csproj", "{1A8ED00F-B0F3-4CA6-A69B-2A1160FDC236}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDennis.Samples.ColorApp.Migrations", "EDennis.Samples.ColorApp.Migrations\EDennis.Samples.ColorApp.Migrations.csproj", "{3C32C0A8-62F4-4981-9358-E7B6A63A3FFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.Samples.ColorApp.Migrations", "EDennis.Samples.ColorApp.Migrations\EDennis.Samples.ColorApp.Migrations.csproj", "{3C32C0A8-62F4-4981-9358-E7B6A63A3FFE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
