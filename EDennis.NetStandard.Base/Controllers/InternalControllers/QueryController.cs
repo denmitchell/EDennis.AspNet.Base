@@ -85,7 +85,7 @@ namespace EDennis.NetStandard.Base {
                     group, groupSummary);
             } catch (ArgumentException ex) {
 
-                using (_logger.BeginScope(GetLoggerScope(new { select, sort, filter, skip, take, totalSummary, group, groupSummary })))
+                using (_logger.BeginScope(GetLoggerScope(new { select, include, sort, filter, skip, take, totalSummary, group, groupSummary })))
                     _logger.LogError(ex.Message);
                 ModelState.AddModelError("", ex.Message);
                 return new BadRequestObjectResult(ModelState);

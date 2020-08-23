@@ -6,22 +6,18 @@ using System.Threading.Tasks;
 namespace EDennis.NetStandard.Base {
 
     /// <summary>
-    /// Api Client for communicating with an
+    /// Blazor Api Client for communicating with an
     /// internal controller via secure HttpClient.
-    /// Note: setup the DependencyInjection to include:
-    /// <list type="bullet">
-    /// <item>AddSecureTokenService<TTokenService>(Configuration,"Security:ClientCredentials")</item>
-    /// <item>AddApiClients(Configuration,"ApiClients");</item>
-    /// </list>
-    public abstract class QueryApiClient<TEntity> : IQueryApiClient<TEntity> where TEntity : class {
+    /// Note: Uses integrated Identity Server and Microsoft-generated
+    /// DI for HttpClientFactory/HttpClient in the Blazor Client Program class.  
+    /// Just extend this class and AddScoped<MyExtendedBlazorQueryApiClient>()
+    public abstract class BlazorQueryApiClient<TEntity> : IQueryApiClient<TEntity> where TEntity : class {
 
         protected readonly HttpClient _client;
         protected readonly ScopedRequestMessage _scopedRequestMessage;
 
-        public QueryApiClient(IHttpClientFactory clientFactory, ITokenService tokenService,
-            ScopedRequestMessage scopedRequestMessage) {
-            _client = clientFactory.CreateClient(GetType().Name);
-            tokenService.AssignTokenAsync(_client).Wait();
+        public BlazorQueryApiClient(HttpClient client, ScopedRequestMessage scopedRequestMessage) {
+            _client = client;
             _scopedRequestMessage = scopedRequestMessage;
         }
 
@@ -86,8 +82,7 @@ namespace EDennis.NetStandard.Base {
                 list.Add($"include={include}");
             if (sort != default)
                 list.Add($"sort={sort}");
-            if (filter != default)
-                list.Add($"filter={filter}");
+            list.Add($"filter={filter}");
             if (skip != default)
                 list.Add($"skip={skip}");
             if (take != default)
