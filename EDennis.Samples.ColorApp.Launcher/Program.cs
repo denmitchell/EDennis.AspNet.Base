@@ -7,6 +7,8 @@ using IdentityServer = EDennis.AspNetIdentityServer;
 using ColorApi = EDennis.Samples.ColorApi;
 using RazorApp = EDennis.Samples.ColorApp.Razor;
 using BlazorApp = EDennis.Samples.ColorApp.Server;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Hr.Launcher {
     public class Program : LauncherBase {
@@ -43,11 +45,27 @@ namespace Hr.Launcher {
         /// <param name="launchBrowser"></param>
         /// <param name="blockWithConsole"></param>
         public override void Launch(string[] args, bool launchBrowser = false, bool blockWithConsole = false) {
-            var launchables = Launch(args, blockWithConsole,
-                    IdentityServer.Program.Main, 
-                    ColorApi.Program.Main,
-                    RazorApp.Program.Main
-                );
+
+            Dictionary<string, Launchable> launchables = null;
+
+            if(args.Contains("/razor"))
+                launchables = Launch(args, blockWithConsole,
+                        IdentityServer.Program.Main, 
+                        ColorApi.Program.Main,
+                        RazorApp.Program.Main
+                    );
+            else if (args.Contains("/blazor"))
+                launchables = Launch(args, blockWithConsole,
+                        IdentityServer.Program.Main,
+                        ColorApi.Program.Main,
+                        BlazorApp.Program.Main
+                    );
+            else if (args.Contains("/api"))
+                launchables = Launch(args, blockWithConsole,
+                        IdentityServer.Program.Main,
+                        ColorApi.Program.Main
+                    );
+
 
             if (launchBrowser == true)
                 LaunchBrowsers(launchables);
