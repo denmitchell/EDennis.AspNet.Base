@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using EDennis.NetStandard.Base;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace EDennis.Samples.ColorApp.Server {
     public class Program {
         public static void Main(string[] args) {
+            Log.Logger = new LoggerConfiguration()
+                .GetLoggerFromConfiguration<Program>("Logging:Serilog");
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -17,7 +15,9 @@ namespace EDennis.Samples.ColorApp.Server {
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder
+                        .UseStartup<Startup>()
+                        .UseSerilog();
                 });
     }
 }

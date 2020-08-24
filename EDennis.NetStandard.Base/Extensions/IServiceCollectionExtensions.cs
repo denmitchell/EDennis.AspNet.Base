@@ -3,15 +3,46 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Configuration;
+using Serilog;
+using Serilog.Extensions.Logging;
 using System;
+using System.IO;
 
 namespace EDennis.NetStandard.Base {
 
 
+    public static class LoggerConfigurationExtensions {
+
+        public static Serilog.Core.Logger GetLoggerFromConfiguration<TProgram>(
+            this LoggerConfiguration loggerConfiguration, IConfiguration config, string configKey = "Logging:Serilog") {
+
+            var slogger = loggerConfiguration
+                .ReadFrom.Configuration(config, configKey)
+                .CreateLogger();
+
+            return slogger;
+        }
+
+        public static Serilog.Core.Logger GetLoggerFromConfiguration<TProgram>(
+            this LoggerConfiguration loggerConfiguration, string configKey = "Logging:Serilog") {
+
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", true, true)
+                .AddJsonFile($"appsettings.{env}.json", true, true)
+                .Build();
+
+            return GetLoggerFromConfiguration<TProgram>(loggerConfiguration, config, configKey);
+        }
+
+
+    }
+
     public static class IServiceCollectionExtensions_Security {
-
-
-
 
 
         /// <summary>
@@ -26,10 +57,10 @@ namespace EDennis.NetStandard.Base {
         /// <typeparam name="TTokenService"></typeparam>
         /// <param name="services"></param>
         /// <param name="config"></param>
-        /// <param name="tokenServiceConfigKey"></param>
+        /// <param name="configKey"></param>
         /// <returns></returns>
         public static IServiceCollection AddSecureTokenService<TTokenService>(this IServiceCollection services,
-            IConfiguration config, string tokenServiceConfigKey = "Security:ClientCredentials")
+            IConfiguration config, string configKey = "Security:ClientCredentials")
             where TTokenService : class, ITokenService {
 
             services.AddSingleton<ITokenService, TTokenService>();
@@ -37,7 +68,7 @@ namespace EDennis.NetStandard.Base {
             if (typeof(ClientCredentialsTokenService).IsAssignableFrom(typeof(TTokenService))) {
 
                 var options = new ClientCredentialsOptions();
-                var configSection = config.GetSection(tokenServiceConfigKey);
+                var configSection = config.GetSection(configKey);
                 configSection.Bind(options);
 
                 services.Configure<ClientCredentialsOptions>(opt =>
@@ -49,7 +80,7 @@ namespace EDennis.NetStandard.Base {
                 });
 
                 if (options.Authority == null)
-                    throw new Exception($"Not able to bind Configuration[\"{tokenServiceConfigKey}\"] to ClientCredentialsOptions");
+                    throw new Exception($"Not able to bind Configuration[\"{configKey}\"] to ClientCredentialsOptions");
 
                 services.AddHttpClient("ClientCredentialsTokenService", configure =>
                 {

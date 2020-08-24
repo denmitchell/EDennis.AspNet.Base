@@ -1,28 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Transactions;
 using EDennis.NetStandard.Base;
 using EDennis.NetStandard.Base.Security.AspNetIdentity.Utils;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OData.UriParser;
 using Serilog;
+using System;
+using System.Linq;
 
 namespace EDennis.Samples.ColorApi {
     public class Program {
         public static void Main(string[] args) {
 
             Log.Logger = new LoggerConfiguration()
-                       .Enrich.FromLogContext()
-                       .WriteTo.Console()
-                       .WriteTo.Seq(
-                            Environment.GetEnvironmentVariable("SEQ_URL") ?? "http://localhost:5341")
-                       .CreateLogger();
+                .GetLoggerFromConfiguration<Program>("Logging:Serilog");
+
 
             if (args.Contains("/idp-config")) {
                 Log.Information("Generating IDP Config file...");
@@ -39,9 +29,10 @@ namespace EDennis.Samples.ColorApi {
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder => {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder
+                        .UseStartup<Startup>()
+                        .UseSerilog();
                 });
     }
 }
