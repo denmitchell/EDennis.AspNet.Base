@@ -9,6 +9,7 @@ using RazorApp = EDennis.Samples.ColorApp.Razor;
 using BlazorApp = EDennis.Samples.ColorApp.Server;
 using System.Collections.Generic;
 using System.Linq;
+using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Hr.Launcher {
     public class Program : LauncherBase {
@@ -19,7 +20,7 @@ namespace Hr.Launcher {
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .WriteTo.Console()
+                .WriteTo.Console(theme: AnsiConsoleTheme.Literate)
                 .CreateLogger();
 
             var logger = new SerilogLoggerProvider(Log.Logger).CreateLogger(typeof(LauncherBase).Name);
@@ -53,12 +54,6 @@ namespace Hr.Launcher {
                         IdentityServer.Program.Main, 
                         ColorApi.Program.Main,
                         RazorApp.Program.Main
-                    );
-            else if (args.Contains("/blazor"))
-                launchables = Launch(args, blockWithConsole,
-                        IdentityServer.Program.Main,
-                        ColorApi.Program.Main,
-                        BlazorApp.Program.Main
                     );
             else if (args.Contains("/api"))
                 launchables = Launch(args, blockWithConsole,

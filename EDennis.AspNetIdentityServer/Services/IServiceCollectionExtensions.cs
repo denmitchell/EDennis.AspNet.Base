@@ -2,10 +2,12 @@
 using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using System.Linq;
 
 namespace EDennis.AspNetIdentityServer {
     public static class IServiceCollectionExtensions {
@@ -18,8 +20,14 @@ namespace EDennis.AspNetIdentityServer {
         /// <param name="config"></param>
         /// <param name="configKey"></param>
         /// <returns></returns>
-        public static IServiceCollection AddIntegratedIdentityServerAndAspNetIdentity(this IServiceCollection services, IConfiguration config,
-            string configKey = "ConnectionStrings:DomainIdentityDbContext") {
+        public static IServiceCollection AddIntegratedIdentityServerAndAspNetIdentity<TAppClaimEncoder>(this IServiceCollection services, IConfiguration config,
+            string configKey = "ConnectionStrings:DomainIdentityDbContext")
+            where TAppClaimEncoder : class, IAppClaimEncoder {
+
+
+            //try add IAppClaimEncoder implementation
+            services.TryAddSingleton<IAppClaimEncoder, TAppClaimEncoder>();
+
 
             //Step 1: Add the DbContext for ASP.NET Identity
             var cxnString = config.GetValueOrThrow<string>(configKey);
@@ -27,35 +35,48 @@ namespace EDennis.AspNetIdentityServer {
                 options.UseSqlServer(cxnString));
 
 
-            //Step 2: Add built-in Identity Server, but point to central Identity Server stores
-            services.AddIdentityServer(config => { })
-                //Add integration between Identity Server and ASP.NET Identity
-                .AddAspNetIdentity<DomainUser>()
-                .AddApiAuthorization<DomainUser, PersistedGrantDbContext>()
+            //TODO: Check whether Validators are working OK
+
+            //Step 2: Add common ASP.NET Identity services, including default UI
+            services.AddDefaultIdentity<DomainUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddUserStore<DomainUserStore>()
+                .AddRoleStore<DomainRoleStore>()
+                .AddUserManager<DomainUserManager>()
+                .AddRoleManager<DomainRoleManager>()
+                .AddUserValidator<DomainUser>()
+                .AddRoleValidator<DomainRole>();
+
+
+            //Step 3: Add built-in Identity Server, but point to central Identity Server stores
+            var isBuilder = services.AddIdentityServer(config => { });
+
+            //note: workaround to prevent double-registering services
+            var cpfServices = services.Where(s => s.ServiceType == typeof(IUserClaimsPrincipalFactory<DomainUser>)).ToArray();
+            for (int i = 0; i < cpfServices.Length; i++) {
+                var cpfService = cpfServices[i];
+                services.Remove(cpfService);
+            }
+
+            isBuilder.Services.AddScoped<IUserClaimsPrincipalFactory<DomainUser>, DomainUserClaimsPrincipalFactory>();
+
+            //Add integration between Identity Server and ASP.NET Identity
+            isBuilder.AddAspNetIdentity<DomainUser>()
+                .AddSigningCredentials();
+
                 //for in-memory objects from configuration ...
                 //.AddApiResources() //from Configuration["IdentityServer:Resources"]
                 //.AddClients() //from Configuration["IdentityServer:Clients"]
                 //.AddIdentityResources() //from Configuration["IdentityServer:IdentityResources"]
-                //Ensure that the current, default models are used for Identity Server stores
-                .AddConfigurationStore(options => { new DefaultConfigurationStoreOptions().Load(options); }) //Need to configure the db context and set table names here just like DefaultConfigurationStoreOptions
-                .AddOperationalStore(options => { new DefaultOperationalStoreOptions().Load(options); })//Need to configure the db context and set table names here just like DefaultOperationalStoreOptions
-                                                                                                        //Add the custom profile service, which uses the UserClientApplicationRole view
+            isBuilder
+                .AddConfigurationStore<ConfigurationDbContext>(options => { 
+                    new DefaultConfigurationStoreOptions().Load(options); 
+                })
+                .AddOperationalStore<PersistedGrantDbContext>(options => { 
+                    new DefaultOperationalStoreOptions().Load(options); 
+                })
+                                                                                                        
+                //Add the custom profile service, which uses the UserClientApplicationRole view
                 .AddProfileService<DomainIdentityProfileService>();
-
-            //Step 3: Add common ASP.NET Identity services, including default UI
-            services.AddDefaultIdentity<DomainUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                //Point to centralized database
-                .AddEntityFrameworkStores<DomainIdentityDbContext>()
-                //Use custom ClaimsPrincipalFactory that uses DomainRole (including Application Name)
-                .AddClaimsPrincipalFactory<DomainUserClaimsPrincipalFactory>()
-                //Use custom role validator to prevent failing on duplicate role name;
-                //  with DomainRole, different applications can have the same role name
-                .AddRoleValidator<DomainRoleValidator>();
-
-            //TODO: see if this is needed
-            services.Replace(new ServiceDescriptor(typeof(IUserClaimsPrincipalFactory<DomainUser>),
-                typeof(DomainUserClaimsPrincipalFactory), ServiceLifetime.Scoped));
-
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();

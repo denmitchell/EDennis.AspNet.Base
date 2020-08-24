@@ -87,7 +87,7 @@ namespace EDennis.NetStandard.Base {
         /// </summary>
         public const int PING_TIMEOUT = 10000;
 
-        private ILogger _logger;
+        private readonly ILogger _logger;
 
         public LauncherBase(ILogger logger) {
             _logger = logger;
@@ -110,6 +110,9 @@ namespace EDennis.NetStandard.Base {
         public Dictionary<string, Launchable> Launch(string[] args, bool blockWithConsole,
                 params Action<string[]>[] programMains) {
 
+
+            _logger.LogInformation($"Launcher initiated for ... \n\t{string.Join("\n\t", args.Where(a=>a.Contains("=")).ToArray())}");
+
             //get the project name, directory, and .csproj file path associated with this Launcher class
             var projectName = GetType().Assembly.GetName().Name;
             var launcherDirectory = GetProjectDirectory(projectName);
@@ -122,7 +125,7 @@ namespace EDennis.NetStandard.Base {
             //and store in a dictionary, keyed by the project name
             var launchables = InitializeLaunchables(args, programMains, dirs);
 
-            CreateConsoleLogger();
+            //CreateConsoleLogger();
 
             //iterate over all the launchables, Launching each one
             foreach (var launchable in launchables) {
@@ -163,6 +166,8 @@ namespace EDennis.NetStandard.Base {
 
             GetLaunchProfile(launchable);
             GetCommandLineArgs(launchable);
+
+            _logger.LogInformation($"Launching {launchable.Key} @ {launchable.Value.LaunchProfile.ApplicationUrl}");
 
             Task.Run(() => {
                 launchable.Value.ProgramMain(launchable.Value.LaunchProfile.Args);
@@ -224,7 +229,9 @@ namespace EDennis.NetStandard.Base {
 
             var launchables = new Dictionary<string, Launchable>();
 
-            var kvpArgs = args.Select(a => new KeyValuePair<string,string>(a.Split('=')[0], a.Split('=')[1]))
+            var kvpArgs = args
+                .Where(a=>a.Contains("="))
+                .Select(a => new KeyValuePair<string,string>(a.Split('=')[0], a.Split('=')[1]))
                 .ToDictionary(x => x.Key, x => x.Value);
 
             NamedEventWaitHandle ewhReady = null;

@@ -49,7 +49,7 @@ namespace EDennis.NetStandard.Base {
         /// <param name="appRole">container for holding app name and role name</param>
         /// <returns>string that combines application name and role name</returns>
         public string Encode(AppRole appRole)
-            => $"{appRole.Application}:{appRole.Role}";
+            => $"{appRole.Application}:{appRole.RoleNomen}";
 
 
         /// <summary>
@@ -63,12 +63,12 @@ namespace EDennis.NetStandard.Base {
             if (separatorIndex == -1)
                 return new AppRole {
                     Application = null,
-                    Role = roleString
+                    RoleNomen = roleString
                 };
             else
                 return new AppRole {
                     Application = roleString.Substring(0, separatorIndex),
-                    Role = roleString.Substring(separatorIndex + 1)
+                    RoleNomen = roleString.Substring(separatorIndex + 1)
                 };
         }
 

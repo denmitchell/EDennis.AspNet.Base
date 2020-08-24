@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace EDennis.NetStandard.Base {
 
+    //TODO: Check impact of Role.Nomen
+
     /// <summary>
     /// With the DomainIdentity classes, DomainRoleClaims (UserRoleClaims<Guid>) was
     /// purposely omitted from the model in order to make role-associated claims a
@@ -50,7 +52,7 @@ namespace EDennis.NetStandard.Base {
                             && c.Application == _env.ApplicationName)
                         .Select(c=> new { c.ClaimType, c.ClaimValue})
                      join c in _cache
-                         on a.ClaimValue equals c.RoleName
+                         on a.ClaimValue equals c.RoleNomen
                      select new Claim(c.ClaimType, c.ClaimValue)
                     ).ToList();
                 });

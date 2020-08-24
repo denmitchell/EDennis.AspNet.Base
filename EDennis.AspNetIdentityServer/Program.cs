@@ -21,6 +21,8 @@ using System.Text.RegularExpressions;
 
 
 namespace EDennis.AspNetIdentityServer {
+
+    //TODO: Check impact of Role.Nomen change
     public class Program {
 
         public const string CONFIGS_DIR = "Configs";
@@ -28,12 +30,14 @@ namespace EDennis.AspNetIdentityServer {
         public static Regex FILE_PROJECT_EXTRACTOR = new Regex(@"(?<=Configs\\)([A-Za-z0-9_.]+)(?=\.json)");
         public const string IDENTITY_RESOURCES_FILE = "IdentityResources.json";
 
+        //NOTE: If using a different implementation of IAppClaimEncoder, update this line!
+        public static IAppClaimEncoder _encoder = new DefaultAppClaimEncoder();
 
         public static void Main(string[] args) {
 
             //Debugger.Launch();
 
-            Log.Logger = new LoggerConfiguration()
+            Log.Logger ??= new LoggerConfiguration()
                 .GetLoggerFromConfiguration<Program>("Logging:Serilog");
 
             try {
@@ -282,22 +286,24 @@ namespace EDennis.AspNetIdentityServer {
 
             var keys = roles.Keys.ToArray();
             for (int i=0; i<keys.Length; i++) {
-                var roleName = keys[i];
+                var roleNomen = keys[i];
                 var role = context.Roles.FirstOrDefault(r =>
-                    r.Application == project && r.Name == roleName);
+                    r.Application == project && r.Nomen == roleNomen);
                 if (role != null) {
-                    Log.Information($"\t\tRole {roleName} record found for {project} ...");
-                    roles[roleName] = role.Id;
+                    Log.Information($"\t\tRole {roleNomen} record found for {project} ...");
+                    roles[roleNomen] = role.Id;
                 } else {
-                    Log.Information($"\t\tAdding role {roleName} record for {project} ...");
+                    Log.Information($"\t\tAdding role {roleNomen} record for {project} ...");
+                    var roleName = _encoder.Encode(new AppRole {Application = project, RoleNomen = roleNomen });
                     role = new DomainRole {
                         Application = project,
+                        Nomen = roleNomen,
                         Name = roleName,
                         NormalizedName = roleName.ToUpper()
                     };
                     context.Roles.Add(role);
                     context.SaveChanges();
-                    roles[roleName] = role.Id;
+                    roles[roleNomen] = role.Id;
                 }
             }
 

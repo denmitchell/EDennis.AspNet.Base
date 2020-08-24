@@ -23,7 +23,7 @@ namespace EDennis.Samples.ColorApp.Server {
 
             //add integrated IdentityServer
             //see EDennis.AspNetIdentityServer.ICollectionExtensions:
-            services.AddIntegratedIdentityServerAndAspNetIdentity(Configuration, 
+            services.AddIntegratedIdentityServerAndAspNetIdentity<DefaultAppClaimEncoder>(Configuration, 
                 "ConnectionStrings:DomainIdentityDbContext");
 
             services.AddControllersWithViews(options=>

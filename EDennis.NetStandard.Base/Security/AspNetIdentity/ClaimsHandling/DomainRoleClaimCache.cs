@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 
 namespace EDennis.NetStandard.Base {
+
+    //TODO: Check impact of Role.Nomen
     /// <summary>
     /// Singleton cache used by IClaimsTransformation
     /// </summary>

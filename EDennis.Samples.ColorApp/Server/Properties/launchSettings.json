@@ -12,7 +12,7 @@
       "commandName": "Project",
       "commandLineArgs": "mcp=Maria",
       "launchBrowser": true,
-      "launchUrl": "Rgb",
+      "launchUrl": "",
       "applicationUrl": "https://localhost:44336;http://localhost:62727",
       "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
       "environmentVariables": {
@@ -23,7 +23,7 @@
       "commandName": "Project",
       "commandLineArgs": "mcp=Darius",
       "launchBrowser": true,
-      "launchUrl": "Rgb",
+      "launchUrl": "",
       "applicationUrl": "https://localhost:44336;http://localhost:62727",
       "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
       "environmentVariables": {

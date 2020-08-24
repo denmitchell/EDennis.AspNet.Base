@@ -54,14 +54,24 @@ namespace EDennis.NetStandard.Base {
 
 
             builder.Entity<TRole>(e => {
-                //replace unique index;
-                e.Metadata.RemoveIndex(new[] { e.Property(r => r.NormalizedName).Metadata });
-                e.HasIndex(i => new { i.Application, i.Name })
+                e.HasIndex(i => new { i.Application, i.Nomen })
                     .IsUnique(true);
                 e.Property(p => p.Application)
                     .IsRequired(true)
                     .IsUnicode(false)
                     .HasMaxLength(200);
+                e.Property(p => p.Nomen)
+                    .IsRequired(true)
+                    .IsUnicode(false)
+                    .HasMaxLength(100);
+                e.Property(p => p.Name)
+                    .IsRequired(true)
+                    .IsUnicode(false)
+                    .HasMaxLength(300);
+                e.Property(p => p.NormalizedName)
+                    .IsRequired(true)
+                    .IsUnicode(false)
+                    .HasMaxLength(300);
             });
 
 

@@ -12,7 +12,7 @@ namespace EDennis.NetStandard.Base {
 
 
     public class DomainUserManager : DomainUserManager<DomainUser, DomainRole> {
-        public DomainUserManager(IUserStore<DomainUser> store, 
+        public DomainUserManager(DomainUserStore store, 
             IOptions<IdentityOptions> optionsAccessor, IPasswordHasher<DomainUser> passwordHasher, 
             IEnumerable<IUserValidator<DomainUser>> userValidators, 
             IEnumerable<IPasswordValidator<DomainUser>> passwordValidators, 
@@ -138,7 +138,7 @@ SELECT u.* FROM AspNetUsers u
 
             if (role == null)
                 return IdentityResult.Failed(new IdentityErrorDescriber()
-                    .RoleNotFoundError(appRole.Application, appRole.Role));
+                    .RoleNotFoundError(appRole.Application, appRole.RoleNomen));
             else {
                 var exists = _dbContext.Set<IdentityUserRole<int>>().Any(ur => ur.UserId == user.Id && ur.RoleId == role.Id);
                 if (exists)
@@ -196,7 +196,7 @@ SELECT u.* FROM AspNetUsers u
 
             if (role == null)
                 return IdentityResult.Failed(new IdentityErrorDescriber()
-                    .RoleNotFoundError(appRole.Application, appRole.Role));
+                    .RoleNotFoundError(appRole.Application, appRole.RoleNomen));
             else {
                 var exists = _dbContext.Set<IdentityUserRole<int>>().Any(ur => ur.UserId == user.Id && ur.RoleId == role.Id);
                 if (!exists)
@@ -256,7 +256,7 @@ SELECT r.*
                 and ur.RoleId = r.Id
 )");
             return (await roles.ToListAsync())
-                .Select(r => _encoder.Encode(new AppRole { Application = r.Application, Role = r.Name }))
+                .Select(r => _encoder.Encode(new AppRole { Application = r.Application, RoleNomen = r.Name }))
                 .ToList();
         }
 

@@ -10,7 +10,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace EDennis.NetStandard.Base {
 
-
+    //TODO: Check impact of Role.Nomen
     public class DomainUserClaimsPrincipalFactory : DomainUserClaimsPrincipalFactory<DomainUser, DomainRole> {
         public DomainUserClaimsPrincipalFactory(DomainIdentityDbContext context, IAppClaimEncoder encoder, 
             IOptionsMonitor<ClaimsPrincipalFactoryOptions> options, IHostEnvironment env) 
@@ -55,7 +55,7 @@ namespace EDennis.NetStandard.Base {
                     join ur in _context.UserRoles
                             on r.Id equals ur.RoleId
                     where ur.UserId == user.Id
-                    select new { RoleId = r.Id, AppClaim = new AppClaim { Application = r.Application, ClaimType = JwtClaimTypes.Role, ClaimValue = r.Name } };
+                    select new { RoleId = r.Id, AppClaim = new AppClaim { Application = r.Application, ClaimType = JwtClaimTypes.Role, ClaimValue = r.Nomen } };
 
             if (_options.FilterByCurrentApplicationName)
                 query = query.Where(q => q.AppClaim.Application == _env.ApplicationName);

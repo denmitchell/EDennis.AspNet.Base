@@ -1,14 +1,6 @@
 ﻿{
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "Blazor-Maria": {
-      "commandName": "Project",
-      "commandLineArgs": "/blazor EDennis.AspNetIdentityServer=Default EDennis.Samples.ColorApi=Maria EDennis.Samples.ColorApp.Server=Maria"
-    },
-    "Blazor-Darius": {
-      "commandName": "Project",
-      "commandLineArgs": "/blazor EDennis.AspNetIdentityServer=Default EDennis.Samples.ColorApi=Darius EDennis.Samples.ColorApp.Server=Darius"
-    },
     "Razor-Maria": {
       "commandName": "Project",
       "commandLineArgs": "/razor EDennis.AspNetIdentityServer=Default EDennis.Samples.ColorApi=Maria EDennis.Samples.ColorApp.Razor=Maria"
@@ -16,6 +8,14 @@
     "Razor-Darius": {
       "commandName": "Project",
       "commandLineArgs": "/razor EDennis.AspNetIdentityServer=Default EDennis.Samples.ColorApi=Darius EDennis.Samples.ColorApp.Razor=Darius"
+    },
+    "Api-Maria": {
+      "commandName": "Project",
+      "commandLineArgs": "/api EDennis.AspNetIdentityServer=Default EDennis.Samples.ColorApi=Maria"
+    },
+    "Api-Darius": {
+      "commandName": "Project",
+      "commandLineArgs": "/api EDennis.AspNetIdentityServer=Default EDennis.Samples.ColorApi=Darius"
     }
   }
 }
