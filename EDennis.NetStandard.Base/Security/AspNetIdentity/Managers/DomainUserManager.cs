@@ -133,12 +133,11 @@ SELECT u.* FROM AspNetUsers u
         public override async Task<IdentityResult> AddToRoleAsync(TUser user, string roleString) {
             var appRole = _encoder.Decode(roleString);
             var role = await _dbContext.Set<TRole>()
-                .FirstOrDefaultAsync(r => r.Application == appRole.Application 
-                && r.NormalizedName == appRole.Application.ToUpper());
+                .FirstOrDefaultAsync(r => r.Application == appRole.Application && r.Name == appRole.RoleName);
 
             if (role == null)
                 return IdentityResult.Failed(new IdentityErrorDescriber()
-                    .RoleNotFoundError(appRole.Application, appRole.RoleNomen));
+                    .RoleNotFoundError(appRole.Application, appRole.RoleName));
             else {
                 var exists = _dbContext.Set<IdentityUserRole<int>>().Any(ur => ur.UserId == user.Id && ur.RoleId == role.Id);
                 if (exists)
@@ -196,7 +195,7 @@ SELECT u.* FROM AspNetUsers u
 
             if (role == null)
                 return IdentityResult.Failed(new IdentityErrorDescriber()
-                    .RoleNotFoundError(appRole.Application, appRole.RoleNomen));
+                    .RoleNotFoundError(appRole.Application, appRole.RoleName));
             else {
                 var exists = _dbContext.Set<IdentityUserRole<int>>().Any(ur => ur.UserId == user.Id && ur.RoleId == role.Id);
                 if (!exists)
@@ -256,7 +255,7 @@ SELECT r.*
                 and ur.RoleId = r.Id
 )");
             return (await roles.ToListAsync())
-                .Select(r => _encoder.Encode(new AppRole { Application = r.Application, RoleNomen = r.Name }))
+                .Select(r => _encoder.Encode(new AppRole { Application = r.Application, RoleName = r.Name }))
                 .ToList();
         }
 

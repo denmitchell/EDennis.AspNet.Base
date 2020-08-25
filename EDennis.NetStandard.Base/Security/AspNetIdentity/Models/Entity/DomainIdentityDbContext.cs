@@ -54,20 +54,16 @@ namespace EDennis.NetStandard.Base {
 
 
             builder.Entity<TRole>(e => {
-                e.HasIndex(i => new { i.Application, i.Nomen })
+                e.HasIndex(i => new { i.Application, i.Name })
                     .IsUnique(true);
                 e.Property(p => p.Application)
                     .IsRequired(true)
                     .IsUnicode(false)
                     .HasMaxLength(200);
-                e.Property(p => p.Nomen)
-                    .IsRequired(true)
-                    .IsUnicode(false)
-                    .HasMaxLength(100);
                 e.Property(p => p.Name)
                     .IsRequired(true)
                     .IsUnicode(false)
-                    .HasMaxLength(300);
+                    .HasMaxLength(100);
                 e.Property(p => p.NormalizedName)
                     .IsRequired(true)
                     .IsUnicode(false)

@@ -11,8 +11,6 @@ using System.Threading.Tasks;
 
 namespace EDennis.AspNetIdentityServer {
 
-    //TODO: Check impact of Role.Nomen.
-
     /// <summary>
     /// Gets all roles associated with the ClientId, as well as 
     /// any requested UserClaims.

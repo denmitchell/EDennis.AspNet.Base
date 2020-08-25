@@ -5,8 +5,10 @@ namespace EDennis.NetStandard.Base {
 
     /// <summary>
     /// Singleton service that handles composition and decomposition of
-    /// AppClaim values, where the application name is embedded into
-    /// either the ClaimType or ClaimValue
+    /// AppClaim values and Role.NormalizedName, where the ClaimValue
+    /// is prefixed by the ApplicationName and a colon.
+    /// 
+    /// NOTE: Other implementations of IAppClaimEncoder are possible.
     /// </summary>
     public class DefaultAppClaimEncoder : IAppClaimEncoder {
 
@@ -18,7 +20,7 @@ namespace EDennis.NetStandard.Base {
         /// <param name="appClaim">container for holding app name, claim type, and claim value</param>
         /// <returns>regular claim with claim type and claim value (and application name embedded in type or value)</returns>
         public Claim Encode(AppClaim appClaim)
-            => new Claim($"{appClaim.Application}:{appClaim.ClaimType}",appClaim.ClaimValue);
+            => new Claim($"{appClaim.ClaimType}",$"{appClaim.Application}:{appClaim.ClaimValue}");
 
         /// <summary>
         /// Decomposes a regular claim into an AppClaim by
@@ -27,7 +29,7 @@ namespace EDennis.NetStandard.Base {
         /// <param name="claim">regular claim</param>
         /// <returns>AppClaim instance holding claim type, claim value, and extracted application name</returns>
         public AppClaim Decode(Claim claim) {
-            var separatorIndex = claim.Type.IndexOf(":");
+            var separatorIndex = claim.Value.IndexOf(":");
             if (separatorIndex == -1)
                 return new AppClaim {
                     Application = null,
@@ -36,9 +38,9 @@ namespace EDennis.NetStandard.Base {
                 };
             else
                 return new AppClaim {
-                    Application = claim.Type.Substring(0, separatorIndex),
-                    ClaimType = claim.Type.Substring(separatorIndex + 1),
-                    ClaimValue = claim.Value 
+                    Application = claim.Value.Substring(0, separatorIndex),
+                    ClaimType = claim.Value,
+                    ClaimValue = claim.Value.Substring(separatorIndex + 1) 
                 };
         }
 
@@ -49,7 +51,7 @@ namespace EDennis.NetStandard.Base {
         /// <param name="appRole">container for holding app name and role name</param>
         /// <returns>string that combines application name and role name</returns>
         public string Encode(AppRole appRole)
-            => $"{appRole.Application}:{appRole.RoleNomen}";
+            => $"{appRole.Application}:{appRole.RoleName}";
 
 
         /// <summary>
@@ -63,12 +65,12 @@ namespace EDennis.NetStandard.Base {
             if (separatorIndex == -1)
                 return new AppRole {
                     Application = null,
-                    RoleNomen = roleString
+                    RoleName = roleString
                 };
             else
                 return new AppRole {
                     Application = roleString.Substring(0, separatorIndex),
-                    RoleNomen = roleString.Substring(separatorIndex + 1)
+                    RoleName = roleString.Substring(separatorIndex + 1)
                 };
         }
 

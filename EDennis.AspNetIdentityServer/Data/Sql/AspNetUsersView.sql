@@ -9,7 +9,7 @@
 				FROM (
 					SELECT a.Name ApplicationName,
 						STUFF((
-							SELECT ',' + char(34) + r.Nomen + char(34) 
+							SELECT ',' + char(34) + r.Name + char(34) 
 								FROM dbo.AspNetRoles r
 								INNER JOIN dbo.AspNetUserRoles ur
 									ON ur.RoleId = r.Id

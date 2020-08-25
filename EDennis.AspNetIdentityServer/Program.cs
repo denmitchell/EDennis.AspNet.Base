@@ -22,7 +22,6 @@ using System.Text.RegularExpressions;
 
 namespace EDennis.AspNetIdentityServer {
 
-    //TODO: Check impact of Role.Nomen change
     public class Program {
 
         public const string CONFIGS_DIR = "Configs";
@@ -286,24 +285,23 @@ namespace EDennis.AspNetIdentityServer {
 
             var keys = roles.Keys.ToArray();
             for (int i=0; i<keys.Length; i++) {
-                var roleNomen = keys[i];
+                var roleName = keys[i];
                 var role = context.Roles.FirstOrDefault(r =>
-                    r.Application == project && r.Nomen == roleNomen);
+                    r.Application == project && r.Name == roleName);
                 if (role != null) {
-                    Log.Information($"\t\tRole {roleNomen} record found for {project} ...");
-                    roles[roleNomen] = role.Id;
+                    Log.Information($"\t\tRole {roleName} record found for {project} ...");
+                    roles[roleName] = role.Id;
                 } else {
-                    Log.Information($"\t\tAdding role {roleNomen} record for {project} ...");
-                    var roleName = _encoder.Encode(new AppRole {Application = project, RoleNomen = roleNomen });
+                    Log.Information($"\t\tAdding role {roleName} record for {project} ...");
+                    var normalizedRoleName = _encoder.Encode(new AppRole {Application = project, RoleName = roleName });
                     role = new DomainRole {
                         Application = project,
-                        Nomen = roleNomen,
                         Name = roleName,
-                        NormalizedName = roleName.ToUpper()
+                        NormalizedName = normalizedRoleName
                     };
                     context.Roles.Add(role);
                     context.SaveChanges();
-                    roles[roleNomen] = role.Id;
+                    roles[roleName] = role.Id;
                 }
             }
 

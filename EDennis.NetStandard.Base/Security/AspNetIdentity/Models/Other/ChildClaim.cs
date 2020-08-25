@@ -1,6 +1,7 @@
 ﻿namespace EDennis.NetStandard.Base {
-    public class RoleClaimView {
-        public string RoleNomen { get; set; }
+    public class ChildClaim {
+        public string ParentType { get; set; }
+        public string ParentValue { get; set; }
         public string ClaimType { get; set; }
         public string ClaimValue { get; set; }
     }

@@ -41,6 +41,10 @@ namespace EDennis.NetStandard.Base {
 
         public string Organization { get; set; }
 
+        /// <summary>
+        /// Transforms user properties into claims
+        /// </summary>
+        /// <returns></returns>
         public virtual ICollection<Claim> ToClaims() =>
             new List<Claim> {
                 new Claim(JwtClaimTypes.Name, UserName),
