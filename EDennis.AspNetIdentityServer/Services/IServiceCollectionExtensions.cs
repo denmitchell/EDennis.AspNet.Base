@@ -44,7 +44,7 @@ namespace EDennis.AspNetIdentityServer {
                 .AddUserManager<DomainUserManager>()
                 .AddRoleManager<DomainRoleManager>()
                 .AddUserValidator<DomainUser>()
-                .AddRoleValidator<DomainRole>();
+                .AddRoleValidator<DomainRoleValidator>();
 
 
             //Step 3: Add built-in Identity Server, but point to central Identity Server stores

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EDennis.NetStandard.Base {
@@ -14,7 +16,7 @@ namespace EDennis.NetStandard.Base {
     /// NOTE: In Startup.ConfigureServices:
     ///         services.AddDefaultIdentity<DomainUser>(options => options.SignIn.RequireConfirmedAccount = true)
     ///            .AddEntityFrameworkStores<DomainIdentityDbContext>()
-    ///            .AddRoleValidator<DomainRoleValidator<TRole>(); //add this line
+    ///            .AddRoleValidator<DomainRoleValidator<TRole>>(); //add this line
     ///   
     /// Adapted from https://stackoverflow.com/a/59466933
     /// </summary>
@@ -22,24 +24,36 @@ namespace EDennis.NetStandard.Base {
     public class DomainRoleValidator<TRole> : RoleValidator<TRole>
     where TRole : DomainRole {
 
-        public override async Task<IdentityResult> ValidateAsync(RoleManager<TRole> manager, TRole role) {
-            var roleName = await manager.GetRoleNameAsync(role);
-            if (string.IsNullOrWhiteSpace(roleName)) {
-                return IdentityResult.Failed(new IdentityError {
-                    Code = "RoleNameIsNotValid",
-                    Description = "Role Name is not valid!"
-                });
-            } else {
-                var owner = await manager.Roles.FirstOrDefaultAsync(x => x.Application == role.Application && x.NormalizedName == roleName);
+        private readonly IdentityErrorDescriber _errorDescriber;
 
-                if (owner != null && !string.Equals(manager.GetRoleIdAsync(owner), manager.GetRoleIdAsync(role))) {
-                    return IdentityResult.Failed(new IdentityError {
-                        Code = "DuplicateRoleName",
-                        Description = "this role already exist in this App!"
-                    });
+        public DomainRoleValidator(IdentityErrorDescriber errorDescriber) {
+            _errorDescriber = errorDescriber;
+        }
+
+
+        public override async Task<IdentityResult> ValidateAsync(RoleManager<TRole> manager, TRole role) {
+            var errors = new List<IdentityError>();
+            if (manager == null) {
+                throw new ArgumentNullException(nameof(manager));
+            }
+            var roleName = await manager.GetRoleNameAsync(role);
+            if (string.IsNullOrWhiteSpace(roleName) && string.IsNullOrWhiteSpace(role.NormalizedName))
+                errors.Add(_errorDescriber.InvalidRoleName(roleName));
+            if (string.IsNullOrWhiteSpace(role.Application) && string.IsNullOrWhiteSpace(role.NormalizedName))
+                errors.Add(_errorDescriber.InvalidApplicationName(role.Application));
+            if (!string.IsNullOrWhiteSpace(roleName) && string.IsNullOrWhiteSpace(role.Application)) {
+                var owner = await manager.FindByNameAsync(role.NormalizedName);
+                if (owner != null &&
+                    !string.Equals(await manager.GetRoleIdAsync(owner), await manager.GetRoleIdAsync(role))) {
+                    errors.Add(_errorDescriber.DuplicateRoleName(role.NormalizedName));
                 }
             }
-            return IdentityResult.Success;
+            if (errors.Count > 0)
+                return IdentityResult.Failed(errors.ToArray());
+            else
+                return IdentityResult.Success;
         }
+
     }
+
 }
