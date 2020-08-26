@@ -91,10 +91,11 @@
   "Users": [
     {
       "Id": 1,
-      "UserName": "admin1@.test",
-      "Email": "admin1@.test",
+      "UserName": "maria@a.test",
+      "Email": "maria@a.test",
       "EmailConfirmed": true,
       "LockoutEnabled": false,
+      "Organization": "a.test",
       "Roles": {
         "EDennis.Samples.ColorApi": [
           "Admin"
@@ -121,6 +122,7 @@
       "Email": "darius@b.test",
       "EmailConfirmed": true,
       "LockoutEnabled": false,
+      "Organization": "b.test",
       "Roles": {
         "EDennis.Samples.ColorApi": [
           "User"
@@ -147,6 +149,7 @@
       "Email": "pat@c.test",
       "EmailConfirmed": true,
       "LockoutEnabled": false,
+      "Organization": "c.test",
       "Roles": {
         "EDennis.Samples.ColorApi": [
           "Readonly"

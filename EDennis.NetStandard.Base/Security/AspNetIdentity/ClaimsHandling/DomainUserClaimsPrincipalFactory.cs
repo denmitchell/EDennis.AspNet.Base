@@ -63,6 +63,9 @@ namespace EDennis.NetStandard.Base {
             //Add user properties as claims
             identity.AddClaims(user.ToClaims());
 
+            identity.AddClaim(new Claim(JwtClaimTypes.Subject, user.Id.ToString()));
+            identity.AddClaim(new Claim(JwtClaimTypes.Name, user.UserName));
+
 
             //Add user claims as claims
             if (_options.IncludeUserClaims) {

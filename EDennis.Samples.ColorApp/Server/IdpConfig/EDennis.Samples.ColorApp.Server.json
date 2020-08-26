@@ -53,7 +53,7 @@
   ],
   "TestUsers": [
     {
-      "Email": "admin1@.test",
+      "Email": "maria@a.test",
       "PlainTextPassword": "test",
       "Organization": "a.test",
       "Roles": [

@@ -22,7 +22,7 @@ namespace EDennis.NetStandard.Base {
         public readonly static List<TestUser> DEFAULT_USERS
             = new List<TestUser> {
                 new TestUser {
-                    Email = "admin1@.test",
+                    Email = "maria@a.test",
                     PlainTextPassword = "test",
                     Organization = "a.test",
                     Claims = new Dictionary<string, List<string>> {

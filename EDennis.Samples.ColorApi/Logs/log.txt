@@ -1,2 +1,14 @@
 2020-08-26 06:40:03.710 -04:00 [INF] Generating IDP Config file...
 2020-08-26 06:40:04.285 -04:00 [INF] Exiting...
+2020-08-26 12:35:43.704 -04:00 [INF] Generating IDP Config file...
+2020-08-26 12:35:44.043 -04:00 [INF] Exiting...
+2020-08-26 16:08:34.969 -04:00 [INF] User profile is available. Using 'C:\Users\denmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-08-26 16:08:36.416 -04:00 [INF] Now listening on: https://localhost:44341
+2020-08-26 16:08:36.418 -04:00 [INF] Now listening on: http://localhost:61244
+2020-08-26 16:08:36.422 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2020-08-26 16:08:36.423 -04:00 [INF] Hosting environment: Development
+2020-08-26 16:08:36.424 -04:00 [INF] Content root path: C:\Users\denmi\source\repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApi
+2020-08-26 16:08:38.146 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44341/swagger/index.html  
+2020-08-26 16:08:38.260 -04:00 [INF] Request finished in 117.9145ms 200 text/html;charset=utf-8
+2020-08-26 16:08:38.508 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44341/swagger/v1/swagger.json  
+2020-08-26 16:08:38.669 -04:00 [INF] Request finished in 160.9313ms 200 application/json;charset=utf-8

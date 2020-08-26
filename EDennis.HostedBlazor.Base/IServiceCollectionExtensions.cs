@@ -1,6 +1,9 @@
 ﻿using EDennis.AspNetIdentityServer;
 using EDennis.NetStandard.Base;
 using IdentityServer4.EntityFramework.DbContexts;
+using IdentityServer4.EntityFramework.Interfaces;
+using IdentityServer4.EntityFramework.Options;
+using IdentityServer4.EntityFramework.Stores;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -43,8 +46,10 @@ namespace EDennis.HostedBlazor.Base {
 
             //Step 2: Add common ASP.NET Identity services, including default UI
             //replacing call to services.AddDefaultIdentity<DomainUser>(options => { options.SignIn.RequireConfirmedAccount = true; });
-            //services.AddDefaultIdentity<DomainUser>(options => { options.SignIn.RequireConfirmedAccount = true; });
+            services.AddDefaultIdentity<DomainUser>(options => { options.SignIn.RequireConfirmedAccount = true; });
 
+
+            /*
 
             //https://github.com/dotnet/aspnetcore/blob/bfec2c14be1e65f7dd361a43950d4c848ad0cd35/src/Identity/UI/src/IdentityServiceCollectionUIExtensions.cs
             services.AddAuthentication(o =>
@@ -78,6 +83,7 @@ namespace EDennis.HostedBlazor.Base {
 
             services.Configure(configureOptions);
 
+            */
 
 
 
@@ -106,13 +112,23 @@ namespace EDennis.HostedBlazor.Base {
             services.ReplaceServiceImplementations<IUserClaimsPrincipalFactory<DomainUser>, DomainUserClaimsPrincipalFactory>(ServiceLifetime.Scoped);
 
 
+            services.AddSingleton(new ConfigurationStoreOptions());
+            services.AddSingleton(new OperationalStoreOptions());
+            services.AddDbContext<IConfigurationDbContext, ConfigurationDbContext>(options =>
+                options.UseSqlServer(cxnString));
+            services.AddDbContext<IPersistedGrantDbContext, PersistedGrantDbContext>(options =>
+                options.UseSqlServer(cxnString));
 
-            var isBuilder = services.AddIdentityServer(config => { })
-                //.AddApiAuthorization<DomainUser, PersistedGrantDbContext>()
-                .AddAspNetIdentity<DomainUser>()
-                .AddSigningCredentials()
-                .AddConfigurationStore<ConfigurationDbContext>()
-                .AddOperationalStore<PersistedGrantDbContext>()
+
+            var isBuilder = services.AddIdentityServer()
+                .AddApiAuthorization<DomainUser, PersistedGrantDbContext>()
+                .AddResourceStore<ResourceStore>()
+                .AddClientStore<ClientStore>()
+                .AddPersistedGrantStore<PersistedGrantStore>()
+                //.AddAspNetIdentity<DomainUser>()
+                //.AddSigningCredentials()
+                //.AddConfigurationStore<ConfigurationDbContext>()
+                //.AddOperationalStore<PersistedGrantDbContext>()
                 //Add the custom profile service, which uses the UserClientApplicationRole view
                 .AddProfileService<DomainIdentityProfileService>();
 

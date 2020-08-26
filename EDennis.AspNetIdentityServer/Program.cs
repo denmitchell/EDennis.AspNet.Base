@@ -354,7 +354,8 @@ namespace EDennis.AspNetIdentityServer {
                         NormalizedEmail = entry.Email,
                         UserName = entry.Email,
                         NormalizedUserName = entry.Email,
-                        EmailConfirmed = true
+                        EmailConfirmed = true,
+                        Organization = entry.Organization
                     };
                     user.PasswordHash = HashPassword(entry.PlainTextPassword);
                     context.Users.Add(user);

@@ -35,7 +35,7 @@ namespace EDennis.NetStandard.Base {
             _recyclableMemoryStreamManager = new RecyclableMemoryStreamManager();
 
             _configFileDir = config.GetValue<string>(WebHostDefaults.ContentRootKey);
-            _configFileName = options.CurrentValue.ConfigFile;
+            _configFileName = options.CurrentValue.ConfigFile ?? "httpLogging.json";
 
             //initial load of configuration file
             LoadConfigurationAsync().Wait();
@@ -72,12 +72,12 @@ namespace EDennis.NetStandard.Base {
             {
                 try {
                     var config = new ConfigurationBuilder()
-                        .AddJsonFile($"{_configFileDir}/{_configFileName}")
+                        .AddJsonFile($"{_configFileDir}\\{_configFileName}")
                         .Build();
                     _options = new HttpLoggingConfiguration();
                     config.Bind(_options);
                 } catch (Exception ex) {
-                    _logger.LogError($"Could not load HttpLogging configuration file at {_configFileDir}/{_configFileName}: " + ex.Message);
+                    _logger.LogError($"Could not load HttpLogging configuration file at {_configFileDir}\\{_configFileName}: " + ex.Message);
                 }
 
             });
@@ -87,11 +87,11 @@ namespace EDennis.NetStandard.Base {
 
         public async Task InvokeAsync(HttpContext context) {
 
-            if (!_options.Enabled
-                || (!MatchesQuery(context) && !MatchesClaim(context))) {
-                await next.Invoke(context);
-                return;
-            }
+            //if (!_options.Enabled
+            //    || (!MatchesQuery(context) && !MatchesClaim(context))) {
+            //    await next.Invoke(context);
+            //    return;
+            //}
 
 
             // create a new log object
@@ -187,8 +187,9 @@ namespace EDennis.NetStandard.Base {
     }
 
     public static class IServiceCollectionExtensions_HttpLoggingMiddleware {
-        public static IServiceCollection AddHttpLogging(this IServiceCollection services, IConfiguration config) {
-            services.Configure<HttpLoggingOptions>(config.GetSection("Logging:HttpLogging"));
+        public static IServiceCollection AddHttpLogging(this IServiceCollection services, IConfiguration config,
+            string configKey = "Logging:HttpLogging") {
+            services.Configure<HttpLoggingOptions>(config.GetSection(configKey));
             return services;
         }
     }

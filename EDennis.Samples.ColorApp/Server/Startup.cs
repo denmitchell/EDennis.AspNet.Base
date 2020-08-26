@@ -39,8 +39,11 @@ namespace EDennis.Samples.ColorApp.Server {
 
             services.AddRazorPages();
 
+            services.AddHttpLogging(Configuration);
+
+
             //for generating the OAuth Access Token
-            //services.AddSecureTokenService<MockTokenService>(Configuration);
+            services.AddSecureTokenService<MockTokenService>(Configuration);
 
             //for propagating headers and cookies to child API (ColorApi)
             services.AddScopedRequestMessage(Configuration);
@@ -79,6 +82,7 @@ namespace EDennis.Samples.ColorApp.Server {
 
             app.UseRouting();
 
+            app.UseHttpLogging();
             app.UseMockClaimsPrincipalFor("/Rgb");
             app.UseIdentityServer();
             app.UseAuthentication();

@@ -86,8 +86,9 @@ namespace EDennis.NetStandard.Base {
                     configure.BaseAddress = new Uri(options.Authority);
                 });
 
-                services.AddAuthentication("Bearer")
-                    .AddScheme<BearerTokenOptions, BearerTokenHandler>("Bearer", opt => { });
+                //TODO: See if this is needed
+                //services.AddAuthentication("Bearer")
+                //    .AddScheme<BearerTokenOptions, BearerTokenHandler>("Bearer", opt => { });
             }
 
             return services;

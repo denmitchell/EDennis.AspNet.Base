@@ -1,0 +1,11 @@
+﻿{
+  "Enabled": true,
+  "MaxRequestBodyLength": 10000,
+  "MaxResponseBodyLength": 10000,
+  "IncludeHeaders": true,
+  "IncludeClaims": true,
+  "ForClaims": {
+    "name": [ "maria@a.test" ]
+  },
+  "ForQueryKey": "3af58255-279c-4800-8e28-41cab4fb65b7"
+}
