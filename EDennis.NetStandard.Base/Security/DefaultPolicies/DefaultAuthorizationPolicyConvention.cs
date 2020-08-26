@@ -19,7 +19,9 @@ namespace EDennis.NetStandard.Base {
         public void Apply(ControllerModel controller) {
 
             //don't add Filter if AllowAnonymousFilter is already added
-            if (controller.Filters.Any(f => f.GetType() == typeof(AllowAnonymousFilter)))
+            //or if ODataController
+            if (controller.Filters.Any(f => f.GetType() == typeof(AllowAnonymousFilter)
+                || controller.ControllerType == typeof(Microsoft.AspNet.OData.ODataController)))
                 return;
 
             var controllerPath = _appName + '.' + controller.ControllerName;

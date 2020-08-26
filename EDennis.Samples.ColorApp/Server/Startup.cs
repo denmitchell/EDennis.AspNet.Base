@@ -1,16 +1,12 @@
-//using EDennis.AspNetIdentityServer;
 using EDennis.HostedBlazor.Base;
 using EDennis.NetStandard.Base;
-using IdentityServer4.EntityFramework.DbContexts;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-//using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace EDennis.Samples.ColorApp.Server {
     public class Startup {
@@ -31,36 +27,16 @@ namespace EDennis.Samples.ColorApp.Server {
             services.AddIntegratedIdentityServerAndAspNetIdentity<DefaultAppClaimEncoder>(Configuration, 
                "ConnectionStrings:DomainIdentityDbContext");
 
-            /*
-            services.AddDbContext<DomainIdentityDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration["ConnectionStrings:DomainIdentityDbContext"]));
-
-            services.AddDefaultIdentity<DomainUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<DomainIdentityDbContext>();
-
-            services.AddIdentityServer()
-                .AddApiAuthorization<DomainUser, PersistedGrantDbContext>()
-                .AddConfigurationStore<ConfigurationDbContext>()
-                .AddOperationalStore<PersistedGrantDbContext>();
-                //.AddConfigurationStore<ConfigurationDbContext>()(options =>
-                //{
-                //    new DefaultConfigurationStoreOptions().Load(options);
-                //})
-                //.AddOperationalStore<PersistedGrantDbContext>(options =>
-                //{
-                //    new DefaultOperationalStoreOptions().Load(options);
-                //});
-
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
-
-            */
 
             services.AddControllersWithViews(options=>
                 //add default policies that allow pattern matching on scopes
                 options.AddDefaultPolicies<Startup>(services, HostEnvironment, Configuration));
-            
+
+            services.AddAuthorization(options => {
+                IServiceCollectionExtensions_DefaultPolicies.LoadDefaultPolicies<Startup>(options, new List<string> { "scope" });
+            });
+
+
             services.AddRazorPages();
 
             //for generating the OAuth Access Token

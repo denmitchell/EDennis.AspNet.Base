@@ -150,7 +150,7 @@ namespace EDennis.AspNetIdentityServer {
                     .Options;
                 context = (TContext)Activator.CreateInstance(typeof(TContext), new object[] { options, new OperationalStoreOptions() });
             } else {
-                var options = new DbContextOptionsBuilder()
+                var options = new DbContextOptionsBuilder<DomainIdentityDbContext>()
                     .UseSqlServer(cxn)
                     .EnableSensitiveDataLogging(true)
                     .Options;

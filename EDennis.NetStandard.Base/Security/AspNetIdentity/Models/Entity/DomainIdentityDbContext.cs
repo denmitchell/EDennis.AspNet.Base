@@ -8,7 +8,7 @@ namespace EDennis.NetStandard.Base {
 
     public class DomainIdentityDbContext : DomainIdentityDbContext<DomainUser, DomainRole>{
 
-        public DomainIdentityDbContext(DbContextOptions options) :
+        public DomainIdentityDbContext(DbContextOptions<DomainIdentityDbContext> options) :
             base(options) { }
     }
 
@@ -26,7 +26,7 @@ namespace EDennis.NetStandard.Base {
         where TRole : DomainRole{        
         
 
-        public DomainIdentityDbContext(DbContextOptions options) :
+        public DomainIdentityDbContext(DbContextOptions<DomainIdentityDbContext> options) :
             base(options) { }
 
 

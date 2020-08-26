@@ -66,7 +66,7 @@ namespace EDennis.NetStandard.Base {
             var project = assembly.GetName().Name;
 
             var controllerTypes = assembly.GetTypes()
-                .Where(type => typeof(ControllerBase).IsAssignableFrom(type));
+                .Where(type => typeof(ControllerBase).IsAssignableFrom(type) || typeof(Controller).IsAssignableFrom(type));
 
             var baseControllerMethods = GetBaseControllerMethods();
 
