@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -6,7 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\EDennis.AspNetIdentityServer\EDennis.AspNetIdentityServer.csproj" />
+    <!--<ProjectReference Include="..\..\EDennis.AspNetIdentityServer\EDennis.AspNetIdentityServer.csproj" />-->
+    <ProjectReference Include="..\..\EDennis.HostedBlazor.Base\EDennis.HostedBlazor.Base.csproj" />
     <ProjectReference Include="..\..\EDennis.NetStandard.Base\EDennis.NetStandard.Base.csproj" />
     <ProjectReference Include="..\Client\EDennis.Samples.ColorApp.Client.csproj" />
     <ProjectReference Include="..\Shared\EDennis.Samples.ColorApp.Shared.csproj" />

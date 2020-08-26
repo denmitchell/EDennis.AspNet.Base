@@ -9,7 +9,7 @@
     },
     "Rollback": {
       "commandName": "Project",
-      "commandLineArgs": "/EDennis.Samples.ColorApi /dump",
+      "commandLineArgs": "/EDennis.Samples.ColorApi /print",
       "applicationUrl": "https://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
@@ -23,9 +23,9 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "All": {
+    "Drop/Create/Commit All": {
       "commandName": "Project",
-      "commandLineArgs": "/all /dump",
+      "commandLineArgs": "/all /drop /migrate /commit /print",
       "applicationUrl": "https://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

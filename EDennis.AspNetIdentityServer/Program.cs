@@ -25,7 +25,8 @@ namespace EDennis.AspNetIdentityServer {
     public class Program {
 
         public const string CONFIGS_DIR = "Configs";
-        public const string DUMP_FILE = "DbDump.json";
+        public const string DBVIEW_DIR = "Logs";
+        public const string DBVIEW_FILE = "DbView.json";
         public static Regex FILE_PROJECT_EXTRACTOR = new Regex(@"(?<=Configs\\)([A-Za-z0-9_.]+)(?=\.json)");
         public const string IDENTITY_RESOURCES_FILE = "IdentityResources.json";
 
@@ -36,7 +37,7 @@ namespace EDennis.AspNetIdentityServer {
 
             //Debugger.Launch();
 
-            Log.Logger ??= new LoggerConfiguration()
+            Log.Logger = new LoggerConfiguration()
                 .GetLoggerFromConfiguration<Program>("Logging:Serilog");
 
             try {
@@ -44,7 +45,7 @@ namespace EDennis.AspNetIdentityServer {
                 var host = CreateHostBuilder(args).Build();
 
                 if (args.Contains("/migrate"))
-                    MigrateDb(host);
+                    MigrateDb(host, args);
 
                 var configs = Directory.EnumerateFiles(CONFIGS_DIR);
 
@@ -55,14 +56,14 @@ namespace EDennis.AspNetIdentityServer {
                 else
                     projects = args.Select(a => a[1..]).Where(a => configs.Contains($"{CONFIGS_DIR}\\{a}.json"));
 
-                var dump = args.Contains("/dump");
+                var print = args.Contains("/print");
                 var commit = args.Contains("/commit");
 
 
                 if (projects.Count() == 0)
                     host.Run();
                 else
-                    RunWithConfigs(host, projects, dump, commit);
+                    RunWithConfigs(host, projects, print, commit);
 
             } catch (Exception ex) {
                 Log.Fatal(ex, "Host terminated unexpectedly.");
@@ -71,7 +72,7 @@ namespace EDennis.AspNetIdentityServer {
 
         }
 
-        private static void RunWithConfigs(IHost host, IEnumerable<string> projects, bool dump, bool commit) {
+        private static void RunWithConfigs(IHost host, IEnumerable<string> projects, bool print, bool commit) {
 
             using var scope = host.Services.CreateScope();
             var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
@@ -87,11 +88,13 @@ namespace EDennis.AspNetIdentityServer {
 
             LoadConfigs(projects, cContext, diContext);
 
+            Log.Information("**Finished Loading Configurations.");
+
             if (commit)
                 trans.Commit();
 
-            if (dump)
-                DumpDb(host, diContext, trans);
+            if (print)
+                PrintDb(host, diContext, trans);
 
             host.Run();
 
@@ -101,11 +104,18 @@ namespace EDennis.AspNetIdentityServer {
 
         }
 
-        private static void MigrateDb(IHost host) {
+        private static void MigrateDb(IHost host, string[] args) {
 
             Log.Information("Migrating Database...");
 
             using var scope = host.Services.CreateScope();
+
+            if(args.Contains("/drop"))
+                scope.ServiceProvider
+                        .GetRequiredService<ConfigurationDbContext>()
+                        .Database
+                        .EnsureDeleted();
+
             scope.ServiceProvider
                     .GetRequiredService<ConfigurationDbContext>()
                     .Database
@@ -130,16 +140,19 @@ namespace EDennis.AspNetIdentityServer {
             if (typeof(TContext) == typeof(ConfigurationDbContext)) {
                 var options = new DbContextOptionsBuilder<ConfigurationDbContext>()
                     .UseSqlServer(cxn)
+                    .EnableSensitiveDataLogging(true)
                     .Options;
                 context = (TContext)Activator.CreateInstance(typeof(TContext), new object[] { options, new ConfigurationStoreOptions() });
             } else if (typeof(TContext) == typeof(PersistedGrantDbContext)) {
                 var options = new DbContextOptionsBuilder<PersistedGrantDbContext>()
                     .UseSqlServer(cxn)
+                    .EnableSensitiveDataLogging(true)
                     .Options;
                 context = (TContext)Activator.CreateInstance(typeof(TContext), new object[] { options, new OperationalStoreOptions() });
             } else {
                 var options = new DbContextOptionsBuilder()
                     .UseSqlServer(cxn)
+                    .EnableSensitiveDataLogging(true)
                     .Options;
                 context = (TContext)Activator.CreateInstance(typeof(TContext), new object[] { options });
             }
@@ -153,21 +166,21 @@ namespace EDennis.AspNetIdentityServer {
 
 
 
-        private static void DumpDb(IHost host, DomainIdentityDbContext context, SqlTransaction trans) {
+        private static void PrintDb(IHost host, DomainIdentityDbContext context, SqlTransaction trans) {
 
             Log.Information($"Dumping ApiResources, Clients, and Users to JSON file ...");
 
             using var scope = host.Services.CreateScope();
 
             var cxn = context.Database.GetDbConnection() as SqlConnection;
-            var cmd = new SqlCommand("select * from DbDump", cxn, trans);
+            var cmd = new SqlCommand("select * from DbView", cxn, trans);
             var result = cmd.ExecuteScalar();
             if (result != null) {
 
-                if (!Directory.Exists(CONFIGS_DIR))
-                    Directory.CreateDirectory(CONFIGS_DIR);
+                if (!Directory.Exists(DBVIEW_DIR))
+                    Directory.CreateDirectory(DBVIEW_DIR);
 
-                var path = $"{CONFIGS_DIR}\\{DUMP_FILE}";
+                var path = $"{DBVIEW_DIR}\\{DBVIEW_FILE}";
 
                 if (File.Exists(path))
                     File.Delete(path);
@@ -338,9 +351,9 @@ namespace EDennis.AspNetIdentityServer {
                     Log.Information($"\t\t\tAdding user record for {entry.Email} ...");
                     user = new DomainUser {
                         Email = entry.Email,
-                        NormalizedEmail = entry.Email.ToUpper(),
+                        NormalizedEmail = entry.Email,
                         UserName = entry.Email,
-                        NormalizedUserName = entry.Email.ToUpper(),
+                        NormalizedUserName = entry.Email,
                         EmailConfirmed = true
                     };
                     user.PasswordHash = HashPassword(entry.PlainTextPassword);

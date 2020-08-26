@@ -11,7 +11,7 @@ namespace EDennis.NetStandard.Base {
 
 
     public class DomainRoleManager : RoleManager<DomainRole> {
-        public DomainRoleManager(DomainRoleStore store, 
+        public DomainRoleManager(IRoleStore<DomainRole> store, 
             IEnumerable<IRoleValidator<DomainRole>> roleValidators, 
             ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors, 
             ILogger<RoleManager<DomainRole>> logger) 

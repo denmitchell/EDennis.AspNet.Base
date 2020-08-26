@@ -1,4 +1,5 @@
-﻿using EDennis.NetStandard.Base;
+﻿using EDennis.AspNetIdentityServer;
+using EDennis.NetStandard.Base;
 using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -7,10 +8,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
-namespace EDennis.AspNetIdentityServer {
-    public static class IServiceCollectionExtensions {
+namespace EDennis.HostedBlazor.Base {
+    public static class IServiceCollectionExtensions_Blazor {
 
         /// <summary>
         /// Configures ASP.NET Identity and built-in Identity Server for Blazor hosted applications.
@@ -40,10 +43,8 @@ namespace EDennis.AspNetIdentityServer {
 
             //Step 2: Add common ASP.NET Identity services, including default UI
             //replacing call to services.AddDefaultIdentity<DomainUser>(options => { options.SignIn.RequireConfirmedAccount = true; });
+            //services.AddDefaultIdentity<DomainUser>(options => { options.SignIn.RequireConfirmedAccount = true; });
 
-            services.AddDefaultIdentity<DomainUser>(options => { options.SignIn.RequireConfirmedAccount = true; });
-
-            
 
             //https://github.com/dotnet/aspnetcore/blob/bfec2c14be1e65f7dd361a43950d4c848ad0cd35/src/Identity/UI/src/IdentityServiceCollectionUIExtensions.cs
             services.AddAuthentication(o =>
@@ -77,8 +78,8 @@ namespace EDennis.AspNetIdentityServer {
 
             services.Configure(configureOptions);
 
-            
-            
+
+
 
             //explicitly instantiating IdentityBuilder in order to pass in
             //type of TUser and type of TRole
@@ -104,20 +105,14 @@ namespace EDennis.AspNetIdentityServer {
 
             services.ReplaceServiceImplementations<IUserClaimsPrincipalFactory<DomainUser>, DomainUserClaimsPrincipalFactory>(ServiceLifetime.Scoped);
 
-            
+
 
             var isBuilder = services.AddIdentityServer(config => { })
-                .AddApiAuthorization<DomainUser,PersistedGrantDbContext>()
-                //.AddAspNetIdentity<DomainUser>()
-                //.AddSigningCredentials()
-                .AddConfigurationStore<ConfigurationDbContext>(options =>
-                {
-                    new DefaultConfigurationStoreOptions().Load(options);
-                })
-                .AddOperationalStore<PersistedGrantDbContext>(options =>
-                {
-                    new DefaultOperationalStoreOptions().Load(options);
-                })
+                //.AddApiAuthorization<DomainUser, PersistedGrantDbContext>()
+                .AddAspNetIdentity<DomainUser>()
+                .AddSigningCredentials()
+                .AddConfigurationStore<ConfigurationDbContext>()
+                .AddOperationalStore<PersistedGrantDbContext>()
                 //Add the custom profile service, which uses the UserClientApplicationRole view
                 .AddProfileService<DomainIdentityProfileService>();
 
@@ -143,14 +138,14 @@ namespace EDennis.AspNetIdentityServer {
             var servicesToReplace = services.Where(s => s.ServiceType == typeof(IServiceType)).ToArray();
             for (int i = 0; i < servicesToReplace.Length; i++) {
                 var serviceToReplace = servicesToReplace[i];
-                if(serviceToReplace.ImplementationType != typeof(TReplacementImplementation)
+                if (serviceToReplace.ImplementationType != typeof(TReplacementImplementation)
                     || serviceToReplace.Lifetime != serviceLifeTime)
                     services.Remove(serviceToReplace);
             }
 
             //Register service, if not already registered
-            if (!services.Any(s => 
-                s.ServiceType == typeof(IServiceType) 
+            if (!services.Any(s =>
+                s.ServiceType == typeof(IServiceType)
                     && s.ImplementationType == typeof(TReplacementImplementation)
                     && s.Lifetime == serviceLifeTime)) {
                 switch (serviceLifeTime) {
@@ -170,4 +165,5 @@ namespace EDennis.AspNetIdentityServer {
 
 
     }
+
 }

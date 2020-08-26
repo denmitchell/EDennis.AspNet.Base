@@ -36,6 +36,34 @@
       "Scopes": [
         "EDennis.Samples.ColorApi.*"
       ]
+    },
+    {
+      "ClientId": "EDennis.Samples.ColorApp.Razor",
+      "RequireConsent": false,
+      "RequirePkce": true,
+      "AllowAccessTokensViaBrowser": false,
+      "AllowOfflineAccess": false,
+      "ClientClaimsPrefix": "",
+      "GrantTypes": [
+        "client_credentials"
+      ],
+      "Scopes": [
+        "EDennis.Samples.ColorApp.Razor.*"
+      ]
+    },
+    {
+      "ClientId": "EDennis.Samples.ColorApp.Server",
+      "RequireConsent": false,
+      "RequirePkce": true,
+      "AllowAccessTokensViaBrowser": false,
+      "AllowOfflineAccess": false,
+      "ClientClaimsPrefix": "",
+      "GrantTypes": [
+        "client_credentials"
+      ],
+      "Scopes": [
+        "EDennis.Samples.ColorApp.Server.*"
+      ]
     }
   ],
   "Users": [
@@ -47,6 +75,12 @@
       "LockoutEnabled": false,
       "Roles": {
         "EDennis.Samples.ColorApi": [
+          "Admin"
+        ],
+        "EDennis.Samples.ColorApp.Razor": [
+          "Admin"
+        ],
+        "EDennis.Samples.ColorApp.Server": [
           "Admin"
         ]
       },
@@ -68,6 +102,12 @@
       "Roles": {
         "EDennis.Samples.ColorApi": [
           "User"
+        ],
+        "EDennis.Samples.ColorApp.Razor": [
+          "User"
+        ],
+        "EDennis.Samples.ColorApp.Server": [
+          "User"
         ]
       },
       "Claims": {
@@ -87,6 +127,12 @@
       "LockoutEnabled": false,
       "Roles": {
         "EDennis.Samples.ColorApi": [
+          "Readonly"
+        ],
+        "EDennis.Samples.ColorApp.Razor": [
+          "Readonly"
+        ],
+        "EDennis.Samples.ColorApp.Server": [
           "Readonly"
         ]
       },

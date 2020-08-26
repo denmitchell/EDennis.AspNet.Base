@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 
-namespace EDennis.NetStandard.Base.Security.AspNetIdentity.Utils {
+namespace EDennis.NetStandard.Base {
 
     public enum IdpConfigType {
         ClientCredentials,

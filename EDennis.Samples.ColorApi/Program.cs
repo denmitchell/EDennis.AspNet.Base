@@ -1,5 +1,4 @@
 using EDennis.NetStandard.Base;
-using EDennis.NetStandard.Base.Security.AspNetIdentity.Utils;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Serilog;

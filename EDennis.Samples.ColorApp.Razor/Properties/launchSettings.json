@@ -28,6 +28,13 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
+    "IdpConfig": {
+      "commandName": "Project",
+      "commandLineArgs": "/idp-config",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,

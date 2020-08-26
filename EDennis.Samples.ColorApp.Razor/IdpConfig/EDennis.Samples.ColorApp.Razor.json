@@ -1,0 +1,84 @@
+{
+  "ApiResources": [
+    {
+      "Name": "EDennis.Samples.ColorApp.Razor",
+      "Scopes": [
+        "EDennis.Samples.ColorApp.Razor.*",
+        "EDennis.Samples.ColorApp.Razor.*.Get*",
+        "EDennis.Samples.ColorApp.Razor.*.Post*",
+        "EDennis.Samples.ColorApp.Razor.*.Put*",
+        "EDennis.Samples.ColorApp.Razor.*.Patch*",
+        "EDennis.Samples.ColorApp.Razor.*.Delete*"
+      ],
+      "UserClaims": [
+        "name",
+        "phone",
+        "role"
+      ]
+    }
+  ],
+  "Clients": [
+    {
+      "Authority": "https://localhost:5000",
+      "ClientId": "EDennis.Samples.ColorApp.Razor",
+      "PlainTextSecret": "secret",
+      "AllowedGrantTypes": [
+        "client_credentials"
+      ],
+      "ClientClaimsPrefix": "",
+      "AllowedScopes": [
+        "EDennis.Samples.ColorApp.Razor.*"
+      ]
+    }
+  ],
+  "TestUsers": [
+    {
+      "Email": "admin1@.test",
+      "PlainTextPassword": "test",
+      "Organization": "a.test",
+      "Roles": [
+        "Admin"
+      ],
+      "Claims": {
+        "name": [
+          "Maria"
+        ],
+        "phone": [
+          "999.555.1212"
+        ]
+      }
+    },
+    {
+      "Email": "darius@b.test",
+      "PlainTextPassword": "test",
+      "Organization": "b.test",
+      "Roles": [
+        "User"
+      ],
+      "Claims": {
+        "name": [
+          "Darius"
+        ],
+        "phone": [
+          "888.555.1212"
+        ]
+      }
+    },
+    {
+      "Email": "pat@c.test",
+      "PlainTextPassword": "test",
+      "Organization": "c.test",
+      "Roles": [
+        "Readonly"
+      ],
+      "Claims": {
+        "name": [
+          "Pat"
+        ],
+        "phone": [
+          "777.555.1212"
+        ]
+      }
+    }
+  ]
+}

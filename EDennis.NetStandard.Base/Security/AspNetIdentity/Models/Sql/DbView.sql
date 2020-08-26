@@ -8,7 +8,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE OR ALTER VIEW [dbo].[DbDump] AS
+CREATE OR ALTER VIEW [dbo].[DbView] AS
 SELECT('{' + STUFF((
 SELECT 
 	JSON_QUERY(
@@ -81,10 +81,6 @@ SELECT
 							FOR XML PATH('')),1,1,'') + '}' ) as Claims
 	
 				FROM dbo.AspNetUsers u
-				INNER JOIN dbo.AspNetUserRoles ur
-					ON ur.UserId = u.Id
-				INNER JOIN dbo.AspNetRoles r
-					ON ur.RoleId = r.Id
 	
 				FOR JSON PATH),1,1,'')
 								+ ']') Users

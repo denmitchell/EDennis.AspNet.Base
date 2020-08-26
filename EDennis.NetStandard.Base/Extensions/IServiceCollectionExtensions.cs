@@ -31,7 +31,6 @@ namespace EDennis.NetStandard.Base {
             var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
             var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", true, true)
                 .AddJsonFile($"appsettings.{env}.json", true, true)
                 .Build();

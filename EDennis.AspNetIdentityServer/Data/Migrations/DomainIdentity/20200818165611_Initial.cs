@@ -234,7 +234,7 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
             migrationBuilder.Sql(File.ReadAllText("Data/Sql/UserClientApplicationRoles.sql"));
             migrationBuilder.Sql(File.ReadAllText("Data/Sql/FkRolesApplications.sql"));
             migrationBuilder.Sql(File.ReadAllText("Data/Sql/FkUsersOrganizations.sql"));
-            migrationBuilder.Sql(File.ReadAllText("Data/Sql/DbDump.sql"));
+            migrationBuilder.Sql(File.ReadAllText("Data/Sql/DbView.sql"));
 
         }
 
