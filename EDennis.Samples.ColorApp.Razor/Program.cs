@@ -12,7 +12,7 @@ namespace EDennis.Samples.ColorApp.Razor {
 
             if (args.Contains("/idp-config")) {
                 Log.Information("Generating IDP Config file...");
-                ConfigStubGenerator.GenerateIdpConfigStub<Startup>(5000, 44341, IdpConfigType.ClientCredentials);
+                ConfigStubGenerator.GenerateIdpConfigStub<Startup>(5000, 44305, IdpConfigType.AuthorizationCode);
                 Log.Information("Exiting...");
                 return;
             }

@@ -47,4 +47,18 @@
 	  <ProjectReference Include="..\EDennis.NetStandard.Base\EDennis.NetStandard.Base.csproj" />
 	</ItemGroup>
 
+
+	<ItemGroup>
+	  <Content Update="Configs\EDennis.Samples.ColorApp.Razor.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="Configs\EDennis.Samples.ColorApp.Server.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	</ItemGroup>
+
 </Project>

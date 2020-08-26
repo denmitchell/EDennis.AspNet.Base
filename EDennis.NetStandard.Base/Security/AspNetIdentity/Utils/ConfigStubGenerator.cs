@@ -19,7 +19,7 @@ namespace EDennis.NetStandard.Base {
         public const string DEFAULT_SECRET = "secret";
         public const string DEFAULT_CLIENT_CLAIMS_PREFIX = "";
 
-        public readonly static List<TestUser> DEFAULT_USERS 
+        public readonly static List<TestUser> DEFAULT_USERS
             = new List<TestUser> {
                 new TestUser {
                     Email = "admin1@.test",
@@ -72,7 +72,7 @@ namespace EDennis.NetStandard.Base {
             var userClaims = users.SelectMany(u => u.Claims)
                 .Select(u => u.Key)
                 .Distinct()
-                .Union(new string[]{ "role" })
+                .Union(new string[] { "role" })
                 .ToList();
 
             var path = $"{OUTPUT_DIR}\\{project}.json";
@@ -106,7 +106,7 @@ namespace EDennis.NetStandard.Base {
         private static void WriteTestUsersSection(Utf8JsonWriter jw, IEnumerable<TestUser> testUsers) {
             jw.WriteStartArray("TestUsers");
             {
-                foreach(var user in testUsers) {
+                foreach (var user in testUsers) {
                     jw.WriteStartObject();
                     {
                         jw.WriteString("Email", user.Email);
@@ -114,7 +114,7 @@ namespace EDennis.NetStandard.Base {
                         jw.WriteString("Organization", user.Organization);
                         jw.WriteStartArray("Roles");
                         {
-                            foreach(var role in user.Roles) {
+                            foreach (var role in user.Roles) {
                                 jw.WriteStringValue(role);
                             }
                         }
@@ -124,7 +124,7 @@ namespace EDennis.NetStandard.Base {
                             foreach (var claimType in user.Claims.Keys) {
                                 jw.WriteStartArray(claimType);
                                 {
-                                    foreach(var claimValue in user.Claims[claimType]) {
+                                    foreach (var claimValue in user.Claims[claimType]) {
                                         jw.WriteStringValue(claimValue);
                                     }
                                 }
@@ -139,7 +139,7 @@ namespace EDennis.NetStandard.Base {
             jw.WriteEndArray();
         }
 
-            private static void WriteApiResourceSection(Utf8JsonWriter jw, string project, List<string> scopes, List<string> userClaims) {
+        private static void WriteApiResourceSection(Utf8JsonWriter jw, string project, List<string> scopes, List<string> userClaims) {
 
             jw.WriteStartArray("ApiResources");
             {
@@ -197,35 +197,37 @@ namespace EDennis.NetStandard.Base {
                 jw.WriteStartObject();
                 {
                     jw.WriteString("Authority", idpUrl);
-                jw.WriteString("ClientId", project);
-                jw.WriteString("PlainTextSecret", DEFAULT_SECRET);
-                jw.WriteStartArray("AllowedGrantTypes");
-                {
-                    jw.WriteStringValue("code");
-                }
-                jw.WriteEndArray();
-                jw.WriteBoolean("RequireConsent", false);
-                jw.WriteBoolean("RequirePkce", true);
-                jw.WriteBoolean("AllowOfflineAccess", true);
-                jw.WriteString("ClientClaimsPrefix", DEFAULT_CLIENT_CLAIMS_PREFIX);
-                jw.WriteStartArray("AllowedScopes");
-                {
-                    jw.WriteStringValue($"{project}.*");
-                    jw.WriteStringValue("openid");
-                    jw.WriteStringValue("profile");
-                    jw.WriteStringValue("name");
-                    jw.WriteStringValue("email");
-                    jw.WriteStringValue("role");
-                }
-                jw.WriteEndArray();
-                jw.WriteStartArray("RedirectUris");
-                {
-                    jw.WriteStringValue($"http://localhost:{apiUrl}/signin-oidc");
-                }
-                jw.WriteStartArray("PostLogoutRedirectUris");
-                {
-                    jw.WriteStringValue($"http://localhost:{apiUrl}/signout-callback-oidc");
-                }
+                    jw.WriteString("ClientId", project);
+                    jw.WriteString("PlainTextSecret", DEFAULT_SECRET);
+                    jw.WriteStartArray("AllowedGrantTypes");
+                    {
+                        jw.WriteStringValue("code");
+                    }
+                    jw.WriteEndArray();
+                    jw.WriteBoolean("RequireConsent", false);
+                    jw.WriteBoolean("RequirePkce", true);
+                    jw.WriteBoolean("AllowOfflineAccess", true);
+                    jw.WriteString("ClientClaimsPrefix", DEFAULT_CLIENT_CLAIMS_PREFIX);
+                    jw.WriteStartArray("AllowedScopes");
+                    {
+                        jw.WriteStringValue($"{project}.*");
+                        jw.WriteStringValue("openid");
+                        jw.WriteStringValue("profile");
+                        jw.WriteStringValue("name");
+                        jw.WriteStringValue("email");
+                        jw.WriteStringValue("role");
+                    }
+                    jw.WriteEndArray();
+                    jw.WriteStartArray("RedirectUris");
+                    {
+                        jw.WriteStringValue($"{apiUrl}/signin-oidc");
+                    }
+                    jw.WriteEndArray();
+                    jw.WriteStartArray("PostLogoutRedirectUris");
+                    {
+                        jw.WriteStringValue($"{apiUrl}/signout-callback-oidc");
+                    }
+                    jw.WriteEndArray();
                 }
                 jw.WriteEndObject();
             }
@@ -261,8 +263,8 @@ namespace EDennis.NetStandard.Base {
                 scopes.Add($"{project}.{controller}.Put*");
                 scopes.Add($"{project}.{controller}.Patch*");
                 scopes.Add($"{project}.{controller}.Delete*");
-                var actions = models[controller].Where(a => 
-                    !a.StartsWith("Get") && 
+                var actions = models[controller].Where(a =>
+                    !a.StartsWith("Get") &&
                     !a.StartsWith("Post") &&
                     !a.StartsWith("Put") &&
                     !a.StartsWith("Patch") &&

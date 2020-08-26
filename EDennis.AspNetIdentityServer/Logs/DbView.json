@@ -42,12 +42,23 @@
       "RequireConsent": false,
       "RequirePkce": true,
       "AllowAccessTokensViaBrowser": false,
-      "AllowOfflineAccess": false,
+      "AllowOfflineAccess": true,
       "ClientClaimsPrefix": "",
       "GrantTypes": [
-        "client_credentials"
+        "code"
+      ],
+      "RedirectUris": [
+        "https://localhost:44305/signin-oidc"
+      ],
+      "PostLogoutRedirectUris": [
+        "https://localhost:44305/signout-callback-oidc"
       ],
       "Scopes": [
+        "role",
+        "email",
+        "name",
+        "profile",
+        "openid",
         "EDennis.Samples.ColorApp.Razor.*"
       ]
     },
@@ -56,12 +67,23 @@
       "RequireConsent": false,
       "RequirePkce": true,
       "AllowAccessTokensViaBrowser": false,
-      "AllowOfflineAccess": false,
+      "AllowOfflineAccess": true,
       "ClientClaimsPrefix": "",
       "GrantTypes": [
-        "client_credentials"
+        "code"
+      ],
+      "RedirectUris": [
+        "https://localhost:44336/signin-oidc"
+      ],
+      "PostLogoutRedirectUris": [
+        "https://localhost:44336/signout-callback-oidc"
       ],
       "Scopes": [
+        "role",
+        "email",
+        "name",
+        "profile",
+        "openid",
         "EDennis.Samples.ColorApp.Server.*"
       ]
     }

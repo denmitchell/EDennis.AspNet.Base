@@ -4771,3 +4771,1595 @@ VALUES (N'20200818165611_Initial', N'3.1.7');
 2020-08-26 08:40:04.327 -04:00 [INF] Application started. Press Ctrl+C to shut down.
 2020-08-26 08:40:04.328 -04:00 [INF] Hosting environment: Development
 2020-08-26 08:40:04.329 -04:00 [INF] Content root path: C:\Users\denmi\source\repos\denmitchell\EDennis.AspNet.Base\EDennis.AspNetIdentityServer
+2020-08-26 08:50:40.633 -04:00 [INF] Starting host...
+2020-08-26 08:50:42.278 -04:00 [INF] Migrating Database...
+2020-08-26 08:50:43.455 -04:00 [INF] Entity Framework Core 3.1.7 initialized 'ConfigurationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: MigrationsAssembly=EDennis.AspNetIdentityServer 
+2020-08-26 08:50:43.962 -04:00 [INF] Executed DbCommand (26ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2020-08-26 08:50:44.032 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [AspNetIdentityServer] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+END;
+2020-08-26 08:50:44.064 -04:00 [INF] Executed DbCommand (29ms) [Parameters=[], CommandType='"Text"', CommandTimeout='60']
+DROP DATABASE [AspNetIdentityServer];
+2020-08-26 08:50:54.351 -04:00 [INF] Executed DbCommand (251ms) [Parameters=[], CommandType='"Text"', CommandTimeout='60']
+CREATE DATABASE [AspNetIdentityServer];
+2020-08-26 08:50:54.426 -04:00 [INF] Executed DbCommand (71ms) [Parameters=[], CommandType='"Text"', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [AspNetIdentityServer] SET READ_COMMITTED_SNAPSHOT ON;
+END;
+2020-08-26 08:50:54.436 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2020-08-26 08:50:54.583 -04:00 [INF] Executed DbCommand (12ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [__EFMigrationsHistory] (
+    [MigrationId] nvarchar(150) NOT NULL,
+    [ProductVersion] nvarchar(32) NOT NULL,
+    CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+);
+2020-08-26 08:50:54.588 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2020-08-26 08:50:54.615 -04:00 [INF] Executed DbCommand (21ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2020-08-26 08:50:54.628 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2020-08-26 08:50:54.668 -04:00 [INF] Applying migration '20200818143842_Initial'.
+2020-08-26 08:50:54.804 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ApiResources] (
+    [Id] int NOT NULL IDENTITY,
+    [Enabled] bit NOT NULL,
+    [Name] nvarchar(200) NOT NULL,
+    [DisplayName] nvarchar(200) NULL,
+    [Description] nvarchar(1000) NULL,
+    [AllowedAccessTokenSigningAlgorithms] nvarchar(100) NULL,
+    [ShowInDiscoveryDocument] bit NOT NULL,
+    [Created] datetime2 NOT NULL,
+    [Updated] datetime2 NULL,
+    [LastAccessed] datetime2 NULL,
+    [NonEditable] bit NOT NULL,
+    CONSTRAINT [PK_ApiResources] PRIMARY KEY ([Id])
+);
+2020-08-26 08:50:54.813 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ApiScopes] (
+    [Id] int NOT NULL IDENTITY,
+    [Enabled] bit NOT NULL,
+    [Name] nvarchar(200) NOT NULL,
+    [DisplayName] nvarchar(200) NULL,
+    [Description] nvarchar(1000) NULL,
+    [Required] bit NOT NULL,
+    [Emphasize] bit NOT NULL,
+    [ShowInDiscoveryDocument] bit NOT NULL,
+    CONSTRAINT [PK_ApiScopes] PRIMARY KEY ([Id])
+);
+2020-08-26 08:50:54.824 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Clients] (
+    [Id] int NOT NULL IDENTITY,
+    [Enabled] bit NOT NULL,
+    [ClientId] nvarchar(200) NOT NULL,
+    [ProtocolType] nvarchar(200) NOT NULL,
+    [RequireClientSecret] bit NOT NULL,
+    [ClientName] nvarchar(200) NULL,
+    [Description] nvarchar(1000) NULL,
+    [ClientUri] nvarchar(2000) NULL,
+    [LogoUri] nvarchar(2000) NULL,
+    [RequireConsent] bit NOT NULL,
+    [AllowRememberConsent] bit NOT NULL,
+    [AlwaysIncludeUserClaimsInIdToken] bit NOT NULL,
+    [RequirePkce] bit NOT NULL,
+    [AllowPlainTextPkce] bit NOT NULL,
+    [RequireRequestObject] bit NOT NULL,
+    [AllowAccessTokensViaBrowser] bit NOT NULL,
+    [FrontChannelLogoutUri] nvarchar(2000) NULL,
+    [FrontChannelLogoutSessionRequired] bit NOT NULL,
+    [BackChannelLogoutUri] nvarchar(2000) NULL,
+    [BackChannelLogoutSessionRequired] bit NOT NULL,
+    [AllowOfflineAccess] bit NOT NULL,
+    [IdentityTokenLifetime] int NOT NULL,
+    [AllowedIdentityTokenSigningAlgorithms] nvarchar(100) NULL,
+    [AccessTokenLifetime] int NOT NULL,
+    [AuthorizationCodeLifetime] int NOT NULL,
+    [ConsentLifetime] int NULL,
+    [AbsoluteRefreshTokenLifetime] int NOT NULL,
+    [SlidingRefreshTokenLifetime] int NOT NULL,
+    [RefreshTokenUsage] int NOT NULL,
+    [UpdateAccessTokenClaimsOnRefresh] bit NOT NULL,
+    [RefreshTokenExpiration] int NOT NULL,
+    [AccessTokenType] int NOT NULL,
+    [EnableLocalLogin] bit NOT NULL,
+    [IncludeJwtId] bit NOT NULL,
+    [AlwaysSendClientClaims] bit NOT NULL,
+    [ClientClaimsPrefix] nvarchar(200) NULL,
+    [PairWiseSubjectSalt] nvarchar(200) NULL,
+    [Created] datetime2 NOT NULL,
+    [Updated] datetime2 NULL,
+    [LastAccessed] datetime2 NULL,
+    [UserSsoLifetime] int NULL,
+    [UserCodeType] nvarchar(100) NULL,
+    [DeviceCodeLifetime] int NOT NULL,
+    [NonEditable] bit NOT NULL,
+    CONSTRAINT [PK_Clients] PRIMARY KEY ([Id])
+);
+2020-08-26 08:50:54.835 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [IdentityResources] (
+    [Id] int NOT NULL IDENTITY,
+    [Enabled] bit NOT NULL,
+    [Name] nvarchar(200) NOT NULL,
+    [DisplayName] nvarchar(200) NULL,
+    [Description] nvarchar(1000) NULL,
+    [Required] bit NOT NULL,
+    [Emphasize] bit NOT NULL,
+    [ShowInDiscoveryDocument] bit NOT NULL,
+    [Created] datetime2 NOT NULL,
+    [Updated] datetime2 NULL,
+    [NonEditable] bit NOT NULL,
+    CONSTRAINT [PK_IdentityResources] PRIMARY KEY ([Id])
+);
+2020-08-26 08:50:54.845 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ApiResourceClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [Type] nvarchar(200) NOT NULL,
+    [ApiResourceId] int NOT NULL,
+    CONSTRAINT [PK_ApiResourceClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ApiResourceClaims_ApiResources_ApiResourceId] FOREIGN KEY ([ApiResourceId]) REFERENCES [ApiResources] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:50:54.850 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ApiResourceProperties] (
+    [Id] int NOT NULL IDENTITY,
+    [Key] nvarchar(250) NOT NULL,
+    [Value] nvarchar(2000) NOT NULL,
+    [ApiResourceId] int NOT NULL,
+    CONSTRAINT [PK_ApiResourceProperties] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ApiResourceProperties_ApiResources_ApiResourceId] FOREIGN KEY ([ApiResourceId]) REFERENCES [ApiResources] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:50:54.858 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ApiResourceScopes] (
+    [Id] int NOT NULL IDENTITY,
+    [Scope] nvarchar(200) NOT NULL,
+    [ApiResourceId] int NOT NULL,
+    CONSTRAINT [PK_ApiResourceScopes] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ApiResourceScopes_ApiResources_ApiResourceId] FOREIGN KEY ([ApiResourceId]) REFERENCES [ApiResources] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:50:54.869 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ApiResourceSecrets] (
+    [Id] int NOT NULL IDENTITY,
+    [Description] nvarchar(1000) NULL,
+    [Value] nvarchar(4000) NOT NULL,
+    [Expiration] datetime2 NULL,
+    [Type] nvarchar(250) NOT NULL,
+    [Created] datetime2 NOT NULL,
+    [ApiResourceId] int NOT NULL,
+    CONSTRAINT [PK_ApiResourceSecrets] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ApiResourceSecrets_ApiResources_ApiResourceId] FOREIGN KEY ([ApiResourceId]) REFERENCES [ApiResources] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:50:54.877 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ApiScopeClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [Type] nvarchar(200) NOT NULL,
+    [ScopeId] int NOT NULL,
+    CONSTRAINT [PK_ApiScopeClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ApiScopeClaims_ApiScopes_ScopeId] FOREIGN KEY ([ScopeId]) REFERENCES [ApiScopes] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:50:54.884 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ApiScopeProperties] (
+    [Id] int NOT NULL IDENTITY,
+    [Key] nvarchar(250) NOT NULL,
+    [Value] nvarchar(2000) NOT NULL,
+    [ScopeId] int NOT NULL,
+    CONSTRAINT [PK_ApiScopeProperties] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ApiScopeProperties_ApiScopes_ScopeId] FOREIGN KEY ([ScopeId]) REFERENCES [ApiScopes] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:50:54.890 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ClientClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [Type] nvarchar(250) NOT NULL,
+    [Value] nvarchar(250) NOT NULL,
+    [ClientId] int NOT NULL,
+    CONSTRAINT [PK_ClientClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ClientClaims_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Clients] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:50:54.895 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ClientCorsOrigins] (
+    [Id] int NOT NULL IDENTITY,
+    [Origin] nvarchar(150) NOT NULL,
+    [ClientId] int NOT NULL,
+    CONSTRAINT [PK_ClientCorsOrigins] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ClientCorsOrigins_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Clients] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:50:54.907 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ClientGrantTypes] (
+    [Id] int NOT NULL IDENTITY,
+    [GrantType] nvarchar(250) NOT NULL,
+    [ClientId] int NOT NULL,
+    CONSTRAINT [PK_ClientGrantTypes] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ClientGrantTypes_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Clients] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:50:54.913 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ClientIdPRestrictions] (
+    [Id] int NOT NULL IDENTITY,
+    [Provider] nvarchar(200) NOT NULL,
+    [ClientId] int NOT NULL,
+    CONSTRAINT [PK_ClientIdPRestrictions] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ClientIdPRestrictions_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Clients] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:50:54.924 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ClientPostLogoutRedirectUris] (
+    [Id] int NOT NULL IDENTITY,
+    [PostLogoutRedirectUri] nvarchar(2000) NOT NULL,
+    [ClientId] int NOT NULL,
+    CONSTRAINT [PK_ClientPostLogoutRedirectUris] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ClientPostLogoutRedirectUris_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Clients] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:50:54.935 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ClientProperties] (
+    [Id] int NOT NULL IDENTITY,
+    [Key] nvarchar(250) NOT NULL,
+    [Value] nvarchar(2000) NOT NULL,
+    [ClientId] int NOT NULL,
+    CONSTRAINT [PK_ClientProperties] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ClientProperties_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Clients] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:50:54.941 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ClientRedirectUris] (
+    [Id] int NOT NULL IDENTITY,
+    [RedirectUri] nvarchar(2000) NOT NULL,
+    [ClientId] int NOT NULL,
+    CONSTRAINT [PK_ClientRedirectUris] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ClientRedirectUris_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Clients] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:50:54.949 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ClientScopes] (
+    [Id] int NOT NULL IDENTITY,
+    [Scope] nvarchar(200) NOT NULL,
+    [ClientId] int NOT NULL,
+    CONSTRAINT [PK_ClientScopes] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ClientScopes_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Clients] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:50:54.958 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ClientSecrets] (
+    [Id] int NOT NULL IDENTITY,
+    [Description] nvarchar(2000) NULL,
+    [Value] nvarchar(4000) NOT NULL,
+    [Expiration] datetime2 NULL,
+    [Type] nvarchar(250) NOT NULL,
+    [Created] datetime2 NOT NULL,
+    [ClientId] int NOT NULL,
+    CONSTRAINT [PK_ClientSecrets] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ClientSecrets_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Clients] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:50:54.966 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [IdentityResourceClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [Type] nvarchar(200) NOT NULL,
+    [IdentityResourceId] int NOT NULL,
+    CONSTRAINT [PK_IdentityResourceClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_IdentityResourceClaims_IdentityResources_IdentityResourceId] FOREIGN KEY ([IdentityResourceId]) REFERENCES [IdentityResources] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:50:54.972 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [IdentityResourceProperties] (
+    [Id] int NOT NULL IDENTITY,
+    [Key] nvarchar(250) NOT NULL,
+    [Value] nvarchar(2000) NOT NULL,
+    [IdentityResourceId] int NOT NULL,
+    CONSTRAINT [PK_IdentityResourceProperties] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_IdentityResourceProperties_IdentityResources_IdentityResourceId] FOREIGN KEY ([IdentityResourceId]) REFERENCES [IdentityResources] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:50:54.980 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ApiResourceClaims_ApiResourceId] ON [ApiResourceClaims] ([ApiResourceId]);
+2020-08-26 08:50:54.984 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ApiResourceProperties_ApiResourceId] ON [ApiResourceProperties] ([ApiResourceId]);
+2020-08-26 08:50:54.988 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_ApiResources_Name] ON [ApiResources] ([Name]);
+2020-08-26 08:50:54.993 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ApiResourceScopes_ApiResourceId] ON [ApiResourceScopes] ([ApiResourceId]);
+2020-08-26 08:50:54.996 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ApiResourceSecrets_ApiResourceId] ON [ApiResourceSecrets] ([ApiResourceId]);
+2020-08-26 08:50:55.002 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ApiScopeClaims_ScopeId] ON [ApiScopeClaims] ([ScopeId]);
+2020-08-26 08:50:55.006 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ApiScopeProperties_ScopeId] ON [ApiScopeProperties] ([ScopeId]);
+2020-08-26 08:50:55.016 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_ApiScopes_Name] ON [ApiScopes] ([Name]);
+2020-08-26 08:50:55.023 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ClientClaims_ClientId] ON [ClientClaims] ([ClientId]);
+2020-08-26 08:50:55.028 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ClientCorsOrigins_ClientId] ON [ClientCorsOrigins] ([ClientId]);
+2020-08-26 08:50:55.034 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ClientGrantTypes_ClientId] ON [ClientGrantTypes] ([ClientId]);
+2020-08-26 08:50:55.039 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ClientIdPRestrictions_ClientId] ON [ClientIdPRestrictions] ([ClientId]);
+2020-08-26 08:50:55.044 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ClientPostLogoutRedirectUris_ClientId] ON [ClientPostLogoutRedirectUris] ([ClientId]);
+2020-08-26 08:50:55.048 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ClientProperties_ClientId] ON [ClientProperties] ([ClientId]);
+2020-08-26 08:50:55.054 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ClientRedirectUris_ClientId] ON [ClientRedirectUris] ([ClientId]);
+2020-08-26 08:50:55.059 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Clients_ClientId] ON [Clients] ([ClientId]);
+2020-08-26 08:50:55.066 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ClientScopes_ClientId] ON [ClientScopes] ([ClientId]);
+2020-08-26 08:50:55.074 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ClientSecrets_ClientId] ON [ClientSecrets] ([ClientId]);
+2020-08-26 08:50:55.078 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_IdentityResourceClaims_IdentityResourceId] ON [IdentityResourceClaims] ([IdentityResourceId]);
+2020-08-26 08:50:55.085 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_IdentityResourceProperties_IdentityResourceId] ON [IdentityResourceProperties] ([IdentityResourceId]);
+2020-08-26 08:50:55.091 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_IdentityResources_Name] ON [IdentityResources] ([Name]);
+2020-08-26 08:50:55.097 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200818143842_Initial', N'3.1.7');
+2020-08-26 08:50:55.140 -04:00 [INF] Entity Framework Core 3.1.7 initialized 'PersistedGrantDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: MigrationsAssembly=EDennis.AspNetIdentityServer 
+2020-08-26 08:50:55.168 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2020-08-26 08:50:55.183 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2020-08-26 08:50:55.192 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2020-08-26 08:50:55.205 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2020-08-26 08:50:55.219 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2020-08-26 08:50:55.230 -04:00 [INF] Applying migration '20200818144238_Initial'.
+2020-08-26 08:50:55.252 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [DeviceCodes] (
+    [UserCode] nvarchar(200) NOT NULL,
+    [DeviceCode] nvarchar(200) NOT NULL,
+    [SubjectId] nvarchar(200) NULL,
+    [SessionId] nvarchar(100) NULL,
+    [ClientId] nvarchar(200) NOT NULL,
+    [Description] nvarchar(200) NULL,
+    [CreationTime] datetime2 NOT NULL,
+    [Expiration] datetime2 NOT NULL,
+    [Data] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_DeviceCodes] PRIMARY KEY ([UserCode])
+);
+2020-08-26 08:50:55.263 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [PersistedGrants] (
+    [Key] nvarchar(200) NOT NULL,
+    [Type] nvarchar(50) NOT NULL,
+    [SubjectId] nvarchar(200) NULL,
+    [SessionId] nvarchar(100) NULL,
+    [ClientId] nvarchar(200) NOT NULL,
+    [Description] nvarchar(200) NULL,
+    [CreationTime] datetime2 NOT NULL,
+    [Expiration] datetime2 NULL,
+    [ConsumedTime] datetime2 NULL,
+    [Data] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_PersistedGrants] PRIMARY KEY ([Key])
+);
+2020-08-26 08:50:55.272 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_DeviceCodes_DeviceCode] ON [DeviceCodes] ([DeviceCode]);
+2020-08-26 08:50:55.275 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_DeviceCodes_Expiration] ON [DeviceCodes] ([Expiration]);
+2020-08-26 08:50:55.282 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_PersistedGrants_Expiration] ON [PersistedGrants] ([Expiration]);
+2020-08-26 08:50:55.286 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_PersistedGrants_SubjectId_ClientId_Type] ON [PersistedGrants] ([SubjectId], [ClientId], [Type]);
+2020-08-26 08:50:55.291 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_PersistedGrants_SubjectId_SessionId_Type] ON [PersistedGrants] ([SubjectId], [SessionId], [Type]);
+2020-08-26 08:50:55.295 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200818144238_Initial', N'3.1.7');
+2020-08-26 08:50:55.470 -04:00 [INF] Entity Framework Core 3.1.7 initialized 'DomainIdentityDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: MigrationsAssembly=EDennis.AspNetIdentityServer 
+2020-08-26 08:50:55.474 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2020-08-26 08:50:55.478 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2020-08-26 08:50:55.486 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2020-08-26 08:50:55.490 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2020-08-26 08:50:55.497 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2020-08-26 08:50:55.501 -04:00 [INF] Applying migration '20200818165611_Initial'.
+2020-08-26 08:50:55.595 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE SEQUENCE [seqAspNetApplications] AS int START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE NO CYCLE;
+2020-08-26 08:50:55.600 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE SEQUENCE [seqAspNetOrganizations] AS int START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE NO CYCLE;
+2020-08-26 08:50:55.613 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetApplications] (
+    [Name] varchar(200) NOT NULL DEFAULT (next value for seqAspNetApplications),
+    [SysUser] nvarchar(150) NULL,
+    [SysStatus] tinyint NOT NULL DEFAULT CAST(0 AS tinyint),
+    CONSTRAINT [PK_AspNetApplications] PRIMARY KEY ([Name])
+);
+2020-08-26 08:50:55.622 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetOrganizations] (
+    [Name] varchar(200) NOT NULL DEFAULT (next value for seqAspNetOrganizations),
+    [SysUser] nvarchar(150) NULL,
+    [SysStatus] tinyint NOT NULL DEFAULT CAST(0 AS tinyint),
+    CONSTRAINT [PK_AspNetOrganizations] PRIMARY KEY ([Name])
+);
+2020-08-26 08:50:55.628 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetRoles] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(256) NULL,
+    [NormalizedName] nvarchar(256) NULL,
+    [ConcurrencyStamp] nvarchar(max) NULL,
+    [Application] varchar(200) NOT NULL,
+    CONSTRAINT [PK_AspNetRoles] PRIMARY KEY ([Id])
+);
+2020-08-26 08:50:55.638 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetUsers] (
+    [Id] int NOT NULL IDENTITY,
+    [UserName] nvarchar(256) NULL,
+    [NormalizedUserName] nvarchar(256) NULL,
+    [Email] nvarchar(256) NULL,
+    [NormalizedEmail] nvarchar(256) NULL,
+    [EmailConfirmed] bit NOT NULL,
+    [PasswordHash] nvarchar(max) NULL,
+    [SecurityStamp] nvarchar(max) NULL,
+    [ConcurrencyStamp] nvarchar(max) NULL,
+    [PhoneNumber] nvarchar(max) NULL,
+    [PhoneNumberConfirmed] bit NOT NULL,
+    [TwoFactorEnabled] bit NOT NULL,
+    [AccessFailedCount] int NOT NULL,
+    [LockoutEnabled] bit NOT NULL,
+    [LockoutBegin] datetimeoffset NULL,
+    [LockoutEnd] datetimeoffset NULL,
+    [Organization] varchar(200) NULL,
+    CONSTRAINT [PK_AspNetUsers] PRIMARY KEY ([Id])
+);
+2020-08-26 08:50:55.647 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetRoleClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [RoleId] int NOT NULL,
+    [ClaimType] nvarchar(max) NULL,
+    [ClaimValue] nvarchar(max) NULL,
+    CONSTRAINT [PK_AspNetRoleClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_AspNetRoleClaims_AspNetRoles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [AspNetRoles] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:50:55.658 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetUserClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [UserId] int NOT NULL,
+    [ClaimType] nvarchar(max) NULL,
+    [ClaimValue] nvarchar(max) NULL,
+    CONSTRAINT [PK_AspNetUserClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_AspNetUserClaims_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:50:55.665 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetUserLogins] (
+    [LoginProvider] nvarchar(450) NOT NULL,
+    [ProviderKey] nvarchar(450) NOT NULL,
+    [ProviderDisplayName] nvarchar(max) NULL,
+    [UserId] int NOT NULL,
+    CONSTRAINT [PK_AspNetUserLogins] PRIMARY KEY ([LoginProvider], [ProviderKey]),
+    CONSTRAINT [FK_AspNetUserLogins_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:50:55.674 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetUserRoles] (
+    [UserId] int NOT NULL,
+    [RoleId] int NOT NULL,
+    CONSTRAINT [PK_AspNetUserRoles] PRIMARY KEY ([UserId], [RoleId]),
+    CONSTRAINT [FK_AspNetUserRoles_AspNetRoles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [AspNetRoles] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_AspNetUserRoles_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:50:55.685 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetUserTokens] (
+    [UserId] int NOT NULL,
+    [LoginProvider] nvarchar(450) NOT NULL,
+    [Name] nvarchar(450) NOT NULL,
+    [Value] nvarchar(max) NULL,
+    CONSTRAINT [PK_AspNetUserTokens] PRIMARY KEY ([UserId], [LoginProvider], [Name]),
+    CONSTRAINT [FK_AspNetUserTokens_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:50:55.692 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_AspNetRoleClaims_RoleId] ON [AspNetRoleClaims] ([RoleId]);
+2020-08-26 08:50:55.696 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_AspNetRoles_Application_Name] ON [AspNetRoles] ([Application], [Name]) WHERE [Application] IS NOT NULL AND [Name] IS NOT NULL;
+2020-08-26 08:50:55.703 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_AspNetUserClaims_UserId] ON [AspNetUserClaims] ([UserId]);
+2020-08-26 08:50:55.707 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_AspNetUserLogins_UserId] ON [AspNetUserLogins] ([UserId]);
+2020-08-26 08:50:55.715 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_AspNetUserRoles_RoleId] ON [AspNetUserRoles] ([RoleId]);
+2020-08-26 08:50:55.719 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [EmailIndex] ON [AspNetUsers] ([NormalizedEmail]);
+2020-08-26 08:50:55.726 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [UserNameIndex] ON [AspNetUsers] ([NormalizedUserName]) WHERE [NormalizedUserName] IS NOT NULL;
+2020-08-26 08:50:55.730 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+create view AspNetApplicationsView as
+	select a.Name Application,
+
+	JSON_QUERY('[' +
+		STUFF((
+			SELECT ',' + char(34) + r.Name + char(34) 
+				FROM dbo.AspNetRoles r
+				WHERE r.[Application] = a.Name
+				FOR XML PATH('')),1,1,'') + ']' ) as Roles
+
+	from dbo.AspNetApplications a
+2020-08-26 08:50:55.738 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+create view AspNetUsersView as
+	select u.Id, u.UserName, u.NormalizedUserName, u.Email NormalizedEmail, u.EmailConfirmed, u.PhoneNumber, u.PhoneNumberConfirmed,
+	u.TwoFactorEnabled, u.LockoutBegin, u.LockoutEnd, u.LockoutEnabled, u.AccessFailedCount,
+	u.Organization,
+
+	JSON_QUERY('{' 
+		+ STUFF((
+			SELECT ',' + char(34) + ApplicationName + char(34) + ':[' + RoleNames + ']' 
+				FROM (
+					SELECT a.Name ApplicationName,
+						STUFF((
+							SELECT ',' + char(34) + r.Name + char(34) 
+								FROM dbo.AspNetRoles r
+								INNER JOIN dbo.AspNetUserRoles ur
+									ON ur.RoleId = r.Id
+								WHERE u.Id = ur.UserId
+									AND r.[Application] = a.Name
+								FOR XML PATH('')),1,1,'') as RoleNames
+						FROM dbo.AspNetApplications a
+						GROUP BY a.Name
+						) stf
+				FOR XML PATH('')),1,1,'') + '}' ) as RolesDictionary,
+	JSON_QUERY('{' 
+		+ STUFF((
+			SELECT ',' + char(34) + ClaimType + char(34) + ':[' + ClaimValues + ']' 
+				FROM (
+					SELECT uc2.ClaimType,
+						STUFF((
+							SELECT ',' + char(34) + uc.ClaimValue + char(34) 
+								FROM dbo.AspNetUserClaims uc
+								WHERE u.Id = uc.UserId
+									and uc.ClaimType = uc2.ClaimType
+								FOR XML PATH('')),1,1,'') as ClaimValues
+						FROM dbo.AspNetUserClaims uc2
+						GROUP BY uc2.ClaimType
+						) stf
+				FOR XML PATH('')),1,1,'') + '}' ) as ClaimsDictionary
+
+	
+	from dbo.AspNetUsers u
+2020-08-26 08:50:55.751 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+create view ClientApplications
+	with schemabinding as 
+	select c.ClientId, ar.Name [Application] 
+		from dbo.ApiResources ar
+        inner join dbo.ClientScopes cs
+            on cs.Scope = ar.Name
+        inner join dbo.Clients c
+            on cs.ClientId = c.Id;
+2020-08-26 08:50:55.758 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+create unique clustered index 
+	ucidx_ClientApplications
+		on ClientApplications(ClientId,[Application]);
+2020-08-26 08:50:55.764 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+create nonclustered index
+	idx_ClientApplications_AppName
+		on ClientApplications([Application]);
+2020-08-26 08:50:55.771 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+create view UserApplicationRoles
+	with schemabinding as 
+	select u.Id UserId, r.[Application], r.Name [Role] 
+		from dbo.AspNetUsers u
+        inner join dbo.AspNetUserRoles ur
+			on ur.UserId = u.Id
+		inner join dbo.AspNetRoles r
+			on ur.RoleId = r.Id
+2020-08-26 08:50:55.779 -04:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+create unique clustered index 
+	ucidx_UserApplicationRoles
+		on UserApplicationRoles(UserId,[Application],[Role]);
+2020-08-26 08:50:55.787 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+create nonclustered index
+	idx_UserApplicationRoles_AppName
+		on UserApplicationRoles([Application]);
+2020-08-26 08:50:55.796 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+create view UserClientApplicationRoles
+	as
+	select uar.UserId, ca.ClientId, uar.[Application], uar.[Role]
+		from UserApplicationRoles uar
+		inner join ClientApplications ca
+			on uar.[Application] = ca.[Application]
+2020-08-26 08:50:55.806 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE AspNetRoles
+	ADD CONSTRAINT fk_RolesApplications
+		FOREIGN KEY ([Application])
+			REFERENCES AspNetApplications (Name)
+				ON DELETE CASCADE
+2020-08-26 08:50:55.812 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE AspNetUsers
+	ADD CONSTRAINT fk_UsersOrganizations
+		FOREIGN KEY (Organization)
+			REFERENCES AspNetOrganizations (Name)
+				ON DELETE SET NULL
+2020-08-26 08:50:55.822 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+USE [AspNetIdentityServer]
+2020-08-26 08:50:55.828 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+/****** Object:  View [dbo].[DbDump]    Script Date: 8/18/2020 1:18:52 PM ******/
+SET ANSI_NULLS ON
+2020-08-26 08:50:55.831 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SET QUOTED_IDENTIFIER ON
+2020-08-26 08:50:55.842 -04:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE OR ALTER VIEW [dbo].[DbView] AS
+SELECT('{' + STUFF((
+SELECT 
+	JSON_QUERY(
+		STUFF((
+			SELECT ar.Name,
+				JSON_QUERY('[' + stuff((SELECT ', "' + s.Scope + '"' FROM ApiResourceScopes s WHERE s.ApiResourceId = ar.Id FOR XML PATH('')),1,1,'') + ']') Scopes,
+				JSON_QUERY('[' + stuff((SELECT ', "' + c.Type + '"' FROM ApiResourceClaims c WHERE c.ApiResourceId = ar.Id FOR XML PATH('')),1,1,'') + ']') Claims
+				FROM ApiResources ar
+				FOR JSON PATH),1,1,'')) ApiResources,
+	JSON_QUERY('[' + 
+		STUFF((
+			SELECT c.ClientId, c.RequireConsent, c.RequirePkce, c.AllowAccessTokensViaBrowser, c.AllowOfflineAccess, c.ClientClaimsPrefix,
+				JSON_QUERY('[' + stuff((SELECT ', "' + g.GrantType + '"' FROM ClientGrantTypes g WHERE g.ClientId = c.Id FOR XML PATH('')),1,1,'') + ']') GrantTypes,	
+				JSON_QUERY('[' + stuff((SELECT ', "' + u.RedirectUri + '"' FROM ClientRedirectUris u WHERE u.ClientId = c.Id FOR XML PATH('')),1,1,'') + ']') RedirectUris,	
+				JSON_QUERY('[' + stuff((SELECT ', "' + u.PostLogoutRedirectUri + '"' FROM ClientPostLogoutRedirectUris u WHERE u.ClientId = c.Id FOR XML PATH('')),1,1,'') + ']') PostLogoutRedirectUris,	
+				JSON_QUERY('[' + stuff((SELECT ', "' + s.Scope + '"' FROM ClientScopes s WHERE s.ClientId = c.Id FOR XML PATH('')),1,1,'') + ']') Scopes,
+				JSON_QUERY('{' 
+					+ STUFF((
+						SELECT ',' + char(34) + Type + char(34) + ':[' + ClaimValues + ']' 
+							FROM (
+								SELECT cc2.Type,
+									STUFF((
+										SELECT ',' + char(34) + cc.Value + char(34) 
+											FROM ClientClaims cc
+											WHERE cc.ClientId = c.Id
+												AND cc.Type = cc2.Type
+											FOR XML PATH('')),1,1,'') as ClaimValues
+									FROM ClientClaims cc2
+									GROUP BY cc2.Type
+									) stf
+							FOR XML PATH('')),1,1,'') + '}' ) as Claims
+				FROM Clients c
+				FOR JSON PATH),1,1,'')
+				+ ']') Clients,
+	JSON_QUERY('[' +
+		STUFF((
+			SELECT u.Id, u.UserName, u.Email, u.EmailConfirmed, u.PhoneNumber, 
+				u.LockoutBegin, u.LockoutEnd, u.LockoutEnabled, u.Organization,  
+				JSON_QUERY('{' 
+					+ STUFF((
+						SELECT ',' + char(34) + [Application] + char(34) + ':[' + RoleNames + ']' 
+							FROM (
+								SELECT a.Name [Application],
+									STUFF((
+										SELECT ',' + char(34) + r.Name + char(34) 
+											FROM dbo.AspNetRoles r
+											INNER JOIN dbo.AspNetUserRoles ur
+												ON ur.RoleId = r.Id
+											WHERE u.Id = ur.UserId
+												AND r.Application = a.Name
+											FOR XML PATH('')),1,1,'') as RoleNames
+									FROM dbo.AspNetApplications a
+									GROUP BY a.Name
+									) stf
+							FOR XML PATH('')),1,1,'') + '}' ) as Roles,
+				JSON_QUERY('{' 
+					+ STUFF((
+						SELECT ',' + char(34) + ClaimType + char(34) + ':[' + ClaimValues + ']' 
+							FROM (
+								SELECT uc2.ClaimType,
+									STUFF((
+										SELECT ',' + char(34) + uc.ClaimValue + char(34) 
+											FROM dbo.AspNetUserClaims uc
+											WHERE u.Id = uc.UserId
+												and uc.ClaimType = uc2.ClaimType
+											FOR XML PATH('')),1,1,'') as ClaimValues
+									FROM dbo.AspNetUserClaims uc2
+									GROUP BY uc2.ClaimType
+									) stf
+							FOR XML PATH('')),1,1,'') + '}' ) as Claims
+	
+				FROM dbo.AspNetUsers u
+	
+				FOR JSON PATH),1,1,'')
+								+ ']') Users
+	FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
+),1,1,'')) as json
+2020-08-26 08:50:55.860 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200818165611_Initial', N'3.1.7');
+2020-08-26 08:50:55.881 -04:00 [INF] Creating DomainIdentityDbContext instance ...
+2020-08-26 08:50:55.940 -04:00 [INF] Creating ConfigurationDbContext instance ...
+2020-08-26 08:50:56.058 -04:00 [INF] Creating PersistedGrantDbContext instance ...
+2020-08-26 08:50:56.126 -04:00 [INF] Loading Configs\IdentityResources.json ...
+2020-08-26 08:50:56.487 -04:00 [INF] 	Adding IdentityResource openid
+2020-08-26 08:50:56.950 -04:00 [INF] 	Adding IdentityResource profile
+2020-08-26 08:50:56.960 -04:00 [INF] 	Adding IdentityResource role
+2020-08-26 08:50:57.122 -04:00 [INF] Loading project configs from Configs ...
+2020-08-26 08:50:57.129 -04:00 [INF] 	Loading Apis for EDennis.Samples.ColorApi ...
+2020-08-26 08:50:57.132 -04:00 [INF] 		Loading EDennis.Samples.ColorApi ...
+2020-08-26 08:50:57.305 -04:00 [INF] 	Loading Clients for EDennis.Samples.ColorApi ...
+2020-08-26 08:50:57.320 -04:00 [INF] 		Loading EDennis.Samples.ColorApi ...
+2020-08-26 08:50:57.614 -04:00 [INF] 	Loading TestUsers for EDennis.Samples.ColorApi ...
+2020-08-26 08:50:57.622 -04:00 [INF] 		Checking application record for EDennis.Samples.ColorApi ...
+2020-08-26 08:50:57.631 -04:00 [INF] 		Adding application record for EDennis.Samples.ColorApi ...
+2020-08-26 08:50:57.672 -04:00 [INF] 		Checking role records for EDennis.Samples.ColorApi ...
+2020-08-26 08:50:57.684 -04:00 [INF] 		Adding role Admin record for EDennis.Samples.ColorApi ...
+2020-08-26 08:50:57.709 -04:00 [INF] 		Adding role User record for EDennis.Samples.ColorApi ...
+2020-08-26 08:50:57.712 -04:00 [INF] 		Adding role Readonly record for EDennis.Samples.ColorApi ...
+2020-08-26 08:50:57.716 -04:00 [INF] 		Checking test user records for EDennis.Samples.ColorApi ...
+2020-08-26 08:50:57.717 -04:00 [INF] 			Checking organization record for admin1@.test ...
+2020-08-26 08:50:57.728 -04:00 [INF] 			Adding Organization a.test record for admin1@.test ...
+2020-08-26 08:50:57.740 -04:00 [INF] 			Checking user record for admin1@.test ...
+2020-08-26 08:50:57.754 -04:00 [INF] 			Adding user record for admin1@.test ...
+2020-08-26 08:50:57.799 -04:00 [INF] 			Checking user role records for admin1@.test ...
+2020-08-26 08:50:57.837 -04:00 [INF] 			Checking claim records for admin1@.test ...
+2020-08-26 08:50:57.866 -04:00 [INF] 			Checking organization record for darius@b.test ...
+2020-08-26 08:50:57.868 -04:00 [INF] 			Adding Organization b.test record for darius@b.test ...
+2020-08-26 08:50:57.870 -04:00 [INF] 			Checking user record for darius@b.test ...
+2020-08-26 08:50:57.871 -04:00 [INF] 			Adding user record for darius@b.test ...
+2020-08-26 08:50:57.876 -04:00 [INF] 			Checking user role records for darius@b.test ...
+2020-08-26 08:50:57.880 -04:00 [INF] 			Checking claim records for darius@b.test ...
+2020-08-26 08:50:57.885 -04:00 [INF] 			Checking organization record for pat@c.test ...
+2020-08-26 08:50:57.888 -04:00 [INF] 			Adding Organization c.test record for pat@c.test ...
+2020-08-26 08:50:57.893 -04:00 [INF] 			Checking user record for pat@c.test ...
+2020-08-26 08:50:57.894 -04:00 [INF] 			Adding user record for pat@c.test ...
+2020-08-26 08:50:57.902 -04:00 [INF] 			Checking user role records for pat@c.test ...
+2020-08-26 08:50:57.905 -04:00 [INF] 			Checking claim records for pat@c.test ...
+2020-08-26 08:50:57.914 -04:00 [INF] 	Loading Apis for EDennis.Samples.ColorApp.Razor ...
+2020-08-26 08:50:57.916 -04:00 [INF] 		Loading EDennis.Samples.ColorApp.Razor ...
+2020-08-26 08:50:57.951 -04:00 [INF] 	Loading Clients for EDennis.Samples.ColorApp.Razor ...
+2020-08-26 08:50:57.953 -04:00 [INF] 		Loading EDennis.Samples.ColorApp.Razor ...
+2020-08-26 08:50:58.007 -04:00 [INF] 	Loading TestUsers for EDennis.Samples.ColorApp.Razor ...
+2020-08-26 08:50:58.008 -04:00 [INF] 		Checking application record for EDennis.Samples.ColorApp.Razor ...
+2020-08-26 08:50:58.010 -04:00 [INF] 		Adding application record for EDennis.Samples.ColorApp.Razor ...
+2020-08-26 08:50:58.013 -04:00 [INF] 		Checking role records for EDennis.Samples.ColorApp.Razor ...
+2020-08-26 08:50:58.014 -04:00 [INF] 		Adding role Admin record for EDennis.Samples.ColorApp.Razor ...
+2020-08-26 08:50:58.017 -04:00 [INF] 		Adding role User record for EDennis.Samples.ColorApp.Razor ...
+2020-08-26 08:50:58.021 -04:00 [INF] 		Adding role Readonly record for EDennis.Samples.ColorApp.Razor ...
+2020-08-26 08:50:58.023 -04:00 [INF] 		Checking test user records for EDennis.Samples.ColorApp.Razor ...
+2020-08-26 08:50:58.025 -04:00 [INF] 			Checking organization record for admin1@.test ...
+2020-08-26 08:50:58.029 -04:00 [INF] 			Organization a.test record found for admin1@.test ...
+2020-08-26 08:50:58.030 -04:00 [INF] 			Checking user record for admin1@.test ...
+2020-08-26 08:50:58.033 -04:00 [INF] 			User record found for admin1@.test ...
+2020-08-26 08:50:58.034 -04:00 [INF] 			Checking user role records for admin1@.test ...
+2020-08-26 08:50:58.038 -04:00 [INF] 			Checking claim records for admin1@.test ...
+2020-08-26 08:50:58.041 -04:00 [INF] 			Checking organization record for darius@b.test ...
+2020-08-26 08:50:58.042 -04:00 [INF] 			Organization b.test record found for darius@b.test ...
+2020-08-26 08:50:58.043 -04:00 [INF] 			Checking user record for darius@b.test ...
+2020-08-26 08:50:58.046 -04:00 [INF] 			User record found for darius@b.test ...
+2020-08-26 08:50:58.047 -04:00 [INF] 			Checking user role records for darius@b.test ...
+2020-08-26 08:50:58.051 -04:00 [INF] 			Checking claim records for darius@b.test ...
+2020-08-26 08:50:58.053 -04:00 [INF] 			Checking organization record for pat@c.test ...
+2020-08-26 08:50:58.055 -04:00 [INF] 			Organization c.test record found for pat@c.test ...
+2020-08-26 08:50:58.055 -04:00 [INF] 			Checking user record for pat@c.test ...
+2020-08-26 08:50:58.057 -04:00 [INF] 			User record found for pat@c.test ...
+2020-08-26 08:50:58.062 -04:00 [INF] 			Checking user role records for pat@c.test ...
+2020-08-26 08:50:58.065 -04:00 [INF] 			Checking claim records for pat@c.test ...
+2020-08-26 08:50:58.071 -04:00 [INF] 	Loading Apis for EDennis.Samples.ColorApp.Server ...
+2020-08-26 08:50:58.072 -04:00 [INF] 		Loading EDennis.Samples.ColorApp.Server ...
+2020-08-26 08:50:58.104 -04:00 [INF] 	Loading Clients for EDennis.Samples.ColorApp.Server ...
+2020-08-26 08:50:58.106 -04:00 [INF] 		Loading EDennis.Samples.ColorApp.Server ...
+2020-08-26 08:50:58.120 -04:00 [INF] 	Loading TestUsers for EDennis.Samples.ColorApp.Server ...
+2020-08-26 08:50:58.122 -04:00 [INF] 		Checking application record for EDennis.Samples.ColorApp.Server ...
+2020-08-26 08:50:58.123 -04:00 [INF] 		Adding application record for EDennis.Samples.ColorApp.Server ...
+2020-08-26 08:50:58.128 -04:00 [INF] 		Checking role records for EDennis.Samples.ColorApp.Server ...
+2020-08-26 08:50:58.129 -04:00 [INF] 		Adding role Admin record for EDennis.Samples.ColorApp.Server ...
+2020-08-26 08:50:58.134 -04:00 [INF] 		Adding role User record for EDennis.Samples.ColorApp.Server ...
+2020-08-26 08:50:58.138 -04:00 [INF] 		Adding role Readonly record for EDennis.Samples.ColorApp.Server ...
+2020-08-26 08:50:58.140 -04:00 [INF] 		Checking test user records for EDennis.Samples.ColorApp.Server ...
+2020-08-26 08:50:58.141 -04:00 [INF] 			Checking organization record for admin1@.test ...
+2020-08-26 08:50:58.143 -04:00 [INF] 			Organization a.test record found for admin1@.test ...
+2020-08-26 08:50:58.145 -04:00 [INF] 			Checking user record for admin1@.test ...
+2020-08-26 08:50:58.147 -04:00 [INF] 			User record found for admin1@.test ...
+2020-08-26 08:50:58.148 -04:00 [INF] 			Checking user role records for admin1@.test ...
+2020-08-26 08:50:58.153 -04:00 [INF] 			Checking claim records for admin1@.test ...
+2020-08-26 08:50:58.158 -04:00 [INF] 			Checking organization record for darius@b.test ...
+2020-08-26 08:50:58.159 -04:00 [INF] 			Organization b.test record found for darius@b.test ...
+2020-08-26 08:50:58.160 -04:00 [INF] 			Checking user record for darius@b.test ...
+2020-08-26 08:50:58.162 -04:00 [INF] 			User record found for darius@b.test ...
+2020-08-26 08:50:58.162 -04:00 [INF] 			Checking user role records for darius@b.test ...
+2020-08-26 08:50:58.169 -04:00 [INF] 			Checking claim records for darius@b.test ...
+2020-08-26 08:50:58.172 -04:00 [INF] 			Checking organization record for pat@c.test ...
+2020-08-26 08:50:58.173 -04:00 [INF] 			Organization c.test record found for pat@c.test ...
+2020-08-26 08:50:58.174 -04:00 [INF] 			Checking user record for pat@c.test ...
+2020-08-26 08:50:58.176 -04:00 [INF] 			User record found for pat@c.test ...
+2020-08-26 08:50:58.179 -04:00 [INF] 			Checking user role records for pat@c.test ...
+2020-08-26 08:50:58.185 -04:00 [INF] 			Checking claim records for pat@c.test ...
+2020-08-26 08:50:58.188 -04:00 [INF] **Finished Loading Configurations.
+2020-08-26 08:50:58.193 -04:00 [INF] Dumping ApiResources, Clients, and Users to JSON file ...
+2020-08-26 08:50:58.287 -04:00 [INF] User profile is available. Using 'C:\Users\denmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-08-26 08:50:58.418 -04:00 [INF] Starting IdentityServer4 version 4.0.4+1b36d1b414f4e0f965af97ab2a7e9dd1b5167bca
+2020-08-26 08:50:58.440 -04:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2020-08-26 08:50:58.942 -04:00 [INF] Now listening on: https://localhost:5000
+2020-08-26 08:50:58.945 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2020-08-26 08:50:58.946 -04:00 [INF] Hosting environment: Development
+2020-08-26 08:50:58.947 -04:00 [INF] Content root path: C:\Users\denmi\source\repos\denmitchell\EDennis.AspNet.Base\EDennis.AspNetIdentityServer
+2020-08-26 08:56:08.666 -04:00 [INF] Starting host...
+2020-08-26 08:56:10.546 -04:00 [INF] Migrating Database...
+2020-08-26 08:56:11.593 -04:00 [INF] Entity Framework Core 3.1.7 initialized 'ConfigurationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: MigrationsAssembly=EDennis.AspNetIdentityServer 
+2020-08-26 08:56:12.085 -04:00 [INF] Executed DbCommand (29ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2020-08-26 08:56:12.155 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [AspNetIdentityServer] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+END;
+2020-08-26 08:56:12.188 -04:00 [INF] Executed DbCommand (30ms) [Parameters=[], CommandType='"Text"', CommandTimeout='60']
+DROP DATABASE [AspNetIdentityServer];
+2020-08-26 08:56:22.425 -04:00 [INF] Executed DbCommand (199ms) [Parameters=[], CommandType='"Text"', CommandTimeout='60']
+CREATE DATABASE [AspNetIdentityServer];
+2020-08-26 08:56:22.505 -04:00 [INF] Executed DbCommand (78ms) [Parameters=[], CommandType='"Text"', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [AspNetIdentityServer] SET READ_COMMITTED_SNAPSHOT ON;
+END;
+2020-08-26 08:56:22.514 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2020-08-26 08:56:22.645 -04:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [__EFMigrationsHistory] (
+    [MigrationId] nvarchar(150) NOT NULL,
+    [ProductVersion] nvarchar(32) NOT NULL,
+    CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+);
+2020-08-26 08:56:22.649 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2020-08-26 08:56:22.676 -04:00 [INF] Executed DbCommand (22ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2020-08-26 08:56:22.687 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2020-08-26 08:56:22.725 -04:00 [INF] Applying migration '20200818143842_Initial'.
+2020-08-26 08:56:22.859 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ApiResources] (
+    [Id] int NOT NULL IDENTITY,
+    [Enabled] bit NOT NULL,
+    [Name] nvarchar(200) NOT NULL,
+    [DisplayName] nvarchar(200) NULL,
+    [Description] nvarchar(1000) NULL,
+    [AllowedAccessTokenSigningAlgorithms] nvarchar(100) NULL,
+    [ShowInDiscoveryDocument] bit NOT NULL,
+    [Created] datetime2 NOT NULL,
+    [Updated] datetime2 NULL,
+    [LastAccessed] datetime2 NULL,
+    [NonEditable] bit NOT NULL,
+    CONSTRAINT [PK_ApiResources] PRIMARY KEY ([Id])
+);
+2020-08-26 08:56:22.865 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ApiScopes] (
+    [Id] int NOT NULL IDENTITY,
+    [Enabled] bit NOT NULL,
+    [Name] nvarchar(200) NOT NULL,
+    [DisplayName] nvarchar(200) NULL,
+    [Description] nvarchar(1000) NULL,
+    [Required] bit NOT NULL,
+    [Emphasize] bit NOT NULL,
+    [ShowInDiscoveryDocument] bit NOT NULL,
+    CONSTRAINT [PK_ApiScopes] PRIMARY KEY ([Id])
+);
+2020-08-26 08:56:22.876 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Clients] (
+    [Id] int NOT NULL IDENTITY,
+    [Enabled] bit NOT NULL,
+    [ClientId] nvarchar(200) NOT NULL,
+    [ProtocolType] nvarchar(200) NOT NULL,
+    [RequireClientSecret] bit NOT NULL,
+    [ClientName] nvarchar(200) NULL,
+    [Description] nvarchar(1000) NULL,
+    [ClientUri] nvarchar(2000) NULL,
+    [LogoUri] nvarchar(2000) NULL,
+    [RequireConsent] bit NOT NULL,
+    [AllowRememberConsent] bit NOT NULL,
+    [AlwaysIncludeUserClaimsInIdToken] bit NOT NULL,
+    [RequirePkce] bit NOT NULL,
+    [AllowPlainTextPkce] bit NOT NULL,
+    [RequireRequestObject] bit NOT NULL,
+    [AllowAccessTokensViaBrowser] bit NOT NULL,
+    [FrontChannelLogoutUri] nvarchar(2000) NULL,
+    [FrontChannelLogoutSessionRequired] bit NOT NULL,
+    [BackChannelLogoutUri] nvarchar(2000) NULL,
+    [BackChannelLogoutSessionRequired] bit NOT NULL,
+    [AllowOfflineAccess] bit NOT NULL,
+    [IdentityTokenLifetime] int NOT NULL,
+    [AllowedIdentityTokenSigningAlgorithms] nvarchar(100) NULL,
+    [AccessTokenLifetime] int NOT NULL,
+    [AuthorizationCodeLifetime] int NOT NULL,
+    [ConsentLifetime] int NULL,
+    [AbsoluteRefreshTokenLifetime] int NOT NULL,
+    [SlidingRefreshTokenLifetime] int NOT NULL,
+    [RefreshTokenUsage] int NOT NULL,
+    [UpdateAccessTokenClaimsOnRefresh] bit NOT NULL,
+    [RefreshTokenExpiration] int NOT NULL,
+    [AccessTokenType] int NOT NULL,
+    [EnableLocalLogin] bit NOT NULL,
+    [IncludeJwtId] bit NOT NULL,
+    [AlwaysSendClientClaims] bit NOT NULL,
+    [ClientClaimsPrefix] nvarchar(200) NULL,
+    [PairWiseSubjectSalt] nvarchar(200) NULL,
+    [Created] datetime2 NOT NULL,
+    [Updated] datetime2 NULL,
+    [LastAccessed] datetime2 NULL,
+    [UserSsoLifetime] int NULL,
+    [UserCodeType] nvarchar(100) NULL,
+    [DeviceCodeLifetime] int NOT NULL,
+    [NonEditable] bit NOT NULL,
+    CONSTRAINT [PK_Clients] PRIMARY KEY ([Id])
+);
+2020-08-26 08:56:22.891 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [IdentityResources] (
+    [Id] int NOT NULL IDENTITY,
+    [Enabled] bit NOT NULL,
+    [Name] nvarchar(200) NOT NULL,
+    [DisplayName] nvarchar(200) NULL,
+    [Description] nvarchar(1000) NULL,
+    [Required] bit NOT NULL,
+    [Emphasize] bit NOT NULL,
+    [ShowInDiscoveryDocument] bit NOT NULL,
+    [Created] datetime2 NOT NULL,
+    [Updated] datetime2 NULL,
+    [NonEditable] bit NOT NULL,
+    CONSTRAINT [PK_IdentityResources] PRIMARY KEY ([Id])
+);
+2020-08-26 08:56:22.902 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ApiResourceClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [Type] nvarchar(200) NOT NULL,
+    [ApiResourceId] int NOT NULL,
+    CONSTRAINT [PK_ApiResourceClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ApiResourceClaims_ApiResources_ApiResourceId] FOREIGN KEY ([ApiResourceId]) REFERENCES [ApiResources] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:56:22.907 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ApiResourceProperties] (
+    [Id] int NOT NULL IDENTITY,
+    [Key] nvarchar(250) NOT NULL,
+    [Value] nvarchar(2000) NOT NULL,
+    [ApiResourceId] int NOT NULL,
+    CONSTRAINT [PK_ApiResourceProperties] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ApiResourceProperties_ApiResources_ApiResourceId] FOREIGN KEY ([ApiResourceId]) REFERENCES [ApiResources] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:56:22.913 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ApiResourceScopes] (
+    [Id] int NOT NULL IDENTITY,
+    [Scope] nvarchar(200) NOT NULL,
+    [ApiResourceId] int NOT NULL,
+    CONSTRAINT [PK_ApiResourceScopes] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ApiResourceScopes_ApiResources_ApiResourceId] FOREIGN KEY ([ApiResourceId]) REFERENCES [ApiResources] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:56:22.925 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ApiResourceSecrets] (
+    [Id] int NOT NULL IDENTITY,
+    [Description] nvarchar(1000) NULL,
+    [Value] nvarchar(4000) NOT NULL,
+    [Expiration] datetime2 NULL,
+    [Type] nvarchar(250) NOT NULL,
+    [Created] datetime2 NOT NULL,
+    [ApiResourceId] int NOT NULL,
+    CONSTRAINT [PK_ApiResourceSecrets] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ApiResourceSecrets_ApiResources_ApiResourceId] FOREIGN KEY ([ApiResourceId]) REFERENCES [ApiResources] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:56:22.938 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ApiScopeClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [Type] nvarchar(200) NOT NULL,
+    [ScopeId] int NOT NULL,
+    CONSTRAINT [PK_ApiScopeClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ApiScopeClaims_ApiScopes_ScopeId] FOREIGN KEY ([ScopeId]) REFERENCES [ApiScopes] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:56:22.947 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ApiScopeProperties] (
+    [Id] int NOT NULL IDENTITY,
+    [Key] nvarchar(250) NOT NULL,
+    [Value] nvarchar(2000) NOT NULL,
+    [ScopeId] int NOT NULL,
+    CONSTRAINT [PK_ApiScopeProperties] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ApiScopeProperties_ApiScopes_ScopeId] FOREIGN KEY ([ScopeId]) REFERENCES [ApiScopes] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:56:22.954 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ClientClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [Type] nvarchar(250) NOT NULL,
+    [Value] nvarchar(250) NOT NULL,
+    [ClientId] int NOT NULL,
+    CONSTRAINT [PK_ClientClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ClientClaims_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Clients] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:56:22.960 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ClientCorsOrigins] (
+    [Id] int NOT NULL IDENTITY,
+    [Origin] nvarchar(150) NOT NULL,
+    [ClientId] int NOT NULL,
+    CONSTRAINT [PK_ClientCorsOrigins] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ClientCorsOrigins_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Clients] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:56:22.972 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ClientGrantTypes] (
+    [Id] int NOT NULL IDENTITY,
+    [GrantType] nvarchar(250) NOT NULL,
+    [ClientId] int NOT NULL,
+    CONSTRAINT [PK_ClientGrantTypes] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ClientGrantTypes_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Clients] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:56:22.980 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ClientIdPRestrictions] (
+    [Id] int NOT NULL IDENTITY,
+    [Provider] nvarchar(200) NOT NULL,
+    [ClientId] int NOT NULL,
+    CONSTRAINT [PK_ClientIdPRestrictions] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ClientIdPRestrictions_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Clients] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:56:22.987 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ClientPostLogoutRedirectUris] (
+    [Id] int NOT NULL IDENTITY,
+    [PostLogoutRedirectUri] nvarchar(2000) NOT NULL,
+    [ClientId] int NOT NULL,
+    CONSTRAINT [PK_ClientPostLogoutRedirectUris] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ClientPostLogoutRedirectUris_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Clients] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:56:22.995 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ClientProperties] (
+    [Id] int NOT NULL IDENTITY,
+    [Key] nvarchar(250) NOT NULL,
+    [Value] nvarchar(2000) NOT NULL,
+    [ClientId] int NOT NULL,
+    CONSTRAINT [PK_ClientProperties] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ClientProperties_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Clients] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:56:23.002 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ClientRedirectUris] (
+    [Id] int NOT NULL IDENTITY,
+    [RedirectUri] nvarchar(2000) NOT NULL,
+    [ClientId] int NOT NULL,
+    CONSTRAINT [PK_ClientRedirectUris] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ClientRedirectUris_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Clients] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:56:23.008 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ClientScopes] (
+    [Id] int NOT NULL IDENTITY,
+    [Scope] nvarchar(200) NOT NULL,
+    [ClientId] int NOT NULL,
+    CONSTRAINT [PK_ClientScopes] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ClientScopes_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Clients] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:56:23.016 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ClientSecrets] (
+    [Id] int NOT NULL IDENTITY,
+    [Description] nvarchar(2000) NULL,
+    [Value] nvarchar(4000) NOT NULL,
+    [Expiration] datetime2 NULL,
+    [Type] nvarchar(250) NOT NULL,
+    [Created] datetime2 NOT NULL,
+    [ClientId] int NOT NULL,
+    CONSTRAINT [PK_ClientSecrets] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ClientSecrets_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Clients] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:56:23.026 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [IdentityResourceClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [Type] nvarchar(200) NOT NULL,
+    [IdentityResourceId] int NOT NULL,
+    CONSTRAINT [PK_IdentityResourceClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_IdentityResourceClaims_IdentityResources_IdentityResourceId] FOREIGN KEY ([IdentityResourceId]) REFERENCES [IdentityResources] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:56:23.040 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [IdentityResourceProperties] (
+    [Id] int NOT NULL IDENTITY,
+    [Key] nvarchar(250) NOT NULL,
+    [Value] nvarchar(2000) NOT NULL,
+    [IdentityResourceId] int NOT NULL,
+    CONSTRAINT [PK_IdentityResourceProperties] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_IdentityResourceProperties_IdentityResources_IdentityResourceId] FOREIGN KEY ([IdentityResourceId]) REFERENCES [IdentityResources] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:56:23.047 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ApiResourceClaims_ApiResourceId] ON [ApiResourceClaims] ([ApiResourceId]);
+2020-08-26 08:56:23.053 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ApiResourceProperties_ApiResourceId] ON [ApiResourceProperties] ([ApiResourceId]);
+2020-08-26 08:56:23.059 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_ApiResources_Name] ON [ApiResources] ([Name]);
+2020-08-26 08:56:23.066 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ApiResourceScopes_ApiResourceId] ON [ApiResourceScopes] ([ApiResourceId]);
+2020-08-26 08:56:23.070 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ApiResourceSecrets_ApiResourceId] ON [ApiResourceSecrets] ([ApiResourceId]);
+2020-08-26 08:56:23.077 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ApiScopeClaims_ScopeId] ON [ApiScopeClaims] ([ScopeId]);
+2020-08-26 08:56:23.082 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ApiScopeProperties_ScopeId] ON [ApiScopeProperties] ([ScopeId]);
+2020-08-26 08:56:23.091 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_ApiScopes_Name] ON [ApiScopes] ([Name]);
+2020-08-26 08:56:23.100 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ClientClaims_ClientId] ON [ClientClaims] ([ClientId]);
+2020-08-26 08:56:23.107 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ClientCorsOrigins_ClientId] ON [ClientCorsOrigins] ([ClientId]);
+2020-08-26 08:56:23.112 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ClientGrantTypes_ClientId] ON [ClientGrantTypes] ([ClientId]);
+2020-08-26 08:56:23.117 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ClientIdPRestrictions_ClientId] ON [ClientIdPRestrictions] ([ClientId]);
+2020-08-26 08:56:23.122 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ClientPostLogoutRedirectUris_ClientId] ON [ClientPostLogoutRedirectUris] ([ClientId]);
+2020-08-26 08:56:23.126 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ClientProperties_ClientId] ON [ClientProperties] ([ClientId]);
+2020-08-26 08:56:23.133 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ClientRedirectUris_ClientId] ON [ClientRedirectUris] ([ClientId]);
+2020-08-26 08:56:23.136 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Clients_ClientId] ON [Clients] ([ClientId]);
+2020-08-26 08:56:23.143 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ClientScopes_ClientId] ON [ClientScopes] ([ClientId]);
+2020-08-26 08:56:23.147 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ClientSecrets_ClientId] ON [ClientSecrets] ([ClientId]);
+2020-08-26 08:56:23.154 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_IdentityResourceClaims_IdentityResourceId] ON [IdentityResourceClaims] ([IdentityResourceId]);
+2020-08-26 08:56:23.158 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_IdentityResourceProperties_IdentityResourceId] ON [IdentityResourceProperties] ([IdentityResourceId]);
+2020-08-26 08:56:23.161 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_IdentityResources_Name] ON [IdentityResources] ([Name]);
+2020-08-26 08:56:23.170 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200818143842_Initial', N'3.1.7');
+2020-08-26 08:56:23.209 -04:00 [INF] Entity Framework Core 3.1.7 initialized 'PersistedGrantDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: MigrationsAssembly=EDennis.AspNetIdentityServer 
+2020-08-26 08:56:23.218 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2020-08-26 08:56:23.223 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2020-08-26 08:56:23.225 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2020-08-26 08:56:23.232 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2020-08-26 08:56:23.241 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2020-08-26 08:56:23.248 -04:00 [INF] Applying migration '20200818144238_Initial'.
+2020-08-26 08:56:23.282 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [DeviceCodes] (
+    [UserCode] nvarchar(200) NOT NULL,
+    [DeviceCode] nvarchar(200) NOT NULL,
+    [SubjectId] nvarchar(200) NULL,
+    [SessionId] nvarchar(100) NULL,
+    [ClientId] nvarchar(200) NOT NULL,
+    [Description] nvarchar(200) NULL,
+    [CreationTime] datetime2 NOT NULL,
+    [Expiration] datetime2 NOT NULL,
+    [Data] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_DeviceCodes] PRIMARY KEY ([UserCode])
+);
+2020-08-26 08:56:23.302 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [PersistedGrants] (
+    [Key] nvarchar(200) NOT NULL,
+    [Type] nvarchar(50) NOT NULL,
+    [SubjectId] nvarchar(200) NULL,
+    [SessionId] nvarchar(100) NULL,
+    [ClientId] nvarchar(200) NOT NULL,
+    [Description] nvarchar(200) NULL,
+    [CreationTime] datetime2 NOT NULL,
+    [Expiration] datetime2 NULL,
+    [ConsumedTime] datetime2 NULL,
+    [Data] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_PersistedGrants] PRIMARY KEY ([Key])
+);
+2020-08-26 08:56:23.324 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_DeviceCodes_DeviceCode] ON [DeviceCodes] ([DeviceCode]);
+2020-08-26 08:56:23.336 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_DeviceCodes_Expiration] ON [DeviceCodes] ([Expiration]);
+2020-08-26 08:56:23.347 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_PersistedGrants_Expiration] ON [PersistedGrants] ([Expiration]);
+2020-08-26 08:56:23.358 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_PersistedGrants_SubjectId_ClientId_Type] ON [PersistedGrants] ([SubjectId], [ClientId], [Type]);
+2020-08-26 08:56:23.371 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_PersistedGrants_SubjectId_SessionId_Type] ON [PersistedGrants] ([SubjectId], [SessionId], [Type]);
+2020-08-26 08:56:23.380 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200818144238_Initial', N'3.1.7');
+2020-08-26 08:56:23.555 -04:00 [INF] Entity Framework Core 3.1.7 initialized 'DomainIdentityDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: MigrationsAssembly=EDennis.AspNetIdentityServer 
+2020-08-26 08:56:23.559 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2020-08-26 08:56:23.562 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2020-08-26 08:56:23.568 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2020-08-26 08:56:23.570 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2020-08-26 08:56:23.575 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2020-08-26 08:56:23.581 -04:00 [INF] Applying migration '20200818165611_Initial'.
+2020-08-26 08:56:23.672 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE SEQUENCE [seqAspNetApplications] AS int START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE NO CYCLE;
+2020-08-26 08:56:23.676 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE SEQUENCE [seqAspNetOrganizations] AS int START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE NO CYCLE;
+2020-08-26 08:56:23.682 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetApplications] (
+    [Name] varchar(200) NOT NULL DEFAULT (next value for seqAspNetApplications),
+    [SysUser] nvarchar(150) NULL,
+    [SysStatus] tinyint NOT NULL DEFAULT CAST(0 AS tinyint),
+    CONSTRAINT [PK_AspNetApplications] PRIMARY KEY ([Name])
+);
+2020-08-26 08:56:23.690 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetOrganizations] (
+    [Name] varchar(200) NOT NULL DEFAULT (next value for seqAspNetOrganizations),
+    [SysUser] nvarchar(150) NULL,
+    [SysStatus] tinyint NOT NULL DEFAULT CAST(0 AS tinyint),
+    CONSTRAINT [PK_AspNetOrganizations] PRIMARY KEY ([Name])
+);
+2020-08-26 08:56:23.699 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetRoles] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(256) NULL,
+    [NormalizedName] nvarchar(256) NULL,
+    [ConcurrencyStamp] nvarchar(max) NULL,
+    [Application] varchar(200) NOT NULL,
+    CONSTRAINT [PK_AspNetRoles] PRIMARY KEY ([Id])
+);
+2020-08-26 08:56:23.705 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetUsers] (
+    [Id] int NOT NULL IDENTITY,
+    [UserName] nvarchar(256) NULL,
+    [NormalizedUserName] nvarchar(256) NULL,
+    [Email] nvarchar(256) NULL,
+    [NormalizedEmail] nvarchar(256) NULL,
+    [EmailConfirmed] bit NOT NULL,
+    [PasswordHash] nvarchar(max) NULL,
+    [SecurityStamp] nvarchar(max) NULL,
+    [ConcurrencyStamp] nvarchar(max) NULL,
+    [PhoneNumber] nvarchar(max) NULL,
+    [PhoneNumberConfirmed] bit NOT NULL,
+    [TwoFactorEnabled] bit NOT NULL,
+    [AccessFailedCount] int NOT NULL,
+    [LockoutEnabled] bit NOT NULL,
+    [LockoutBegin] datetimeoffset NULL,
+    [LockoutEnd] datetimeoffset NULL,
+    [Organization] varchar(200) NULL,
+    CONSTRAINT [PK_AspNetUsers] PRIMARY KEY ([Id])
+);
+2020-08-26 08:56:23.714 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetRoleClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [RoleId] int NOT NULL,
+    [ClaimType] nvarchar(max) NULL,
+    [ClaimValue] nvarchar(max) NULL,
+    CONSTRAINT [PK_AspNetRoleClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_AspNetRoleClaims_AspNetRoles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [AspNetRoles] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:56:23.723 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetUserClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [UserId] int NOT NULL,
+    [ClaimType] nvarchar(max) NULL,
+    [ClaimValue] nvarchar(max) NULL,
+    CONSTRAINT [PK_AspNetUserClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_AspNetUserClaims_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:56:23.730 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetUserLogins] (
+    [LoginProvider] nvarchar(450) NOT NULL,
+    [ProviderKey] nvarchar(450) NOT NULL,
+    [ProviderDisplayName] nvarchar(max) NULL,
+    [UserId] int NOT NULL,
+    CONSTRAINT [PK_AspNetUserLogins] PRIMARY KEY ([LoginProvider], [ProviderKey]),
+    CONSTRAINT [FK_AspNetUserLogins_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:56:23.739 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetUserRoles] (
+    [UserId] int NOT NULL,
+    [RoleId] int NOT NULL,
+    CONSTRAINT [PK_AspNetUserRoles] PRIMARY KEY ([UserId], [RoleId]),
+    CONSTRAINT [FK_AspNetUserRoles_AspNetRoles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [AspNetRoles] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_AspNetUserRoles_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:56:23.748 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetUserTokens] (
+    [UserId] int NOT NULL,
+    [LoginProvider] nvarchar(450) NOT NULL,
+    [Name] nvarchar(450) NOT NULL,
+    [Value] nvarchar(max) NULL,
+    CONSTRAINT [PK_AspNetUserTokens] PRIMARY KEY ([UserId], [LoginProvider], [Name]),
+    CONSTRAINT [FK_AspNetUserTokens_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+2020-08-26 08:56:23.755 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_AspNetRoleClaims_RoleId] ON [AspNetRoleClaims] ([RoleId]);
+2020-08-26 08:56:23.758 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_AspNetRoles_Application_Name] ON [AspNetRoles] ([Application], [Name]) WHERE [Application] IS NOT NULL AND [Name] IS NOT NULL;
+2020-08-26 08:56:23.765 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_AspNetUserClaims_UserId] ON [AspNetUserClaims] ([UserId]);
+2020-08-26 08:56:23.769 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_AspNetUserLogins_UserId] ON [AspNetUserLogins] ([UserId]);
+2020-08-26 08:56:23.774 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_AspNetUserRoles_RoleId] ON [AspNetUserRoles] ([RoleId]);
+2020-08-26 08:56:23.778 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [EmailIndex] ON [AspNetUsers] ([NormalizedEmail]);
+2020-08-26 08:56:23.783 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [UserNameIndex] ON [AspNetUsers] ([NormalizedUserName]) WHERE [NormalizedUserName] IS NOT NULL;
+2020-08-26 08:56:23.789 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+create view AspNetApplicationsView as
+	select a.Name Application,
+
+	JSON_QUERY('[' +
+		STUFF((
+			SELECT ',' + char(34) + r.Name + char(34) 
+				FROM dbo.AspNetRoles r
+				WHERE r.[Application] = a.Name
+				FOR XML PATH('')),1,1,'') + ']' ) as Roles
+
+	from dbo.AspNetApplications a
+2020-08-26 08:56:23.800 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+create view AspNetUsersView as
+	select u.Id, u.UserName, u.NormalizedUserName, u.Email NormalizedEmail, u.EmailConfirmed, u.PhoneNumber, u.PhoneNumberConfirmed,
+	u.TwoFactorEnabled, u.LockoutBegin, u.LockoutEnd, u.LockoutEnabled, u.AccessFailedCount,
+	u.Organization,
+
+	JSON_QUERY('{' 
+		+ STUFF((
+			SELECT ',' + char(34) + ApplicationName + char(34) + ':[' + RoleNames + ']' 
+				FROM (
+					SELECT a.Name ApplicationName,
+						STUFF((
+							SELECT ',' + char(34) + r.Name + char(34) 
+								FROM dbo.AspNetRoles r
+								INNER JOIN dbo.AspNetUserRoles ur
+									ON ur.RoleId = r.Id
+								WHERE u.Id = ur.UserId
+									AND r.[Application] = a.Name
+								FOR XML PATH('')),1,1,'') as RoleNames
+						FROM dbo.AspNetApplications a
+						GROUP BY a.Name
+						) stf
+				FOR XML PATH('')),1,1,'') + '}' ) as RolesDictionary,
+	JSON_QUERY('{' 
+		+ STUFF((
+			SELECT ',' + char(34) + ClaimType + char(34) + ':[' + ClaimValues + ']' 
+				FROM (
+					SELECT uc2.ClaimType,
+						STUFF((
+							SELECT ',' + char(34) + uc.ClaimValue + char(34) 
+								FROM dbo.AspNetUserClaims uc
+								WHERE u.Id = uc.UserId
+									and uc.ClaimType = uc2.ClaimType
+								FOR XML PATH('')),1,1,'') as ClaimValues
+						FROM dbo.AspNetUserClaims uc2
+						GROUP BY uc2.ClaimType
+						) stf
+				FOR XML PATH('')),1,1,'') + '}' ) as ClaimsDictionary
+
+	
+	from dbo.AspNetUsers u
+2020-08-26 08:56:23.811 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+create view ClientApplications
+	with schemabinding as 
+	select c.ClientId, ar.Name [Application] 
+		from dbo.ApiResources ar
+        inner join dbo.ClientScopes cs
+            on cs.Scope = ar.Name
+        inner join dbo.Clients c
+            on cs.ClientId = c.Id;
+2020-08-26 08:56:23.819 -04:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+create unique clustered index 
+	ucidx_ClientApplications
+		on ClientApplications(ClientId,[Application]);
+2020-08-26 08:56:23.826 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+create nonclustered index
+	idx_ClientApplications_AppName
+		on ClientApplications([Application]);
+2020-08-26 08:56:23.834 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+create view UserApplicationRoles
+	with schemabinding as 
+	select u.Id UserId, r.[Application], r.Name [Role] 
+		from dbo.AspNetUsers u
+        inner join dbo.AspNetUserRoles ur
+			on ur.UserId = u.Id
+		inner join dbo.AspNetRoles r
+			on ur.RoleId = r.Id
+2020-08-26 08:56:23.840 -04:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+create unique clustered index 
+	ucidx_UserApplicationRoles
+		on UserApplicationRoles(UserId,[Application],[Role]);
+2020-08-26 08:56:23.847 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+create nonclustered index
+	idx_UserApplicationRoles_AppName
+		on UserApplicationRoles([Application]);
+2020-08-26 08:56:23.852 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+create view UserClientApplicationRoles
+	as
+	select uar.UserId, ca.ClientId, uar.[Application], uar.[Role]
+		from UserApplicationRoles uar
+		inner join ClientApplications ca
+			on uar.[Application] = ca.[Application]
+2020-08-26 08:56:23.859 -04:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE AspNetRoles
+	ADD CONSTRAINT fk_RolesApplications
+		FOREIGN KEY ([Application])
+			REFERENCES AspNetApplications (Name)
+				ON DELETE CASCADE
+2020-08-26 08:56:23.867 -04:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE AspNetUsers
+	ADD CONSTRAINT fk_UsersOrganizations
+		FOREIGN KEY (Organization)
+			REFERENCES AspNetOrganizations (Name)
+				ON DELETE SET NULL
+2020-08-26 08:56:23.873 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+USE [AspNetIdentityServer]
+2020-08-26 08:56:23.880 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+/****** Object:  View [dbo].[DbDump]    Script Date: 8/18/2020 1:18:52 PM ******/
+SET ANSI_NULLS ON
+2020-08-26 08:56:23.885 -04:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SET QUOTED_IDENTIFIER ON
+2020-08-26 08:56:23.895 -04:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE OR ALTER VIEW [dbo].[DbView] AS
+SELECT('{' + STUFF((
+SELECT 
+	JSON_QUERY(
+		STUFF((
+			SELECT ar.Name,
+				JSON_QUERY('[' + stuff((SELECT ', "' + s.Scope + '"' FROM ApiResourceScopes s WHERE s.ApiResourceId = ar.Id FOR XML PATH('')),1,1,'') + ']') Scopes,
+				JSON_QUERY('[' + stuff((SELECT ', "' + c.Type + '"' FROM ApiResourceClaims c WHERE c.ApiResourceId = ar.Id FOR XML PATH('')),1,1,'') + ']') Claims
+				FROM ApiResources ar
+				FOR JSON PATH),1,1,'')) ApiResources,
+	JSON_QUERY('[' + 
+		STUFF((
+			SELECT c.ClientId, c.RequireConsent, c.RequirePkce, c.AllowAccessTokensViaBrowser, c.AllowOfflineAccess, c.ClientClaimsPrefix,
+				JSON_QUERY('[' + stuff((SELECT ', "' + g.GrantType + '"' FROM ClientGrantTypes g WHERE g.ClientId = c.Id FOR XML PATH('')),1,1,'') + ']') GrantTypes,	
+				JSON_QUERY('[' + stuff((SELECT ', "' + u.RedirectUri + '"' FROM ClientRedirectUris u WHERE u.ClientId = c.Id FOR XML PATH('')),1,1,'') + ']') RedirectUris,	
+				JSON_QUERY('[' + stuff((SELECT ', "' + u.PostLogoutRedirectUri + '"' FROM ClientPostLogoutRedirectUris u WHERE u.ClientId = c.Id FOR XML PATH('')),1,1,'') + ']') PostLogoutRedirectUris,	
+				JSON_QUERY('[' + stuff((SELECT ', "' + s.Scope + '"' FROM ClientScopes s WHERE s.ClientId = c.Id FOR XML PATH('')),1,1,'') + ']') Scopes,
+				JSON_QUERY('{' 
+					+ STUFF((
+						SELECT ',' + char(34) + Type + char(34) + ':[' + ClaimValues + ']' 
+							FROM (
+								SELECT cc2.Type,
+									STUFF((
+										SELECT ',' + char(34) + cc.Value + char(34) 
+											FROM ClientClaims cc
+											WHERE cc.ClientId = c.Id
+												AND cc.Type = cc2.Type
+											FOR XML PATH('')),1,1,'') as ClaimValues
+									FROM ClientClaims cc2
+									GROUP BY cc2.Type
+									) stf
+							FOR XML PATH('')),1,1,'') + '}' ) as Claims
+				FROM Clients c
+				FOR JSON PATH),1,1,'')
+				+ ']') Clients,
+	JSON_QUERY('[' +
+		STUFF((
+			SELECT u.Id, u.UserName, u.Email, u.EmailConfirmed, u.PhoneNumber, 
+				u.LockoutBegin, u.LockoutEnd, u.LockoutEnabled, u.Organization,  
+				JSON_QUERY('{' 
+					+ STUFF((
+						SELECT ',' + char(34) + [Application] + char(34) + ':[' + RoleNames + ']' 
+							FROM (
+								SELECT a.Name [Application],
+									STUFF((
+										SELECT ',' + char(34) + r.Name + char(34) 
+											FROM dbo.AspNetRoles r
+											INNER JOIN dbo.AspNetUserRoles ur
+												ON ur.RoleId = r.Id
+											WHERE u.Id = ur.UserId
+												AND r.Application = a.Name
+											FOR XML PATH('')),1,1,'') as RoleNames
+									FROM dbo.AspNetApplications a
+									GROUP BY a.Name
+									) stf
+							FOR XML PATH('')),1,1,'') + '}' ) as Roles,
+				JSON_QUERY('{' 
+					+ STUFF((
+						SELECT ',' + char(34) + ClaimType + char(34) + ':[' + ClaimValues + ']' 
+							FROM (
+								SELECT uc2.ClaimType,
+									STUFF((
+										SELECT ',' + char(34) + uc.ClaimValue + char(34) 
+											FROM dbo.AspNetUserClaims uc
+											WHERE u.Id = uc.UserId
+												and uc.ClaimType = uc2.ClaimType
+											FOR XML PATH('')),1,1,'') as ClaimValues
+									FROM dbo.AspNetUserClaims uc2
+									GROUP BY uc2.ClaimType
+									) stf
+							FOR XML PATH('')),1,1,'') + '}' ) as Claims
+	
+				FROM dbo.AspNetUsers u
+	
+				FOR JSON PATH),1,1,'')
+								+ ']') Users
+	FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
+),1,1,'')) as json
+2020-08-26 08:56:23.920 -04:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200818165611_Initial', N'3.1.7');
+2020-08-26 08:56:23.939 -04:00 [INF] Creating DomainIdentityDbContext instance ...
+2020-08-26 08:56:23.995 -04:00 [INF] Creating ConfigurationDbContext instance ...
+2020-08-26 08:56:24.136 -04:00 [INF] Creating PersistedGrantDbContext instance ...
+2020-08-26 08:56:24.208 -04:00 [INF] Loading Configs\IdentityResources.json ...
+2020-08-26 08:56:24.579 -04:00 [INF] 	Adding IdentityResource openid
+2020-08-26 08:56:25.025 -04:00 [INF] 	Adding IdentityResource profile
+2020-08-26 08:56:25.035 -04:00 [INF] 	Adding IdentityResource role
+2020-08-26 08:56:25.210 -04:00 [INF] Loading project configs from Configs ...
+2020-08-26 08:56:25.215 -04:00 [INF] 	Loading Apis for EDennis.Samples.ColorApi ...
+2020-08-26 08:56:25.219 -04:00 [INF] 		Loading EDennis.Samples.ColorApi ...
+2020-08-26 08:56:25.395 -04:00 [INF] 	Loading Clients for EDennis.Samples.ColorApi ...
+2020-08-26 08:56:25.409 -04:00 [INF] 		Loading EDennis.Samples.ColorApi ...
+2020-08-26 08:56:25.704 -04:00 [INF] 	Loading TestUsers for EDennis.Samples.ColorApi ...
+2020-08-26 08:56:25.710 -04:00 [INF] 		Checking application record for EDennis.Samples.ColorApi ...
+2020-08-26 08:56:25.718 -04:00 [INF] 		Adding application record for EDennis.Samples.ColorApi ...
+2020-08-26 08:56:25.750 -04:00 [INF] 		Checking role records for EDennis.Samples.ColorApi ...
+2020-08-26 08:56:25.762 -04:00 [INF] 		Adding role Admin record for EDennis.Samples.ColorApi ...
+2020-08-26 08:56:25.788 -04:00 [INF] 		Adding role User record for EDennis.Samples.ColorApi ...
+2020-08-26 08:56:25.791 -04:00 [INF] 		Adding role Readonly record for EDennis.Samples.ColorApi ...
+2020-08-26 08:56:25.793 -04:00 [INF] 		Checking test user records for EDennis.Samples.ColorApi ...
+2020-08-26 08:56:25.794 -04:00 [INF] 			Checking organization record for admin1@.test ...
+2020-08-26 08:56:25.801 -04:00 [INF] 			Adding Organization a.test record for admin1@.test ...
+2020-08-26 08:56:25.813 -04:00 [INF] 			Checking user record for admin1@.test ...
+2020-08-26 08:56:25.825 -04:00 [INF] 			Adding user record for admin1@.test ...
+2020-08-26 08:56:25.869 -04:00 [INF] 			Checking user role records for admin1@.test ...
+2020-08-26 08:56:25.908 -04:00 [INF] 			Checking claim records for admin1@.test ...
+2020-08-26 08:56:25.936 -04:00 [INF] 			Checking organization record for darius@b.test ...
+2020-08-26 08:56:25.938 -04:00 [INF] 			Adding Organization b.test record for darius@b.test ...
+2020-08-26 08:56:25.940 -04:00 [INF] 			Checking user record for darius@b.test ...
+2020-08-26 08:56:25.941 -04:00 [INF] 			Adding user record for darius@b.test ...
+2020-08-26 08:56:25.946 -04:00 [INF] 			Checking user role records for darius@b.test ...
+2020-08-26 08:56:25.951 -04:00 [INF] 			Checking claim records for darius@b.test ...
+2020-08-26 08:56:25.955 -04:00 [INF] 			Checking organization record for pat@c.test ...
+2020-08-26 08:56:25.958 -04:00 [INF] 			Adding Organization c.test record for pat@c.test ...
+2020-08-26 08:56:25.960 -04:00 [INF] 			Checking user record for pat@c.test ...
+2020-08-26 08:56:25.961 -04:00 [INF] 			Adding user record for pat@c.test ...
+2020-08-26 08:56:25.965 -04:00 [INF] 			Checking user role records for pat@c.test ...
+2020-08-26 08:56:25.970 -04:00 [INF] 			Checking claim records for pat@c.test ...
+2020-08-26 08:56:25.983 -04:00 [INF] 	Loading Apis for EDennis.Samples.ColorApp.Razor ...
+2020-08-26 08:56:25.984 -04:00 [INF] 		Loading EDennis.Samples.ColorApp.Razor ...
+2020-08-26 08:56:26.019 -04:00 [INF] 	Loading Clients for EDennis.Samples.ColorApp.Razor ...
+2020-08-26 08:56:26.021 -04:00 [INF] 		Loading EDennis.Samples.ColorApp.Razor ...
+2020-08-26 08:56:26.076 -04:00 [INF] 	Loading TestUsers for EDennis.Samples.ColorApp.Razor ...
+2020-08-26 08:56:26.079 -04:00 [INF] 		Checking application record for EDennis.Samples.ColorApp.Razor ...
+2020-08-26 08:56:26.082 -04:00 [INF] 		Adding application record for EDennis.Samples.ColorApp.Razor ...
+2020-08-26 08:56:26.085 -04:00 [INF] 		Checking role records for EDennis.Samples.ColorApp.Razor ...
+2020-08-26 08:56:26.089 -04:00 [INF] 		Adding role Admin record for EDennis.Samples.ColorApp.Razor ...
+2020-08-26 08:56:26.094 -04:00 [INF] 		Adding role User record for EDennis.Samples.ColorApp.Razor ...
+2020-08-26 08:56:26.097 -04:00 [INF] 		Adding role Readonly record for EDennis.Samples.ColorApp.Razor ...
+2020-08-26 08:56:26.102 -04:00 [INF] 		Checking test user records for EDennis.Samples.ColorApp.Razor ...
+2020-08-26 08:56:26.103 -04:00 [INF] 			Checking organization record for admin1@.test ...
+2020-08-26 08:56:26.108 -04:00 [INF] 			Organization a.test record found for admin1@.test ...
+2020-08-26 08:56:26.111 -04:00 [INF] 			Checking user record for admin1@.test ...
+2020-08-26 08:56:26.117 -04:00 [INF] 			User record found for admin1@.test ...
+2020-08-26 08:56:26.117 -04:00 [INF] 			Checking user role records for admin1@.test ...
+2020-08-26 08:56:26.124 -04:00 [INF] 			Checking claim records for admin1@.test ...
+2020-08-26 08:56:26.126 -04:00 [INF] 			Checking organization record for darius@b.test ...
+2020-08-26 08:56:26.127 -04:00 [INF] 			Organization b.test record found for darius@b.test ...
+2020-08-26 08:56:26.128 -04:00 [INF] 			Checking user record for darius@b.test ...
+2020-08-26 08:56:26.130 -04:00 [INF] 			User record found for darius@b.test ...
+2020-08-26 08:56:26.133 -04:00 [INF] 			Checking user role records for darius@b.test ...
+2020-08-26 08:56:26.138 -04:00 [INF] 			Checking claim records for darius@b.test ...
+2020-08-26 08:56:26.139 -04:00 [INF] 			Checking organization record for pat@c.test ...
+2020-08-26 08:56:26.140 -04:00 [INF] 			Organization c.test record found for pat@c.test ...
+2020-08-26 08:56:26.143 -04:00 [INF] 			Checking user record for pat@c.test ...
+2020-08-26 08:56:26.145 -04:00 [INF] 			User record found for pat@c.test ...
+2020-08-26 08:56:26.146 -04:00 [INF] 			Checking user role records for pat@c.test ...
+2020-08-26 08:56:26.150 -04:00 [INF] 			Checking claim records for pat@c.test ...
+2020-08-26 08:56:26.162 -04:00 [INF] 	Loading Apis for EDennis.Samples.ColorApp.Server ...
+2020-08-26 08:56:26.164 -04:00 [INF] 		Loading EDennis.Samples.ColorApp.Server ...
+2020-08-26 08:56:26.194 -04:00 [INF] 	Loading Clients for EDennis.Samples.ColorApp.Server ...
+2020-08-26 08:56:26.196 -04:00 [INF] 		Loading EDennis.Samples.ColorApp.Server ...
+2020-08-26 08:56:26.212 -04:00 [INF] 	Loading TestUsers for EDennis.Samples.ColorApp.Server ...
+2020-08-26 08:56:26.213 -04:00 [INF] 		Checking application record for EDennis.Samples.ColorApp.Server ...
+2020-08-26 08:56:26.217 -04:00 [INF] 		Adding application record for EDennis.Samples.ColorApp.Server ...
+2020-08-26 08:56:26.220 -04:00 [INF] 		Checking role records for EDennis.Samples.ColorApp.Server ...
+2020-08-26 08:56:26.221 -04:00 [INF] 		Adding role Admin record for EDennis.Samples.ColorApp.Server ...
+2020-08-26 08:56:26.227 -04:00 [INF] 		Adding role User record for EDennis.Samples.ColorApp.Server ...
+2020-08-26 08:56:26.230 -04:00 [INF] 		Adding role Readonly record for EDennis.Samples.ColorApp.Server ...
+2020-08-26 08:56:26.233 -04:00 [INF] 		Checking test user records for EDennis.Samples.ColorApp.Server ...
+2020-08-26 08:56:26.236 -04:00 [INF] 			Checking organization record for admin1@.test ...
+2020-08-26 08:56:26.238 -04:00 [INF] 			Organization a.test record found for admin1@.test ...
+2020-08-26 08:56:26.238 -04:00 [INF] 			Checking user record for admin1@.test ...
+2020-08-26 08:56:26.241 -04:00 [INF] 			User record found for admin1@.test ...
+2020-08-26 08:56:26.241 -04:00 [INF] 			Checking user role records for admin1@.test ...
+2020-08-26 08:56:26.250 -04:00 [INF] 			Checking claim records for admin1@.test ...
+2020-08-26 08:56:26.252 -04:00 [INF] 			Checking organization record for darius@b.test ...
+2020-08-26 08:56:26.253 -04:00 [INF] 			Organization b.test record found for darius@b.test ...
+2020-08-26 08:56:26.254 -04:00 [INF] 			Checking user record for darius@b.test ...
+2020-08-26 08:56:26.261 -04:00 [INF] 			User record found for darius@b.test ...
+2020-08-26 08:56:26.262 -04:00 [INF] 			Checking user role records for darius@b.test ...
+2020-08-26 08:56:26.267 -04:00 [INF] 			Checking claim records for darius@b.test ...
+2020-08-26 08:56:26.271 -04:00 [INF] 			Checking organization record for pat@c.test ...
+2020-08-26 08:56:26.273 -04:00 [INF] 			Organization c.test record found for pat@c.test ...
+2020-08-26 08:56:26.275 -04:00 [INF] 			Checking user record for pat@c.test ...
+2020-08-26 08:56:26.278 -04:00 [INF] 			User record found for pat@c.test ...
+2020-08-26 08:56:26.283 -04:00 [INF] 			Checking user role records for pat@c.test ...
+2020-08-26 08:56:26.290 -04:00 [INF] 			Checking claim records for pat@c.test ...
+2020-08-26 08:56:26.303 -04:00 [INF] **Finished Loading Configurations.
+2020-08-26 08:56:26.306 -04:00 [INF] Dumping ApiResources, Clients, and Users to JSON file ...
+2020-08-26 08:56:26.397 -04:00 [INF] User profile is available. Using 'C:\Users\denmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-08-26 08:56:26.527 -04:00 [INF] Starting IdentityServer4 version 4.0.4+1b36d1b414f4e0f965af97ab2a7e9dd1b5167bca
+2020-08-26 08:56:26.552 -04:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2020-08-26 08:56:27.059 -04:00 [INF] Now listening on: https://localhost:5000
+2020-08-26 08:56:27.064 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2020-08-26 08:56:27.088 -04:00 [INF] Hosting environment: Development
+2020-08-26 08:56:27.091 -04:00 [INF] Content root path: C:\Users\denmi\source\repos\denmitchell\EDennis.AspNet.Base\EDennis.AspNetIdentityServer

@@ -23,11 +23,25 @@
       "ClientId": "EDennis.Samples.ColorApp.Razor",
       "PlainTextSecret": "secret",
       "AllowedGrantTypes": [
-        "client_credentials"
+        "code"
       ],
+      "RequireConsent": false,
+      "RequirePkce": true,
+      "AllowOfflineAccess": true,
       "ClientClaimsPrefix": "",
       "AllowedScopes": [
-        "EDennis.Samples.ColorApp.Razor.*"
+        "EDennis.Samples.ColorApp.Razor.*",
+        "openid",
+        "profile",
+        "name",
+        "email",
+        "role"
+      ],
+      "RedirectUris": [
+        "https://localhost:44305/signin-oidc"
+      ],
+      "PostLogoutRedirectUris": [
+        "https://localhost:44305/signout-callback-oidc"
       ]
     }
   ],
