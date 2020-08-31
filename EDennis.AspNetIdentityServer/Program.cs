@@ -362,7 +362,11 @@ namespace EDennis.AspNetIdentityServer {
                         UserName = entry.Email,
                         NormalizedUserName = entry.Email,
                         EmailConfirmed = true,
-                        Organization = entry.Organization
+                        PhoneNumber = entry.PhoneNumber,
+                        PhoneNumberConfirmed = true,
+                        Organization = entry.Organization,
+                        OrganizationConfirmed = true,
+                        OrganizationAdmin = entry.OrganizationAdmin
                     };
                     user.PasswordHash = HashPassword(entry.PlainTextPassword);
                     context.Users.Add(user);

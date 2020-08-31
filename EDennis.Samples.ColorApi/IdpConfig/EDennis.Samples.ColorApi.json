@@ -35,6 +35,9 @@
       "ClientClaimsPrefix": "",
       "AllowedScopes": [
         "EDennis.Samples.ColorApi.*"
+      ],
+      "Applications": [
+        "EDennis.Samples.ColorApi"
       ]
     }
   ],
@@ -43,6 +46,7 @@
       "Email": "maria@a.test",
       "PlainTextPassword": "test",
       "Organization": "a.test",
+      "IsOrgAdmin": true,
       "Roles": [
         "Admin"
       ],
@@ -59,6 +63,7 @@
       "Email": "darius@b.test",
       "PlainTextPassword": "test",
       "Organization": "b.test",
+      "IsOrgAdmin": false,
       "Roles": [
         "User"
       ],
@@ -75,6 +80,7 @@
       "Email": "pat@c.test",
       "PlainTextPassword": "test",
       "Organization": "c.test",
+      "IsOrgAdmin": false,
       "Roles": [
         "Readonly"
       ],

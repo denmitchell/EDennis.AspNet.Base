@@ -25,31 +25,48 @@ namespace EDennis.NetStandard.Base {
                     Email = "maria@a.test",
                     PlainTextPassword = "test",
                     Organization = "a.test",
-                    IsOrgAdmin = true,
-                    Claims = new Dictionary<string, List<string>> {
-                        { "name", new List<string>() { "Maria" } },
-                        { "phone", new List<string>() { "999.555.1212" } }
-                    },
+                    OrganizationAdmin = true,
+                    PhoneNumber = "999.555.1212",
+                    Roles = new List<string>() { "Admin" }
+                },
+                new TestUser {
+                    Email = "john@a.test",
+                    PlainTextPassword = "test",
+                    Organization = "a.test",
+                    OrganizationAdmin = false,
+                    PhoneNumber = "999.555.1313",
                     Roles = new List<string>() { "Admin" }
                 },
                 new TestUser {
                     Email = "darius@b.test",
                     PlainTextPassword = "test",
                     Organization = "b.test",
-                    Claims = new Dictionary<string, List<string>> {
-                        { "name", new List<string>() { "Darius" } },
-                        { "phone", new List<string>() { "888.555.1212" } }
-                    },
+                    OrganizationAdmin = true,
+                    PhoneNumber = "888.555.1212",
+                    Roles = new List<string>() { "User" }
+                },
+                new TestUser {
+                    Email = "linda@b.test",
+                    PlainTextPassword = "test",
+                    Organization = "b.test",
+                    OrganizationAdmin = false,
+                    PhoneNumber = "888.555.1313",
                     Roles = new List<string>() { "User" }
                 },
                 new TestUser {
                     Email = "pat@c.test",
                     PlainTextPassword = "test",
                     Organization = "c.test",
-                    Claims = new Dictionary<string, List<string>> {
-                        { "name", new List<string>() { "Pat" } },
-                        { "phone", new List<string>() { "777.555.1212" } }
-                    },
+                    OrganizationAdmin = true,
+                    PhoneNumber = "777.555.1212",
+                    Roles = new List<string>() { "Readonly" }
+                },
+                new TestUser {
+                    Email = "ebony@c.test",
+                    PlainTextPassword = "test",
+                    Organization = "c.test",
+                    OrganizationAdmin = true,
+                    PhoneNumber = "777.555.1313",
                     Roles = new List<string>() { "Readonly" }
                 },
             };
@@ -115,7 +132,7 @@ namespace EDennis.NetStandard.Base {
                         jw.WriteString("Email", user.Email);
                         jw.WriteString("PlainTextPassword", user.PlainTextPassword);
                         jw.WriteString("Organization", user.Organization);
-                        jw.WriteBoolean("IsOrgAdmin", user.IsOrgAdmin);
+                        jw.WriteBoolean("OrganizationAdmin", user.OrganizationAdmin);
                         jw.WriteStartArray("Roles");
                         {
                             foreach (var role in user.Roles) {
@@ -123,19 +140,21 @@ namespace EDennis.NetStandard.Base {
                             }
                         }
                         jw.WriteEndArray();
-                        jw.WriteStartObject("Claims");
-                        {
-                            foreach (var claimType in user.Claims.Keys) {
-                                jw.WriteStartArray(claimType);
-                                {
-                                    foreach (var claimValue in user.Claims[claimType]) {
-                                        jw.WriteStringValue(claimValue);
+                        if (user.Claims.Count > 0) {
+                            jw.WriteStartObject("Claims");
+                            {
+                                foreach (var claimType in user.Claims.Keys) {
+                                    jw.WriteStartArray(claimType);
+                                    {
+                                        foreach (var claimValue in user.Claims[claimType]) {
+                                            jw.WriteStringValue(claimValue);
+                                        }
                                     }
+                                    jw.WriteEndArray();
                                 }
-                                jw.WriteEndArray();
                             }
+                            jw.WriteEndObject();
                         }
-                        jw.WriteEndObject();
                     }
                     jw.WriteEndObject();
                 }
@@ -191,7 +210,7 @@ namespace EDennis.NetStandard.Base {
                     jw.WriteEndArray();
                     jw.WriteStartArray("Applications");
                     {
-                        jw.WriteStringValue($"project");
+                        jw.WriteStringValue(project);
                     }
                     jw.WriteEndArray();
                 }
@@ -239,7 +258,7 @@ namespace EDennis.NetStandard.Base {
                     jw.WriteEndArray();
                     jw.WriteStartArray("Applications");
                     {
-                        jw.WriteStringValue($"project");
+                        jw.WriteStringValue(project);
                     }
                     jw.WriteEndArray();
                 }
