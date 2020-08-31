@@ -12,14 +12,19 @@ using System.Threading.Tasks;
 namespace EDennis.AspNetIdentityServer {
 
     /// <summary>
-    /// Gets all roles associated with the ClientId, as well as 
+    /// Gets all app roles associated with the ClientId, as well as 
     /// any requested UserClaims.
     /// 
-    /// NOTE: this implementation depends upon the existence of a 
-    /// UserClientApplicationRoles view (materialized is better)
+    /// NOTE: this implementation requires each Client to store each
+    /// relevant application name as a record in ClientProperties,
+    /// where the Key column holds the application name.  By convention, 
+    /// the Value column should be "ResourceApplication" (or 
+    /// something else that conveys the meaning of the record); 
+    /// however, there are no real constraints on the Value column.
     /// 
     /// NOTE: when configuring an ApiResource, add UserClaims -- all
-    /// user claims that should be added to access token
+    /// user claims that should be added to access token.  These
+    /// claims are stored as entries in the ApiResourceClaims table.
     /// </summary>
     public class DomainIdentityProfileService : IProfileService {
 
@@ -32,30 +37,33 @@ namespace EDennis.AspNetIdentityServer {
             _logger = logger;
         }
 
-        
+
         public async Task GetProfileDataAsync(ProfileDataRequestContext context) {
 
             var userId = int.Parse(context.Subject.GetSubjectId());
             var clientId = context.Client.ClientId;
 
+            //retrieve client Application Names stored as property keys 
+            var scopes = context.Client.Properties.Keys;
 
-            //add roles
-            var roles = await _dbContext.Set<UserClientApplicationRole>()
-                .Where(x => x.UserId == userId && x.ClientId == clientId)
-                .ToListAsync();
-
-            context.IssuedClaims.AddRange(roles.Select(r => new Claim(r.Application, r.Role)));
-
-
-            //add requested user claims
+            //retrieve all user claims from database
             var userClaims = await _dbContext.UserClaims
-                                .Where(uc => uc.UserId == userId
-                                    && context.RequestedClaimTypes.Any(rct => rct == uc.ClaimType))
-                                .Select(uc=>new Claim(uc.ClaimType, uc.ClaimValue))
+                                .Where(uc => uc.UserId == userId)
+                                .Select(uc => new Claim(uc.ClaimType, uc.ClaimValue))
                                 .ToListAsync();
 
+            //limit the list of claims to those that are either
+            //  (a) requested claims, as configured in ApiResourceClaims OR
+            //  (b) app role claims for applications registered in ClientProperties
+            userClaims = userClaims
+                .Where(uc => context.RequestedClaimTypes.Any(rct => rct == uc.Type)
+                    || (uc.Type.StartsWith("app:") && scopes.Any(s => uc.Value.StartsWith($"{s}:"))))
+                .ToList();
+
+            //updated the IssuedClaims property
             context.IssuedClaims.AddRange(userClaims);
         }
+
 
 
         /// <summary>

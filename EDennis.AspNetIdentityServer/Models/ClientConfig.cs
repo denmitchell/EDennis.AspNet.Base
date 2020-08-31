@@ -1,5 +1,6 @@
 ﻿using IdentityServer4.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EDennis.AspNetIdentityServer {
     public class ClientConfig : Client {
@@ -15,6 +16,16 @@ namespace EDennis.AspNetIdentityServer {
             } 
         }
 
+        public string[] _applications;
+
+        public string[] Applications {
+            get => _applications;
+            set {
+                _applications = value;
+                if (_applications != null && _applications.Length > 0)
+                    Properties = _applications.ToDictionary(a => a, a => "ApplicationResource");
+            }
+        }
 
     }
 }

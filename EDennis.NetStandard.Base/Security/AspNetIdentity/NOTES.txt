@@ -1,8 +1,7 @@
 ﻿Features of AspNetIdentityServer
 	0. Combined IdentityServer and ASP.NET Identity
-	1. Application Property of Role
-	2. Organization Property of User
-	3. UserClientApplicationRoles materialized view
-	4. DomainIdentityProfileService
-	5. int Keys for User and Role (with CombGuid default)
-	6. Role-associated claims resolved by app
+	1. Organization Property of User
+	2. Org Admins and App Admins
+	3. DomainIdentityProfileService
+	4. int Keys for User and Role (with CombGuid default)
+	5. Role-associated claims resolved by app

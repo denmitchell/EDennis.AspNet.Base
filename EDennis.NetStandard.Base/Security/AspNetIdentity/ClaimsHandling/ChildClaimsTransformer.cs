@@ -25,7 +25,6 @@ namespace EDennis.NetStandard.Base {
 
         private readonly ChildClaimCache _cache;
         private readonly IHostEnvironment _env;
-        private readonly IAppClaimEncoder _encoder;
 
         /// <summary>
         /// 
@@ -33,11 +32,9 @@ namespace EDennis.NetStandard.Base {
         /// <param name="cache">Singleton holding cached ChildClaimCache</param>
         /// <param name="env"></param>
         /// <param name="encoder">Implementation of IAppClaimEncoder</param>
-        public ChildClaimsTransformer(ChildClaimCache cache, IHostEnvironment env,
-            IAppClaimEncoder encoder) {
+        public ChildClaimsTransformer(ChildClaimCache cache, IHostEnvironment env) {
             _cache = cache;
             _env = env;
-            _encoder = encoder;
         }
 
         /// <summary>
@@ -55,9 +52,7 @@ namespace EDennis.NetStandard.Base {
                 await Task.Run(() =>
                 {
                 var appClaims = principal.Claims
-                    .Select(c => _encoder.Decode(c))
-                    .Where(c => c.Application == _env.ApplicationName)
-                    .Select(c => new Claim(c.ClaimType, c.ClaimValue))
+                    .Where(c => c.Type == "app:role" && c.Value.StartsWith($"{_env.ApplicationName}:"))
                     .AsQueryable();
 
                     return (from a in appClaims
@@ -67,7 +62,8 @@ namespace EDennis.NetStandard.Base {
                         ).ToList();
                 });
 
-            principal.AddIdentity(new ClaimsIdentity(claims));
+            if(claims != null && claims.Count() > 0)
+                principal.AddIdentity(new ClaimsIdentity(claims));
 
             return principal;
         }

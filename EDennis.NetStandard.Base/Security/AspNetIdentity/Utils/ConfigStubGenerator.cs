@@ -25,6 +25,7 @@ namespace EDennis.NetStandard.Base {
                     Email = "maria@a.test",
                     PlainTextPassword = "test",
                     Organization = "a.test",
+                    IsOrgAdmin = true,
                     Claims = new Dictionary<string, List<string>> {
                         { "name", new List<string>() { "Maria" } },
                         { "phone", new List<string>() { "999.555.1212" } }
@@ -52,6 +53,7 @@ namespace EDennis.NetStandard.Base {
                     Roles = new List<string>() { "Readonly" }
                 },
             };
+
 
         public static void GenerateIdpConfigStub<TStartup>(
             dynamic idpPortOrUrl,
@@ -103,6 +105,7 @@ namespace EDennis.NetStandard.Base {
 
         }
 
+
         private static void WriteTestUsersSection(Utf8JsonWriter jw, IEnumerable<TestUser> testUsers) {
             jw.WriteStartArray("TestUsers");
             {
@@ -112,6 +115,7 @@ namespace EDennis.NetStandard.Base {
                         jw.WriteString("Email", user.Email);
                         jw.WriteString("PlainTextPassword", user.PlainTextPassword);
                         jw.WriteString("Organization", user.Organization);
+                        jw.WriteBoolean("IsOrgAdmin", user.IsOrgAdmin);
                         jw.WriteStartArray("Roles");
                         {
                             foreach (var role in user.Roles) {
@@ -185,6 +189,11 @@ namespace EDennis.NetStandard.Base {
                         jw.WriteStringValue($"{project}.*");
                     }
                     jw.WriteEndArray();
+                    jw.WriteStartArray("Applications");
+                    {
+                        jw.WriteStringValue($"project");
+                    }
+                    jw.WriteEndArray();
                 }
                 jw.WriteEndObject();
             }
@@ -226,6 +235,11 @@ namespace EDennis.NetStandard.Base {
                     jw.WriteStartArray("PostLogoutRedirectUris");
                     {
                         jw.WriteStringValue($"{apiUrl}/signout-callback-oidc");
+                    }
+                    jw.WriteEndArray();
+                    jw.WriteStartArray("Applications");
+                    {
+                        jw.WriteStringValue($"project");
                     }
                     jw.WriteEndArray();
                 }

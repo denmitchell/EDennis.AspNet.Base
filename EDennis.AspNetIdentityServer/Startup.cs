@@ -1,20 +1,15 @@
-using EDennis.AspNetIdentityServer;
-using EDennis.MigrationsExtensions;
 using EDennis.NetStandard.Base;
-using IdentityServer4.EntityFramework.Options;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace EDennis.AspNetIdentityServer {
@@ -50,9 +45,8 @@ namespace EDennis.AspNetIdentityServer {
             //   string via the SqlServer property
             string cxnConfiguration = Configuration.GetValueOrThrow<string>("DbContexts:ConfigurationDbContext:ConnectionString",null,true);
             string cxnPersistedGrant = Configuration.GetValueOrThrow<string>("DbContexts:PersistedGrantDbContext:ConnectionString", null, true);
-            string cxnAspNetIdentity = Configuration.GetValueOrThrow<string>("DbContexts:AspNetIdentityDbContext:ConnectionString", null, true);
+            string cxnAspNetIdentity = Configuration.GetValueOrThrow<string>("DbContexts:DomainIdentityDbContext:ConnectionString", null, true);
 
-            services.AddScoped<IAppClaimEncoder, DefaultAppClaimEncoder>();
 
             services.AddScoped<IUserClaimsPrincipalFactory<DomainUser>, DomainUserClaimsPrincipalFactory>();
 
@@ -71,17 +65,20 @@ namespace EDennis.AspNetIdentityServer {
                 .AddAspNetIdentity<DomainUser>()
                 .AddProfileService<DomainIdentityProfileService>();
 
+
+            services.Configure<CentralAdminOptions>(Configuration.GetSection("CentralAdmin"));
+            services.Configure<ClaimsPrincipalFactoryOptions>(Configuration.GetSection("ClaimsPrincipalFactory"));
+            services.AddSingleton<CentralAdmin>();
+
+
             services.AddDbContext<DomainIdentityDbContext>(options =>
                     options.UseSqlServer(cxnAspNetIdentity,
-                        sql => sql.MigrationsAssembly(migrationsAssembly))
-                    .ReplaceService<IMigrationsSqlGenerator,MigrationsExtensionsSqlGenerator>());
+                        sql => sql.MigrationsAssembly(migrationsAssembly)));
 
+            services.AddDefaultIdentity<DomainUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddUserStore<DomainUserStore>()
+                .AddClaimsPrincipalFactory<DomainUserClaimsPrincipalFactory>();
 
-            services.AddIdentity<DomainUser, DomainRole>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<DomainIdentityDbContext>()
-                //.AddUserManager<>
-                //.AddRoleManager<>
-                .AddDefaultTokenProviders();
 
             services.AddTransient<IEmailSender, MockEmailSender>();
 
@@ -90,18 +87,6 @@ namespace EDennis.AspNetIdentityServer {
             services.Replace(ServiceDescriptor.Transient<IProfileService, DomainIdentityProfileService>());
 
             services.AddOidcLogging(Configuration);
-
-            //services.AddAuthentication()
-            //    .AddGoogle("Google", options => {
-            //        options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-            //        options.ClientId = "<insert here>";
-            //        options.ClientSecret = "<insert here>";
-            //    })
-            //    .AddMicrosoftAccount("Microsoft", options => {
-            //        options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-            //        options.ClientId = "<insert here>";
-            //        options.ClientSecret = "<insert here>";
-            //    });
 
 
             services.AddAuthorization(options =>

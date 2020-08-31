@@ -4,16 +4,12 @@ using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Interfaces;
 using IdentityServer4.EntityFramework.Options;
 using IdentityServer4.EntityFramework.Stores;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace EDennis.HostedBlazor.Base {
     public static class IServiceCollectionExtensions_Blazor {
@@ -26,16 +22,10 @@ namespace EDennis.HostedBlazor.Base {
         /// <param name="config"></param>
         /// <param name="configKey"></param>
         /// <returns></returns>
-        public static IServiceCollection AddIntegratedIdentityServerAndAspNetIdentity<TAppClaimEncoder>(
+        public static IServiceCollection AddIntegratedIdentityServerAndAspNetIdentity(
             this IServiceCollection services, IConfiguration config,
             string configKey = "ConnectionStrings:DomainIdentityDbContext",
-            Action<IdentityOptions> configureOptions = null)
-
-            where TAppClaimEncoder : class, IAppClaimEncoder {
-
-
-            //try add IAppClaimEncoder implementation
-            services.TryAddSingleton<IAppClaimEncoder, TAppClaimEncoder>();
+            Action<IdentityOptions> configureOptions = null) {
 
 
             //Step 1: Add the DbContext for ASP.NET Identity
@@ -46,56 +36,17 @@ namespace EDennis.HostedBlazor.Base {
 
             //Step 2: Add common ASP.NET Identity services, including default UI
             //replacing call to services.AddDefaultIdentity<DomainUser>(options => { options.SignIn.RequireConfirmedAccount = true; });
-            services.AddDefaultIdentity<DomainUser>(options => { options.SignIn.RequireConfirmedAccount = true; });
-
-
-            /*
-
-            //https://github.com/dotnet/aspnetcore/blob/bfec2c14be1e65f7dd361a43950d4c848ad0cd35/src/Identity/UI/src/IdentityServiceCollectionUIExtensions.cs
-            services.AddAuthentication(o =>
-            {
-                o.DefaultScheme = IdentityConstants.ApplicationScheme;
-                o.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-            })
-            .AddIdentityServerJwt()
-            .AddIdentityCookies(o => { });
-
-
-            //https://github.com/dotnet/aspnetcore/blob/555b506a97a188583df2872913cc40b59e563da6/src/Identity/Extensions.Core/src/IdentityServiceCollectionExtensions.cs
-            // Services identity depends on
-            services.AddOptions().AddLogging();
-
-            // Services used by identity
-            //services.TryAddScoped<IUserValidator<DomainUser>, UserValidator<DomainUser>>(); //handled with IdentityBuilder below
-            //services.TryAddScoped<IPasswordValidator<DomainUser>, PasswordValidator<DomainUser>>(); //handled with IdentityBuilder below
-            services.TryAddScoped<IPasswordHasher<DomainUser>, PasswordHasher<DomainUser>>();
-            services.TryAddScoped<ILookupNormalizer, NoEffectNormalizer>(); // don't use UpperInvariantLookupNormalizer> because managers use case-insensitive EF.Functions.Like
-            services.TryAddScoped<IUserConfirmation<DomainUser>, DefaultUserConfirmation<DomainUser>>();
-            //services.TryAddScoped<IdentityErrorDescriber>(); //handled with IdentityBuilder below
-            //services.TryAddScoped<IUserClaimsPrincipalFactory<DomainUser>, DomainUserClaimsPrincipalFactory>(); //handled with replace service below
-            //services.TryAddScoped<UserManager<DomainUser>>(); //handled with IdentityBuilder below
-
-            configureOptions ??= options =>
-            {
-                options.Stores.MaxLengthForKeys = 128;
-                options.SignIn.RequireConfirmedAccount = true;
-            };
-
-            services.Configure(configureOptions);
-
-            */
-
-
+            services.AddDefaultIdentity<DomainUser>(options => { options.SignIn.RequireConfirmedAccount = true; })
+                .AddUserStore<DomainUserStore>()
+                .AddClaimsPrincipalFactory<DomainUserClaimsPrincipalFactory>();
+            ;
 
             //explicitly instantiating IdentityBuilder in order to pass in
-            //type of TUser and type of TRole
-            var ibuilder = new IdentityBuilder(typeof(DomainUser), typeof(DomainRole), services)
+            //type of TUser
+            var ibuilder = new IdentityBuilder(typeof(DomainUser), services)
                 .AddUserStore<DomainUserStore>()
-                .AddRoleStore<DomainRoleStore>()
-                .AddUserManager<DomainUserManager>()
-                .AddRoleManager<DomainRoleManager>()
+                .AddUserManager<UserManager<DomainUser>>()
                 .AddUserValidator<UserValidator<DomainUser>>() //https://github.com/dotnet/aspnetcore/blob/master/src/Identity/Extensions.Core/src/UserValidator.cs
-                .AddRoleValidator<DomainRoleValidator>()
                 .AddPasswordValidator<PasswordValidator<DomainUser>>()
                 .AddErrorDescriber<IdentityErrorDescriber>()
                 .AddDefaultTokenProviders()
@@ -125,11 +76,6 @@ namespace EDennis.HostedBlazor.Base {
                 .AddResourceStore<ResourceStore>()
                 .AddClientStore<ClientStore>()
                 .AddPersistedGrantStore<PersistedGrantStore>()
-                //.AddAspNetIdentity<DomainUser>()
-                //.AddSigningCredentials()
-                //.AddConfigurationStore<ConfigurationDbContext>()
-                //.AddOperationalStore<PersistedGrantDbContext>()
-                //Add the custom profile service, which uses the UserClientApplicationRole view
                 .AddProfileService<DomainIdentityProfileService>();
 
 

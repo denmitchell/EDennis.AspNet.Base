@@ -1,0 +1,132 @@
+﻿@page "{id}"
+@model EDennis.AspNetIdentityServer.Areas.Identity.Pages.Account.Admin.UserModel
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+<h4>@ViewData["Title"]</h4>
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+<form id="user" method="post">
+
+    <hr class="mt-sm-5" />
+    <h5 class="text-center">User Information</h5>
+    <hr />
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-row align-items-center">
+        <div class="col-sm-2">User Name</div>
+        <div class="col-sm-4">
+            <input asp-for="UserName" class="form-control" placeholder="UserName" readonly />
+        </div>
+    </div>
+
+    <div class="form-row align-items-center">
+        <div class="col-sm-2">Phone Number</div>
+        <div class="col-sm-4">
+            <input asp-for="PhoneNumber" class="form-control" placeholder="Phone Number" readonly=@(!(Model.IsSelf || Model.IsSuperAdmin || Model.IsOrgAdmin)) />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+        <div class="col-auto form-inline">
+            <input asp-for="PhoneNumberConfirmed" disabled=@(Model.IsSuperAdmin || Model.IsOrgAdmin)>
+            <label asp-for="PhoneNumberConfirmed">Confirmed</label>
+        </div>
+    </div>
+
+    <div class="form-row align-items-center">
+        <div class="col-sm-2">Email</div>
+        <div class="col-sm-4">
+            <input asp-for="Email" class="form-control" placeholder="Email" readonly=@(!(Model.IsSelf || Model.IsSuperAdmin || Model.IsOrgAdmin)) />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="col-auto form-inline">
+            <input asp-for="EmailConfirmed" disabled=@(!(Model.IsSuperAdmin || Model.IsOrgAdmin))>
+            <label asp-for="EmailConfirmed">Confirmed</label>
+        </div>
+    </div>
+
+    <div class="form-row align-items-center">
+        <div class="col-sm-2">Organization</div>
+        <div class="col-sm-4">
+            <select asp-for="Organization" asp-items="Model.Organizations" class="form-control" disabled=@(!(Model.IsSuperAdmin || ( Model.IsOrgAdmin && !Model.IsSelf)))>
+            </select>
+        </div>
+        <div class="col-auto form-inline">
+            <input asp-for="OrganizationConfirmed" disabled=@(!(Model.IsSuperAdmin || ( Model.IsOrgAdmin && !Model.IsSelf))) />
+            <label asp-for="OrganizationConfirmed">Confirmed</label>
+        </div>
+        <div class="col-auto form-inline">
+            <input asp-for="OrganizationAdmin" disabled=@(!(Model.IsSuperAdmin || ( Model.IsOrgAdmin && !Model.IsSelf))) />
+            <label asp-for="OrganizationAdmin">Admin</label>
+        </div>
+    </div>
+
+    <div class="form-row align-items-center">
+        <div class="col-sm-2">Lockout</div>
+        <div class="col-sm-4 form-inline">
+            <div class="input-group-prepend">
+                <div class="input-group-text">Begin</div>
+            </div>
+            <input type="date" asp-for="LockoutBegin" class="form-control" readonly=@(!(Model.IsSelf || Model.IsSuperAdmin || Model.IsOrgAdmin)) />
+            <span asp-validation-for="LockoutBegin" class="text-danger"></span>
+        </div>
+        <div class="col-sm-4 form-inline">
+            <div class="input-group-prepend">
+                <div class="input-group-text">End</div>
+            </div>
+            <input type="date" asp-for="LockoutEnd" class="form-control form-inline" readonly=@(!(Model.IsSelf || Model.IsSuperAdmin || Model.IsOrgAdmin)) />
+            <span asp-validation-for="LockoutEnd" class="text-danger"></span>
+        </div>
+        <div class="col-auto form-inline">
+            <button class="btn btn-sm btn-secondary" id="UnsetLockoutButton" disabled=@(!(Model.IsSelf || Model.IsSuperAdmin || Model.IsOrgAdmin))>Unset</button>
+        </div>
+    </div>
+
+    @if (Model.IsAdmin()) {
+        <hr class="mt-sm-5" />
+        <h5 class="text-center">Application Roles</h5>
+        <hr />
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Application</th>
+                    <th>Roles</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var app in Model.OrgApps) {
+                    <tr>
+                        <td>@app</td>
+                        <td>
+                            @foreach (var role in Model.AppRoles(app)) {
+                                var key = $"{app}:{role}";
+                                <div class="form-check-inline">
+                                    @*
+                                        To edit an app role, you must either be a super admin, an app admin for the app,
+                                        or an org admin for the org and the app role is flagged as OrgAdminable
+                                    *@
+                                    <input asp-for="AppRoleClaims[key]" class="form-check-input" disabled=@(!(Model.IsSuperAdmin || Model.IsAppAdminFor(app) || (Model.IsOrgAdmin && Model.OrgAdminable(app, role))))>
+                                    <label class="form-check-label">@role</label>
+                                </div>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    }
+    <button id="update-user-button" type="submit" class="btn btn-primary">Save</button>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            $("#UnsetLockoutButton").click(function (e) {
+                e.preventDefault();
+                $("#LockoutBegin").value = "";
+                $("#LockoutEnd").value = "";
+            });
+        });
+    </script>
+}

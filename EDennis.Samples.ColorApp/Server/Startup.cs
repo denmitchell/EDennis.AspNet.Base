@@ -24,7 +24,7 @@ namespace EDennis.Samples.ColorApp.Server {
 
             //add integrated IdentityServer
             //see EDennis.AspNetIdentityServer.ICollectionExtensions:
-            services.AddIntegratedIdentityServerAndAspNetIdentity<DefaultAppClaimEncoder>(Configuration, 
+            services.AddIntegratedIdentityServerAndAspNetIdentity(Configuration, 
                "ConnectionStrings:DomainIdentityDbContext");
 
 
@@ -83,7 +83,7 @@ namespace EDennis.Samples.ColorApp.Server {
             app.UseRouting();
 
             app.UseHttpLogging();
-            app.UseMockClaimsPrincipalFor("/Rgb");
+            //app.UseMockClaimsPrincipalFor("/Rgb");
             app.UseIdentityServer();
             app.UseAuthentication();
             app.UseClaimsToHeaderFor("/Rgb");

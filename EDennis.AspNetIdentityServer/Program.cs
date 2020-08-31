@@ -30,8 +30,6 @@ namespace EDennis.AspNetIdentityServer {
         public static Regex FILE_PROJECT_EXTRACTOR = new Regex(@"(?<=Configs\\)([A-Za-z0-9_.]+)(?=\.json)");
         public const string IDENTITY_RESOURCES_FILE = "IdentityResources.json";
 
-        //NOTE: If using a different implementation of IAppClaimEncoder, update this line!
-        public static IAppClaimEncoder _encoder = new DefaultAppClaimEncoder();
 
         public static void Main(string[] args) {
 
@@ -283,8 +281,7 @@ namespace EDennis.AspNetIdentityServer {
             } else {
                 Log.Information($"\t\tAdding application record for {project} ...");
                 app = new DomainApplication {
-                    Name = project,
-                    SysUser = Environment.UserName
+                    Name = project
                 };
                 context.Set<DomainApplication>().Add(app);
                 context.SaveChanges();
@@ -292,52 +289,62 @@ namespace EDennis.AspNetIdentityServer {
 
 
 
-            Log.Information($"\t\tChecking role records for {project} ...");
+            Log.Information($"\t\tAdding any missing application claim records ...");
+
             var roles = users.SelectMany(u => u.Roles)
                 .ToDictionary(r => r, r => default(int));
 
-            var keys = roles.Keys.ToArray();
-            for (int i=0; i<keys.Length; i++) {
-                var roleName = keys[i];
-                var role = context.Roles.FirstOrDefault(r =>
-                    r.Application == project && r.Name == roleName);
-                if (role != null) {
-                    Log.Information($"\t\tRole {roleName} record found for {project} ...");
-                    roles[roleName] = role.Id;
-                } else {
-                    Log.Information($"\t\tAdding role {roleName} record for {project} ...");
-                    var normalizedRoleName = _encoder.Encode(new AppRole {Application = project, RoleName = roleName });
-                    role = new DomainRole {
-                        Application = project,
-                        Name = roleName,
-                        NormalizedName = normalizedRoleName
-                    };
-                    context.Roles.Add(role);
-                    context.SaveChanges();
-                    roles[roleName] = role.Id;
-                }
-            }
+            var applicationClaimRecords = context.ApplicationClaims
+                .Where(ac => ac.ClaimType == "app:role" && ac.ClaimValue.StartsWith($"{project}:"))
+                .ToList();
+
+            var missingApplicationClaims = roles.Keys
+                .Where(r => !applicationClaimRecords
+                .Any(ac => ac.ClaimValue.EndsWith($":{r}")))
+                .Select(r => new DomainApplicationClaim { 
+                    Application = project, 
+                    ClaimType = "app:role", 
+                    ClaimValue = r, 
+                    OrgAdminable = true 
+                });
+
+            context.ApplicationClaims.AddRange(missingApplicationClaims);
+            context.SaveChanges();
+
+
+
+            Log.Information($"\t\t\tAdding any missing organization records ...");
+
+            var orgs = users.Select(u => u.Organization).Distinct();
+
+            var existingOrgs = context.Set<DomainOrganization>()
+                .Select(o => o.Name).ToList();
+
+            var missingOrgs = orgs.Except(existingOrgs)
+                .Select(o => new DomainOrganization { Name = o });
+
+            context.Organizations.AddRange(missingOrgs);
+            context.SaveChanges();
+
+
+
+            Log.Information($"\t\t\tAdding any missing organization application records ...");
+
+            var existingOrgApps = context.OrganizationApplications
+                .Where(oa => oa.Application == project)
+                .Select(oa=> oa.Organization);
+
+            var missingOrgApps = orgs.Except(existingOrgApps)
+                .Select(o => new DomainOrganizationApplication { Organization = o, Application = project });
+
+            context.OrganizationApplications.AddRange(missingOrgApps);
+            context.SaveChanges();
+
 
 
             Log.Information($"\t\tChecking test user records for {project} ...");
 
             foreach (var entry in users) {
-
-                Log.Information($"\t\t\tChecking organization record for {entry.Email} ...");
-
-                var org = context.Set<DomainOrganization>().FirstOrDefault(a => a.Name == entry.Organization);
-                if (org != null) {
-                    Log.Information($"\t\t\tOrganization {entry.Organization} record found for {entry.Email} ...");
-                } else {
-                    Log.Information($"\t\t\tAdding Organization {entry.Organization} record for {entry.Email} ...");
-                    org = new DomainOrganization {
-                        Name = entry.Organization,
-                        SysUser = Environment.UserName
-                    };
-                    context.Set<DomainOrganization>().Add(org);
-                    context.SaveChanges();
-                }
-
 
 
                 Log.Information($"\t\t\tChecking user record for {entry.Email} ...");
@@ -363,17 +370,6 @@ namespace EDennis.AspNetIdentityServer {
                     userId = user.Id;
                 }
 
-                Log.Information($"\t\t\tChecking user role records for {entry.Email} ...");
-
-                foreach (var role in entry.Roles) {
-                    if (!context.UserRoles.Any(ur => ur.UserId == userId && ur.RoleId == roles[role])) {
-                        context.UserRoles.Add(new IdentityUserRole<int> {
-                            UserId = userId,
-                            RoleId = roles[role]
-                        });
-                        context.SaveChanges();
-                    }
-                }
 
                 Log.Information($"\t\t\tChecking claim records for {entry.Email} ...");
 
