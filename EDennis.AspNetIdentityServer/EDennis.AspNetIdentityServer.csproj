@@ -66,9 +66,4 @@
 	  </Content>
 	</ItemGroup>
 
-
-	<ItemGroup>
-	  <Folder Include="Data\Migrations\DomainIdentity\" />
-	</ItemGroup>
-
 </Project>

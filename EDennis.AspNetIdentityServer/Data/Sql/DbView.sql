@@ -47,7 +47,7 @@ SELECT
 	JSON_QUERY('[' +
 		STUFF((
 			SELECT u.Id, u.UserName, u.Email, u.EmailConfirmed, u.PhoneNumber, u.PhoneNumberConfirmed,
-				u.LockoutBegin, u.LockoutEnd, u.LockoutEnabled, u.Organization, u.OrganizationConfirmed, u.IsOrganizationAdmin, 
+				u.LockoutBegin, u.LockoutEnd, u.Organization, u.OrganizationConfirmed, u.OrganizationAdmin, 
 				JSON_QUERY('{' 
 					+ STUFF((
 						SELECT ',' + char(34) + ClaimType + char(34) + ':[' + ClaimValues + ']' 
