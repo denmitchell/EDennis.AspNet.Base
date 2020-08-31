@@ -13,7 +13,7 @@ namespace EDennis.NetStandard.Base {
         AuthorizationCode
     }
 
-    public static class ConfigStubGenerator {
+    public static class SeedDataGenerator {
 
         public const string OUTPUT_DIR = "IdpConfig";
         public const string DEFAULT_SECRET = "secret";
@@ -23,52 +23,50 @@ namespace EDennis.NetStandard.Base {
             = new List<TestUser> {
                 new TestUser {
                     Email = "maria@a.test",
-                    PlainTextPassword = "test",
-                    Organization = "a.test",
-                    OrganizationAdmin = true,
                     PhoneNumber = "999.555.1212",
                     Roles = new List<string>() { "Admin" }
                 },
                 new TestUser {
                     Email = "john@a.test",
-                    PlainTextPassword = "test",
-                    Organization = "a.test",
-                    OrganizationAdmin = false,
+                    OrganizationAdmin = true,
                     PhoneNumber = "999.555.1313",
-                    Roles = new List<string>() { "Admin" }
+                    Roles = new List<string>() { "User" }
                 },
                 new TestUser {
                     Email = "darius@b.test",
-                    PlainTextPassword = "test",
-                    Organization = "b.test",
                     OrganizationAdmin = true,
                     PhoneNumber = "888.555.1212",
                     Roles = new List<string>() { "User" }
                 },
                 new TestUser {
                     Email = "linda@b.test",
-                    PlainTextPassword = "test",
-                    Organization = "b.test",
-                    OrganizationAdmin = false,
                     PhoneNumber = "888.555.1313",
-                    Roles = new List<string>() { "User" }
+                    Roles = new List<string>() { "Readonly" }
                 },
                 new TestUser {
                     Email = "pat@c.test",
-                    PlainTextPassword = "test",
-                    Organization = "c.test",
                     OrganizationAdmin = true,
                     PhoneNumber = "777.555.1212",
-                    Roles = new List<string>() { "Readonly" }
+                    Roles = new List<string>() { "User" }
                 },
                 new TestUser {
                     Email = "ebony@c.test",
-                    PlainTextPassword = "test",
-                    Organization = "c.test",
-                    OrganizationAdmin = true,
                     PhoneNumber = "777.555.1313",
                     Roles = new List<string>() { "Readonly" }
                 },
+                new TestUser {
+                    Email="juan@a.test",
+                    PhoneNumber = "999.555.1414",
+                    Claims = new Dictionary<string,List<string>>() {
+                        { "*:role", new List<string>{ "*.admin" } }
+                    }
+                },
+                new TestUser {
+                    Email="james@b.test",
+                    PhoneNumber = "888.555.1414",
+                    Roles = new List<string>() { "Readonly" },
+                    LockedOut = true
+                }
             };
 
 
@@ -130,17 +128,34 @@ namespace EDennis.NetStandard.Base {
                     jw.WriteStartObject();
                     {
                         jw.WriteString("Email", user.Email);
-                        jw.WriteString("PlainTextPassword", user.PlainTextPassword);
-                        jw.WriteString("Organization", user.Organization);
-                        jw.WriteBoolean("OrganizationAdmin", user.OrganizationAdmin);
-                        jw.WriteStartArray("Roles");
-                        {
-                            foreach (var role in user.Roles) {
-                                jw.WriteStringValue(role);
+                        if(user.EmailConfirmed != TestUser.EMAIL_CONFIRMED_DEFAULT)
+                            jw.WriteBoolean("EmailConfirmed", user.EmailConfirmed);
+                        if (user.PlainTextPassword != TestUser.PASSWORD_DEFAULT)
+                            jw.WriteString("PlainTextPassword", user.PlainTextPassword);
+                        if (user.PhoneNumber != TestUser.PHONE_NUMBER_DEFAULT)
+                            jw.WriteString("PhoneNumber", user.PhoneNumber);
+                        if(user.PhoneNumberConfirmed != TestUser.PHONE_CONFIRMED_DEFAULT)
+                            jw.WriteBoolean("PhoneNumberConfirmed", user.PhoneNumberConfirmed);
+                        if (user.Organization != default)
+                            jw.WriteString("Organization", user.Organization);
+                        if (user.OrganizationConfirmed != TestUser.ORGANIZATION_CONFIRMED_DEFAULT)
+                            jw.WriteBoolean("OrganizationConfirmed", user.OrganizationConfirmed);
+                        if (user.OrganizationAdmin != TestUser.ORGANIZATION_ADMIN_DEFAULT)
+                            jw.WriteBoolean("OrganizationAdmin", user.OrganizationAdmin);
+                        if (user.LockedOut != TestUser.LOCKED_OUT_DEFAULT)
+                            jw.WriteBoolean("LockedOut", user.LockedOut);
+
+                        if (user.Roles != null && user.Roles.Count > 0) {
+                            jw.WriteStartArray("Roles");
+                            {
+                                foreach (var role in user.Roles) {
+                                    jw.WriteStringValue(role);
+                                }
                             }
+                            jw.WriteEndArray();
                         }
-                        jw.WriteEndArray();
-                        if (user.Claims.Count > 0) {
+
+                        if (user.Claims != null && user.Claims.Count > 0) {
                             jw.WriteStartObject("Claims");
                             {
                                 foreach (var claimType in user.Claims.Keys) {
@@ -155,6 +170,7 @@ namespace EDennis.NetStandard.Base {
                             }
                             jw.WriteEndObject();
                         }
+
                     }
                     jw.WriteEndObject();
                 }
