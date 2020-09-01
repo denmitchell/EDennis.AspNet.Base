@@ -298,6 +298,7 @@ namespace EDennis.AspNetIdentityServer {
                         Organization = entry.Organization ?? entry.Email.Substring(entry.Email.IndexOf('@') + 1),
                         OrganizationConfirmed = entry.OrganizationConfirmed,
                         OrganizationAdmin = entry.OrganizationAdmin,
+                        SuperAdmin = entry.SuperAdmin,
                         LockoutBegin = entry.LockedOut ? DateTime.MinValue : default,
                         LockoutEnd = entry.LockedOut ? DateTime.MaxValue : default
                     };

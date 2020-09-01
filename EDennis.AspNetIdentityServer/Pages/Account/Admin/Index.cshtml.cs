@@ -42,6 +42,16 @@ namespace EDennis.AspNetIdentityServer.Areas.Identity.Pages.Account.Admin {
         public async Task<IActionResult> OnGetAsync(ComparisonOperator usrop, string usr, string org, string app,
                 int pageNumber = 1, int? totalRecords = null) {
 
+            Organizations = Organizations.Where(o => User.Claims.Any(
+                c => c.Type == "super_admin"
+                || c.Type == "app:role" && c.Value.EndsWith(":admin")
+                || c.Type == "organization_admin" && c.Value == o.Value));
+
+            Applications = Applications.Where(a => User.Claims.Any(
+                c => c.Type == "super_admin"
+                || c.Type == "app:role" && c.Value == $"{a}:admin"
+                || c.Type == "organization_admin"));
+
 
             SearchTable[0].FieldName = "UserName";
             SearchTable[0].Operator = usrop;

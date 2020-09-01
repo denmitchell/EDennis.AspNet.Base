@@ -8,7 +8,9 @@ namespace EDennis.NetStandard.Base {
     public static class DomainClaimTypes {
         public const string Organization = "organization";
         public const string OrganizationConfirmed = "organization_confirmed";
-        public const string OrganizationAdmin = "organization_admin";
+        public const string OrganizationAdminFor = "organization_admin_for";
+        public const string SuperAdmin = "super_admin";
         public const string Locked = "locked";
+        public const string ApplicationRole = "app:role";
     }
 }

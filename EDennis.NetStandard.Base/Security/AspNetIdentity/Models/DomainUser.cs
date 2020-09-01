@@ -14,6 +14,7 @@ namespace EDennis.NetStandard.Base {
         public string Organization { get; set; }
         public bool OrganizationConfirmed { get; set; }
         public bool OrganizationAdmin { get; set; }
+        public bool SuperAdmin { get; set; }
 
 
         #region User Locking
@@ -55,8 +56,11 @@ namespace EDennis.NetStandard.Base {
             if (Organization != default) {
                 claims.Add(new Claim(DomainClaimTypes.Organization, Email));
                 claims.Add(new Claim(DomainClaimTypes.OrganizationConfirmed, OrganizationConfirmed.ToString().ToLower()));
-                claims.Add(new Claim(DomainClaimTypes.OrganizationAdmin, OrganizationAdmin.ToString().ToLower()));
+                if(OrganizationAdmin && OrganizationConfirmed)
+                    claims.Add(new Claim(DomainClaimTypes.OrganizationAdminFor, Organization));
             }
+            if (SuperAdmin)
+                claims.Add(new Claim(DomainClaimTypes.SuperAdmin, true.ToString()));
             if (LockoutBegin <= DateTime.Now && LockoutEnd >= DateTime.Now)
                 claims.Add(new Claim(DomainClaimTypes.Locked, "true"));
 

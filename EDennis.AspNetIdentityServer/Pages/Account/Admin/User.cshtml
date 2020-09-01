@@ -17,7 +17,7 @@
     <div class="form-row align-items-center">
         <div class="col-sm-2">User Name</div>
         <div class="col-sm-4">
-            <input asp-for="UserName" class="form-control" placeholder="UserName" readonly />
+            <input asp-for="UserName" class="form-control" placeholder="UserName" readonly />@if (Model.IsSuperAdmin) { <span>&#x2b50;</span> }
         </div>
     </div>
 

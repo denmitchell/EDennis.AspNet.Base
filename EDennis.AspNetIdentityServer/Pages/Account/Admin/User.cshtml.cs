@@ -68,7 +68,7 @@ namespace EDennis.AspNetIdentityServer.Areas.Identity.Pages.Account.Admin {
         private bool lockoutBeginSubmitted = false;
         private bool lockoutEndSubmitted = false;
 
-        private Dictionary<string, bool> submittedAppRoleClaims
+        private readonly Dictionary<string, bool> submittedAppRoleClaims
             = new Dictionary<string, bool>();
 
 
@@ -87,8 +87,6 @@ namespace EDennis.AspNetIdentityServer.Areas.Identity.Pages.Account.Admin {
         [BindProperty] public IEnumerable<SelectListItem> Organizations { get; set; }
 
 
-        //the following applies to the admin user editing this page
-        private DomainUser adminUser;
         [BindProperty] public bool IsSuperAdmin { get; set; }
         [BindProperty] public bool IsOrgAdmin { get; set; }
         [BindProperty] public bool IsSelf { get; set; }
@@ -119,32 +117,10 @@ namespace EDennis.AspNetIdentityServer.Areas.Identity.Pages.Account.Admin {
 
         private async Task LoadAdminUserDataAsync() {
 
-            adminUser = await _dbContext.Users.FromSqlInterpolated(
-                $@"
-                    SELECT u.* 
-                        FROM AspNetUsers u
-                        WHERE u.UserName = {User.Identity.Name} 
-                            OR EXISTS (
-                                SELECT 0 
-                                    FROM AspNetUserClaims uc
-                                    WHERE uc.UserId = u.Id
-                                        AND (
-                                            ( uc.ClaimType = {JwtClaimTypes.Email} AND uc.ClaimValue = {User.Email()} ) OR
-                                            ( uc.ClaimType = {ClaimTypes.Email} AND uc.ClaimValue = {User.Email()} ) OR
-                                            ( uc.ClaimType = {JwtClaimTypes.Name} AND uc.ClaimValue = {User.Name()} ) OR
-                                            ( uc.ClaimType = {ClaimTypes.Name} AND uc.ClaimValue = {User.Name()} ) OR
-                                            ( uc.ClaimType = {JwtClaimTypes.Subject} AND uc.ClaimValue = {User.Subject()} )
-                                        )
-                                )                        
-                ").FirstOrDefaultAsync();
 
-
-            if (adminUser == null)
-                throw new ApplicationException($"current user is not registered.");
-
-
-            IsSuperAdmin = User.HasClaim(c => c.Type == "*:role" && c.Value == "*:admin");
-            IsOrgAdmin = adminUser.Organization == Organization && adminUser.OrganizationAdmin;
+            IsSuperAdmin = User.HasClaim(c => c.Type == DomainClaimTypes.SuperAdmin);
+            IsOrgAdmin = User.HasClaim(c=>c.Type == DomainClaimTypes.OrganizationAdminFor && c.Value == Organization);
+            IsOrgAdmin = User.HasClaim(c => c.Type == DomainClaimTypes.OrganizationAdminFor && c.Value == Organization);
 
 
             OrgApps = await _dbContext.OrganizationApplications
@@ -156,7 +132,7 @@ namespace EDennis.AspNetIdentityServer.Areas.Identity.Pages.Account.Admin {
             //  (which applies across all organizations) 
             appAdminFor =
                 User.Claims
-                .Where(c => c.Type == "app:role" && c.Value.EndsWith(":admin"))
+                .Where(c => c.Type == DomainClaimTypes.ApplicationRole && c.Value.EndsWith(":admin"))
                 .Select(c => c.Value.Split(":")[0])
                 .ToArray();
 
@@ -178,7 +154,7 @@ namespace EDennis.AspNetIdentityServer.Areas.Identity.Pages.Account.Admin {
 
             // get all app role claims for relevant Apps 
             var appRoleClaims = await _dbContext.ApplicationClaims
-                .Where(ac => OrgApps.Contains(ac.Application) && ac.ClaimType == "app:role")
+                .Where(ac => OrgApps.Contains(ac.Application) && ac.ClaimType == DomainClaimTypes.ApplicationRole)
                 .ToListAsync();
 
             AppRoleClaims =  appRoleClaims.ToDictionary(ac => $"{ac.Application}:{ac.ClaimValue}", ac => false);
@@ -192,7 +168,7 @@ namespace EDennis.AspNetIdentityServer.Areas.Identity.Pages.Account.Admin {
             //update the app role claims to true when the target user has that claim
             var appRoleClaimKeys = AppRoleClaims.Keys.ToArray();
             for (int i = 0; i < appRoleClaimKeys.Length; i++) {
-                if (userClaims.Any(uc => uc.ClaimType == "app:role" && uc.ClaimValue == appRoleClaimKeys[i]))
+                if (userClaims.Any(uc => uc.ClaimType == DomainClaimTypes.ApplicationRole && uc.ClaimValue == appRoleClaimKeys[i]))
                     AppRoleClaims[appRoleClaimKeys[i]] = true;
             }
 
@@ -259,7 +235,7 @@ namespace EDennis.AspNetIdentityServer.Areas.Identity.Pages.Account.Admin {
             var userHistory = new DomainUserHistory {
                 Id = user.Id,
                 DateReplaced = DateTime.Now,
-                ReplacedBy = adminUser.UserName,
+                ReplacedBy = User.Identity.Name,
                 UserName = user.UserName,
                 Email = user.Email,
                 EmailConfirmed = user.EmailConfirmed,
@@ -295,9 +271,9 @@ namespace EDennis.AspNetIdentityServer.Areas.Identity.Pages.Account.Admin {
             for (int i = 0; i < appRoleClaimsKeys.Length; i++) {
                 var claimValue = appRoleClaimsKeys[i];
                 var shouldHaveClaim = submittedAppRoleClaims[claimValue];
-                var matchingUserClaim = userClaims.FirstOrDefault(uc => uc.ClaimType == "app:role" && uc.ClaimValue == claimValue);
+                var matchingUserClaim = userClaims.FirstOrDefault(uc => uc.ClaimType == DomainClaimTypes.ApplicationRole && uc.ClaimValue == claimValue);
                 if (shouldHaveClaim && matchingUserClaim == null)
-                    _dbContext.UserClaims.Add(new IdentityUserClaim<int> { UserId = Id, ClaimType = "app:role", ClaimValue = claimValue });
+                    _dbContext.UserClaims.Add(new IdentityUserClaim<int> { UserId = Id, ClaimType = DomainClaimTypes.ApplicationRole, ClaimValue = claimValue });
                 else if (!shouldHaveClaim && matchingUserClaim != null)
                     _dbContext.UserClaims.Remove(matchingUserClaim);
             }

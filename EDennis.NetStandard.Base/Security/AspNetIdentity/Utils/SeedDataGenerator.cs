@@ -57,8 +57,9 @@ namespace EDennis.NetStandard.Base {
                 new TestUser {
                     Email="juan@a.test",
                     PhoneNumber = "999.555.1414",
+                    SuperAdmin = true,
                     Claims = new Dictionary<string,List<string>>() {
-                        { "*:role", new List<string>{ "*.admin" } }
+                        { "SomeClaimType", new List<string>{ "SomeClaimValue" } }
                     }
                 },
                 new TestUser {
@@ -142,6 +143,8 @@ namespace EDennis.NetStandard.Base {
                             jw.WriteBoolean("OrganizationConfirmed", user.OrganizationConfirmed);
                         if (user.OrganizationAdmin != TestUser.ORGANIZATION_ADMIN_DEFAULT)
                             jw.WriteBoolean("OrganizationAdmin", user.OrganizationAdmin);
+                        if (user.OrganizationAdmin != TestUser.SUPER_ADMIN_DEFAULT)
+                            jw.WriteBoolean("SuperAdmin", user.SuperAdmin);
                         if (user.LockedOut != TestUser.LOCKED_OUT_DEFAULT)
                             jw.WriteBoolean("LockedOut", user.LockedOut);
 
