@@ -9,5 +9,7 @@ namespace EDennis.Samples.ColorApp.Razor {
         }
 
         public override string ControllerName => "Rgb";
+
+        public override string ClientName => nameof(RgbApiClient);
     }
 }

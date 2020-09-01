@@ -523,7 +523,7 @@ namespace EDennis.NetStandard.Base {
                 .CopyHeaders(httpRequest, client, options)
                 .CopyCookies(httpRequest, options);
 
-            if (options.ForwardQueryString)
+            if (options?.ForwardQueryString ?? true)
                 msg.CopyQueryString(httpRequest);
 
             return msg;
@@ -544,7 +544,7 @@ namespace EDennis.NetStandard.Base {
                 .CopyHeaders(httpRequest, client, options)
                 .CopyCookies(httpRequest, options);
 
-            if (options.ForwardQueryString)
+            if (options?.ForwardQueryString ?? true)
                 msg.CopyQueryString(httpRequest);
 
             msg.AddJsonContent(body);

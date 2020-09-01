@@ -29,7 +29,10 @@ namespace EDennis.AspNetIdentityServer {
             //Debugger.Launch();
 
             services.AddControllersWithViews();
-            services.AddRazorPages();
+
+            services.AddRazorPages(options => {
+                options.Conventions.AuthorizeFolder("/Account/Admin");
+            });
 
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
@@ -77,6 +80,7 @@ namespace EDennis.AspNetIdentityServer {
 
             services.AddDefaultIdentity<DomainUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddUserStore<DomainUserStore>()
+                .AddUserManager<UserManager<DomainUser>>()
                 .AddClaimsPrincipalFactory<DomainUserClaimsPrincipalFactory>();
 
 
@@ -89,21 +93,21 @@ namespace EDennis.AspNetIdentityServer {
             services.AddOidcLogging(Configuration);
 
 
-            services.AddAuthorization(options =>
-            {
-                var settings = new AdministrationSettings();
-                Configuration.GetSection("Administration").Bind(settings);
-                if(settings.PolicyType == PolicyType.Unconfigured && settings.PolicyName == default)
-                    throw new System.Exception("IdentityServer configuration does not contain an Administration section that can bind to an AdministrationSettings object.");
+            //services.AddAuthorization(options =>
+            //{
+            //    var settings = new AdministrationSettings();
+            //    Configuration.GetSection("Administration").Bind(settings);
+            //    if(settings.PolicyType == PolicyType.Unconfigured && settings.PolicyName == default)
+            //        throw new System.Exception("IdentityServer configuration does not contain an Administration section that can bind to an AdministrationSettings object.");
 
-                options.AddPolicy(settings.PolicyName, policy =>
-                {
-                    if (settings.PolicyType == PolicyType.Open)
-                        policy.RequireAssertion(context => true); //open
-                    else if (settings.PolicyType == PolicyType.Role)
-                        policy.RequireRole(settings.RoleName);
-                });
-            });
+            //    options.AddPolicy(settings.PolicyName, policy =>
+            //    {
+            //        if (settings.PolicyType == PolicyType.Open)
+            //            policy.RequireAssertion(context => true); //open
+            //        else if (settings.PolicyType == PolicyType.Role)
+            //            policy.RequireRole(settings.RoleName);
+            //    });
+            //});
 
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("IdentityServer", new OpenApiInfo { Title = "IdentityServer", Version = "v4" });

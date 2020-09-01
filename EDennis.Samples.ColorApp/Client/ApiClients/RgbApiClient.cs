@@ -9,5 +9,7 @@ namespace EDennis.Samples.ColorApp.Client {
         }
 
         public override string ControllerName => "Rgb";
+
+        public override string ClientName => "RgbClient";
     }
 }

@@ -24,9 +24,11 @@ namespace EDennis.NetStandard.Base {
 
         protected readonly HttpClient _client;
 
+        public abstract string ClientName { get; }
+
         public ProxyQueryController(IHttpClientFactory clientFactory,
             ITokenService tokenService) {
-            _client = clientFactory.CreateClient(GetType().Name);
+            _client = clientFactory.CreateClient(ClientName);
             tokenService.AssignTokenAsync(_client).Wait();
         }
 

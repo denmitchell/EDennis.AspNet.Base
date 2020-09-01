@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +10,7 @@ using Serilog;
 using Serilog.Extensions.Logging;
 using System;
 using System.IO;
+using System.Net.Http;
 
 namespace EDennis.NetStandard.Base {
 
@@ -94,45 +96,33 @@ namespace EDennis.NetStandard.Base {
             return services;
         }
 
-        private const string DEFAULT_DEPENDPOINTS_CONFIG_KEY = "DepEndpoints";
+        public const string PROXY_CLIENTS_CONFIG_KEY_PARENT = "ProxyClients";
+        public const string API_CLIENTS_CONFIG_KEY_PARENT = "ApiClients";
 
+        public static TypedClientBuilder AddProxyClient(this IServiceCollection services,
+                IConfiguration config, string clientName, string configKeyParent = PROXY_CLIENTS_CONFIG_KEY_PARENT) {
 
-        public static TypedClientBuilder AddProxyClient<TClientImplementation>(this IServiceCollection services,
-                IConfiguration config, string configKey = DEFAULT_DEPENDPOINTS_CONFIG_KEY)
-            where TClientImplementation : class
-                => AddApiClient<TClientImplementation, TClientImplementation>(services, config, configKey);
+            var builder = new TypedClientBuilder { ConfigKeyParent = configKeyParent, Configuration = config, Services = services };
+            builder.AddProxyClient(clientName);
 
-
-        public static TypedClientBuilder AddProxyClient<TClientInterface, TClientImplementation>(this IServiceCollection services,
-                IConfiguration config, string configKey = DEFAULT_DEPENDPOINTS_CONFIG_KEY)
-            where TClientInterface : class
-            where TClientImplementation : class, TClientInterface
-                => AddApiClient<TClientInterface, TClientImplementation>(services, config, configKey);
+            return builder;
+        }
 
 
         public static TypedClientBuilder AddApiClient<TClientImplementation>(this IServiceCollection services,
-                IConfiguration config, string configKey = DEFAULT_DEPENDPOINTS_CONFIG_KEY)
+                IConfiguration config, string clientName = null, string configKeyParent = API_CLIENTS_CONFIG_KEY_PARENT)
             where TClientImplementation : class
-                => AddApiClient<TClientImplementation, TClientImplementation>(services, config, configKey);
-
+                => AddApiClient<TClientImplementation, TClientImplementation>(services, config, configKeyParent, clientName);
 
 
         public static TypedClientBuilder AddApiClient<TClientInterface, TClientImplementation>(this IServiceCollection services,
-                IConfiguration config, string configKey = DEFAULT_DEPENDPOINTS_CONFIG_KEY)
+                IConfiguration config, string clientName = null, string configKeyParent = API_CLIENTS_CONFIG_KEY_PARENT)
             where TClientInterface : class
             where TClientImplementation : class, TClientInterface {
 
-            configKey ??= DEFAULT_DEPENDPOINTS_CONFIG_KEY;
-            var dependPoints = new DepEndpoints();
-            config.BindSectionOrThrow(configKey, dependPoints);
-
-            var clientBuilder = new TypedClientBuilder { DepEndpoints = dependPoints, Services = services };
-
-            clientBuilder.AddClient<TClientInterface, TClientImplementation>();
-
-            return clientBuilder;
+            var builder = new TypedClientBuilder { ConfigKeyParent = configKeyParent, Configuration = config, Services = services };
+            return builder.AddApiClient<TClientInterface, TClientImplementation>(clientName);
         }
-
 
     }
 }

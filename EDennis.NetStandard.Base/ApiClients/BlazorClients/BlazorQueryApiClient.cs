@@ -73,6 +73,7 @@ namespace EDennis.NetStandard.Base {
 
         public abstract string ControllerName { get; }
 
+        public abstract string ClientName { get; }
 
         private static string BuildDevExtremeQueryString(string select, string include, string sort, string filter, int skip, int take, string totalSummary, string group, string groupSummary) {
             var list = new List<string>();

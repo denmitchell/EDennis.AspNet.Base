@@ -7964,3 +7964,270 @@ VALUES (N'20200818165611_Initial', N'3.1.7');
 2020-08-26 16:08:18.292 -04:00 [INF] Application started. Press Ctrl+C to shut down.
 2020-08-26 16:08:18.293 -04:00 [INF] Hosting environment: Development
 2020-08-26 16:08:18.295 -04:00 [INF] Content root path: C:\Users\denmi\source\repos\denmitchell\EDennis.AspNet.Base\EDennis.AspNetIdentityServer
+2020-09-01 09:51:25.368 -04:00 [INF] Starting host...
+2020-09-01 09:51:28.869 -04:00 [INF] Creating DomainIdentityDbContext instance ...
+2020-09-01 09:51:29.769 -04:00 [INF] Creating ConfigurationDbContext instance ...
+2020-09-01 09:51:29.963 -04:00 [INF] Creating PersistedGrantDbContext instance ...
+2020-09-01 09:51:30.030 -04:00 [INF] Loading SeedData\IdentityResources.json ...
+2020-09-01 09:51:30.396 -04:00 [INF] 	Adding IdentityResource openid
+2020-09-01 09:51:30.823 -04:00 [INF] 	Adding IdentityResource profile
+2020-09-01 09:51:30.829 -04:00 [INF] 	Adding IdentityResource role
+2020-09-01 09:51:30.989 -04:00 [INF] Loading project configs from SeedData ...
+2020-09-01 09:51:30.990 -04:00 [INF] **Finished Loading Configurations.
+2020-09-01 09:51:31.030 -04:00 [INF] User profile is available. Using 'C:\Users\denmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-01 09:51:31.220 -04:00 [INF] Starting IdentityServer4 version 4.0.4+1b36d1b414f4e0f965af97ab2a7e9dd1b5167bca
+2020-09-01 09:51:31.248 -04:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2020-09-01 09:56:07.649 -04:00 [INF] Starting host...
+2020-09-01 09:56:09.326 -04:00 [INF] Creating DomainIdentityDbContext instance ...
+2020-09-01 09:56:10.161 -04:00 [INF] Creating ConfigurationDbContext instance ...
+2020-09-01 09:56:10.350 -04:00 [INF] Creating PersistedGrantDbContext instance ...
+2020-09-01 09:56:10.418 -04:00 [INF] Loading SeedData\IdentityResources.json ...
+2020-09-01 09:56:10.761 -04:00 [INF] 	Adding IdentityResource openid
+2020-09-01 09:56:11.101 -04:00 [INF] 	Adding IdentityResource profile
+2020-09-01 09:56:11.108 -04:00 [INF] 	Adding IdentityResource role
+2020-09-01 09:56:11.275 -04:00 [INF] Loading project configs from SeedData ...
+2020-09-01 09:56:11.276 -04:00 [INF] **Finished Loading Configurations.
+2020-09-01 09:56:11.316 -04:00 [INF] User profile is available. Using 'C:\Users\denmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-01 09:56:11.423 -04:00 [INF] Starting IdentityServer4 version 4.0.4+1b36d1b414f4e0f965af97ab2a7e9dd1b5167bca
+2020-09-01 09:56:11.455 -04:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2020-09-01 09:56:11.999 -04:00 [INF] Now listening on: https://localhost:5000
+2020-09-01 09:56:12.002 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2020-09-01 09:56:12.003 -04:00 [INF] Hosting environment: Development
+2020-09-01 09:56:12.004 -04:00 [INF] Content root path: C:\Users\denmi\source\repos\denmitchell\EDennis.AspNet.Base\EDennis.AspNetIdentityServer
+2020-09-01 09:57:41.134 -04:00 [INF] Request starting HTTP/2 GET https://localhost:5000/Account/Admin/Index  
+2020-09-01 09:57:41.279 -04:00 [INF] Authorization failed.
+2020-09-01 09:57:41.296 -04:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2020-09-01 09:57:41.306 -04:00 [INF] Request finished in 175.6835ms 302 
+2020-09-01 09:57:41.309 -04:00 [INF] Request starting HTTP/2 GET https://localhost:5000/Identity/Account/Login?ReturnUrl=%2FAccount%2FAdmin%2FIndex  
+2020-09-01 09:57:41.325 -04:00 [INF] 
+<REQUEST method='GET'>
+     <URL>
+          https://localhost:5000/Identity/Account/Login?ReturnUrl=%2FAccount%2FAdmin%2FInd
+          ex
+     </URL>
+</REQUEST>
+
+2020-09-01 09:57:41.391 -04:00 [INF] Executing endpoint '/Account/Login'
+2020-09-01 09:57:41.452 -04:00 [INF] Route matched with {page = "/Account/Login", area = "Identity", action = "", controller = ""}. Executing page /Account/Login
+2020-09-01 09:57:41.497 -04:00 [INF] Executing handler method Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal.LoginModel.OnGetAsync - ModelState is "Valid"
+2020-09-01 09:57:41.514 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2020-09-01 09:57:41.517 -04:00 [INF] Executed handler method OnGetAsync, returned result .
+2020-09-01 09:57:41.523 -04:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2020-09-01 09:57:41.524 -04:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2020-09-01 09:57:41.679 -04:00 [INF] Executed page /Account/Login in 220.3318ms
+2020-09-01 09:57:41.682 -04:00 [INF] Executed endpoint '/Account/Login'
+2020-09-01 09:57:41.687 -04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: No service for type 'Microsoft.AspNetCore.Identity.UserManager`1[Microsoft.AspNetCore.Identity.IdentityUser]' has been registered.
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorPagePropertyActivator.<>c__DisplayClass8_0.<CreateActivateInfo>b__1(ViewContext context)
+   at Microsoft.Extensions.Internal.PropertyActivator`1.Activate(Object instance, TContext context)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorPagePropertyActivator.Activate(Object page, ViewContext context)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorPageActivator.Activate(IRazorPage page, ViewContext context)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderPageCoreAsync(IRazorPage page, ViewContext context)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderPageAsync(IRazorPage page, ViewContext context, Boolean invokeViewStarts)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderAsync(ViewContext context)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.HtmlHelper.RenderPartialCoreAsync(String partialViewName, Object model, ViewDataDictionary viewData, TextWriter writer)
+   at Microsoft.AspNetCore.Identity.UI.V4.Pages.Internal.Areas_Identity_Pages__Layout.<ExecuteAsync>b__42_1()
+   at Microsoft.AspNetCore.Razor.Runtime.TagHelpers.TagHelperExecutionContext.SetOutputContentAsync()
+   at Microsoft.AspNetCore.Identity.UI.V4.Pages.Internal.Areas_Identity_Pages__Layout.ExecuteAsync()
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderPageCoreAsync(IRazorPage page, ViewContext context)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderPageAsync(IRazorPage page, ViewContext context, Boolean invokeViewStarts)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderLayoutAsync(ViewContext context, ViewBufferTextWriter bodyWriter)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderAsync(ViewContext context)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewExecutor.ExecuteAsync(ViewContext viewContext, String contentType, Nullable`1 statusCode)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewExecutor.ExecuteAsync(ViewContext viewContext, String contentType, Nullable`1 statusCode)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResultFilterAsync>g__Awaited|29_0[TFilter,TFilterAsync](ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResultExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultFilters()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at IdentityServer4.Hosting.IdentityServerMiddleware.Invoke(HttpContext context, IEndpointRouter router, IUserSession session, IEventService events, IBackChannelLogoutService backChannelLogoutService)
+   at IdentityServer4.Hosting.MutualTlsEndpointMiddleware.Invoke(HttpContext context, IAuthenticationSchemeProvider schemes)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at IdentityServer4.Hosting.BaseUrlMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.MigrationsEndPointMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.DatabaseErrorPageMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.DatabaseErrorPageMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2020-09-01 09:57:41.826 -04:00 [INF] 
+<RESPONSE statusCode='500'>
+     <URL>
+          /Identity/Account/Login
+     </URL>
+     <BODY>
+          RequestVerificationToken></__RequestVerificationToken
+     </BODY>
+</RESPONSE>
+2020-09-01 09:57:41.841 -04:00 [INF] Request finished in 531.2948ms 500 text/html; charset=utf-8
+2020-09-01 09:57:41.984 -04:00 [INF] Request starting HTTP/2 GET https://localhost:5000/favicon.ico  
+2020-09-01 09:57:42.007 -04:00 [INF] Sending file. Request path: '/favicon.ico'. Physical path: 'C:\Users\denmi\source\repos\denmitchell\EDennis.AspNet.Base\EDennis.AspNetIdentityServer\wwwroot\favicon.ico'
+2020-09-01 09:57:42.012 -04:00 [INF] Request finished in 27.9669ms 200 image/x-icon
+2020-09-01 09:59:37.492 -04:00 [INF] Starting host...
+2020-09-01 09:59:39.218 -04:00 [INF] Creating DomainIdentityDbContext instance ...
+2020-09-01 09:59:40.097 -04:00 [INF] Creating ConfigurationDbContext instance ...
+2020-09-01 09:59:40.292 -04:00 [INF] Creating PersistedGrantDbContext instance ...
+2020-09-01 09:59:40.361 -04:00 [INF] Loading SeedData\IdentityResources.json ...
+2020-09-01 09:59:40.714 -04:00 [INF] 	Adding IdentityResource openid
+2020-09-01 09:59:41.071 -04:00 [INF] 	Adding IdentityResource profile
+2020-09-01 09:59:41.077 -04:00 [INF] 	Adding IdentityResource role
+2020-09-01 09:59:41.231 -04:00 [INF] Loading project configs from SeedData ...
+2020-09-01 09:59:41.232 -04:00 [INF] **Finished Loading Configurations.
+2020-09-01 09:59:41.275 -04:00 [INF] User profile is available. Using 'C:\Users\denmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-01 09:59:41.401 -04:00 [INF] Starting IdentityServer4 version 4.0.4+1b36d1b414f4e0f965af97ab2a7e9dd1b5167bca
+2020-09-01 09:59:41.430 -04:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2020-09-01 09:59:41.828 -04:00 [INF] Now listening on: https://localhost:5000
+2020-09-01 09:59:41.831 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2020-09-01 09:59:41.831 -04:00 [INF] Hosting environment: Development
+2020-09-01 09:59:41.832 -04:00 [INF] Content root path: C:\Users\denmi\source\repos\denmitchell\EDennis.AspNet.Base\EDennis.AspNetIdentityServer
+2020-09-01 09:59:47.483 -04:00 [INF] Request starting HTTP/2 GET https://localhost:5000/Identity/Account/Login?ReturnUrl=%2FAccount%2FAdmin%2FIndex  
+2020-09-01 09:59:47.518 -04:00 [INF] 
+<REQUEST method='GET'>
+     <URL>
+          https://localhost:5000/Identity/Account/Login?ReturnUrl=%2FAccount%2FAdmin%2FInd
+          ex
+     </URL>
+</REQUEST>
+
+2020-09-01 09:59:47.634 -04:00 [INF] Executing endpoint '/Account/Login'
+2020-09-01 09:59:47.690 -04:00 [INF] Route matched with {page = "/Account/Login", area = "Identity", action = "", controller = ""}. Executing page /Account/Login
+2020-09-01 09:59:47.734 -04:00 [INF] Executing handler method Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal.LoginModel.OnGetAsync - ModelState is "Valid"
+2020-09-01 09:59:47.751 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2020-09-01 09:59:47.754 -04:00 [INF] Executed handler method OnGetAsync, returned result .
+2020-09-01 09:59:47.759 -04:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2020-09-01 09:59:47.760 -04:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2020-09-01 09:59:47.925 -04:00 [INF] Executed page /Account/Login in 227.868ms
+2020-09-01 09:59:47.929 -04:00 [INF] Executed endpoint '/Account/Login'
+2020-09-01 09:59:47.936 -04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: No service for type 'Microsoft.AspNetCore.Identity.UserManager`1[Microsoft.AspNetCore.Identity.IdentityUser]' has been registered.
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorPagePropertyActivator.<>c__DisplayClass8_0.<CreateActivateInfo>b__1(ViewContext context)
+   at Microsoft.Extensions.Internal.PropertyActivator`1.Activate(Object instance, TContext context)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorPagePropertyActivator.Activate(Object page, ViewContext context)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorPageActivator.Activate(IRazorPage page, ViewContext context)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderPageCoreAsync(IRazorPage page, ViewContext context)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderPageAsync(IRazorPage page, ViewContext context, Boolean invokeViewStarts)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderAsync(ViewContext context)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.HtmlHelper.RenderPartialCoreAsync(String partialViewName, Object model, ViewDataDictionary viewData, TextWriter writer)
+   at Microsoft.AspNetCore.Identity.UI.V4.Pages.Internal.Areas_Identity_Pages__Layout.<ExecuteAsync>b__42_1()
+   at Microsoft.AspNetCore.Razor.Runtime.TagHelpers.TagHelperExecutionContext.SetOutputContentAsync()
+   at Microsoft.AspNetCore.Identity.UI.V4.Pages.Internal.Areas_Identity_Pages__Layout.ExecuteAsync()
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderPageCoreAsync(IRazorPage page, ViewContext context)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderPageAsync(IRazorPage page, ViewContext context, Boolean invokeViewStarts)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderLayoutAsync(ViewContext context, ViewBufferTextWriter bodyWriter)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderAsync(ViewContext context)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewExecutor.ExecuteAsync(ViewContext viewContext, String contentType, Nullable`1 statusCode)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewExecutor.ExecuteAsync(ViewContext viewContext, String contentType, Nullable`1 statusCode)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResultFilterAsync>g__Awaited|29_0[TFilter,TFilterAsync](ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResultExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultFilters()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at IdentityServer4.Hosting.IdentityServerMiddleware.Invoke(HttpContext context, IEndpointRouter router, IUserSession session, IEventService events, IBackChannelLogoutService backChannelLogoutService)
+   at IdentityServer4.Hosting.MutualTlsEndpointMiddleware.Invoke(HttpContext context, IAuthenticationSchemeProvider schemes)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at IdentityServer4.Hosting.BaseUrlMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.MigrationsEndPointMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.DatabaseErrorPageMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.DatabaseErrorPageMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2020-09-01 09:59:48.083 -04:00 [INF] 
+<RESPONSE statusCode='500'>
+     <URL>
+          /Identity/Account/Login
+     </URL>
+     <BODY>
+          RequestVerificationToken></__RequestVerificationToken
+     </BODY>
+</RESPONSE>
+2020-09-01 09:59:48.107 -04:00 [INF] Request finished in 627.5963ms 500 text/html; charset=utf-8
+2020-09-01 09:59:48.175 -04:00 [INF] Request starting HTTP/2 GET https://localhost:5000/favicon.ico  
+2020-09-01 09:59:48.191 -04:00 [INF] Sending file. Request path: '/favicon.ico'. Physical path: 'C:\Users\denmi\source\repos\denmitchell\EDennis.AspNet.Base\EDennis.AspNetIdentityServer\wwwroot\favicon.ico'
+2020-09-01 09:59:48.197 -04:00 [INF] Request finished in 22.0688ms 200 image/x-icon
+2020-09-01 10:00:26.327 -04:00 [INF] Request starting HTTP/2 GET https://localhost:5000/Identity/Account/Login?ReturnUrl=%2FAccount%2FAdmin%2FIndex  
+2020-09-01 10:00:26.330 -04:00 [INF] 
+<REQUEST method='GET'>
+     <URL>
+          https://localhost:5000/Identity/Account/Login?ReturnUrl=%2FAccount%2FAdmin%2FInd
+          ex
+     </URL>
+</REQUEST>
+
+2020-09-01 10:00:26.346 -04:00 [INF] Executing endpoint '/Account/Login'
+2020-09-01 10:00:26.352 -04:00 [INF] Route matched with {page = "/Account/Login", area = "Identity", action = "", controller = ""}. Executing page /Account/Login
+2020-09-01 10:00:26.356 -04:00 [INF] Executing handler method Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal.LoginModel.OnGetAsync - ModelState is "Valid"
+2020-09-01 10:00:26.359 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2020-09-01 10:00:26.360 -04:00 [INF] Executed handler method OnGetAsync, returned result .
+2020-09-01 10:00:26.362 -04:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2020-09-01 10:00:26.364 -04:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2020-09-01 10:00:26.382 -04:00 [INF] Executed page /Account/Login in 27.5405ms
+2020-09-01 10:00:26.385 -04:00 [INF] Executed endpoint '/Account/Login'
+2020-09-01 10:00:26.389 -04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: No service for type 'Microsoft.AspNetCore.Identity.UserManager`1[Microsoft.AspNetCore.Identity.IdentityUser]' has been registered.
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorPagePropertyActivator.<>c__DisplayClass8_0.<CreateActivateInfo>b__1(ViewContext context)
+   at Microsoft.Extensions.Internal.PropertyActivator`1.Activate(Object instance, TContext context)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorPagePropertyActivator.Activate(Object page, ViewContext context)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorPageActivator.Activate(IRazorPage page, ViewContext context)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderPageCoreAsync(IRazorPage page, ViewContext context)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderPageAsync(IRazorPage page, ViewContext context, Boolean invokeViewStarts)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderAsync(ViewContext context)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.HtmlHelper.RenderPartialCoreAsync(String partialViewName, Object model, ViewDataDictionary viewData, TextWriter writer)
+   at Microsoft.AspNetCore.Identity.UI.V4.Pages.Internal.Areas_Identity_Pages__Layout.<ExecuteAsync>b__42_1()
+   at Microsoft.AspNetCore.Razor.Runtime.TagHelpers.TagHelperExecutionContext.SetOutputContentAsync()
+   at Microsoft.AspNetCore.Identity.UI.V4.Pages.Internal.Areas_Identity_Pages__Layout.ExecuteAsync()
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderPageCoreAsync(IRazorPage page, ViewContext context)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderPageAsync(IRazorPage page, ViewContext context, Boolean invokeViewStarts)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderLayoutAsync(ViewContext context, ViewBufferTextWriter bodyWriter)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderAsync(ViewContext context)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewExecutor.ExecuteAsync(ViewContext viewContext, String contentType, Nullable`1 statusCode)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewExecutor.ExecuteAsync(ViewContext viewContext, String contentType, Nullable`1 statusCode)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResultFilterAsync>g__Awaited|29_0[TFilter,TFilterAsync](ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResultExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultFilters()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at IdentityServer4.Hosting.IdentityServerMiddleware.Invoke(HttpContext context, IEndpointRouter router, IUserSession session, IEventService events, IBackChannelLogoutService backChannelLogoutService)
+   at IdentityServer4.Hosting.MutualTlsEndpointMiddleware.Invoke(HttpContext context, IAuthenticationSchemeProvider schemes)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at IdentityServer4.Hosting.BaseUrlMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.MigrationsEndPointMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.DatabaseErrorPageMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.DatabaseErrorPageMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2020-09-01 10:00:26.442 -04:00 [INF] 
+<RESPONSE statusCode='500'>
+     <URL>
+          /Identity/Account/Login
+     </URL>
+     <BODY>
+          RequestVerificationToken></__RequestVerificationToken
+     </BODY>
+</RESPONSE>
+2020-09-01 10:00:26.445 -04:00 [INF] Request finished in 118.1312ms 500 text/html; charset=utf-8
+2020-09-01 10:00:26.488 -04:00 [INF] Request starting HTTP/2 GET https://localhost:5000/favicon.ico  
+2020-09-01 10:00:26.494 -04:00 [INF] Sending file. Request path: '/favicon.ico'. Physical path: 'C:\Users\denmi\source\repos\denmitchell\EDennis.AspNet.Base\EDennis.AspNetIdentityServer\wwwroot\favicon.ico'
+2020-09-01 10:00:26.496 -04:00 [INF] Request finished in 7.974ms 200 image/x-icon

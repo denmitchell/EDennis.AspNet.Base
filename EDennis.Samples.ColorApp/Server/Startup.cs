@@ -1,5 +1,6 @@
 using EDennis.HostedBlazor.Base;
 using EDennis.NetStandard.Base;
+using EDennis.Samples.ColorApp.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -40,6 +41,9 @@ namespace EDennis.Samples.ColorApp.Server {
             services.AddRazorPages();
 
             services.AddHttpLogging(Configuration);
+
+
+            services.AddProxyClient(Configuration,"RgbClient");
 
 
             //for generating the OAuth Access Token

@@ -12,5 +12,7 @@ namespace EDennis.Samples.ColorApi.Controllers {
             ClientCredentialsTokenService tokenService) 
             : base(clientFactory, tokenService) {
         }
+
+        public override string ClientName => "RgbClient";
     }
 }

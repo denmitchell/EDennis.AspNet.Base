@@ -7,6 +7,8 @@ namespace EDennis.NetStandard.Base {
         string ControllerName { get; }
         string ControllerPath { get; }
 
+        string ClientName { get; }
+
         void AdjustQuery(ref IQueryable<TEntity> query);
         ObjectResult<List<TEntity>> GetAll();
         Task<ObjectResult<List<TEntity>>> GetAllAsync();

@@ -18,9 +18,12 @@ namespace EDennis.NetStandard.Base {
         protected readonly HttpClient _client;
         protected readonly ScopedRequestMessage _scopedRequestMessage;
 
+        public abstract string ClientName { get; }
+
+
         public QueryApiClient(IHttpClientFactory clientFactory, ITokenService tokenService,
             ScopedRequestMessage scopedRequestMessage) {
-            _client = clientFactory.CreateClient(GetType().Name);
+            _client = clientFactory.CreateClient(ClientName);
             tokenService.AssignTokenAsync(_client).Wait();
             _scopedRequestMessage = scopedRequestMessage;
         }
