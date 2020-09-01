@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
 {
     [DbContext(typeof(DomainIdentityDbContext))]
-    [Migration("20200831175624_Initial")]
-    partial class Initial
+    [Migration("20200901172105_DomainIdentityInitial")]
+    partial class DomainIdentityInitial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -232,6 +232,9 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("SuperAdmin")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -256,7 +259,7 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                         {
                             Id = -1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "4c89a4a5-53ed-4e69-b9d6-ec192198e8ff",
+                            ConcurrencyStamp = "f9db615d-a76c-417b-8c9a-2d7bbfdb2d37",
                             Email = "moe@mcdougalls.com",
                             EmailConfirmed = true,
                             NormalizedEmail = "MOE@MCDOUGALLS.COM",
@@ -264,10 +267,11 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                             Organization = "McDougall's",
                             OrganizationAdmin = true,
                             OrganizationConfirmed = false,
-                            PasswordHash = "AA9h108SlVBssRSc+Dqntg7bZiwt6AQPEsxZOhY7pcUGDy3v4fRsEDEVhNJk4rr43A==",
+                            PasswordHash = "AHQhhv/JbmFkA5O3OJyamWfdtRAt5eC3YuR9FOwmNHwZsgkGX80SckP/C6uLO6AtBg==",
                             PhoneNumber = "000-111-2222",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e390994a-b411-44de-a3a7-d59bfbb9cf5a",
+                            SecurityStamp = "8a908948-f7a2-45a4-a2cc-ba4b121d6a62",
+                            SuperAdmin = false,
                             TwoFactorEnabled = false,
                             UserName = "moe@mcdougalls.com"
                         },
@@ -275,7 +279,7 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                         {
                             Id = -2,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "22a140fa-b110-42fc-b9d8-e6dcbc3ea43f",
+                            ConcurrencyStamp = "7ee29c84-9b20-4f23-8c4c-1a7ad68a391e",
                             Email = "larry@burgersquire.com",
                             EmailConfirmed = true,
                             NormalizedEmail = "LARRY@BURGERSQUIRE.COM",
@@ -283,10 +287,11 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                             Organization = "Burger Squire",
                             OrganizationAdmin = true,
                             OrganizationConfirmed = false,
-                            PasswordHash = "AH56YEMKGpGxvsomtHRDBmKQSu/NyD04OEJSY49Llq9PL+t2CHoWoMmqCrSvZBujig==",
+                            PasswordHash = "ALG1OP/NCWjFpC5rSBSDrauVvPA3EbMxby77Uwt8UKpH58agaCXlnIv1cg4xQE/iHA==",
                             PhoneNumber = "111-222-3333",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "0d748aed-63d4-431d-beec-e590e1f841e3",
+                            SecurityStamp = "42243ffc-d18c-4b22-890e-bd4c519ddcf7",
+                            SuperAdmin = false,
                             TwoFactorEnabled = false,
                             UserName = "larry@burgersquire.com"
                         },
@@ -294,7 +299,7 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                         {
                             Id = -3,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "4414f7aa-27f3-4cc0-a033-177009989968",
+                            ConcurrencyStamp = "dcb1bd4e-df97-4f43-a60c-9bedd760709c",
                             Email = "curly@windys.com",
                             EmailConfirmed = true,
                             NormalizedEmail = "CURLY@WINDYS.COM",
@@ -302,10 +307,11 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                             Organization = "Windy's",
                             OrganizationAdmin = true,
                             OrganizationConfirmed = false,
-                            PasswordHash = "AEsOfG0oSS+J7tUfteSOMknWfYoZv29wZv6Fzo3BEDBBnwHHLJDP4SA82+dw28HrIA==",
+                            PasswordHash = "AEHKZugG3D/te0QUgaQ38qtmApdbvE9TjpS38iG/btctQsuWudaCH3UGTAvv6c5qIA==",
                             PhoneNumber = "222-333-4444",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "8013a9af-6639-4a98-bf12-f6e442e898c6",
+                            SecurityStamp = "83d6a4a8-4ca3-4a32-aecc-f36c13dfcb9c",
+                            SuperAdmin = false,
                             TwoFactorEnabled = false,
                             UserName = "curly@windys.com"
                         },
@@ -313,7 +319,7 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                         {
                             Id = -4,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6f72b5b1-b143-4168-885e-9aa0857b7482",
+                            ConcurrencyStamp = "cd4b8ee6-2df0-4bfe-881e-2ed03b93ed51",
                             Email = "marcia@mcdougalls.com",
                             EmailConfirmed = true,
                             NormalizedEmail = "MARCIA@MCDOUGALLS.COM",
@@ -321,10 +327,11 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                             Organization = "McDougall's",
                             OrganizationAdmin = false,
                             OrganizationConfirmed = false,
-                            PasswordHash = "AKJy5CVEFbEto2XHI6Nv07QMsOWaKMYOuNuLo5k5l8yG6HmFFyqJ+GexdR38ErrpoQ==",
+                            PasswordHash = "AHc7eMal2Ju+KxGC+DNX5ykpx/dPdmhq4z4mPoJ3cEL1BYu78szo+EqmDdmqSpGE4Q==",
                             PhoneNumber = "000-111-2223",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1b6fba77-42f4-4585-b8c7-2689a672d97e",
+                            SecurityStamp = "0732f0a2-1ddc-44e1-91bf-eba6a70d0c9a",
+                            SuperAdmin = false,
                             TwoFactorEnabled = false,
                             UserName = "marcia@mcdougalls.com"
                         },
@@ -332,7 +339,7 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                         {
                             Id = -5,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0759e9c5-237c-4e8a-be87-dc84d077d3c1",
+                            ConcurrencyStamp = "b64813f6-221c-4a26-8ef8-cf6f380c9db2",
                             Email = "jan@burgersquire.com",
                             EmailConfirmed = true,
                             NormalizedEmail = "JAN@BURGERSQUIRE.COM",
@@ -340,10 +347,11 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                             Organization = "Burger Squire",
                             OrganizationAdmin = false,
                             OrganizationConfirmed = false,
-                            PasswordHash = "AOKFZ/0fs5ZlFlgBcdRs0/GAtr54YIc9X8zv6YMez9UIR7DtVZW608tRa4j/LU8t8w==",
+                            PasswordHash = "AGClgbBglDK154+J/FK9rR0yAzwS8TM029v6bZSEAd/ByzszB4RYa/zBolN34s8F6g==",
                             PhoneNumber = "111-222-3334",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "73bc5052-a491-4eef-833e-e5cef8e7f2d9",
+                            SecurityStamp = "c3d92933-c2fc-48e2-bfa9-82819292f2bf",
+                            SuperAdmin = false,
                             TwoFactorEnabled = false,
                             UserName = "jan@burgersquire.com"
                         },
@@ -351,7 +359,7 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                         {
                             Id = -6,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6aa8809e-9ecb-40bb-a7c8-99ea2a3c6ac9",
+                            ConcurrencyStamp = "dc643442-e6a5-4b13-82ca-687ca7aea13f",
                             Email = "cindy@windys.com",
                             EmailConfirmed = true,
                             NormalizedEmail = "CINDY@WINDYS.COM",
@@ -359,10 +367,11 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                             Organization = "Windy's",
                             OrganizationAdmin = false,
                             OrganizationConfirmed = false,
-                            PasswordHash = "AFexRbApNOVdhRaK/fRolsFxeRkw1boJ9/QUqhkeIX54brYEp+IvuV05ssGkdqs8Dg==",
+                            PasswordHash = "AKonnfUXy2u6fFkWm5wH7KCO7EPylRXBRSQy02rw3y+VawwCLj8gy+aUQL/C9Z3e0g==",
                             PhoneNumber = "222-333-4445",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "60303360-ff3b-4d79-b560-a0ca49900067",
+                            SecurityStamp = "0c2894ae-0f6c-4e23-9c80-9628c8ec38a7",
+                            SuperAdmin = false,
                             TwoFactorEnabled = false,
                             UserName = "cindy@windys.com"
                         },
@@ -370,7 +379,7 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                         {
                             Id = -7,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5a6fdbb9-e7cc-4808-9bb0-57e602bc148e",
+                            ConcurrencyStamp = "88a26bdb-f4c0-46be-98e1-67d9a767dd6f",
                             Email = "greg@mcdougalls.com",
                             EmailConfirmed = true,
                             NormalizedEmail = "GREG@MCDOUGALLS.COM",
@@ -378,10 +387,11 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                             Organization = "McDougall's",
                             OrganizationAdmin = false,
                             OrganizationConfirmed = false,
-                            PasswordHash = "AOs5pcwsec1Fr0ctoOa4zGGDYJcWJxd1DwEvbsEHwyYm+/dxgxbxsaE8EwsdErS+pQ==",
+                            PasswordHash = "APFsitEgUngOUmkzmJX4FcC0QWUD3j3itJ4kGejCqdNR8FMeNfnay53l9wBJbAjlVw==",
                             PhoneNumber = "000-111-2224",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "502a028d-947b-4501-bf53-14e591a29bb3",
+                            SecurityStamp = "33873d4c-7429-428e-b7fd-04e0b859fef7",
+                            SuperAdmin = false,
                             TwoFactorEnabled = false,
                             UserName = "greg@mcdougalls.com"
                         },
@@ -389,7 +399,7 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                         {
                             Id = -8,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1d494787-9bd6-4018-be6c-c88398708cd0",
+                            ConcurrencyStamp = "dd41f3b8-70f7-4e55-92ed-0acb00e64912",
                             Email = "peter@burgersquire.com",
                             EmailConfirmed = true,
                             NormalizedEmail = "PETER@BURGERSQUIRE.COM",
@@ -397,10 +407,11 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                             Organization = "Burger Squire",
                             OrganizationAdmin = false,
                             OrganizationConfirmed = false,
-                            PasswordHash = "AOVUIcfSFifkaIYM25VzeT5lI6Ra2HlVMzdYNCIaB8Hkxjs8vO5N+m/N4A6YrjyvGw==",
+                            PasswordHash = "APd0egA0D56GUOXi94zvCXi6V6+oiaAeqemgLjiDYYAx6oVpTM/vJZsY/6qykRTZiQ==",
                             PhoneNumber = "111-222-3335",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "5401e644-4b04-46d2-ab38-ce99ab05fe48",
+                            SecurityStamp = "f71c44eb-51b8-4aed-a92b-a763387e9501",
+                            SuperAdmin = false,
                             TwoFactorEnabled = false,
                             UserName = "peter@burgersquire.com"
                         },
@@ -408,7 +419,7 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                         {
                             Id = -9,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2c4ca8aa-bf3e-44f2-995a-57ff1f4ad291",
+                            ConcurrencyStamp = "65ae7b12-27cb-4bde-8bab-416e57414c9d",
                             Email = "bobby@windys.com",
                             EmailConfirmed = true,
                             LockoutBegin = new DateTimeOffset(new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)),
@@ -418,10 +429,11 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                             Organization = "Windy's",
                             OrganizationAdmin = false,
                             OrganizationConfirmed = false,
-                            PasswordHash = "ALLUTZJjhrofh2bxvJMxX5wr844YB2A1TpRrFsInH/sqtoI4KeXCdOloxmmO2aXTQw==",
+                            PasswordHash = "ALa6v4WiOqr74SpTWqR1nYCBjV4IffezJ9U1lDsnWcBw4cIQFqNkpiK9M5f6XxSgiQ==",
                             PhoneNumber = "222-333-4446",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f9b2716a-bb24-445e-b333-420f88001e35",
+                            SecurityStamp = "6cfffb56-34e9-425f-b4ab-575c66939eb3",
+                            SuperAdmin = false,
                             TwoFactorEnabled = false,
                             UserName = "bobby@windys.com"
                         },
@@ -429,7 +441,7 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                         {
                             Id = -10,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ca9342ca-50a3-41fc-a867-300abe024ff6",
+                            ConcurrencyStamp = "89e3aefc-48b6-4c00-a2ea-3e5949438e2e",
                             Email = "alice@windys.com",
                             EmailConfirmed = true,
                             NormalizedEmail = "ALICE@WINDYS.COM",
@@ -437,10 +449,11 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                             Organization = "Windy's",
                             OrganizationAdmin = false,
                             OrganizationConfirmed = false,
-                            PasswordHash = "AHfTD2iqsjzwV3zBRIwUFCg27J/9L391ShpGQMQD/sJnVf+62mhAJgZaHDDIdtggzw==",
+                            PasswordHash = "ABECH/3HNbsodHmwTd7Di9HAIDvmFKfbWynWnaGOn7wVQNyNvjRuaZC7sCBgUYxs/A==",
                             PhoneNumber = "222-333-4446",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "cce2a95d-ceb9-4451-864b-8311e4144c10",
+                            SecurityStamp = "ae61c7b2-80c7-409c-939b-176f24416b8b",
+                            SuperAdmin = false,
                             TwoFactorEnabled = false,
                             UserName = "alice@windys.com"
                         },
@@ -448,7 +461,7 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                         {
                             Id = -11,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "94e81422-7d0a-447e-9c76-e2b8ab7d7413",
+                            ConcurrencyStamp = "e242e8fc-d5d0-40fe-b7b8-7dbd570b3167",
                             Email = "sheldon@burgersquire.com",
                             EmailConfirmed = true,
                             NormalizedEmail = "SHELDON@BURGERSQUIRE.COM",
@@ -456,10 +469,11 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                             Organization = "Burger Squire",
                             OrganizationAdmin = false,
                             OrganizationConfirmed = false,
-                            PasswordHash = "ALQmLyWUPXDt1DZ1Xtp3feAosNKQKe6WUqalvcsVN7WrcHtCmrB5MZCylLlo/KZBWg==",
+                            PasswordHash = "AGUebo3/plsz2lMKYn7bZ/BIFk3gQvZ5m3rsbGl9SNvZNVyoa6IGJtaPjIpyfOj2tw==",
                             PhoneNumber = "999-888-7777",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a7d1aaec-0d39-4dbe-8804-1e97d52b0374",
+                            SecurityStamp = "3d82bce7-da76-4d86-8605-d2594f80180b",
+                            SuperAdmin = false,
                             TwoFactorEnabled = false,
                             UserName = "sheldon@burgersquire.com"
                         });

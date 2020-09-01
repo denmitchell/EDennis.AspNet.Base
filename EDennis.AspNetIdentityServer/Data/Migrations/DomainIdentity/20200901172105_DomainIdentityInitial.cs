@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
 {
-    public partial class Initial : Migration
+    public partial class DomainIdentityInitial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -103,6 +103,7 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
                     Organization = table.Column<string>(unicode: false, maxLength: 128, nullable: true),
                     OrganizationConfirmed = table.Column<bool>(nullable: false),
                     OrganizationAdmin = table.Column<bool>(nullable: false),
+                    SuperAdmin = table.Column<bool>(nullable: false),
                     LockoutBegin = table.Column<DateTimeOffset>(nullable: true)
                 },
                 constraints: table =>
@@ -282,20 +283,20 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutBegin", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "Organization", "OrganizationAdmin", "OrganizationConfirmed", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutBegin", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "Organization", "OrganizationAdmin", "OrganizationConfirmed", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "SuperAdmin", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { -10, 0, "ca9342ca-50a3-41fc-a867-300abe024ff6", "alice@windys.com", true, null, null, "ALICE@WINDYS.COM", "ALICE@WINDYS.COM", "Windy's", false, false, "AHfTD2iqsjzwV3zBRIwUFCg27J/9L391ShpGQMQD/sJnVf+62mhAJgZaHDDIdtggzw==", "222-333-4446", false, "cce2a95d-ceb9-4451-864b-8311e4144c10", false, "alice@windys.com" },
-                    { -1, 0, "4c89a4a5-53ed-4e69-b9d6-ec192198e8ff", "moe@mcdougalls.com", true, null, null, "MOE@MCDOUGALLS.COM", "MOE@MCDOUGALLS.COM", "McDougall's", true, false, "AA9h108SlVBssRSc+Dqntg7bZiwt6AQPEsxZOhY7pcUGDy3v4fRsEDEVhNJk4rr43A==", "000-111-2222", false, "e390994a-b411-44de-a3a7-d59bfbb9cf5a", false, "moe@mcdougalls.com" },
-                    { -2, 0, "22a140fa-b110-42fc-b9d8-e6dcbc3ea43f", "larry@burgersquire.com", true, null, null, "LARRY@BURGERSQUIRE.COM", "LARRY@BURGERSQUIRE.COM", "Burger Squire", true, false, "AH56YEMKGpGxvsomtHRDBmKQSu/NyD04OEJSY49Llq9PL+t2CHoWoMmqCrSvZBujig==", "111-222-3333", true, "0d748aed-63d4-431d-beec-e590e1f841e3", false, "larry@burgersquire.com" },
-                    { -3, 0, "4414f7aa-27f3-4cc0-a033-177009989968", "curly@windys.com", true, null, null, "CURLY@WINDYS.COM", "CURLY@WINDYS.COM", "Windy's", true, false, "AEsOfG0oSS+J7tUfteSOMknWfYoZv29wZv6Fzo3BEDBBnwHHLJDP4SA82+dw28HrIA==", "222-333-4444", false, "8013a9af-6639-4a98-bf12-f6e442e898c6", false, "curly@windys.com" },
-                    { -4, 0, "6f72b5b1-b143-4168-885e-9aa0857b7482", "marcia@mcdougalls.com", true, null, null, "MARCIA@MCDOUGALLS.COM", "MARCIA@MCDOUGALLS.COM", "McDougall's", false, false, "AKJy5CVEFbEto2XHI6Nv07QMsOWaKMYOuNuLo5k5l8yG6HmFFyqJ+GexdR38ErrpoQ==", "000-111-2223", false, "1b6fba77-42f4-4585-b8c7-2689a672d97e", false, "marcia@mcdougalls.com" },
-                    { -5, 0, "0759e9c5-237c-4e8a-be87-dc84d077d3c1", "jan@burgersquire.com", true, null, null, "JAN@BURGERSQUIRE.COM", "JAN@BURGERSQUIRE.COM", "Burger Squire", false, false, "AOKFZ/0fs5ZlFlgBcdRs0/GAtr54YIc9X8zv6YMez9UIR7DtVZW608tRa4j/LU8t8w==", "111-222-3334", true, "73bc5052-a491-4eef-833e-e5cef8e7f2d9", false, "jan@burgersquire.com" },
-                    { -6, 0, "6aa8809e-9ecb-40bb-a7c8-99ea2a3c6ac9", "cindy@windys.com", true, null, null, "CINDY@WINDYS.COM", "CINDY@WINDYS.COM", "Windy's", false, false, "AFexRbApNOVdhRaK/fRolsFxeRkw1boJ9/QUqhkeIX54brYEp+IvuV05ssGkdqs8Dg==", "222-333-4445", false, "60303360-ff3b-4d79-b560-a0ca49900067", false, "cindy@windys.com" },
-                    { -7, 0, "5a6fdbb9-e7cc-4808-9bb0-57e602bc148e", "greg@mcdougalls.com", true, null, null, "GREG@MCDOUGALLS.COM", "GREG@MCDOUGALLS.COM", "McDougall's", false, false, "AOs5pcwsec1Fr0ctoOa4zGGDYJcWJxd1DwEvbsEHwyYm+/dxgxbxsaE8EwsdErS+pQ==", "000-111-2224", false, "502a028d-947b-4501-bf53-14e591a29bb3", false, "greg@mcdougalls.com" },
-                    { -8, 0, "1d494787-9bd6-4018-be6c-c88398708cd0", "peter@burgersquire.com", true, null, null, "PETER@BURGERSQUIRE.COM", "PETER@BURGERSQUIRE.COM", "Burger Squire", false, false, "AOVUIcfSFifkaIYM25VzeT5lI6Ra2HlVMzdYNCIaB8Hkxjs8vO5N+m/N4A6YrjyvGw==", "111-222-3335", true, "5401e644-4b04-46d2-ab38-ce99ab05fe48", false, "peter@burgersquire.com" },
-                    { -9, 0, "2c4ca8aa-bf3e-44f2-995a-57ff1f4ad291", "bobby@windys.com", true, new DateTimeOffset(new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)), new DateTimeOffset(new DateTime(2030, 12, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)), "BOBBY@WINDYS.COM", "BOBBY@WINDYS.COM", "Windy's", false, false, "ALLUTZJjhrofh2bxvJMxX5wr844YB2A1TpRrFsInH/sqtoI4KeXCdOloxmmO2aXTQw==", "222-333-4446", false, "f9b2716a-bb24-445e-b333-420f88001e35", false, "bobby@windys.com" },
-                    { -11, 0, "94e81422-7d0a-447e-9c76-e2b8ab7d7413", "sheldon@burgersquire.com", true, null, null, "SHELDON@BURGERSQUIRE.COM", "SHELDON@BURGERSQUIRE.COM", "Burger Squire", false, false, "ALQmLyWUPXDt1DZ1Xtp3feAosNKQKe6WUqalvcsVN7WrcHtCmrB5MZCylLlo/KZBWg==", "999-888-7777", false, "a7d1aaec-0d39-4dbe-8804-1e97d52b0374", false, "sheldon@burgersquire.com" }
+                    { -10, 0, "89e3aefc-48b6-4c00-a2ea-3e5949438e2e", "alice@windys.com", true, null, null, "ALICE@WINDYS.COM", "ALICE@WINDYS.COM", "Windy's", false, false, "ABECH/3HNbsodHmwTd7Di9HAIDvmFKfbWynWnaGOn7wVQNyNvjRuaZC7sCBgUYxs/A==", "222-333-4446", false, "ae61c7b2-80c7-409c-939b-176f24416b8b", false, false, "alice@windys.com" },
+                    { -1, 0, "f9db615d-a76c-417b-8c9a-2d7bbfdb2d37", "moe@mcdougalls.com", true, null, null, "MOE@MCDOUGALLS.COM", "MOE@MCDOUGALLS.COM", "McDougall's", true, false, "AHQhhv/JbmFkA5O3OJyamWfdtRAt5eC3YuR9FOwmNHwZsgkGX80SckP/C6uLO6AtBg==", "000-111-2222", false, "8a908948-f7a2-45a4-a2cc-ba4b121d6a62", false, false, "moe@mcdougalls.com" },
+                    { -2, 0, "7ee29c84-9b20-4f23-8c4c-1a7ad68a391e", "larry@burgersquire.com", true, null, null, "LARRY@BURGERSQUIRE.COM", "LARRY@BURGERSQUIRE.COM", "Burger Squire", true, false, "ALG1OP/NCWjFpC5rSBSDrauVvPA3EbMxby77Uwt8UKpH58agaCXlnIv1cg4xQE/iHA==", "111-222-3333", true, "42243ffc-d18c-4b22-890e-bd4c519ddcf7", false, false, "larry@burgersquire.com" },
+                    { -3, 0, "dcb1bd4e-df97-4f43-a60c-9bedd760709c", "curly@windys.com", true, null, null, "CURLY@WINDYS.COM", "CURLY@WINDYS.COM", "Windy's", true, false, "AEHKZugG3D/te0QUgaQ38qtmApdbvE9TjpS38iG/btctQsuWudaCH3UGTAvv6c5qIA==", "222-333-4444", false, "83d6a4a8-4ca3-4a32-aecc-f36c13dfcb9c", false, false, "curly@windys.com" },
+                    { -4, 0, "cd4b8ee6-2df0-4bfe-881e-2ed03b93ed51", "marcia@mcdougalls.com", true, null, null, "MARCIA@MCDOUGALLS.COM", "MARCIA@MCDOUGALLS.COM", "McDougall's", false, false, "AHc7eMal2Ju+KxGC+DNX5ykpx/dPdmhq4z4mPoJ3cEL1BYu78szo+EqmDdmqSpGE4Q==", "000-111-2223", false, "0732f0a2-1ddc-44e1-91bf-eba6a70d0c9a", false, false, "marcia@mcdougalls.com" },
+                    { -5, 0, "b64813f6-221c-4a26-8ef8-cf6f380c9db2", "jan@burgersquire.com", true, null, null, "JAN@BURGERSQUIRE.COM", "JAN@BURGERSQUIRE.COM", "Burger Squire", false, false, "AGClgbBglDK154+J/FK9rR0yAzwS8TM029v6bZSEAd/ByzszB4RYa/zBolN34s8F6g==", "111-222-3334", true, "c3d92933-c2fc-48e2-bfa9-82819292f2bf", false, false, "jan@burgersquire.com" },
+                    { -6, 0, "dc643442-e6a5-4b13-82ca-687ca7aea13f", "cindy@windys.com", true, null, null, "CINDY@WINDYS.COM", "CINDY@WINDYS.COM", "Windy's", false, false, "AKonnfUXy2u6fFkWm5wH7KCO7EPylRXBRSQy02rw3y+VawwCLj8gy+aUQL/C9Z3e0g==", "222-333-4445", false, "0c2894ae-0f6c-4e23-9c80-9628c8ec38a7", false, false, "cindy@windys.com" },
+                    { -7, 0, "88a26bdb-f4c0-46be-98e1-67d9a767dd6f", "greg@mcdougalls.com", true, null, null, "GREG@MCDOUGALLS.COM", "GREG@MCDOUGALLS.COM", "McDougall's", false, false, "APFsitEgUngOUmkzmJX4FcC0QWUD3j3itJ4kGejCqdNR8FMeNfnay53l9wBJbAjlVw==", "000-111-2224", false, "33873d4c-7429-428e-b7fd-04e0b859fef7", false, false, "greg@mcdougalls.com" },
+                    { -8, 0, "dd41f3b8-70f7-4e55-92ed-0acb00e64912", "peter@burgersquire.com", true, null, null, "PETER@BURGERSQUIRE.COM", "PETER@BURGERSQUIRE.COM", "Burger Squire", false, false, "APd0egA0D56GUOXi94zvCXi6V6+oiaAeqemgLjiDYYAx6oVpTM/vJZsY/6qykRTZiQ==", "111-222-3335", true, "f71c44eb-51b8-4aed-a92b-a763387e9501", false, false, "peter@burgersquire.com" },
+                    { -9, 0, "65ae7b12-27cb-4bde-8bab-416e57414c9d", "bobby@windys.com", true, new DateTimeOffset(new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)), new DateTimeOffset(new DateTime(2030, 12, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)), "BOBBY@WINDYS.COM", "BOBBY@WINDYS.COM", "Windy's", false, false, "ALa6v4WiOqr74SpTWqR1nYCBjV4IffezJ9U1lDsnWcBw4cIQFqNkpiK9M5f6XxSgiQ==", "222-333-4446", false, "6cfffb56-34e9-425f-b4ab-575c66939eb3", false, false, "bobby@windys.com" },
+                    { -11, 0, "e242e8fc-d5d0-40fe-b7b8-7dbd570b3167", "sheldon@burgersquire.com", true, null, null, "SHELDON@BURGERSQUIRE.COM", "SHELDON@BURGERSQUIRE.COM", "Burger Squire", false, false, "AGUebo3/plsz2lMKYn7bZ/BIFk3gQvZ5m3rsbGl9SNvZNVyoa6IGJtaPjIpyfOj2tw==", "999-888-7777", false, "3d82bce7-da76-4d86-8605-d2594f80180b", false, false, "sheldon@burgersquire.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -361,6 +362,8 @@ namespace EDennis.AspNetIdentityServer.Data.Migrations.DomainIdentity
             migrationBuilder.Sql(File.ReadAllText("Data/Sql/ForeignKeys.sql"));
             migrationBuilder.Sql(File.ReadAllText("Data/Sql/SearchableDomainUser.sql"));
             migrationBuilder.Sql(File.ReadAllText("Data/Sql/DbView.sql"));
+
+
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

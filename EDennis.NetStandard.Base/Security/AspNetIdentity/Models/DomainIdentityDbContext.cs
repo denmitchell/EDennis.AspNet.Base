@@ -270,7 +270,8 @@ namespace EDennis.NetStandard.Base {
                         Email = "sheldon@burgersquire.com",
                         EmailConfirmed = true,
                         PhoneNumber = "999-888-7777",
-                        Organization = "Burger Squire"
+                        Organization = "Burger Squire",
+                        SuperAdmin = true
                     }
                 };
                 foreach(var user in users) {
@@ -308,7 +309,6 @@ namespace EDennis.NetStandard.Base {
                     new IdentityUserClaim<int> { Id = -9914, UserId = -8, ClaimType = "app:role", ClaimValue = "InfoMaster:readonly" },
                     new IdentityUserClaim<int> { Id = -9915, UserId = -9, ClaimType = "app:role", ClaimValue = "InfoMaster:readonly" },
                     new IdentityUserClaim<int> { Id = -9916, UserId = -10, ClaimType = "app:role", ClaimValue = "InfoMaster:auditor" },
-                    new IdentityUserClaim<int> { Id = -9917, UserId = -11, ClaimType = "*:role", ClaimValue = "*:admin" }
                 });
             });
 

@@ -1,4 +1,5 @@
 ﻿using EDennis.NetStandard.Base;
+using IdentityServer4.Test;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
@@ -7,23 +8,21 @@ using System.Threading.Tasks;
 
 
 namespace EDennis.AspNetIdentityServer.Areas.Identity.Pages.Account.Admin {
-    public partial class IndexModel : DynamicLinqPageModel<SearchableDomainUser>
-    {
+    public partial class IndexModel : DynamicLinqPageModel<SearchableDomainUser> {
         public const int PAGE_SIZE = 10;
         public const string ORDER_BY = "UserName";
 
         private readonly DomainIdentityDbContext _dbContext;
         public override int SearchTableRowCount => 3;
 
-        public IndexModel(DomainIdentityDbContext dbContext)
-        {
+        public IndexModel(DomainIdentityDbContext dbContext) {
             _dbContext = dbContext;
             PageSize = PAGE_SIZE;
 
             Organizations = _dbContext.Organizations
                 .ToList()
-                .Select(o=> new SelectListItem { Text = o.Name, Value = o.Name });
-            
+                .Select(o => new SelectListItem { Text = o.Name, Value = o.Name });
+
             Applications = _dbContext.Applications
                 .ToList()
                 .Select(a => new SelectListItem { Text = a.Name, Value = a.Name });
@@ -38,32 +37,50 @@ namespace EDennis.AspNetIdentityServer.Areas.Identity.Pages.Account.Admin {
         public IEnumerable<SelectListItem> Applications { get; set; }
 
 
+        #region query string aliases
+        [BindProperty] public ComparisonOperator UsrOp { get; set; }
+        [BindProperty] public string Usr { get; set; }
+        [BindProperty] public string Org { get; set; }
+        [BindProperty] public string App { get; set; }
+        #endregion
 
-        public async Task<IActionResult> OnGetAsync(ComparisonOperator usrop, string usr, string org, string app,
-                int pageNumber = 1, int? totalRecords = null) {
 
-            Organizations = Organizations.Where(o => User.Claims.Any(
-                c => c.Type == "super_admin"
-                || c.Type == "app:role" && c.Value.EndsWith(":admin")
-                || c.Type == "organization_admin" && c.Value == o.Value));
+        public async Task<IActionResult> OnGetAsync(
+            ComparisonOperator UsrOp, string Usr, string Org, string App,
+            int pageNumber = 1, int? totalRecords = null) {
 
-            Applications = Applications.Where(a => User.Claims.Any(
-                c => c.Type == "super_admin"
-                || c.Type == "app:role" && c.Value == $"{a}:admin"
-                || c.Type == "organization_admin"));
+            Organizations =
+                new SelectListItem[] { new SelectListItem { Value = null, Text = "" } }
+                .Union(
+                    Organizations.Where(o => User.Claims.Any(
+                    c => c.Type == "super_admin"
+                    || (c.Type == "app:role" && c.Value.EndsWith(":admin"))
+                    || (c.Type == "organization_admin_for" && c.Value == o.Value)))
+                )
+                .ToList();
+
+            Applications =
+                new SelectListItem[] { new SelectListItem { Value = null, Text = "" } }
+                .Union(
+                    Applications.Where(a => User.Claims.Any(
+                    c => c.Type == "super_admin"
+                    || (c.Type == "app:role" && c.Value == $"{a}:admin")
+                    || (c.Type == "organization_admin_for")))
+                )
+                .ToList();
 
 
             SearchTable[0].FieldName = "UserName";
-            SearchTable[0].Operator = usrop;
-            SearchTable[0].FieldValue = usr;
+            SearchTable[0].Operator = UsrOp;
+            SearchTable[0].FieldValue = Usr;
 
             SearchTable[1].FieldName = "Organization";
             SearchTable[1].Operator = ComparisonOperator.Equals;
-            SearchTable[1].FieldValue = org;
+            SearchTable[1].FieldValue = Org;
 
             SearchTable[2].FieldName = "Applications";
             SearchTable[2].Operator = ComparisonOperator.Contains;
-            SearchTable[2].FieldValue = app;
+            SearchTable[2].FieldValue = App;
 
 
             var where = SearchTable.Where;

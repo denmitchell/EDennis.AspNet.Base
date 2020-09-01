@@ -56,7 +56,7 @@ namespace EDennis.NetStandard.Base {
             if (Organization != default) {
                 claims.Add(new Claim(DomainClaimTypes.Organization, Email));
                 claims.Add(new Claim(DomainClaimTypes.OrganizationConfirmed, OrganizationConfirmed.ToString().ToLower()));
-                if(OrganizationAdmin && OrganizationConfirmed)
+                if(OrganizationAdmin)
                     claims.Add(new Claim(DomainClaimTypes.OrganizationAdminFor, Organization));
             }
             if (SuperAdmin)

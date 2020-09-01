@@ -13,25 +13,25 @@
 <div class="container">
     <form class="form" asp-page="./Index" method="get">
         <div class="form-group row filter-row">
-            <input asp-for="SearchTable[0].FieldName" class="form-control col-sm-3" name="fld0" id="fld0" value="UserName" readonly />
-            <select asp-for="SearchTable[0].Operator" class="form-control col-sm-3" name="usrop" id="usrop">
+            <input asp-for="SearchTable[0].FieldName" class="form-control col-sm-3" name="op0" id="op0" value="UserName" disabled />
+            <select asp-for="UsrOp" class="form-control col-sm-3">
                 <option value="0" title="equals">Equals</option>
                 <option value="8" title="starts with">Starts With</option>
                 <option value="9" title="ends with">Ends With</option>
                 <option value="10" title="contains">Contains</option>
                 <option value="11" title="like (use % wildcard)">Like</option>
             </select>
-            <input asp-for="SearchTable[0].FieldValue" type="text" class="form-control col-sm-6" name="usr" id="usr">
+            <input asp-for="Usr" type="text" class="form-control col-sm-6">
         </div>
         <div class="form-group row filter-row">
-            <input asp-for="SearchTable[1].FieldName" class="form-control col-sm-3" name="fld1" id="fld1" value="Organization" readonly />
-            <input asp-for="SearchTable[1].Operator" class="form-control col-sm-3" name="op1" id="op1" value="Equals" readonly />
-            <select asp-for="SearchTable[1].FieldValue" asp-items="Model.Organizations" class="form-control col-sm-6" name="org" id="org"/>
+            <input asp-for="SearchTable[1].FieldName" class="form-control col-sm-3" name="fld1" id="fld1" value="Organization" disabled />
+            <input asp-for="SearchTable[1].Operator" class="form-control col-sm-3" name="op1" id="op1" value="Equals" disabled />
+            <select asp-for="Org" asp-items="Model.Organizations" class="form-control col-sm-6"></select>
         </div>
         <div class="form-group row filter-row">
-            <input asp-for="SearchTable[2].FieldName" class="form-control col-sm-3" name="fld2" id="fld2" value="Application" readonly />
-            <input asp-for="SearchTable[2].Operator" class="form-control col-sm-3" name="op2" id="op2" value="Contains" readonly />
-            <select asp-for="SearchTable[2].FieldValue" asp-items="Model.Applications" class="form-control col-sm-6" name="app" id="app"/>
+            <input asp-for="SearchTable[2].FieldName" class="form-control col-sm-3" name="fld2" id="fld2" value="Application" disabled />
+            <input asp-for="SearchTable[2].Operator" class="form-control col-sm-3" name="op2" id="op2" value="Contains" disabled />
+            <select asp-for="App" asp-items="Model.Applications" class="form-control col-sm-6"></select>
             <input type="hidden" name="pageNumber" id="pageNumber" value="1" />
         </div>
 
@@ -80,20 +80,20 @@
 }
 
 <a asp-page="./Index"
-   asp-route-usrop="@Model.SearchTable[0].Operator"
-   asp-route-usr="@Model.SearchTable[0].FieldValue"
-   asp-route-org="@Model.SearchTable[1].FieldValue"
-   asp-route-app="@Model.SearchTable[2].FieldValue"
+   asp-route-usrop="@Model.UsrOp"
+   asp-route-usr="@Model.Usr"
+   asp-route-org="@Model.Org"
+   asp-route-app="@Model.App"
    asp-route-pageNumber="@(Model.CurrentPage - 1)"
    asp-route-totalRecords="@Model.RowCount"
    class="btn btn-secondary @prevDisabled">
     Previous
 </a>
 <a asp-page="./Index"
-   asp-route-usrop="@Model.SearchTable[0].Operator"
-   asp-route-usr="@Model.SearchTable[0].FieldValue"
-   asp-route-org="@Model.SearchTable[1].FieldValue"
-   asp-route-app="@Model.SearchTable[2].FieldValue"
+   asp-route-usrop="@Model.UsrOp"
+   asp-route-usr="@Model.Usr"
+   asp-route-org="@Model.Org"
+   asp-route-app="@Model.App"
    asp-route-pageNumber="@(Model.CurrentPage + 1)"
    asp-route-totalRecords="@Model.RowCount"
    class="btn btn-secondary @nextDisabled">

@@ -1,16 +1,16 @@
 ﻿@page "{id}"
 @model EDennis.AspNetIdentityServer.Areas.Identity.Pages.Account.Admin.UserModel
 @{
-    ViewData["Title"] = "Edit User";
+    ViewData["Title"] = "Editing " + Model.UserName;
 }
 
-<h4>@ViewData["Title"]</h4>
+<h4 class="text-primary font-italic">@ViewData["Title"]</h4>
 <partial name="_StatusMessage" model="Model.StatusMessage" />
 <form id="user" method="post">
 
-    <hr class="mt-sm-5" />
-    <h5 class="text-center">User Information</h5>
-    <hr />
+    @*<hr class="mt-sm-5" />*@
+    <h5 class="section-header text-center pt-sm-4 pb-sm-3">User Information</h5>
+    @*<hr />*@
 
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -85,9 +85,9 @@
     </div>
 
     @if (Model.IsAdmin()) {
-        <hr class="mt-sm-5" />
-        <h5 class="text-center">Application Roles</h5>
-        <hr />
+        @*<hr class="mt-sm-5" />*@
+        <h5 class="section-header text-center pt-sm-4 pb-sm-3">Application Roles</h5>
+        @*<hr />*@
         <table class="table table-bordered">
             <thead>
                 <tr>
