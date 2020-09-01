@@ -295,7 +295,7 @@ namespace EDennis.AspNetIdentityServer {
                         EmailConfirmed = entry.EmailConfirmed,
                         PhoneNumber = entry.PhoneNumber,
                         PhoneNumberConfirmed = entry.PhoneNumberConfirmed,
-                        Organization = entry.Organization,
+                        Organization = entry.Organization ?? entry.Email.Substring(entry.Email.IndexOf('@') + 1),
                         OrganizationConfirmed = entry.OrganizationConfirmed,
                         OrganizationAdmin = entry.OrganizationAdmin,
                         LockoutBegin = entry.LockedOut ? DateTime.MinValue : default,

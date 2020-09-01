@@ -7,6 +7,6 @@
         public string Organization { get; set; }
         public bool OrganizationAdmin { get; set; }
         public string Applications { get; set; } 
-
+        //public long ApplicationCount { get; set; }
     }
 }
