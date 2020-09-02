@@ -5,6 +5,12 @@ using System;
 using System.Security.Cryptography;
 
 namespace EDennis.NetStandard.Base {
+
+    /// <summary>
+    /// DbContext class for ASP.NET Identity using Domain model classes.
+    /// Note: HasData sections were included for debugging purposes only and thus
+    ///       are compiled only conditionally
+    /// </summary>
     public class DomainIdentityDbContext : IdentityDbContext<DomainUser,IdentityRole<int>,int> {
         public DomainIdentityDbContext(DbContextOptions<DomainIdentityDbContext> options)
             : base(options) {
@@ -61,11 +67,13 @@ namespace EDennis.NetStandard.Base {
                 e.Property(p => p.Name)
                     .IsUnicode(false)
                     .HasMaxLength(128);
+#if DBCONTEXT_HASDATA
                 e.HasData(new DomainOrganization[] {
                     new DomainOrganization { Name = "McDougall's" },
                     new DomainOrganization { Name = "Burger Squire" },
                     new DomainOrganization { Name = "Windy's" }
                 });
+#endif
             });
             builder.Entity<DomainApplication>(e =>
             {
@@ -74,10 +82,12 @@ namespace EDennis.NetStandard.Base {
                 e.Property(p => p.Name)
                     .IsUnicode(false)
                     .HasMaxLength(128);
+#if DBCONTEXT_HASDATA
                 e.HasData(new DomainApplication[] {
                     new DomainApplication { Name = "DataGenie" },
                     new DomainApplication { Name = "InfoMaster" },
                 });
+#endif
             });
 
             builder.Entity<DomainOrganizationApplication>(e =>
@@ -93,6 +103,7 @@ namespace EDennis.NetStandard.Base {
                     .IsUnicode(false)
                     .HasMaxLength(128);
 
+#if DBCONTEXT_HASDATA
                 e.HasData(new DomainOrganizationApplication[] {
                     new DomainOrganizationApplication {
                         Organization = "McDougall's",
@@ -112,6 +123,7 @@ namespace EDennis.NetStandard.Base {
                     }
                 });
 
+#endif
             });
 
 
@@ -129,39 +141,40 @@ namespace EDennis.NetStandard.Base {
                     .IsUnicode(false)
                     .HasMaxLength(128);
 
+#if DBCONTEXT_HASDATA
                 e.HasData(new DomainApplicationClaim[] {
                     new DomainApplicationClaim {
                         Application="DataGenie",
-                        ClaimType="app:role",
+                        ClaimType="DomainClaimTypes.ApplicationRole",
                         ClaimValue="admin",
                         OrgAdminable=true
                     },
                     new DomainApplicationClaim {
                         Application="DataGenie",
-                        ClaimType="app:role",
+                        ClaimType="DomainClaimTypes.ApplicationRole",
                         ClaimValue="user",
                         OrgAdminable=true
                     },
                     new DomainApplicationClaim {
                         Application="InfoMaster",
-                        ClaimType="app:role",
+                        ClaimType="DomainClaimTypes.ApplicationRole",
                         ClaimValue="admin",
                         OrgAdminable=true
                     },
                     new DomainApplicationClaim {
                         Application="InfoMaster",
-                        ClaimType="app:role",
+                        ClaimType="DomainClaimTypes.ApplicationRole",
                         ClaimValue="readonly",
                         OrgAdminable=true
                     },
                     new DomainApplicationClaim {
                         Application="InfoMaster",
-                        ClaimType="app:role",
+                        ClaimType="DomainClaimTypes.ApplicationRole",
                         ClaimValue="auditor",
                         OrgAdminable=false
                     }
                 });
-
+#endif
             });
 
 
@@ -174,6 +187,7 @@ namespace EDennis.NetStandard.Base {
                 e.Property(p => p.Id)
                     .HasDefaultValueSql("NEXT VALUE FOR seqAspNetUsers");
 
+#if DBCONTEXT_HASDATA
                 var users =
                 new DomainUser[] {
                     new DomainUser {
@@ -283,6 +297,7 @@ namespace EDennis.NetStandard.Base {
                 }
 
                 e.HasData(users);
+#endif
             });
 
 
@@ -293,27 +308,28 @@ namespace EDennis.NetStandard.Base {
             });
 
 
+#if DBCONTEXT_HASDATA
             builder.Entity<IdentityUserClaim<int>>(e =>
             {
                 e.HasData(new IdentityUserClaim<int>[] {
-                    new IdentityUserClaim<int> { Id = -9902, UserId = -1, ClaimType = "app:role", ClaimValue = "DataGenie:admin" },
-                    new IdentityUserClaim<int> { Id = -9904, UserId = -2, ClaimType = "app:role", ClaimValue = "DataGenie:admin" },
-                    new IdentityUserClaim<int> { Id = -9905, UserId = -2, ClaimType = "app:role", ClaimValue = "InfoMaster:admin" },
-                    new IdentityUserClaim<int> { Id = -9907, UserId = -3, ClaimType = "app:role", ClaimValue = "InfoMaster:admin" },
-                    new IdentityUserClaim<int> { Id = -9908, UserId = -4, ClaimType = "app:role", ClaimValue = "DataGenie:user" },
-                    new IdentityUserClaim<int> { Id = -9909, UserId = -5, ClaimType = "app:role", ClaimValue = "DataGenie:user" },
-                    new IdentityUserClaim<int> { Id = -9910, UserId = -5, ClaimType = "app:role", ClaimValue = "InfoMaster:readonly" },
-                    new IdentityUserClaim<int> { Id = -9911, UserId = -6, ClaimType = "app:role", ClaimValue = "InfoMaster:readonly" },
-                    new IdentityUserClaim<int> { Id = -9912, UserId = -7, ClaimType = "app:role", ClaimValue = "DataGenie:user" },
-                    new IdentityUserClaim<int> { Id = -9913, UserId = -8, ClaimType = "app:role", ClaimValue = "DataGenie:user" },
-                    new IdentityUserClaim<int> { Id = -9914, UserId = -8, ClaimType = "app:role", ClaimValue = "InfoMaster:readonly" },
-                    new IdentityUserClaim<int> { Id = -9915, UserId = -9, ClaimType = "app:role", ClaimValue = "InfoMaster:readonly" },
-                    new IdentityUserClaim<int> { Id = -9916, UserId = -10, ClaimType = "app:role", ClaimValue = "InfoMaster:auditor" },
+                    new IdentityUserClaim<int> { Id = -9902, UserId = -1, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "DataGenie:admin" },
+                    new IdentityUserClaim<int> { Id = -9904, UserId = -2, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "DataGenie:admin" },
+                    new IdentityUserClaim<int> { Id = -9905, UserId = -2, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "InfoMaster:admin" },
+                    new IdentityUserClaim<int> { Id = -9907, UserId = -3, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "InfoMaster:admin" },
+                    new IdentityUserClaim<int> { Id = -9908, UserId = -4, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "DataGenie:user" },
+                    new IdentityUserClaim<int> { Id = -9909, UserId = -5, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "DataGenie:user" },
+                    new IdentityUserClaim<int> { Id = -9910, UserId = -5, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "InfoMaster:readonly" },
+                    new IdentityUserClaim<int> { Id = -9911, UserId = -6, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "InfoMaster:readonly" },
+                    new IdentityUserClaim<int> { Id = -9912, UserId = -7, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "DataGenie:user" },
+                    new IdentityUserClaim<int> { Id = -9913, UserId = -8, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "DataGenie:user" },
+                    new IdentityUserClaim<int> { Id = -9914, UserId = -8, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "InfoMaster:readonly" },
+                    new IdentityUserClaim<int> { Id = -9915, UserId = -9, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "InfoMaster:readonly" },
+                    new IdentityUserClaim<int> { Id = -9916, UserId = -10, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "InfoMaster:auditor" },
                 });
             });
+#endif
 
-
-            }
+        }
 
         /// <summary>
         /// per https://stackoverflow.com/a/20622428

@@ -12,5 +12,11 @@ namespace EDennis.NetStandard.Base {
         public const string SuperAdmin = "super_admin";
         public const string Locked = "locked";
         public const string ApplicationRole = "app:role";
+        public const string ApplicationRoleAdminSuffix = ":admin";
     }
+    public static class DomainClaimValues {
+        public const string ApplicationRoleAdminSuffix = ":admin";
+        public static string ApplicationRoleAdmin(string appName) => $"{appName}{ApplicationRoleAdminSuffix}";
+    }
+
 }

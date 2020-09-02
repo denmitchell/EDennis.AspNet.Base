@@ -23,8 +23,7 @@ namespace EDennis.NetStandard.Base {
     /// </summary>
     public class ChildClaimsTransformer : IClaimsTransformation {
 
-        private readonly ChildClaimCache _cache;
-        private readonly IHostEnvironment _env;
+        private readonly IChildClaimCache _cache;
 
         /// <summary>
         /// 
@@ -32,18 +31,12 @@ namespace EDennis.NetStandard.Base {
         /// <param name="cache">Singleton holding cached ChildClaimCache</param>
         /// <param name="env"></param>
         /// <param name="encoder">Implementation of IAppClaimEncoder</param>
-        public ChildClaimsTransformer(ChildClaimCache cache, IHostEnvironment env) {
+        public ChildClaimsTransformer(IChildClaimCache cache) {
             _cache = cache;
-            _env = env;
         }
 
         /// <summary>
-        /// Filters the list of incoming claims by application name and also adds any
-        /// derived claims
-        /// 
-        /// Assumes that incoming claims from the user/client are encoded according to the
-        /// IAppClaimEncoder implementation.  If using the DefaultAppClaimEncoder, then
-        /// claim value is prefixed by application name and a colon.  
+        /// Adds any child claims defined in cache whose parent claims are in the claims principal
         /// </summary>
         /// <param name="principal"></param>
         /// <returns></returns>
@@ -51,12 +44,8 @@ namespace EDennis.NetStandard.Base {
             var claims =
                 await Task.Run(() =>
                 {
-                var appClaims = principal.Claims
-                    .Where(c => c.Type == "app:role" && c.Value.StartsWith($"{_env.ApplicationName}:"))
-                    .AsQueryable();
-
-                    return (from a in appClaims
-                         join c in _cache
+                    return (from a in principal.Claims
+                            join c in _cache.ChildClaims
                              on new { a.Type, a.Value } equals new { Type=c.ParentType, Value=c.ParentValue }
                          select new Claim(c.ClaimType, c.ClaimValue)
                         ).ToList();

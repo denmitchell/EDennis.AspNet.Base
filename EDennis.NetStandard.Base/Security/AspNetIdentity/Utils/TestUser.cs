@@ -24,8 +24,9 @@ namespace EDennis.NetStandard.Base {
 
         public bool LockedOut = LOCKED_OUT_DEFAULT;
 
-        public List<string> Roles { get; set; }
+        public List<string> Roles { get; set; } = new List<string>();
         public Dictionary<string, List<string>> Claims { get; set; }
+            = new Dictionary<string, List<string>>();
 
         public string PlainTextPassword { get; set; } = PASSWORD_DEFAULT;
 

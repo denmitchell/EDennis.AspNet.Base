@@ -1,5 +1,4 @@
 ﻿using EDennis.NetStandard.Base;
-using IdentityServer4.Test;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
@@ -53,9 +52,9 @@ namespace EDennis.AspNetIdentityServer.Areas.Identity.Pages.Account.Admin {
                 new SelectListItem[] { new SelectListItem { Value = null, Text = "" } }
                 .Union(
                     Organizations.Where(o => User.Claims.Any(
-                    c => c.Type == "super_admin"
-                    || (c.Type == "app:role" && c.Value.EndsWith(":admin"))
-                    || (c.Type == "organization_admin_for" && c.Value == o.Value)))
+                    c => c.Type == DomainClaimTypes.SuperAdmin
+                    || (c.Type == DomainClaimTypes.ApplicationRole && c.Value.EndsWith(DomainClaimValues.ApplicationRoleAdminSuffix))
+                    || (c.Type == DomainClaimTypes.OrganizationAdminFor && c.Value == o.Value)))
                 )
                 .ToList();
 
@@ -63,9 +62,9 @@ namespace EDennis.AspNetIdentityServer.Areas.Identity.Pages.Account.Admin {
                 new SelectListItem[] { new SelectListItem { Value = null, Text = "" } }
                 .Union(
                     Applications.Where(a => User.Claims.Any(
-                    c => c.Type == "super_admin"
-                    || (c.Type == "app:role" && c.Value == $"{a}:admin")
-                    || (c.Type == "organization_admin_for")))
+                    c => c.Type == DomainClaimTypes.SuperAdmin
+                    || (c.Type == DomainClaimTypes.ApplicationRole && c.Value == $"{a}{DomainClaimValues.ApplicationRoleAdminSuffix}")
+                    || (c.Type == DomainClaimTypes.OrganizationAdminFor)))
                 )
                 .ToList();
 

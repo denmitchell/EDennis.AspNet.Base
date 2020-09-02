@@ -24,18 +24,18 @@ namespace EDennis.NetStandard.Base {
                 new TestUser {
                     Email = "maria@a.test",
                     PhoneNumber = "999.555.1212",
+                    OrganizationAdmin = true,
                     Roles = new List<string>() { "Admin" }
                 },
                 new TestUser {
                     Email = "john@a.test",
-                    OrganizationAdmin = true,
                     PhoneNumber = "999.555.1313",
                     Roles = new List<string>() { "User" }
                 },
                 new TestUser {
                     Email = "darius@b.test",
-                    OrganizationAdmin = true,
                     PhoneNumber = "888.555.1212",
+                    OrganizationAdmin = true,
                     Roles = new List<string>() { "User" }
                 },
                 new TestUser {
@@ -45,8 +45,8 @@ namespace EDennis.NetStandard.Base {
                 },
                 new TestUser {
                     Email = "pat@c.test",
-                    OrganizationAdmin = true,
                     PhoneNumber = "777.555.1212",
+                    OrganizationAdmin = true,
                     Roles = new List<string>() { "User" }
                 },
                 new TestUser {
@@ -86,12 +86,22 @@ namespace EDennis.NetStandard.Base {
             var assembly = typeof(TStartup).Assembly;
             var scopes = GenerateScopes(assembly, out string project);
 
-            var users = testUsers ?? DEFAULT_USERS;
-            var userClaims = users.SelectMany(u => u.Claims)
-                .Select(u => u.Key)
-                .Distinct()
-                .Union(new string[] { "role" })
-                .ToList();
+
+            //TODO: ApiResourceClaims vs. ProfileService - which is better
+            // If you need to defer any claims to ProfileService, 
+            //    perhaps better to just deliver them all via ProfileService
+
+            //what user claims will be included in access tokens
+            //they can be included here or retrieved via ProfileService
+            var apiUserClaims = new string[] { };
+                //new string[] { 
+                //    JwtClaimTypes.Name,
+                //    ClaimTypes.Name,
+                //    DomainClaimTypes.Organization,
+                //    //DomainClaimTypes.ApplicationRole, //if many applications, too many claims for cookie
+                //    DomainClaimTypes.OrganizationAdminFor,
+                //    DomainClaimTypes.SuperAdmin
+                //};
 
             var path = $"{OUTPUT_DIR}\\{project}.json";
             if (File.Exists(path))
@@ -106,7 +116,7 @@ namespace EDennis.NetStandard.Base {
 
             jw.WriteStartObject();
             {
-                WriteApiResourceSection(jw, project, scopes, userClaims);
+                WriteApiResourceSection(jw, project, scopes, apiUserClaims);
 
                 if (idpConfigType == IdpConfigType.ClientCredentials)
                     WriteClientCredentialsSection(jw, project, idpUrl);
@@ -143,7 +153,7 @@ namespace EDennis.NetStandard.Base {
                             jw.WriteBoolean("OrganizationConfirmed", user.OrganizationConfirmed);
                         if (user.OrganizationAdmin != TestUser.ORGANIZATION_ADMIN_DEFAULT)
                             jw.WriteBoolean("OrganizationAdmin", user.OrganizationAdmin);
-                        if (user.OrganizationAdmin != TestUser.SUPER_ADMIN_DEFAULT)
+                        if (user.SuperAdmin != TestUser.SUPER_ADMIN_DEFAULT)
                             jw.WriteBoolean("SuperAdmin", user.SuperAdmin);
                         if (user.LockedOut != TestUser.LOCKED_OUT_DEFAULT)
                             jw.WriteBoolean("LockedOut", user.LockedOut);
@@ -159,6 +169,9 @@ namespace EDennis.NetStandard.Base {
                         }
 
                         if (user.Claims != null && user.Claims.Count > 0) {
+                            if (user.Claims.Count == 1 && user.Claims.Keys.First() == "SomeClaimType")
+                                jw.WriteCommentValue("Sample Custom Claims");
+
                             jw.WriteStartObject("Claims");
                             {
                                 foreach (var claimType in user.Claims.Keys) {
@@ -181,25 +194,29 @@ namespace EDennis.NetStandard.Base {
             jw.WriteEndArray();
         }
 
-        private static void WriteApiResourceSection(Utf8JsonWriter jw, string project, List<string> scopes, List<string> userClaims) {
+        private static void WriteApiResourceSection(Utf8JsonWriter jw, string project, IEnumerable<string> scopes, IEnumerable<string> userClaims) {
 
             jw.WriteStartArray("ApiResources");
             {
                 jw.WriteStartObject();
                 {
                     jw.WriteString("Name", project);
-                    jw.WriteStartArray("Scopes");
-                    {
-                        foreach (var scope in scopes)
-                            jw.WriteStringValue(scope);
+                    if (scopes != null && scopes.Count() > 0) {
+                        jw.WriteStartArray("Scopes");
+                        {
+                            foreach (var scope in scopes)
+                                jw.WriteStringValue(scope);
+                        }
+                        jw.WriteEndArray();
                     }
-                    jw.WriteEndArray();
-                    jw.WriteStartArray("UserClaims");
-                    {
-                        foreach (var claim in userClaims)
-                            jw.WriteStringValue(claim);
+                    if (userClaims != null && userClaims.Count() > 0) {
+                        jw.WriteStartArray("UserClaims");
+                        {
+                            foreach (var claim in userClaims)
+                                jw.WriteStringValue(claim);
+                        }
+                        jw.WriteEndArray();
                     }
-                    jw.WriteEndArray();
 
                 }
                 jw.WriteEndObject();
