@@ -1,40 +1,33 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
 using System;
 
 namespace EDennis.NetStandard.Base {
 
-
-    public static class LoggerConfigurationExtensions {
-
-        public static Serilog.Core.Logger GetLoggerFromConfiguration<TProgram>(
-            this LoggerConfiguration loggerConfiguration, IConfiguration config, string configKey = "Logging:Serilog") {
-
-            var slogger = loggerConfiguration
-                .ReadFrom.Configuration(config, configKey)
-                .CreateLogger();
-
-            return slogger;
-        }
-
-        public static Serilog.Core.Logger GetLoggerFromConfiguration<TProgram>(
-            this LoggerConfiguration loggerConfiguration, string configKey = "Logging:Serilog") {
-
-            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-
-            var config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", true, true)
-                .AddJsonFile($"appsettings.{env}.json", true, true)
-                .Build();
-
-            return GetLoggerFromConfiguration<TProgram>(loggerConfiguration, config, configKey);
-        }
-
-
-    }
-
     public static class IServiceCollectionExtensions_Security {
+
+        /// <summary>
+        /// Configures a singleton cache that can be used to resolve
+        /// parent claims to child claims.  In addition to configuring
+        /// DI for the ChildClaimCache and its Options (ChildClaimSettings) 
+        /// from configuration, it also sets up DI for IClaimsTransformation,
+        /// where the implementation is a ChildClaimsTransformer.
+        /// </summary>
+        /// <param name="services">IServiceCollection instance</param>
+        /// <param name="config">IConfiguration instance</param>
+        /// <param name="configKey">configuration key for ChildClaimSettings</param>
+        /// <returns></returns>
+        public static IServiceCollection AddChildClaimCache(this IServiceCollection services, 
+            IConfiguration config, string configKey = "Security:ChildClaims") {
+
+            services.Configure<ChildClaimSettings>(config.GetSection(configKey));
+            services.AddSingleton<ChildClaimCache>();
+            services.AddScoped<IClaimsTransformation, ChildClaimsTransformer>();
+
+            return services;
+        }
+
 
 
         /// <summary>

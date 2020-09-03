@@ -22,7 +22,6 @@ namespace EDennis.Samples.ColorApp.Razor {
             //for generating the OAuth Access Token
             services.AddSecureTokenService<MockTokenService>(Configuration);
 
-            //TODO: Need to create Security:OpenIdConnect section in configuration
             services.AddAuthentication()
                 .AddOpenIdConnect(Configuration);
 
@@ -34,6 +33,9 @@ namespace EDennis.Samples.ColorApp.Razor {
 
             //for mocking the user/client
             services.AddMockClaimsPrincipal(Configuration);
+
+            //for resolving parent claims to app-level child claims defined in configuration
+            services.AddChildClaimCache(Configuration);
 
             //for propagating user claims to the child API (ColorApi) via headers
             services.AddClaimsToHeader(Configuration);
