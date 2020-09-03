@@ -1,4 +1,4 @@
-using EDennis.HostedBlazor.Base;
+using EDennis.NetApp.Base;
 using EDennis.NetStandard.Base;
 using EDennis.Samples.ColorApp.Client;
 using Microsoft.AspNetCore.Builder;

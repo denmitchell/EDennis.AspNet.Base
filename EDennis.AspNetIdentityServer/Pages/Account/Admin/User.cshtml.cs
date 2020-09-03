@@ -52,8 +52,6 @@ namespace EDennis.AspNetIdentityServer.Areas.Identity.Pages.Account.Admin {
 
 
 
-
-        //claim type = "app:role"
         [BindProperty] public Dictionary<string, bool> AppRoleClaims { get; set; }
 
 
@@ -132,8 +130,8 @@ namespace EDennis.AspNetIdentityServer.Areas.Identity.Pages.Account.Admin {
             //  (which applies across all organizations) 
             appAdminFor =
                 User.Claims
-                .Where(c => c.Type == DomainClaimTypes.ApplicationRole && c.Value.EndsWith(":admin"))
-                .Select(c => c.Value.Split(":")[0])
+                .Where(c => c.Type.StartsWith(DomainClaimTypes.ApplicationRolePrefix) && c.Value.Equals(DomainClaimValues.Admin))
+                .Select(c => c.Type.Split(":")[1])
                 .ToArray();
 
 
@@ -152,9 +150,10 @@ namespace EDennis.AspNetIdentityServer.Areas.Identity.Pages.Account.Admin {
                 .Where(uc => uc.UserId == Id)
                 .ToListAsync();
 
-            // get all app role claims for relevant Apps 
+            // get all app role claims for OrgApps 
             var appRoleClaims = await _dbContext.ApplicationClaims
-                .Where(ac => OrgApps.Contains(ac.Application) && ac.ClaimType == DomainClaimTypes.ApplicationRole)
+                .Where(ac => OrgApps.Contains(ac.Application) 
+                    && ac.ClaimTypePrefix == DomainClaimTypes.ApplicationRolePrefix)
                 .ToListAsync();
 
             AppRoleClaims =  appRoleClaims.ToDictionary(ac => $"{ac.Application}:{ac.ClaimValue}", ac => false);
@@ -166,10 +165,13 @@ namespace EDennis.AspNetIdentityServer.Areas.Identity.Pages.Account.Admin {
                 .ToArray();
 
             //update the app role claims to true when the target user has that claim
-            var appRoleClaimKeys = AppRoleClaims.Keys.ToArray();
-            for (int i = 0; i < appRoleClaimKeys.Length; i++) {
-                if (userClaims.Any(uc => uc.ClaimType == DomainClaimTypes.ApplicationRole && uc.ClaimValue == appRoleClaimKeys[i]))
-                    AppRoleClaims[appRoleClaimKeys[i]] = true;
+            var appRoleClaimsKeys = AppRoleClaims.Keys.ToArray();
+            for (int i = 0; i < appRoleClaimsKeys.Length; i++) {
+                var key = appRoleClaimsKeys[i];
+                var app = key.Substring(0, key.LastIndexOf(':'));
+                var role = key.Substring(app.Length);
+                if (userClaims.Any(uc => uc.ClaimType == DomainClaimTypes.ApplicationRole(app) && uc.ClaimValue == role))
+                    AppRoleClaims[key] = true;
             }
 
 
@@ -269,11 +271,22 @@ namespace EDennis.AspNetIdentityServer.Areas.Identity.Pages.Account.Admin {
 
             var appRoleClaimsKeys = submittedAppRoleClaims.Keys.ToArray();
             for (int i = 0; i < appRoleClaimsKeys.Length; i++) {
-                var claimValue = appRoleClaimsKeys[i];
-                var shouldHaveClaim = submittedAppRoleClaims[claimValue];
-                var matchingUserClaim = userClaims.FirstOrDefault(uc => uc.ClaimType == DomainClaimTypes.ApplicationRole && uc.ClaimValue == claimValue);
+
+                var key = appRoleClaimsKeys[i];
+                var app = key.Substring(0, key.LastIndexOf(':'));
+                var role = key.Substring(app.Length);
+
+                var shouldHaveClaim = submittedAppRoleClaims[key];
+                var matchingUserClaim = userClaims
+                    .FirstOrDefault(uc => uc.ClaimType == DomainClaimTypes.ApplicationRole(app) 
+                        && uc.ClaimValue == role);
+
                 if (shouldHaveClaim && matchingUserClaim == null)
-                    _dbContext.UserClaims.Add(new IdentityUserClaim<int> { UserId = Id, ClaimType = DomainClaimTypes.ApplicationRole, ClaimValue = claimValue });
+                    _dbContext.UserClaims.Add(new IdentityUserClaim<int> { 
+                        UserId = Id, 
+                        ClaimType = DomainClaimTypes.ApplicationRole(app), 
+                        ClaimValue = role 
+                    });
                 else if (!shouldHaveClaim && matchingUserClaim != null)
                     _dbContext.UserClaims.Remove(matchingUserClaim);
             }

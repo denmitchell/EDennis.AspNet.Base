@@ -9,11 +9,6 @@
         "EDennis.Samples.ColorApp.Razor.*.Put*",
         "EDennis.Samples.ColorApp.Razor.*.Patch*",
         "EDennis.Samples.ColorApp.Razor.*.Delete*"
-      ],
-      "UserClaims": [
-        "name",
-        "phone",
-        "role"
       ]
     }
   ],
@@ -42,57 +37,74 @@
       ],
       "PostLogoutRedirectUris": [
         "https://localhost:44305/signout-callback-oidc"
+      ],
+      "Applications": [
+        "EDennis.Samples.ColorApp.Razor"
       ]
     }
   ],
   "TestUsers": [
     {
       "Email": "maria@a.test",
-      "PlainTextPassword": "test",
-      "Organization": "a.test",
+      "OrganizationAdmin": true,
       "Roles": [
         "Admin"
-      ],
-      "Claims": {
-        "name": [
-          "Maria"
-        ],
-        "phone": [
-          "999.555.1212"
-        ]
-      }
+      ]
+    },
+    {
+      "Email": "john@a.test",
+      "PhoneNumber": "999.555.1313",
+      "Roles": [
+        "User"
+      ]
     },
     {
       "Email": "darius@b.test",
-      "PlainTextPassword": "test",
-      "Organization": "b.test",
+      "PhoneNumber": "888.555.1212",
+      "OrganizationAdmin": true,
       "Roles": [
         "User"
-      ],
+      ]
+    },
+    {
+      "Email": "linda@b.test",
+      "PhoneNumber": "888.555.1313",
+      "Roles": [
+        "Readonly"
+      ]
+    },
+    {
+      "Email": "pat@c.test",
+      "PhoneNumber": "777.555.1212",
+      "OrganizationAdmin": true,
+      "Roles": [
+        "User"
+      ]
+    },
+    {
+      "Email": "ebony@c.test",
+      "PhoneNumber": "777.555.1313",
+      "Roles": [
+        "Readonly"
+      ]
+    },
+    {
+      "Email": "juan@a.test",
+      "PhoneNumber": "999.555.1414",
+      "SuperAdmin": true
+      /*Sample Custom Claims*/,
       "Claims": {
-        "name": [
-          "Darius"
-        ],
-        "phone": [
-          "888.555.1212"
+        "SomeClaimType": [
+          "SomeClaimValue"
         ]
       }
     },
     {
-      "Email": "pat@c.test",
-      "PlainTextPassword": "test",
-      "Organization": "c.test",
+      "Email": "james@b.test",
+      "PhoneNumber": "888.555.1414",
       "Roles": [
         "Readonly"
-      ],
-      "Claims": {
-        "name": [
-          "Pat"
-        ],
-        "phone": [
-          "777.555.1212"
-        ]
-      }
+      ]
     }
   ]
 }

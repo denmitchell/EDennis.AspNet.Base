@@ -26,7 +26,7 @@ namespace EDennis.NetStandard.Base {
         /// NOTE: if this property is left as null, IHostEnvironment.ApplicationName 
         /// is used as the default. 
         /// </summary>
-        public virtual string ApplicationName { get; }
+        public virtual string ApplicationName { get; set; }
 
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace EDennis.NetStandard.Base {
         /// NOTE: This is used by the default implementation of the 
         /// GetAppRoleChildClaims() method.
         /// </summary>
-        public virtual string ConfigFilePath { get; } = "appRoles.csv";
+        public virtual string ConfigFilePath { get; set; } = "appRoles.csv";
 
 
         /// <summary>
@@ -81,12 +81,12 @@ namespace EDennis.NetStandard.Base {
         /// and combined with the application name
         /// </summary>
         /// <param name="env"></param>
-        public AppRoleChildClaimCache(IHostEnvironment env) {
+        public AppRoleChildClaimCache(IHostEnvironment env = null) {
 
             ChildClaims = GetAppRoleChildClaims().Select(a => 
                 new ChildClaim {
-                ParentType = DomainClaimTypes.ApplicationRole,
-                ParentValue = $"{ApplicationName ?? env.ApplicationName}:{a.AppRole}",
+                ParentType = DomainClaimTypes.ApplicationRole(ApplicationName ?? env.ApplicationName),
+                ParentValue = a.AppRole,
                 ClaimType = a.ClaimType,
                 ClaimValue = a.ClaimValue
             }) ;

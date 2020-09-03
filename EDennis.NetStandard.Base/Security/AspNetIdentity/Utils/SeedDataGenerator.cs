@@ -1,9 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using IdentityModel;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace EDennis.NetStandard.Base {
@@ -25,47 +30,47 @@ namespace EDennis.NetStandard.Base {
                     Email = "maria@a.test",
                     PhoneNumber = "999.555.1212",
                     OrganizationAdmin = true,
-                    Roles = new List<string>() { "Admin" }
+                    Roles = new List<string>() { "admin" }
                 },
                 new TestUser {
                     Email = "john@a.test",
                     PhoneNumber = "999.555.1313",
-                    Roles = new List<string>() { "User" }
+                    Roles = new List<string>() { "user" }
                 },
                 new TestUser {
                     Email = "darius@b.test",
                     PhoneNumber = "888.555.1212",
                     OrganizationAdmin = true,
-                    Roles = new List<string>() { "User" }
+                    Roles = new List<string>() { "user" }
                 },
                 new TestUser {
                     Email = "linda@b.test",
                     PhoneNumber = "888.555.1313",
-                    Roles = new List<string>() { "Readonly" }
+                    Roles = new List<string>() { "readonly" }
                 },
                 new TestUser {
                     Email = "pat@c.test",
                     PhoneNumber = "777.555.1212",
                     OrganizationAdmin = true,
-                    Roles = new List<string>() { "User" }
+                    Roles = new List<string>() { "user" }
                 },
                 new TestUser {
                     Email = "ebony@c.test",
                     PhoneNumber = "777.555.1313",
-                    Roles = new List<string>() { "Readonly" }
+                    Roles = new List<string>() { "readonly" }
                 },
                 new TestUser {
                     Email="juan@a.test",
                     PhoneNumber = "999.555.1414",
                     SuperAdmin = true,
                     Claims = new Dictionary<string,List<string>>() {
-                        { "SomeClaimType", new List<string>{ "SomeClaimValue" } }
+                        { "someClaimType", new List<string>{ "someClaimValue" } }
                     }
                 },
                 new TestUser {
                     Email="james@b.test",
                     PhoneNumber = "888.555.1414",
-                    Roles = new List<string>() { "Readonly" },
+                    Roles = new List<string>() { "readonly" },
                     LockedOut = true
                 }
             };
@@ -75,10 +80,48 @@ namespace EDennis.NetStandard.Base {
             dynamic idpPortOrUrl,
             dynamic apiPortOrUrl,
             IdpConfigType idpConfigType = IdpConfigType.ClientCredentials,
+            string appRolesCsv = null,
+            string childClaimsCsv = null,
+            string appName = null,
             IEnumerable<TestUser> testUsers = null) {
 
-
             testUsers ??= DEFAULT_USERS;
+
+            //if using ChildClaimCache or AppRoleChildClaimCache,
+            //make sure that each defined parent claim is held
+            //by at least one test user.
+            if (appRolesCsv != null || childClaimsCsv != null) {
+
+                var parentRoleClaims = new List<Claim>();
+                var parentClaims = new List<Claim>();
+
+                var roles = testUsers.SelectMany(u => u.Roles).Distinct();
+                var userIdx = 0;
+                var users = testUsers.ToArray();
+
+                if (appRolesCsv != null) {
+                    GetParentRoleClaims(appRolesCsv, parentRoleClaims, appName);
+                    foreach (var role in parentRoleClaims.Select(c => c.Value)) {
+                        if (!roles.Contains(role)) {
+                            users[userIdx].Roles.Add(role);
+                            userIdx = (userIdx + 1) % users.Length;
+                        }
+                    }
+                }
+
+                if (childClaimsCsv != null) {
+                    GetParentClaims(childClaimsCsv, parentClaims);
+                    foreach (var role in parentClaims.Select(c => c.Value)) {
+                        if (!roles.Contains(role)) {
+                            users[userIdx].Roles.Add(role);
+                            userIdx = (userIdx + 1) % users.Length;
+                        }
+                    }
+                }
+
+            }
+
+
 
             if (!Directory.Exists(OUTPUT_DIR))
                 Directory.CreateDirectory(OUTPUT_DIR);
@@ -86,22 +129,17 @@ namespace EDennis.NetStandard.Base {
             var assembly = typeof(TStartup).Assembly;
             var scopes = GenerateScopes(assembly, out string project);
 
-
-            //TODO: ApiResourceClaims vs. ProfileService - which is better
-            // If you need to defer any claims to ProfileService, 
-            //    perhaps better to just deliver them all via ProfileService
-
             //what user claims will be included in access tokens
-            //they can be included here or retrieved via ProfileService
-            var apiUserClaims = new string[] { };
-                //new string[] { 
-                //    JwtClaimTypes.Name,
-                //    ClaimTypes.Name,
-                //    DomainClaimTypes.Organization,
-                //    //DomainClaimTypes.ApplicationRole, //if many applications, too many claims for cookie
-                //    DomainClaimTypes.OrganizationAdminFor,
-                //    DomainClaimTypes.SuperAdmin
-                //};
+            //via DomainIdentityProfileService when requested in client app
+            var apiUserClaims =
+                new string[] {
+                    JwtClaimTypes.Name,
+                    ClaimTypes.Name,
+                    DomainClaimTypes.Organization,
+                    DomainClaimTypes.ApplicationRole(project),
+                    DomainClaimTypes.OrganizationAdminFor,
+                    DomainClaimTypes.SuperAdmin
+                };
 
             var path = $"{OUTPUT_DIR}\\{project}.json";
             if (File.Exists(path))
@@ -131,6 +169,22 @@ namespace EDennis.NetStandard.Base {
 
         }
 
+        private static void GetParentClaims(string childClaimsCsv, List<Claim> parentClaims) {
+            var cache = new ChildClaimCache {
+                ConfigFilePath = childClaimsCsv
+            };
+            parentClaims.AddRange(cache.GetChildClaims().Select(cc=>new Claim(cc.ParentType, cc.ParentValue)));
+        }
+
+
+        private static void GetParentRoleClaims(string appRoleClaimsCsv, List<Claim> parentRoleClaims, string appName) {
+            var cache = new AppRoleChildClaimCache {
+                ApplicationName = appName,
+                ConfigFilePath = appRoleClaimsCsv
+            };
+            parentRoleClaims.AddRange(cache.GetAppRoleChildClaims()
+                .Select(cc => new Claim(DomainClaimTypes.ApplicationRole(appName), cc.AppRole)));
+        }
 
         private static void WriteTestUsersSection(Utf8JsonWriter jw, IEnumerable<TestUser> testUsers) {
             jw.WriteStartArray("TestUsers");
@@ -139,13 +193,13 @@ namespace EDennis.NetStandard.Base {
                     jw.WriteStartObject();
                     {
                         jw.WriteString("Email", user.Email);
-                        if(user.EmailConfirmed != TestUser.EMAIL_CONFIRMED_DEFAULT)
+                        if (user.EmailConfirmed != TestUser.EMAIL_CONFIRMED_DEFAULT)
                             jw.WriteBoolean("EmailConfirmed", user.EmailConfirmed);
                         if (user.PlainTextPassword != TestUser.PASSWORD_DEFAULT)
                             jw.WriteString("PlainTextPassword", user.PlainTextPassword);
                         if (user.PhoneNumber != TestUser.PHONE_NUMBER_DEFAULT)
                             jw.WriteString("PhoneNumber", user.PhoneNumber);
-                        if(user.PhoneNumberConfirmed != TestUser.PHONE_CONFIRMED_DEFAULT)
+                        if (user.PhoneNumberConfirmed != TestUser.PHONE_CONFIRMED_DEFAULT)
                             jw.WriteBoolean("PhoneNumberConfirmed", user.PhoneNumberConfirmed);
                         if (user.Organization != default)
                             jw.WriteString("Organization", user.Organization);
@@ -169,7 +223,7 @@ namespace EDennis.NetStandard.Base {
                         }
 
                         if (user.Claims != null && user.Claims.Count > 0) {
-                            if (user.Claims.Count == 1 && user.Claims.Keys.First() == "SomeClaimType")
+                            if (user.Claims.Count == 1 && user.Claims.Keys.First() == "someClaimType")
                                 jw.WriteCommentValue("Sample Custom Claims");
 
                             jw.WriteStartObject("Claims");

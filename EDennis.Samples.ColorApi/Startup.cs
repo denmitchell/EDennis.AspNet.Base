@@ -29,7 +29,6 @@ namespace EDennis.Samples.ColorApi {
             services.AddAuthorization(options => {
                 IServiceCollectionExtensions_DefaultPolicies.LoadDefaultPolicies<Startup>(options, new List<string> { "scope" });
                 });
-            //System.Diagnostics.Debugger.Launch();
 
             var cxnString = Configuration.GetValueOrThrow<string>("ConnectionStrings:ColorContext",null,true);
             services.AddScoped<DbContextProvider<ColorContext>>();

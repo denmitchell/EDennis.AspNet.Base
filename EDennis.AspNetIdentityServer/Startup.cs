@@ -1,3 +1,4 @@
+using EDennis.NetApp.Base;
 using EDennis.NetStandard.Base;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;

@@ -1,4 +1,5 @@
 using EDennis.NetStandard.Base;
+using EDennis.NetApp.Base;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +21,10 @@ namespace EDennis.Samples.ColorApp.Razor {
 
             //for generating the OAuth Access Token
             services.AddSecureTokenService<MockTokenService>(Configuration);
+
+            //TODO: Need to create Security:OpenIdConnect section in configuration
+            services.AddAuthentication()
+                .AddOpenIdConnect(Configuration);
 
             //for propagating headers and cookies to child API (ColorApi)
             services.AddScopedRequestMessage(Configuration);

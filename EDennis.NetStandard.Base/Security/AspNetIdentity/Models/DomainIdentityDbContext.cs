@@ -130,11 +130,11 @@ namespace EDennis.NetStandard.Base {
             builder.Entity<DomainApplicationClaim>(e =>
             {
                 e.ToTable("AspNetApplicationClaims")
-                    .HasKey(p => new { p.Application, p.ClaimType, p.ClaimValue });
+                    .HasKey(p => new { p.Application, p.ClaimTypePrefix, p.ClaimValue });
                 e.Property(p => p.Application)
                     .IsUnicode(false)
                     .HasMaxLength(128);
-                e.Property(p => p.ClaimType)
+                e.Property(p => p.ClaimTypePrefix)
                     .IsUnicode(false)
                     .HasMaxLength(128);
                 e.Property(p => p.ClaimValue)
@@ -145,31 +145,31 @@ namespace EDennis.NetStandard.Base {
                 e.HasData(new DomainApplicationClaim[] {
                     new DomainApplicationClaim {
                         Application="DataGenie",
-                        ClaimType="DomainClaimTypes.ApplicationRole",
+                        ClaimTypePrefix="role:",
                         ClaimValue="admin",
                         OrgAdminable=true
                     },
                     new DomainApplicationClaim {
                         Application="DataGenie",
-                        ClaimType="DomainClaimTypes.ApplicationRole",
+                        ClaimTypePrefix="role:",
                         ClaimValue="user",
                         OrgAdminable=true
                     },
                     new DomainApplicationClaim {
                         Application="InfoMaster",
-                        ClaimType="DomainClaimTypes.ApplicationRole",
+                        ClaimTypePrefix="role:",
                         ClaimValue="admin",
                         OrgAdminable=true
                     },
                     new DomainApplicationClaim {
                         Application="InfoMaster",
-                        ClaimType="DomainClaimTypes.ApplicationRole",
+                        ClaimTypePrefix="role:",
                         ClaimValue="readonly",
                         OrgAdminable=true
                     },
                     new DomainApplicationClaim {
                         Application="InfoMaster",
-                        ClaimType="DomainClaimTypes.ApplicationRole",
+                        ClaimTypePrefix="role:",
                         ClaimValue="auditor",
                         OrgAdminable=false
                     }
@@ -312,19 +312,19 @@ namespace EDennis.NetStandard.Base {
             builder.Entity<IdentityUserClaim<int>>(e =>
             {
                 e.HasData(new IdentityUserClaim<int>[] {
-                    new IdentityUserClaim<int> { Id = -9902, UserId = -1, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "DataGenie:admin" },
-                    new IdentityUserClaim<int> { Id = -9904, UserId = -2, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "DataGenie:admin" },
-                    new IdentityUserClaim<int> { Id = -9905, UserId = -2, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "InfoMaster:admin" },
-                    new IdentityUserClaim<int> { Id = -9907, UserId = -3, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "InfoMaster:admin" },
-                    new IdentityUserClaim<int> { Id = -9908, UserId = -4, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "DataGenie:user" },
-                    new IdentityUserClaim<int> { Id = -9909, UserId = -5, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "DataGenie:user" },
-                    new IdentityUserClaim<int> { Id = -9910, UserId = -5, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "InfoMaster:readonly" },
-                    new IdentityUserClaim<int> { Id = -9911, UserId = -6, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "InfoMaster:readonly" },
-                    new IdentityUserClaim<int> { Id = -9912, UserId = -7, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "DataGenie:user" },
-                    new IdentityUserClaim<int> { Id = -9913, UserId = -8, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "DataGenie:user" },
-                    new IdentityUserClaim<int> { Id = -9914, UserId = -8, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "InfoMaster:readonly" },
-                    new IdentityUserClaim<int> { Id = -9915, UserId = -9, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "InfoMaster:readonly" },
-                    new IdentityUserClaim<int> { Id = -9916, UserId = -10, ClaimType = "DomainClaimTypes.ApplicationRole", ClaimValue = "InfoMaster:auditor" },
+                    new IdentityUserClaim<int> { Id = -9902, UserId = -1, ClaimType = "role:DataGenie", ClaimValue = "admin" },
+                    new IdentityUserClaim<int> { Id = -9904, UserId = -2, ClaimType = "role:DataGenie", ClaimValue = "admin" },
+                    new IdentityUserClaim<int> { Id = -9905, UserId = -2, ClaimType = "role:InfoMaster", ClaimValue = "admin" },
+                    new IdentityUserClaim<int> { Id = -9907, UserId = -3, ClaimType = "role:InfoMaster", ClaimValue = "admin" },
+                    new IdentityUserClaim<int> { Id = -9908, UserId = -4, ClaimType = "role:DataGenie", ClaimValue = "user" },
+                    new IdentityUserClaim<int> { Id = -9909, UserId = -5, ClaimType = "role:DataGenie", ClaimValue = "user" },
+                    new IdentityUserClaim<int> { Id = -9910, UserId = -5, ClaimType = "role:InfoMaster", ClaimValue = "readonly" },
+                    new IdentityUserClaim<int> { Id = -9911, UserId = -6, ClaimType = "role:InfoMaster", ClaimValue = "readonly" },
+                    new IdentityUserClaim<int> { Id = -9912, UserId = -7, ClaimType = "role:DataGenie", ClaimValue = "user" },
+                    new IdentityUserClaim<int> { Id = -9913, UserId = -8, ClaimType = "role:DataGenie", ClaimValue = "user" },
+                    new IdentityUserClaim<int> { Id = -9914, UserId = -8, ClaimType = "role:InfoMaster", ClaimValue = "readonly" },
+                    new IdentityUserClaim<int> { Id = -9915, UserId = -9, ClaimType = "role:InfoMaster", ClaimValue = "readonly" },
+                    new IdentityUserClaim<int> { Id = -9916, UserId = -10, ClaimType = "role:InfoMaster", ClaimValue = "auditor" },
                 });
             });
 #endif

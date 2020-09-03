@@ -1,0 +1,34 @@
+﻿Configuration AspNetIdentityServer
+ - Server configuration is accomplished by using the SeedDataLoader to load
+   configurations generated from the SeedDataGenerator, which is launched
+   from each project's Program class.
+
+ - Client configuration depends upon the nature of the client
+	-- To configure APIs, follow the example in EDennis.Samples.ColorApi Startup.cs
+		--- In the ConfigureServices method ...
+			---- Call services.AddControllers with the AddDefaultPolicies extension method
+		         and services.AddAuthorization with the LoadDefaultPolicies extension method.
+		         Collectively, these extension methods automatically generate 
+			     [Authorize("SomePolicy")] attributes and the associated policies
+			---- Call services.AddAuthentication
+			---- Optionally call services.AddMockClaimsPrincipal to bypass security 
+			     during development.  This middleware can be used for clients or users.
+			---- Call services.AddHeadersToClaims to create user claims from HTTP 
+			     request headers.  This is required when you need to propagate users 
+				 claims from a parent application, but you are not propagating the 
+				 identity or access token.
+		--- In the Configure method ...
+			1. Call app.UseRouting() before any of the other middleware that follows
+			2. Optionally, call app.UseMockClaimsPrincipalFor(...) where ... is one 
+			   or more relative endpoints for controllers
+			3. Call app.UseAuthentication() to prompt the authentication challenge.
+			4. Call app.UseHeaderToClaimsFor(...).  This should be called after
+			   app.UseAuthentication() to ensure that it doesn't interfere with the
+			   authentication challenge.
+			5. Call UseAuthorization()
+			... Optionally, call other middleware
+			6. Call app.UseEndpoints(...)
+			... Optionally, call other middleware
+	-- To configure Razor apps, follow the example in EDennis.Samples.ColorApp.Razor Startup.cs
+		--- In the ConfigureServices method ...
+			

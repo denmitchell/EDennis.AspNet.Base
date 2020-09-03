@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.Samples.ColorApp.La
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.Samples.ColorApp.Migrations", "EDennis.Samples.ColorApp.Migrations\EDennis.Samples.ColorApp.Migrations.csproj", "{3C32C0A8-62F4-4981-9358-E7B6A63A3FFE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.HostedBlazor.Base", "EDennis.HostedBlazor.Base\EDennis.HostedBlazor.Base.csproj", "{B08E1693-6213-498C-9612-60B8439EB8CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.NetApp.Base", "EDennis.NetApp.Base\EDennis.NetApp.Base.csproj", "{CD272059-9C1E-4F0B-9086-4DF2F0286ABB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,10 +65,10 @@ Global
 		{3C32C0A8-62F4-4981-9358-E7B6A63A3FFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C32C0A8-62F4-4981-9358-E7B6A63A3FFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C32C0A8-62F4-4981-9358-E7B6A63A3FFE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B08E1693-6213-498C-9612-60B8439EB8CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B08E1693-6213-498C-9612-60B8439EB8CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B08E1693-6213-498C-9612-60B8439EB8CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B08E1693-6213-498C-9612-60B8439EB8CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD272059-9C1E-4F0B-9086-4DF2F0286ABB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD272059-9C1E-4F0B-9086-4DF2F0286ABB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD272059-9C1E-4F0B-9086-4DF2F0286ABB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD272059-9C1E-4F0B-9086-4DF2F0286ABB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

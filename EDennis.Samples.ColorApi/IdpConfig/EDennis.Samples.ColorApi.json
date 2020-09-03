@@ -85,7 +85,7 @@
       "Email": "juan@a.test",
       "PhoneNumber": "999.555.1414",
       "SuperAdmin": true
-      /*Sample Custom Claim*/,
+      /*Sample Custom Claims*/,
       "Claims": {
         "SomeClaimType": [
           "SomeClaimValue"

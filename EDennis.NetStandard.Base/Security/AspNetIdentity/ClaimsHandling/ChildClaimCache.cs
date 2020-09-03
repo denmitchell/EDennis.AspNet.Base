@@ -27,7 +27,7 @@ namespace EDennis.NetStandard.Base {
         /// NOTE: This is used by the default implementation of the 
         /// GetChildClaims() method.
         /// </summary>
-        public virtual string ConfigFilePath { get; } = "childClaims.csv";
+        public virtual string ConfigFilePath { get; set;  } = "childClaims.csv";
 
 
         /// <summary>

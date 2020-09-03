@@ -53,7 +53,7 @@ namespace EDennis.AspNetIdentityServer.Areas.Identity.Pages.Account.Admin {
                 .Union(
                     Organizations.Where(o => User.Claims.Any(
                     c => c.Type == DomainClaimTypes.SuperAdmin
-                    || (c.Type == DomainClaimTypes.ApplicationRole && c.Value.EndsWith(DomainClaimValues.ApplicationRoleAdminSuffix))
+                    || (c.Type.StartsWith(DomainClaimTypes.ApplicationRolePrefix) && c.Value.Equals(DomainClaimValues.Admin))
                     || (c.Type == DomainClaimTypes.OrganizationAdminFor && c.Value == o.Value)))
                 )
                 .ToList();
@@ -63,7 +63,7 @@ namespace EDennis.AspNetIdentityServer.Areas.Identity.Pages.Account.Admin {
                 .Union(
                     Applications.Where(a => User.Claims.Any(
                     c => c.Type == DomainClaimTypes.SuperAdmin
-                    || (c.Type == DomainClaimTypes.ApplicationRole && c.Value == $"{a}{DomainClaimValues.ApplicationRoleAdminSuffix}")
+                    || (c.Type == DomainClaimTypes.ApplicationRole(a.Value) && c.Value == DomainClaimValues.Admin)
                     || (c.Type == DomainClaimTypes.OrganizationAdminFor)))
                 )
                 .ToList();

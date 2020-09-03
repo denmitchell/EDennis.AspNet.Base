@@ -226,15 +226,16 @@ namespace EDennis.AspNetIdentityServer {
                 .ToDictionary(r => r, r => default(int));
 
             var applicationClaimRecords = context.ApplicationClaims
-                .Where(ac => ac.ClaimType == "app:role" && ac.ClaimValue.StartsWith($"{project}:"))
+                .Where(ac => ac.Application == project 
+                    && ac.ClaimTypePrefix == "role:")
                 .ToList();
 
             var missingApplicationClaims = roles.Keys
                 .Where(r => !applicationClaimRecords
-                .Any(ac => ac.ClaimValue.EndsWith($":{r}")))
+                .Any(ac => ac.ClaimValue == r))
                 .Select(r => new DomainApplicationClaim {
                     Application = project,
-                    ClaimType = "app:role",
+                    ClaimTypePrefix = "role:",
                     ClaimValue = r,
                     OrgAdminable = true
                 });
