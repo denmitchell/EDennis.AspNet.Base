@@ -1,0 +1,3 @@
+admin,scope,*
+user,scope,-*.Delete*"
+readonly,scope,*.Get*"

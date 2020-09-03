@@ -9,6 +9,17 @@
         "EDennis.Samples.ColorApp.Razor.*.Put*",
         "EDennis.Samples.ColorApp.Razor.*.Patch*",
         "EDennis.Samples.ColorApp.Razor.*.Delete*"
+      ],
+      "UserClaims": [
+        "name",
+        "email",
+        "email_confirmed",
+        "phone_number",
+        "organization",
+        "organization_confirmed",
+        "organization_admin_for",
+        "super_admin",
+        "role:EDennis.Samples.ColorApp.Razor"
       ]
     }
   ],
@@ -25,12 +36,18 @@
       "AllowOfflineAccess": true,
       "ClientClaimsPrefix": "",
       "AllowedScopes": [
-        "EDennis.Samples.ColorApp.Razor.*",
         "openid",
         "profile",
         "name",
         "email",
-        "role"
+        "email_confirmed",
+        "offline_access",
+        "phone_number",
+        "organization",
+        "organization_confirmed",
+        "organization_admin_for",
+        "super_admin",
+        "role:EDennis.Samples.ColorApp.Razor"
       ],
       "RedirectUris": [
         "https://localhost:44305/signin-oidc"
@@ -48,14 +65,14 @@
       "Email": "maria@a.test",
       "OrganizationAdmin": true,
       "Roles": [
-        "Admin"
+        "admin"
       ]
     },
     {
       "Email": "john@a.test",
       "PhoneNumber": "999.555.1313",
       "Roles": [
-        "User"
+        "user"
       ]
     },
     {
@@ -63,14 +80,14 @@
       "PhoneNumber": "888.555.1212",
       "OrganizationAdmin": true,
       "Roles": [
-        "User"
+        "user"
       ]
     },
     {
       "Email": "linda@b.test",
       "PhoneNumber": "888.555.1313",
       "Roles": [
-        "Readonly"
+        "readonly"
       ]
     },
     {
@@ -78,14 +95,14 @@
       "PhoneNumber": "777.555.1212",
       "OrganizationAdmin": true,
       "Roles": [
-        "User"
+        "user"
       ]
     },
     {
       "Email": "ebony@c.test",
       "PhoneNumber": "777.555.1313",
       "Roles": [
-        "Readonly"
+        "readonly"
       ]
     },
     {
@@ -94,8 +111,8 @@
       "SuperAdmin": true
       /*Sample Custom Claims*/,
       "Claims": {
-        "SomeClaimType": [
-          "SomeClaimValue"
+        "someClaimType": [
+          "someClaimValue"
         ]
       }
     },
@@ -103,7 +120,7 @@
       "Email": "james@b.test",
       "PhoneNumber": "888.555.1414",
       "Roles": [
-        "Readonly"
+        "readonly"
       ]
     }
   ]

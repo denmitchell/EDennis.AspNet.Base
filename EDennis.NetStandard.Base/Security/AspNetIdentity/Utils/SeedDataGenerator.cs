@@ -1,8 +1,6 @@
 ﻿using IdentityModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -154,7 +152,7 @@ namespace EDennis.NetStandard.Base {
 
             jw.WriteStartObject();
             {
-                WriteApiResourceSection(jw, project, scopes, apiUserClaims);
+                WriteApiResourceSection(jw, project, scopes, apiUserClaims, idpConfigType);
 
                 if (idpConfigType == IdpConfigType.ClientCredentials)
                     WriteClientCredentialsSection(jw, project, idpUrl);
@@ -248,7 +246,7 @@ namespace EDennis.NetStandard.Base {
             jw.WriteEndArray();
         }
 
-        private static void WriteApiResourceSection(Utf8JsonWriter jw, string project, IEnumerable<string> scopes, IEnumerable<string> userClaims) {
+        private static void WriteApiResourceSection(Utf8JsonWriter jw, string project, IEnumerable<string> scopes, IEnumerable<string> userClaims, IdpConfigType idpConfigType) {
 
             jw.WriteStartArray("ApiResources");
             {
@@ -266,8 +264,20 @@ namespace EDennis.NetStandard.Base {
                     if (userClaims != null && userClaims.Count() > 0) {
                         jw.WriteStartArray("UserClaims");
                         {
-                            foreach (var claim in userClaims)
-                                jw.WriteStringValue(claim);
+                            if (idpConfigType == IdpConfigType.ClientCredentials) {
+                                foreach (var claim in userClaims)
+                                    jw.WriteStringValue(claim);
+                            } else {
+                                jw.WriteStringValue("name");
+                                jw.WriteStringValue("email");
+                                jw.WriteStringValue("email_confirmed");
+                                jw.WriteStringValue("phone_number");
+                                jw.WriteStringValue("organization");
+                                jw.WriteStringValue("organization_confirmed");
+                                jw.WriteStringValue("organization_admin_for");
+                                jw.WriteStringValue("super_admin");
+                                jw.WriteStringValue($"role:{project}");
+                            }
                         }
                         jw.WriteEndArray();
                     }
@@ -328,12 +338,18 @@ namespace EDennis.NetStandard.Base {
                     jw.WriteString("ClientClaimsPrefix", DEFAULT_CLIENT_CLAIMS_PREFIX);
                     jw.WriteStartArray("AllowedScopes");
                     {
-                        jw.WriteStringValue($"{project}.*");
                         jw.WriteStringValue("openid");
                         jw.WriteStringValue("profile");
                         jw.WriteStringValue("name");
                         jw.WriteStringValue("email");
-                        jw.WriteStringValue("role");
+                        jw.WriteStringValue("email_confirmed");
+                        jw.WriteStringValue("offline_access");
+                        jw.WriteStringValue("phone_number");
+                        jw.WriteStringValue("organization");
+                        jw.WriteStringValue("organization_confirmed");
+                        jw.WriteStringValue("organization_admin_for");
+                        jw.WriteStringValue("super_admin");
+                        jw.WriteStringValue($"role:{project}");
                     }
                     jw.WriteEndArray();
                     jw.WriteStartArray("RedirectUris");
