@@ -1,10 +1,5 @@
-﻿using CsvHelper;
-using Microsoft.Extensions.Hosting;
-using System;
+﻿using Microsoft.Extensions.Options;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
 
 namespace EDennis.NetStandard.Base {
 
@@ -16,64 +11,57 @@ namespace EDennis.NetStandard.Base {
     /// implementing role-like functionality without using ASP.NET Identity 
     /// Roles. If desired, many highly granular child claims can be 
     /// maintained in the cache without much impact on performance.
+    /// 
+    /// The child claims are populated from data in configuration.  The Data
+    /// section is a two-dimensional array where the first dimension is the
+    /// row/object and the second dimension is the column/property.  For
+    /// convenience, there are three configuration strategies:
+    /// 
+    /// <list type="bullet">
+    /// <item>Define no constant values. In this strategy, each row
+    /// consists of four columns:
+    ///     <list type="number">
+    ///         <item>ParentType</item>
+    ///         <item>ParentValue</item>
+    ///         <item>ChildType</item>
+    ///         <item>ChildValue</item>
+    ///     </list>
+    /// </item>
+    /// <item>Define ParentType as a constant value. For example, ParentType
+    /// could be set as "role" or "role:{AppName}" (the latter being 
+    /// consistent with DomainIdentity classes). In this strategy, each row
+    /// consists of three columns:
+    ///     <list type="number">
+    ///         <item>ParentValue</item>
+    ///         <item>ChildType</item>
+    ///         <item>ChildValue</item>
+    ///     </list>
+    /// </item>
+    /// <item>Define ParentType and ChildType as a constant values. For example, 
+    /// ParentType could be set as "role" or "role:{AppName}" (the latter being 
+    /// consistent with DomainIdentity classes), and ChildType could be set
+    /// as "scope". In this strategy, each row consists of two columns:
+    ///     <list type="number">
+    ///         <item>ParentValue</item>
+    ///         <item>ChildValue</item>
+    ///     </list>
+    /// </item>
+    /// </list>
+    /// 
+    /// Note that the configuration did not have to use two-dimensional arrays; 
+    /// however, there would be greater verbosity in the configuration file 
+    /// if one used an array of ChildClaim objects, rather than a two-dimensional 
+    /// array.
     /// </summary>
     public class ChildClaimCache : IChildClaimCache {
 
 
         /// <summary>
-        /// The path to a configuration file that holds the app role
-        /// child claims.
-        /// 
-        /// NOTE: This is used by the default implementation of the 
-        /// GetChildClaims() method.
-        /// </summary>
-        public virtual string ConfigFilePath { get; set;  } = "childClaims.csv";
-
-
-        /// <summary>
-        /// 
-        /// By default, retrieve all child claims from the CSV config file
-        /// (without header row) consisting of four fields per row:
-        /// <list type="number">
-        ///   <item>parent claim type -- the type of the parent claim</item>
-        ///   <item>parent claim value -- the type of the parent value</item>
-        ///   <item>claim type -- the type of the child claim</item>
-        ///   <item>claim value -- the value of the child claim</item>
-        /// </list>
-        /// 
-        /// NOTE: the CSV format was chosen because of its compactness and
-        /// because it would be relatively easy to enter the child claims
-        /// in a spreadsheet application and export to csv.  This method
-        /// can be overridden to specify a different source or to
-        /// hard-code the child claims.
-        /// 
-        /// </summary>
-        public virtual IEnumerable<ChildClaim> GetChildClaims() {
-            using var reader = new StreamReader(ConfigFilePath);
-            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-            var records = new List<ChildClaim>();
-            csv.Configuration.HasHeaderRecord = false;
-            while (csv.Read()) {
-                var record = new ChildClaim {
-                    ParentType = csv.GetField<string>(0),
-                    ParentValue = csv.GetField<string>(1),
-                    ClaimType = csv.GetField<string>(2),
-                    ClaimValue = csv.GetField<string>(3)
-                };
-                //add the record if it isn't the header row
-                if (!(record.ClaimType.Equals("ClaimType", StringComparison.OrdinalIgnoreCase)
-                    && record.ClaimValue.Equals("ClaimValue", StringComparison.OrdinalIgnoreCase)))
-                    records.Add(record);
-            }
-            return records;
-        }
-
-        /// <summary>
         /// Constructs a new ChildClaimCache object, populating
         /// the child claims with data retrieved from ChildClaims()
         /// </summary>
-        public ChildClaimCache() {
-            ChildClaims = GetChildClaims();
+        public ChildClaimCache(IOptionsMonitor<ChildClaimSettings> settings) {
+            ChildClaims = settings.CurrentValue.GetChildClaims();
         }
 
         public IEnumerable<ChildClaim> ChildClaims { get; }

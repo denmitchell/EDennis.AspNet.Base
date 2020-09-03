@@ -45,7 +45,7 @@ namespace EDennis.NetStandard.Base {
                     return (from a in principal.Claims
                             join c in _cache.ChildClaims
                              on new { a.Type, a.Value } equals new { Type=c.ParentType, Value=c.ParentValue }
-                         select new Claim(c.ClaimType, c.ClaimValue)
+                         select new Claim(c.ChildType, c.ChildValue)
                         ).ToList();
                 });
 

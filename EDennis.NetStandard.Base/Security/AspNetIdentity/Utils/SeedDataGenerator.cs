@@ -1,6 +1,8 @@
 ﻿using IdentityModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -78,42 +80,26 @@ namespace EDennis.NetStandard.Base {
             dynamic idpPortOrUrl,
             dynamic apiPortOrUrl,
             IdpConfigType idpConfigType = IdpConfigType.ClientCredentials,
-            string appRolesCsv = null,
-            string childClaimsCsv = null,
-            string appName = null,
+            string childClaimsConfigKey = null,
             IEnumerable<TestUser> testUsers = null) {
 
             testUsers ??= DEFAULT_USERS;
 
-            //if using ChildClaimCache or AppRoleChildClaimCache,
-            //make sure that each defined parent claim is held
-            //by at least one test user.
-            if (appRolesCsv != null || childClaimsCsv != null) {
+            //if using ChildClaimCache, make sure that each defined 
+            //parent claim is held by at least one test user.
+            if (childClaimsConfigKey != null) {
 
-                var parentRoleClaims = new List<Claim>();
                 var parentClaims = new List<Claim>();
 
                 var roles = testUsers.SelectMany(u => u.Roles).Distinct();
                 var userIdx = 0;
                 var users = testUsers.ToArray();
 
-                if (appRolesCsv != null) {
-                    GetParentRoleClaims(appRolesCsv, parentRoleClaims, appName);
-                    foreach (var role in parentRoleClaims.Select(c => c.Value)) {
-                        if (!roles.Contains(role)) {
-                            users[userIdx].Roles.Add(role);
-                            userIdx = (userIdx + 1) % users.Length;
-                        }
-                    }
-                }
-
-                if (childClaimsCsv != null) {
-                    GetParentClaims(childClaimsCsv, parentClaims);
-                    foreach (var role in parentClaims.Select(c => c.Value)) {
-                        if (!roles.Contains(role)) {
-                            users[userIdx].Roles.Add(role);
-                            userIdx = (userIdx + 1) % users.Length;
-                        }
+                GetParentClaims(childClaimsConfigKey, parentClaims);
+                foreach (var role in parentClaims.Select(c => c.Value)) {
+                    if (!roles.Contains(role)) {
+                        users[userIdx].Roles.Add(role);
+                        userIdx = (userIdx + 1) % users.Length;
                     }
                 }
 
@@ -164,25 +150,30 @@ namespace EDennis.NetStandard.Base {
             }
             jw.WriteEndObject();
 
-
-        }
-
-        private static void GetParentClaims(string childClaimsCsv, List<Claim> parentClaims) {
-            var cache = new ChildClaimCache {
-                ConfigFilePath = childClaimsCsv
-            };
-            parentClaims.AddRange(cache.GetChildClaims().Select(cc=>new Claim(cc.ParentType, cc.ParentValue)));
         }
 
 
-        private static void GetParentRoleClaims(string appRoleClaimsCsv, List<Claim> parentRoleClaims, string appName) {
-            var cache = new AppRoleChildClaimCache {
-                ApplicationName = appName,
-                ConfigFilePath = appRoleClaimsCsv
-            };
-            parentRoleClaims.AddRange(cache.GetAppRoleChildClaims()
-                .Select(cc => new Claim(DomainClaimTypes.ApplicationRole(appName), cc.AppRole)));
+        /// <summary>
+        /// Adds parent claims from child claims defined in configuration
+        /// </summary>
+        /// <param name="configKey"></param>
+        /// <param name="parentClaims"></param>
+        /// <param name="appName"></param>
+        private static void GetParentClaims(string configKey, List<Claim> parentClaims) {
+            var settings = new ChildClaimSettings();
+            var config = new ConfigurationBuilder()
+                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true)
+                .AddJsonFile("appsettings.json", true)
+                .Build();
+            config.BindSectionOrThrow(configKey, settings);
+
+            var options = IOptionsMonitorFactory.Create(settings);
+            var cache = new ChildClaimCache(options);
+
+            parentClaims.AddRange(cache.ChildClaims
+                .Select(cc => new Claim(cc.ParentType, cc.ParentValue)));
         }
+
 
         private static void WriteTestUsersSection(Utf8JsonWriter jw, IEnumerable<TestUser> testUsers) {
             jw.WriteStartArray("TestUsers");
