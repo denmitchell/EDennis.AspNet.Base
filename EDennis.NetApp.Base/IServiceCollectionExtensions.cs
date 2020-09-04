@@ -57,8 +57,8 @@ namespace EDennis.NetApp.Base {
         /// <returns></returns>
         public static IServiceCollection AddIntegratedIdentityServerAndAspNetIdentity(
                     this IServiceCollection services, IConfiguration config,
-                    string dbContextConfigKey = "DbContexts:DomainIdentityDbContext",
-                    string identityServerConfigKey = "IdentityServer") {
+                    string dbContextConfigKey = "ConnectionStrings:DomainIdentityDbContext",
+                    string identityServerConfigKey = "Security:IdentityServer") {
 
 
             //Step 1. Get options from configuration

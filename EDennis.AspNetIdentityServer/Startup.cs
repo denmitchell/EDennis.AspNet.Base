@@ -47,9 +47,7 @@ namespace EDennis.AspNetIdentityServer {
             //   Server, Database, Trusted_Connection, and MultipleActiveResultSets; bind these to an
             //   EDennis.NetStandard.Base.ConnectionString instance; and retrieve the value of the connection 
             //   string via the SqlServer property
-            string cxnConfiguration = Configuration.GetValueOrThrow<string>("DbContexts:ConfigurationDbContext:ConnectionString",null,true);
-            string cxnPersistedGrant = Configuration.GetValueOrThrow<string>("DbContexts:PersistedGrantDbContext:ConnectionString", null, true);
-            string cxnAspNetIdentity = Configuration.GetValueOrThrow<string>("DbContexts:DomainIdentityDbContext:ConnectionString", null, true);
+            string cxnAspNetIdentity = Configuration.GetValueOrThrow<string>("ConnectionStrings:DomainIdentityDbContext", null, true);
 
 
             services.AddScoped<IUserClaimsPrincipalFactory<DomainUser>, DomainUserClaimsPrincipalFactory>();
@@ -57,12 +55,12 @@ namespace EDennis.AspNetIdentityServer {
             services.AddIdentityServer()
                 .AddConfigurationStore(options => {
                     new DefaultConfigurationStoreOptions().Load(options);
-                    options.ConfigureDbContext = b => b.UseSqlServer(cxnConfiguration,
+                    options.ConfigureDbContext = b => b.UseSqlServer(cxnAspNetIdentity,
                         sql => sql.MigrationsAssembly(migrationsAssembly));
                 })
                 .AddOperationalStore(options => {
                     new DefaultOperationalStoreOptions().Load(options);
-                    options.ConfigureDbContext = b => b.UseSqlServer(cxnPersistedGrant,
+                    options.ConfigureDbContext = b => b.UseSqlServer(cxnAspNetIdentity,
                         sql => sql.MigrationsAssembly(migrationsAssembly));
                 })
                 .AddDeveloperSigningCredential()

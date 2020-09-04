@@ -10,13 +10,6 @@ namespace EDennis.Samples.ColorApp.Server {
             Log.Logger = new LoggerConfiguration()
                 .GetLoggerFromConfiguration<Program>("Logging:Serilog");
 
-            if (args.Contains("/idp-config")) {
-                Log.Information("Generating IDP Config file...");
-                SeedDataGenerator.GenerateIdpConfigStub<Startup>(5000, 44336, IdpConfigType.AuthorizationCode);
-                Log.Information("Exiting...");
-                return;
-            }
-
             CreateHostBuilder(args).Build().Run();
         }
 

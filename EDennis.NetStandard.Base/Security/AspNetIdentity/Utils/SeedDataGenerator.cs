@@ -138,12 +138,12 @@ namespace EDennis.NetStandard.Base {
 
             jw.WriteStartObject();
             {
-                WriteApiResourceSection(jw, project, scopes, apiUserClaims, idpConfigType);
+                WriteApiResourcesSection(jw, project, scopes, apiUserClaims, idpConfigType);
 
                 if (idpConfigType == IdpConfigType.ClientCredentials)
-                    WriteClientCredentialsSection(jw, project, idpUrl);
+                    WriteClientsSectionForClientCredentials(jw, project, idpUrl);
                 else {
-                    WriteAuthorizationCodeSection(jw, project, idpUrl, apiUrl);
+                    WriteClientsSectionForAuthorizationCode(jw, project, idpUrl, apiUrl);
                 }
 
                 WriteTestUsersSection(jw, testUsers);
@@ -237,7 +237,7 @@ namespace EDennis.NetStandard.Base {
             jw.WriteEndArray();
         }
 
-        private static void WriteApiResourceSection(Utf8JsonWriter jw, string project, IEnumerable<string> scopes, IEnumerable<string> userClaims, IdpConfigType idpConfigType) {
+        private static void WriteApiResourcesSection(Utf8JsonWriter jw, string project, IEnumerable<string> scopes, IEnumerable<string> userClaims, IdpConfigType idpConfigType) {
 
             jw.WriteStartArray("ApiResources");
             {
@@ -280,7 +280,7 @@ namespace EDennis.NetStandard.Base {
         }
 
 
-        private static void WriteClientCredentialsSection(Utf8JsonWriter jw, string project, string idpUrl) {
+        private static void WriteClientsSectionForClientCredentials(Utf8JsonWriter jw, string project, string idpUrl) {
             jw.WriteStartArray("Clients");
             {
                 jw.WriteStartObject();
@@ -310,7 +310,7 @@ namespace EDennis.NetStandard.Base {
             jw.WriteEndArray();
         }
 
-        private static void WriteAuthorizationCodeSection(Utf8JsonWriter jw, string project, string idpUrl, string apiUrl) {
+        private static void WriteClientsSectionForAuthorizationCode(Utf8JsonWriter jw, string project, string idpUrl, string apiUrl) {
             jw.WriteStartArray("Clients");
             {
                 jw.WriteStartObject();

@@ -20,25 +20,24 @@ namespace EDennis.NetStandard.Base {
 
         private readonly RequestDelegate _next;
         private readonly IOptionsMonitor<MockClaimsPrincipalOptions> _options;
-        private readonly string _mcp;
 
         public MockClaimsPrincipalMiddleware(RequestDelegate next,
-            IOptionsMonitor<MockClaimsPrincipalOptions> options,
-            IConfiguration config) {
+            IOptionsMonitor<MockClaimsPrincipalOptions> options) {
             _next = next;
             _options = options;
-            _mcp = config.GetValueOrThrow<string>(MockClaimsPrincipalOptions.SELECTED_MOCK_CLAIMS_PRINCIPAL_KEY);
         }
 
         public async Task InvokeAsync(HttpContext context) {
 
+            var mcp = _options.CurrentValue;
+
             //bypass if _mcp == null or X-Claims header is present.  
             //The latter indicates that regular authentication should proceed 
             //  and X-Claims will be added after authentication
-            if (_mcp == null || context.Request.Headers.ContainsKey(HeaderToClaimsOptions.HEADER_KEY))
+            if (mcp.Selected == null || context.Request.Headers.ContainsKey(HeaderToClaimsOptions.HEADER_KEY))
                 await _next(context);
             else {
-                var claims = _options.CurrentValue[_mcp].ToClaimEnumerable();
+                var claims = mcp.Pool[mcp.Selected].ToClaimEnumerable();
                 context.User = new ClaimsPrincipal(new ClaimsIdentity(claims,"mockAuth"));
                  
                 await _next(context); 
@@ -49,8 +48,17 @@ namespace EDennis.NetStandard.Base {
     }
 
     public static class IServiceCollectionExtensions_MockClaimsPrincipalMiddleware {
-        public static IServiceCollection AddMockClaimsPrincipal(this IServiceCollection services, IConfiguration config) {
-            services.Configure<MockClaimsPrincipalOptions>(config.GetSection("Security:MockClaimsPrincipals"));
+        public static IServiceCollection AddMockClaimsPrincipal(this IServiceCollection services, IConfiguration config,
+            string configKey = "Testing:MockClaimsPrincipal") {
+            services.Configure<MockClaimsPrincipalOptions>(config.GetSection(configKey));
+
+            //use PostConfigure to update the value of the Selected property
+            //to the configuration value for "mcp" (passed in via command-line),
+            //when it is present.
+            services.PostConfigure<MockClaimsPrincipalOptions>(options => {
+                var mcp = config[MockClaimsPrincipalOptions.SELECTED_MOCK_CLAIMS_PRINCIPAL_ARGUMENT];
+                options.Selected = mcp ?? options.Selected;
+            });
             return services;
         }
     }

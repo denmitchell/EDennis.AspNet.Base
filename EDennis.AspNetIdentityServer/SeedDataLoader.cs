@@ -31,7 +31,6 @@ namespace EDennis.AspNetIdentityServer {
         public const string DEFAULT_DBVIEW_DIR = "Logs";
         public const string DEFAULT_DBVIEW_FILE = "DbView.json";
         public const string DEFAULT_IDENTITY_RESOURCES_FILE = "IdentityResources.json";
-        public const string DEFAULT_CONNECTION_STRING_CONFIG_KEY = "DbContexts:DomainIdentityDbContext";
 
 
         public string SeedDataDir { get; set; } = DEFAULT_SEED_DATA_DIR;
@@ -43,7 +42,6 @@ namespace EDennis.AspNetIdentityServer {
         private readonly string[] _args;
         private readonly ILogger _logger;
 
-        public string ConnectionStringConfigKey { get; set; } = DEFAULT_CONNECTION_STRING_CONFIG_KEY;
 
         public Regex FileProjectExtractor {get; set;} 
                 = new Regex($@"(?<={DEFAULT_SEED_DATA_DIR}\\)([A-Za-z0-9_.]+)(?=\.json)");
