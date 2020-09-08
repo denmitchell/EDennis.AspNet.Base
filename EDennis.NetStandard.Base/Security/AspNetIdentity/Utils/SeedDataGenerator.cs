@@ -79,10 +79,12 @@ namespace EDennis.NetStandard.Base {
         public static void GenerateIdpConfigStub<TStartup>(
             dynamic idpPortOrUrl,
             dynamic apiPortOrUrl,
-            IdpConfigType idpConfigType = IdpConfigType.ClientCredentials,
+            bool isRazorUserApp,
+            string[] childApiScopes = null,
             string childClaimsConfigKey = null,
             IEnumerable<TestUser> testUsers = null) {
 
+            childApiScopes ??= new string[] { };
             testUsers ??= DEFAULT_USERS;
 
             //if using ChildClaimCache, make sure that each defined 
@@ -114,7 +116,6 @@ namespace EDennis.NetStandard.Base {
             var scopes = GenerateScopes(assembly, out string project);
 
             //what user claims will be included in access tokens
-            //via DomainIdentityProfileService when requested in client app
             var apiUserClaims =
                 new string[] {
                     JwtClaimTypes.Name,
@@ -138,13 +139,13 @@ namespace EDennis.NetStandard.Base {
 
             jw.WriteStartObject();
             {
-                WriteApiResourcesSection(jw, project, scopes, apiUserClaims, idpConfigType);
+                WriteApiResourcesSection(jw, project, scopes, apiUserClaims, isRazorUserApp);
 
-                if (idpConfigType == IdpConfigType.ClientCredentials)
-                    WriteClientsSectionForClientCredentials(jw, project, idpUrl);
-                else {
+                if (childApiScopes.Any())
+                    WriteClientsSectionForClientCredentials(jw, project, idpUrl, childApiScopes);
+                if (isRazorUserApp)
                     WriteClientsSectionForAuthorizationCode(jw, project, idpUrl, apiUrl);
-                }
+
 
                 WriteTestUsersSection(jw, testUsers);
             }
@@ -237,7 +238,8 @@ namespace EDennis.NetStandard.Base {
             jw.WriteEndArray();
         }
 
-        private static void WriteApiResourcesSection(Utf8JsonWriter jw, string project, IEnumerable<string> scopes, IEnumerable<string> userClaims, IdpConfigType idpConfigType) {
+        private static void WriteApiResourcesSection(Utf8JsonWriter jw, string project, IEnumerable<string> scopes, IEnumerable<string> userClaims,
+                bool hasAuthorizationCodeClient) {
 
             jw.WriteStartArray("ApiResources");
             {
@@ -252,23 +254,11 @@ namespace EDennis.NetStandard.Base {
                         }
                         jw.WriteEndArray();
                     }
-                    if (userClaims != null && userClaims.Count() > 0) {
+                    if (userClaims != null && userClaims.Count() > 0 && hasAuthorizationCodeClient) {
                         jw.WriteStartArray("UserClaims");
                         {
-                            if (idpConfigType == IdpConfigType.ClientCredentials) {
-                                foreach (var claim in userClaims)
-                                    jw.WriteStringValue(claim);
-                            } else {
-                                jw.WriteStringValue("name");
-                                jw.WriteStringValue("email");
-                                jw.WriteStringValue("email_confirmed");
-                                jw.WriteStringValue("phone_number");
-                                jw.WriteStringValue("organization");
-                                jw.WriteStringValue("organization_confirmed");
-                                jw.WriteStringValue("organization_admin_for");
-                                jw.WriteStringValue("super_admin");
-                                jw.WriteStringValue($"role:{project}");
-                            }
+                            foreach (var claim in userClaims)
+                                jw.WriteStringValue(claim);
                         }
                         jw.WriteEndArray();
                     }
@@ -280,13 +270,13 @@ namespace EDennis.NetStandard.Base {
         }
 
 
-        private static void WriteClientsSectionForClientCredentials(Utf8JsonWriter jw, string project, string idpUrl) {
+        private static void WriteClientsSectionForClientCredentials(Utf8JsonWriter jw, string project, string idpUrl, string[] childApiScopes) {
             jw.WriteStartArray("Clients");
             {
                 jw.WriteStartObject();
                 {
                     jw.WriteString("Authority", idpUrl);
-                    jw.WriteString("ClientId", project);
+                    jw.WriteString("ClientId", $"{project}:API");
                     jw.WriteString("PlainTextSecret", DEFAULT_SECRET);
                     jw.WriteStartArray("AllowedGrantTypes");
                     {
@@ -296,7 +286,9 @@ namespace EDennis.NetStandard.Base {
                     jw.WriteString("ClientClaimsPrefix", DEFAULT_CLIENT_CLAIMS_PREFIX);
                     jw.WriteStartArray("AllowedScopes");
                     {
-                        jw.WriteStringValue($"{project}.*");
+                        foreach (var scope in childApiScopes) {
+                            jw.WriteStringValue(scope);
+                        }
                     }
                     jw.WriteEndArray();
                     jw.WriteStartArray("Applications");
@@ -316,11 +308,12 @@ namespace EDennis.NetStandard.Base {
                 jw.WriteStartObject();
                 {
                     jw.WriteString("Authority", idpUrl);
-                    jw.WriteString("ClientId", project);
+                    jw.WriteString("ClientId", $"{project}:ID");
                     jw.WriteString("PlainTextSecret", DEFAULT_SECRET);
                     jw.WriteStartArray("AllowedGrantTypes");
                     {
                         jw.WriteStringValue("code");
+                        jw.WriteStringValue("client_credentials");
                     }
                     jw.WriteEndArray();
                     jw.WriteBoolean("RequireConsent", false);

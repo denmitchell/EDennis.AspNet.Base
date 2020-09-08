@@ -15,7 +15,7 @@ namespace EDennis.Samples.ColorApi {
 
             if (args.Contains("/idp-config")) {
                 Log.Information("Generating IDP Config file...");
-                SeedDataGenerator.GenerateIdpConfigStub<Startup>(5000, 44341, IdpConfigType.ClientCredentials);
+                SeedDataGenerator.GenerateIdpConfigStub<Startup>(5000, 44341, false);
                 Log.Information("Exiting...");
                 return;
             }

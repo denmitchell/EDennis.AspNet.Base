@@ -1,5 +1,6 @@
 using EDennis.NetApp.Base;
 using EDennis.NetStandard.Base;
+using IdentityServer4.AspNetIdentity;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -65,7 +66,7 @@ namespace EDennis.AspNetIdentityServer {
                 })
                 .AddDeveloperSigningCredential()
                 .AddAspNetIdentity<DomainUser>()
-                .AddProfileService<DomainIdentityProfileService>();
+                .AddProfileService<ProfileService<DomainUser>>();
 
 
             services.Configure<CentralAdminOptions>(Configuration.GetSection("CentralAdmin"));
@@ -84,10 +85,6 @@ namespace EDennis.AspNetIdentityServer {
 
 
             services.AddTransient<IEmailSender, MockEmailSender>();
-
-            //replace Identity Server's ProfileService with a profile service that determines
-            //which claims to retrieve for a user/client as configured in the database
-            services.Replace(ServiceDescriptor.Transient<IProfileService, DomainIdentityProfileService>());
 
             services.AddOidcLogging(Configuration);
 

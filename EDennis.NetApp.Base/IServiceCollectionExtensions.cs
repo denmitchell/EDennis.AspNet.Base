@@ -105,10 +105,9 @@ namespace EDennis.NetApp.Base {
                 .AddAspNetIdentity<DomainUser>();
 
             
-            //Step 5: Ensure correct implementations for IUserClaimsPrincipalFactory and IProfileService,
-            //        As these may have been altered by the call to .AddAspNetIdentity, above.
+            //Step 5: Ensure correct implementations for IUserClaimsPrincipalFactory,
+            //        As this may have been altered by the call to .AddAspNetIdentity, above.
             services.ReplaceServiceImplementations<IUserClaimsPrincipalFactory<DomainUser>, DomainUserClaimsPrincipalFactory>(ServiceLifetime.Scoped);
-            services.Replace(ServiceDescriptor.Transient<IProfileService, DomainIdentityProfileService>());
 
 
             return services;
