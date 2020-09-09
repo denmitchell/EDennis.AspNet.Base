@@ -24,7 +24,7 @@ namespace EDennis.Samples.ColorApp.Razor {
                 .AddApiExplorer();
 
             //for generating the OAuth Access Token
-            services.AddSecureTokenService<MockTokenService>(Configuration);
+            services.AddSecureTokenService<ClientCredentialsTokenService>(Configuration);
 
             services.AddAuthentication()
                 .AddOpenIdConnect(Configuration);

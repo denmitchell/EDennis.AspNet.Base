@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
 
@@ -13,6 +15,10 @@ namespace EDennis.NetStandard.Base {
 
     /// <summary>
     /// This middleware will transform headers into user claims per configuration settings.
+    /// 
+    /// The middleware requires a ClaimTypesConfigKey, which is an array of claim types to
+    /// pack into the header.  This key could point to Security:OpenIdConnect:Scope, which
+    /// should have all the relevant user claims.
     /// 
     /// This middleware is designed to be used immediately BEFORE or AFTER UseAuthentication() or
     /// UseAuthorization().  All header/claims configured for PostAuthentication will be ignored if
@@ -25,11 +31,14 @@ namespace EDennis.NetStandard.Base {
     public class ClaimsToHeaderMiddleware {
         private readonly RequestDelegate _next;
         private readonly ClaimsToHeaderOptions _settings;
+        private readonly List<string> _claimTypes = new List<string>();
 
         public ClaimsToHeaderMiddleware(RequestDelegate next,
-            IOptionsMonitor<ClaimsToHeaderOptions> settings) {
+            IOptionsMonitor<ClaimsToHeaderOptions> settings,
+            IConfiguration config) {
             _next = next;
             _settings = settings.CurrentValue;
+            config.BindSectionOrThrow(_settings.ClaimTypesConfigKey,_claimTypes);
         }
 
         public async Task InvokeAsync(HttpContext context,
@@ -48,10 +57,14 @@ namespace EDennis.NetStandard.Base {
                     throw ex;
                 }
 
-                var packedClaims = context.User.Claims.PackKeyValues(c => (c.Type, c.Value));
+                var packedClaims = context.User.Claims
+                    .Where(c=>_claimTypes.Contains(c.Type))
+                    .PackKeyValues(c => (c.Type, c.Value));
 
                 if (req.Headers.ContainsKey(HeaderToClaimsOptions.HEADER_KEY))
                     req.Headers[HeaderToClaimsOptions.HEADER_KEY] = packedClaims;
+                else
+                    req.Headers.Add(HeaderToClaimsOptions.HEADER_KEY, packedClaims);
 
 
                 await _next(context);

@@ -40,10 +40,10 @@ namespace EDennis.Samples.ColorApi {
             services.AddSingleton(new TransactionCache<ColorContext>());
 
             //with AddSecureTokenService, I may only need
-            services.AddAuthentication();
+            //services.AddAuthentication();
 
             //TODO: SEE WHETHER .AddJwtBearer is needed.
-            /*
+            
             services.AddAuthentication("Bearer")
                        .AddJwtBearer("Bearer", options =>
                        {
@@ -53,7 +53,7 @@ namespace EDennis.Samples.ColorApi {
                                ValidateAudience = false
                            };
                        });
-            */
+            
 
             services.AddMockClaimsPrincipal(Configuration);
             services.AddHeaderToClaims(Configuration);
@@ -80,6 +80,9 @@ namespace EDennis.Samples.ColorApi {
 
             app.UseRouting();
 
+            app.Use(async (context, next) => {
+                await next();
+            });
             app.UseMockClaimsPrincipalFor("/api/Rgb");
             app.Use(async (context, next) => {
                 await next();
