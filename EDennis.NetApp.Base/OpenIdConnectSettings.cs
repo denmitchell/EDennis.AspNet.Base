@@ -10,6 +10,8 @@ using System.Collections.Generic;
 namespace EDennis.NetApp.Base {
     public class OpenIdConnectSettings {
 
+        private static OpenIdConnectOptions _defaults = new OpenIdConnectOptions();
+
         public void LoadOptions(OpenIdConnectOptions options) {
 
             options.Authority = Authority;
@@ -68,11 +70,11 @@ namespace EDennis.NetApp.Base {
 
 
         public string MetadataAddress { get; set; }
-        public string CallbackPath { get; set; }
+        public string CallbackPath { get; set; } = _defaults.CallbackPath;
         public string ReturnUrlParameter { get; set; } = "ReturnUrl";
-        public string SignedOutCallbackPath { get; set; }
+        public string SignedOutCallbackPath { get; set; } = _defaults.SignedOutCallbackPath;
         public string SignedOutRedirectUri { get; set; } = "/";
-        public string RemoteSignOutPath { get; set; }
+        public string RemoteSignOutPath { get; set; } = _defaults.RemoteSignOutPath;
         public string AccessDeniedPath { get; set; }
 
     }

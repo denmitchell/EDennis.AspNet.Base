@@ -14,3 +14,154 @@
 2020-09-09 06:38:35.619 -04:00 [INF] Exiting...
 2020-09-09 11:19:06.421 -04:00 [INF] Generating IDP Config file...
 2020-09-09 11:19:06.835 -04:00 [INF] Exiting...
+2020-09-09 12:52:32.068 -04:00 [INF] Starting host ...
+2020-09-09 12:55:14.326 -04:00 [INF] Starting host ...
+2020-09-09 12:58:48.734 -04:00 [INF] Starting host ...
+2020-09-09 14:48:41.311 -04:00 [INF] Starting host ...
+2020-09-09 14:48:42.793 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-09 14:48:44.635 -04:00 [INF] Now listening on: https://localhost:44305
+2020-09-09 14:48:44.637 -04:00 [INF] Now listening on: http://localhost:64438
+2020-09-09 14:48:44.640 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2020-09-09 14:48:44.642 -04:00 [INF] Hosting environment: Development
+2020-09-09 14:48:44.645 -04:00 [INF] Content root path: C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp.Razor
+2020-09-09 14:48:45.627 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/Rgb  
+2020-09-09 14:48:45.933 -04:00 [ERR] An unhandled exception has occurred while executing the request.
+System.ArgumentException: The 'CallbackPath' option must be provided. (Parameter 'CallbackPath')
+   at Microsoft.AspNetCore.Authentication.RemoteAuthenticationOptions.Validate()
+   at Microsoft.AspNetCore.Authentication.OpenIdConnect.OpenIdConnectOptions.Validate()
+   at Microsoft.AspNetCore.Authentication.RemoteAuthenticationOptions.Validate(String scheme)
+   at Microsoft.AspNetCore.Authentication.AuthenticationBuilder.<>c__DisplayClass4_0`2.<AddSchemeHelper>b__1(TOptions o)
+   at Microsoft.Extensions.Options.ValidateOptions`1.Validate(String name, TOptions options)
+   at Microsoft.Extensions.Options.OptionsFactory`1.Create(String name)
+   at Microsoft.Extensions.Options.OptionsMonitor`1.<>c__DisplayClass11_0.<Get>b__0()
+   at System.Lazy`1.ViaFactory(LazyThreadSafetyMode mode)
+   at System.Lazy`1.ExecutionAndPublication(LazyHelper executionAndPublication, Boolean useDefaultConstructor)
+   at System.Lazy`1.CreateValue()
+   at System.Lazy`1.get_Value()
+   at Microsoft.Extensions.Options.OptionsCache`1.GetOrAdd(String name, Func`1 createOptions)
+   at Microsoft.Extensions.Options.OptionsMonitor`1.Get(String name)
+   at Microsoft.AspNetCore.Authentication.AuthenticationHandler`1.InitializeAsync(AuthenticationScheme scheme, HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationHandlerProvider.GetHandlerAsync(HttpContext context, String authenticationScheme)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at EDennis.NetStandard.Base.MockClaimsPrincipalMiddleware.InvokeAsync(HttpContext context) in C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.NetStandard.Base\Middleware\MockClaimsPrincipal\MockClaimsPrincipalMiddleware.cs:line 43
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2020-09-09 14:48:46.125 -04:00 [INF] Request finished in 501.309ms 500 text/html; charset=utf-8
+2020-09-09 14:48:46.315 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/favicon.ico  
+2020-09-09 14:48:46.363 -04:00 [INF] Sending file. Request path: '/favicon.ico'. Physical path: 'C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp.Razor\wwwroot\favicon.ico'
+2020-09-09 14:48:46.368 -04:00 [INF] Request finished in 52.6529ms 200 image/x-icon
+2020-09-09 14:58:05.952 -04:00 [INF] Starting host ...
+2020-09-09 14:58:07.317 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-09 14:58:08.405 -04:00 [INF] Now listening on: https://localhost:44305
+2020-09-09 14:58:08.407 -04:00 [INF] Now listening on: http://localhost:64438
+2020-09-09 14:58:08.410 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2020-09-09 14:58:08.412 -04:00 [INF] Hosting environment: Development
+2020-09-09 14:58:08.413 -04:00 [INF] Content root path: C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp.Razor
+2020-09-09 14:58:10.978 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/Rgb  
+2020-09-09 15:10:42.563 -04:00 [INF] Starting host ...
+2020-09-09 15:10:44.226 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-09 15:10:45.233 -04:00 [INF] Now listening on: https://localhost:44305
+2020-09-09 15:10:45.234 -04:00 [INF] Now listening on: http://localhost:64438
+2020-09-09 15:10:45.238 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2020-09-09 15:10:45.239 -04:00 [INF] Hosting environment: Development
+2020-09-09 15:10:45.241 -04:00 [INF] Content root path: C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp.Razor
+2020-09-09 15:10:46.027 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/Rgb  
+2020-09-09 15:10:46.159 -04:00 [INF] Executing endpoint '/Rgb/Index'
+2020-09-09 15:10:46.250 -04:00 [INF] Route matched with {page = "/Rgb/Index", action = "", controller = ""}. Executing page /Rgb/Index
+2020-09-09 15:10:46.303 -04:00 [INF] Executing handler method EDennis.Samples.ColorApp.Razor.Pages.Rgb.IndexModel.OnGetAsync - ModelState is "Valid"
+2020-09-09 15:10:46.446 -04:00 [INF] Start processing HTTP request GET "https://localhost:44341/api/Rgb/linq/async?orderBy=Name&skip=0&take=10"
+2020-09-09 15:10:46.451 -04:00 [INF] Sending HTTP request GET "https://localhost:44341/api/Rgb/linq/async?orderBy=Name&skip=0&take=10"
+2020-09-09 15:10:49.873 -04:00 [INF] Received HTTP response after 3415.9015ms - "OK"
+2020-09-09 15:10:49.879 -04:00 [INF] End processing HTTP request after 3438.345ms - "OK"
+2020-09-09 15:10:49.930 -04:00 [INF] Executed handler method OnGetAsync, returned result .
+2020-09-09 15:10:49.938 -04:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2020-09-09 15:10:49.941 -04:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2020-09-09 15:10:50.317 -04:00 [INF] Executed page /Rgb/Index in 4054.6901ms
+2020-09-09 15:10:50.320 -04:00 [INF] Executed endpoint '/Rgb/Index'
+2020-09-09 15:10:50.332 -04:00 [INF] Request finished in 4309.017ms 200 text/html; charset=utf-8
+2020-09-09 15:10:50.357 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/lib/bootstrap/dist/js/bootstrap.bundle.min.js  
+2020-09-09 15:10:50.356 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/lib/bootstrap/dist/css/bootstrap.min.css  
+2020-09-09 15:10:50.357 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/css/site.css  
+2020-09-09 15:10:50.357 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/lib/jquery/dist/jquery.min.js  
+2020-09-09 15:10:50.357 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/js/site.js?v=dLGP40S79Xnx6GqUthRF6NWvjvhQ1nOvdVSwaNcgG18  
+2020-09-09 15:10:50.382 -04:00 [INF] Sending file. Request path: '/js/site.js'. Physical path: 'C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp.Razor\wwwroot\js\site.js'
+2020-09-09 15:10:50.385 -04:00 [INF] Request finished in 27.4184ms 200 application/javascript
+2020-09-09 15:10:50.396 -04:00 [INF] Sending file. Request path: '/css/site.css'. Physical path: 'C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp.Razor\wwwroot\css\site.css'
+2020-09-09 15:10:50.399 -04:00 [INF] Request finished in 42.1484ms 200 text/css
+2020-09-09 15:10:50.416 -04:00 [INF] Sending file. Request path: '/lib/bootstrap/dist/css/bootstrap.min.css'. Physical path: 'C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp.Razor\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css'
+2020-09-09 15:10:50.416 -04:00 [INF] Sending file. Request path: '/lib/bootstrap/dist/js/bootstrap.bundle.min.js'. Physical path: 'C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp.Razor\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js'
+2020-09-09 15:10:50.419 -04:00 [INF] Request finished in 63.1378ms 200 text/css
+2020-09-09 15:10:50.422 -04:00 [INF] Request finished in 65.3394ms 200 application/javascript
+2020-09-09 15:10:50.435 -04:00 [INF] Sending file. Request path: '/lib/jquery/dist/jquery.min.js'. Physical path: 'C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp.Razor\wwwroot\lib\jquery\dist\jquery.min.js'
+2020-09-09 15:10:50.439 -04:00 [INF] Request finished in 82.5576ms 200 application/javascript
+2020-09-09 15:11:45.039 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/Rgb/Edit?id=-999001  
+2020-09-09 15:11:45.061 -04:00 [INF] Executing endpoint '/Rgb/Edit'
+2020-09-09 15:11:45.075 -04:00 [INF] Route matched with {page = "/Rgb/Edit", action = "", controller = ""}. Executing page /Rgb/Edit
+2020-09-09 15:11:45.083 -04:00 [INF] Executing handler method EDennis.Samples.ColorApp.Razor.Pages.Rgb.EditModel.OnGetAsync - ModelState is "Valid"
+2020-09-09 15:11:45.088 -04:00 [INF] Start processing HTTP request GET "https://localhost:44341/api/Rgb/async/-999001"
+2020-09-09 15:11:45.092 -04:00 [INF] Sending HTTP request GET "https://localhost:44341/api/Rgb/async/-999001"
+2020-09-09 15:11:45.437 -04:00 [INF] Received HTTP response after 345.7238ms - "OK"
+2020-09-09 15:11:45.441 -04:00 [INF] End processing HTTP request after 352.781ms - "OK"
+2020-09-09 15:11:45.466 -04:00 [INF] Executed handler method OnGetAsync, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2020-09-09 15:11:45.533 -04:00 [INF] Executed page /Rgb/Edit in 455.2479ms
+2020-09-09 15:11:45.545 -04:00 [INF] Executed endpoint '/Rgb/Edit'
+2020-09-09 15:11:45.548 -04:00 [INF] Request finished in 509.6576ms 200 text/html; charset=utf-8
+2020-09-09 15:11:45.573 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/lib/jquery-validation/dist/jquery.validate.min.js  
+2020-09-09 15:11:45.573 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js  
+2020-09-09 15:11:45.595 -04:00 [INF] Sending file. Request path: '/lib/jquery-validation/dist/jquery.validate.min.js'. Physical path: 'C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp.Razor\wwwroot\lib\jquery-validation\dist\jquery.validate.min.js'
+2020-09-09 15:11:45.597 -04:00 [INF] Sending file. Request path: '/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js'. Physical path: 'C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp.Razor\wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js'
+2020-09-09 15:11:45.601 -04:00 [INF] Request finished in 28.241ms 200 application/javascript
+2020-09-09 15:11:45.608 -04:00 [INF] Request finished in 34.977ms 200 application/javascript
+2020-09-09 15:11:48.410 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/Rgb  
+2020-09-09 15:11:48.417 -04:00 [INF] Executing endpoint '/Rgb/Index'
+2020-09-09 15:11:48.422 -04:00 [INF] Route matched with {page = "/Rgb/Index", action = "", controller = ""}. Executing page /Rgb/Index
+2020-09-09 15:11:48.428 -04:00 [INF] Executing handler method EDennis.Samples.ColorApp.Razor.Pages.Rgb.IndexModel.OnGetAsync - ModelState is "Valid"
+2020-09-09 15:11:48.432 -04:00 [INF] Start processing HTTP request GET "https://localhost:44341/api/Rgb/linq/async?orderBy=Name&skip=0&take=10"
+2020-09-09 15:11:48.436 -04:00 [INF] Sending HTTP request GET "https://localhost:44341/api/Rgb/linq/async?orderBy=Name&skip=0&take=10"
+2020-09-09 15:11:48.692 -04:00 [INF] Received HTTP response after 255.8122ms - "OK"
+2020-09-09 15:11:48.695 -04:00 [INF] End processing HTTP request after 263.0374ms - "OK"
+2020-09-09 15:11:48.706 -04:00 [INF] Executed handler method OnGetAsync, returned result .
+2020-09-09 15:11:48.708 -04:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2020-09-09 15:11:48.709 -04:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2020-09-09 15:11:48.743 -04:00 [INF] Executed page /Rgb/Index in 317.8429ms
+2020-09-09 15:11:48.746 -04:00 [INF] Executed endpoint '/Rgb/Index'
+2020-09-09 15:11:48.752 -04:00 [INF] Request finished in 342.1321ms 200 text/html; charset=utf-8
+2020-09-09 15:11:52.743 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/Rgb/Details?id=-999002  
+2020-09-09 15:11:52.755 -04:00 [INF] Executing endpoint '/Rgb/Details'
+2020-09-09 15:11:52.766 -04:00 [INF] Route matched with {page = "/Rgb/Details", action = "", controller = ""}. Executing page /Rgb/Details
+2020-09-09 15:11:52.774 -04:00 [INF] Executing handler method EDennis.Samples.ColorApp.Razor.Pages.Rgb.DetailsModel.OnGetAsync - ModelState is "Valid"
+2020-09-09 15:11:52.779 -04:00 [INF] Start processing HTTP request GET "https://localhost:44341/api/Rgb/async/-999002"
+2020-09-09 15:11:52.782 -04:00 [INF] Sending HTTP request GET "https://localhost:44341/api/Rgb/async/-999002"
+2020-09-09 15:11:52.890 -04:00 [INF] Received HTTP response after 108.8583ms - "OK"
+2020-09-09 15:11:52.893 -04:00 [INF] End processing HTTP request after 113.3701ms - "OK"
+2020-09-09 15:11:52.912 -04:00 [INF] Executed handler method OnGetAsync, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2020-09-09 15:11:52.946 -04:00 [INF] Executed page /Rgb/Details in 176.6231ms
+2020-09-09 15:11:52.949 -04:00 [INF] Executed endpoint '/Rgb/Details'
+2020-09-09 15:11:52.951 -04:00 [INF] Request finished in 208.6628ms 200 text/html; charset=utf-8
+2020-09-09 15:11:55.253 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/Rgb  
+2020-09-09 15:11:55.257 -04:00 [INF] Executing endpoint '/Rgb/Index'
+2020-09-09 15:11:55.260 -04:00 [INF] Route matched with {page = "/Rgb/Index", action = "", controller = ""}. Executing page /Rgb/Index
+2020-09-09 15:11:55.264 -04:00 [INF] Executing handler method EDennis.Samples.ColorApp.Razor.Pages.Rgb.IndexModel.OnGetAsync - ModelState is "Valid"
+2020-09-09 15:11:55.268 -04:00 [INF] Start processing HTTP request GET "https://localhost:44341/api/Rgb/linq/async?orderBy=Name&skip=0&take=10"
+2020-09-09 15:11:55.272 -04:00 [INF] Sending HTTP request GET "https://localhost:44341/api/Rgb/linq/async?orderBy=Name&skip=0&take=10"
+2020-09-09 15:11:55.495 -04:00 [INF] Received HTTP response after 223.373ms - "OK"
+2020-09-09 15:11:55.499 -04:00 [INF] End processing HTTP request after 230.1349ms - "OK"
+2020-09-09 15:11:55.514 -04:00 [INF] Executed handler method OnGetAsync, returned result .
+2020-09-09 15:11:55.518 -04:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2020-09-09 15:11:55.521 -04:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2020-09-09 15:11:55.554 -04:00 [INF] Executed page /Rgb/Index in 292.4656ms
+2020-09-09 15:11:55.557 -04:00 [INF] Executed endpoint '/Rgb/Index'
+2020-09-09 15:11:55.561 -04:00 [INF] Request finished in 309.2783ms 200 text/html; charset=utf-8
+2020-09-09 15:12:28.186 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/Rgb?fld0=Name&op0=11&val0=%22%25u%25%22&fld1=Id&op1=0&val1=&pageNumber=1  
+2020-09-09 15:12:28.191 -04:00 [INF] Executing endpoint '/Rgb/Index'
+2020-09-09 15:12:28.194 -04:00 [INF] Route matched with {page = "/Rgb/Index", action = "", controller = ""}. Executing page /Rgb/Index
+2020-09-09 15:12:28.202 -04:00 [INF] Executing handler method EDennis.Samples.ColorApp.Razor.Pages.Rgb.IndexModel.OnGetAsync - ModelState is "Valid"
+2020-09-09 15:12:28.207 -04:00 [INF] Start processing HTTP request GET "https://localhost:44341/api/Rgb/linq/async?where=Name.Like(\"%25u%25\")&orderBy=Name&skip=0&take=10"
+2020-09-09 15:12:28.210 -04:00 [INF] Sending HTTP request GET "https://localhost:44341/api/Rgb/linq/async?where=Name.Like(\"%25u%25\")&orderBy=Name&skip=0&take=10"
+2020-09-09 15:12:28.459 -04:00 [INF] Received HTTP response after 248.5433ms - "OK"
+2020-09-09 15:12:28.462 -04:00 [INF] End processing HTTP request after 254.8248ms - "OK"
+2020-09-09 15:12:28.471 -04:00 [INF] Executed handler method OnGetAsync, returned result .
+2020-09-09 15:12:28.474 -04:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2020-09-09 15:12:28.476 -04:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2020-09-09 15:12:28.504 -04:00 [INF] Executed page /Rgb/Index in 305.3535ms
+2020-09-09 15:12:28.511 -04:00 [INF] Executed endpoint '/Rgb/Index'
+2020-09-09 15:12:28.526 -04:00 [INF] Request finished in 339.8684ms 200 text/html; charset=utf-8

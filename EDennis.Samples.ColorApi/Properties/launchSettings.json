@@ -9,6 +9,15 @@
     }
   },
   "profiles": {
+    "NoMcp": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:44341;http://localhost:61244",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
     "Maria": {
       "commandName": "Project",
       "commandLineArgs": "mcp=Maria",

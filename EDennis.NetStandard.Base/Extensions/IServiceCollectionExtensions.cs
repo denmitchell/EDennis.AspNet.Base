@@ -22,7 +22,7 @@ namespace EDennis.NetStandard.Base {
             IConfiguration config, string configKey = "Security:ChildClaims") {
 
             services.Configure<ChildClaimSettings>(config.GetSection(configKey));
-            services.AddSingleton<ChildClaimCache>();
+            services.AddSingleton<IChildClaimCache,ChildClaimCache>();
             services.AddScoped<IClaimsTransformation, ChildClaimsTransformer>();
 
             return services;
@@ -100,7 +100,7 @@ namespace EDennis.NetStandard.Base {
 
 
         public static TypedClientBuilder AddApiClient<TClientInterface, TClientImplementation>(this IServiceCollection services,
-                IConfiguration config, string clientName = null, string configKeyParent = API_CLIENTS_CONFIG_KEY_PARENT)
+                IConfiguration config, string configKeyParent = API_CLIENTS_CONFIG_KEY_PARENT, string clientName = null )
             where TClientInterface : class
             where TClientImplementation : class, TClientInterface {
 

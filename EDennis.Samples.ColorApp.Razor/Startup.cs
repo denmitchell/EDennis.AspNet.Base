@@ -19,6 +19,10 @@ namespace EDennis.Samples.ColorApp.Razor {
         public void ConfigureServices(IServiceCollection services) {
             services.AddRazorPages();
 
+            //for swagger
+            services.AddMvcCore()
+                .AddApiExplorer();
+
             //for generating the OAuth Access Token
             services.AddSecureTokenService<MockTokenService>(Configuration);
 

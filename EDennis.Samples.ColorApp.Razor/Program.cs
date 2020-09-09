@@ -10,6 +10,8 @@ namespace EDennis.Samples.ColorApp.Razor {
             Log.Logger = new LoggerConfiguration()
                 .GetLoggerFromConfiguration<Program>("Logging:Serilog");
 
+            Log.Information("Starting host ...");
+
             if (args.Contains("/idp-config")) {
                 Log.Information("Generating IDP Config file...");
                 SeedDataGenerator.GenerateIdpConfigStub<Startup>(5000, 44305, true, new string[] { "EDennis.Samples.ColorApi" });

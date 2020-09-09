@@ -58,7 +58,7 @@ namespace EDennis.Samples.ColorApi {
             services.AddMockClaimsPrincipal(Configuration);
             services.AddHeaderToClaims(Configuration);
             services.AddCachedTransaction(Configuration);
-            services.AddHttpLogging(Configuration);
+            //services.AddHttpLogging(Configuration);
             services.AddScopedRequestMessage(Configuration);
 
 
@@ -81,12 +81,27 @@ namespace EDennis.Samples.ColorApi {
             app.UseRouting();
 
             app.UseMockClaimsPrincipalFor("/api/Rgb");
+            app.Use(async (context, next) => {
+                await next();
+            });
             app.UseAuthentication();
             app.UseHeaderToClaimsFor("/api/Rgb");
+            app.Use(async (context, next) => {
+                await next();
+            });
             app.UseAuthorization();
             app.UseCachedTransactionFor<ColorContext>("/api/Rgb");
-            app.UseHttpLoggingFor("/api/Rgb");
+            app.Use(async (context, next) => {
+                await next();
+            });
+            //app.UseHttpLoggingFor("/api/Rgb");
+            app.Use(async (context, next) => {
+                await next();
+            });
             app.UseScopedRequestMessageFor("/api/Rgb");
+            app.Use(async (context, next) => {
+                await next();
+            });
 
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();
