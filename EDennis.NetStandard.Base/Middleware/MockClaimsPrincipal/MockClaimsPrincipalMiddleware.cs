@@ -34,7 +34,7 @@ namespace EDennis.NetStandard.Base {
             //bypass if _mcp == null or X-Claims header is present.  
             //The latter indicates that regular authentication should proceed 
             //  and X-Claims will be added after authentication
-            if (mcp.Selected == null || context.Request.Headers.ContainsKey(HeaderToClaimsOptions.HEADER_KEY))
+            if (mcp.Selected == null || mcp.Selected == "" || context.Request.Headers.ContainsKey(HeaderToClaimsOptions.HEADER_KEY))
                 await _next(context);
             else {
                 var claims = mcp.Pool[mcp.Selected].ToClaimEnumerable();

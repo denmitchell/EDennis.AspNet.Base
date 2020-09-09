@@ -5,9 +5,9 @@
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  <!--<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>TRACE;DBCONTEXT_HASDATA</DefineConstants>
-  </PropertyGroup>
+  </PropertyGroup>-->
 
   
   <ItemGroup>

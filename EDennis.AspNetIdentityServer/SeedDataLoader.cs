@@ -43,7 +43,7 @@ namespace EDennis.AspNetIdentityServer {
         private readonly ILogger _logger;
 
 
-        public Regex FileProjectExtractor {get; set;} 
+        public Regex FileProjectExtractor { get; set; }
                 = new Regex($@"(?<={DEFAULT_SEED_DATA_DIR}\\)([A-Za-z0-9_.]+)(?=\.json)");
 
 
@@ -69,21 +69,21 @@ namespace EDennis.AspNetIdentityServer {
 
         private void Initialize() {
 
-                if (_args.Contains("/migrate"))
-                    MigrateDb(_host, _args);
+            if (_args.Contains("/migrate"))
+                MigrateDb(_host, _args);
 
-                var configs = Directory.EnumerateFiles(SeedDataDir);
+            var configs = Directory.EnumerateFiles(SeedDataDir);
 
-                if (_args.Contains("/all"))
-                    _projects = configs.Where(c => c != $"{SeedDataDir}\\{IdentityResourcesFile}")
-                        .Select(c => FileProjectExtractor.Match(c).Value);
-                else
-                    _projects = _args.Select(a => a[1..]).Where(a => configs.Contains($"{SeedDataDir}\\{a}.json"));
+            if (_args.Contains("/all"))
+                _projects = configs.Where(c => c != $"{SeedDataDir}\\{IdentityResourcesFile}")
+                    .Select(c => FileProjectExtractor.Match(c).Value);
+            else
+                _projects = _args.Select(a => a[1..]).Where(a => configs.Contains($"{SeedDataDir}\\{a}.json"));
 
-                _print = _args.Contains("/print");
-                _commit = _args.Contains("/commit");
-                
-                HasProjects = _projects.Count() == 0;
+            _print = _args.Contains("/print");
+            _commit = _args.Contains("/commit");
+
+            HasProjects = _projects.Count() > 0;
         }
 
 
@@ -94,7 +94,7 @@ namespace EDennis.AspNetIdentityServer {
 
             using var scope = _host.Services.CreateScope();
             var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-            var cxnString = config["DbContexts:DomainIdentityDbContext:ConnectionString"];
+            var cxnString = config["ConnectionStrings:DomainIdentityDbContext"];
 
             using var cxn = new SqlConnection(cxnString);
             cxn.Open();
@@ -173,8 +173,8 @@ namespace EDennis.AspNetIdentityServer {
                 _logger.LogInformation($"\tLoading Clients for {project} ...");
                 var clients = new List<ClientConfig>();
                 config.GetSection("Clients").Bind(clients);
-                if (clients.Count == 0)
-                    throw new Exception($"Could not find/bind Clients section in {SeedDataDir}\\{project}");
+                //if (clients.Count == 0)
+                //    throw new Exception($"Could not find/bind Clients section in {SeedDataDir}\\{project}");
 
                 foreach (var client in clients) {
                     _logger.LogInformation($"\t\tLoading {client.ClientId} ...");
@@ -221,10 +221,11 @@ namespace EDennis.AspNetIdentityServer {
             _logger.LogInformation($"\t\tAdding any missing application claim records ...");
 
             var roles = users.SelectMany(u => u.Roles)
+                .Distinct()
                 .ToDictionary(r => r, r => default(int));
 
             var applicationClaimRecords = context.ApplicationClaims
-                .Where(ac => ac.Application == project 
+                .Where(ac => ac.Application == project
                     && ac.ClaimTypePrefix == "role:")
                 .ToList();
 
@@ -245,6 +246,9 @@ namespace EDennis.AspNetIdentityServer {
 
             _logger.LogInformation($"\t\t\tAdding any missing organization records ...");
 
+            for (int i = 0; i < users.Count(); i++)
+                users[i].Organization = users[i].Organization ?? users[i].Email.Substring(users[i].Email.IndexOf('@') + 1);
+
             var orgs = users.Select(u => u.Organization).Distinct();
 
             var existingOrgs = context.Set<DomainOrganization>()
@@ -260,12 +264,12 @@ namespace EDennis.AspNetIdentityServer {
 
             _logger.LogInformation($"\t\t\tAdding any missing organization application records ...");
 
-            var existingOrgApps = context.OrganizationApplications
-                .Where(oa => oa.Application == project)
-                .Select(oa => oa.Organization);
+            var orgApps = orgs.Select(o => new DomainOrganizationApplication { Organization = o, Application = project });
 
-            var missingOrgApps = orgs.Except(existingOrgApps)
-                .Select(o => new DomainOrganizationApplication { Organization = o, Application = project });
+            var existingOrgApps = context.OrganizationApplications
+                .Where(oa => oa.Application == project);
+
+            var missingOrgApps = orgApps.Except(existingOrgApps);
 
             context.OrganizationApplications.AddRange(missingOrgApps);
             context.SaveChanges();
@@ -298,8 +302,8 @@ namespace EDennis.AspNetIdentityServer {
                         OrganizationConfirmed = entry.OrganizationConfirmed,
                         OrganizationAdmin = entry.OrganizationAdmin,
                         SuperAdmin = entry.SuperAdmin,
-                        LockoutBegin = entry.LockedOut ? DateTime.MinValue : default,
-                        LockoutEnd = entry.LockedOut ? DateTime.MaxValue : default
+                        LockoutBegin = entry.LockedOut ? DateTime.MinValue.ToUniversalTime() : default,
+                        LockoutEnd = entry.LockedOut ? DateTime.MaxValue.ToUniversalTime() : default
                     };
                     user.PasswordHash = HashPassword(entry.PlainTextPassword);
                     context.Users.Add(user);
@@ -321,6 +325,21 @@ namespace EDennis.AspNetIdentityServer {
                             context.SaveChanges();
                         }
                     }
+
+                _logger.LogInformation($"\t\t\tChecking application role records for {entry.Email} ...");
+
+                foreach (var role in entry.Roles)
+                    if (!context.UserClaims.Any(ur => ur.UserId == userId && ur.ClaimType == $"role:{project}" && ur.ClaimValue == role)) {
+                        context.UserClaims.Add(new IdentityUserClaim<int> {
+                            UserId = userId,
+                            ClaimType = $"role:{project}",
+                            ClaimValue = role
+                        });
+                        context.SaveChanges();
+                    }
+
+
+
             }
 
 

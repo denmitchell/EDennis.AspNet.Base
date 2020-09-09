@@ -27,7 +27,7 @@
     },
     "Drop/Create/Commit All": {
       "commandName": "Project",
-      "commandLineArgs": "/all /drop /migrate /commit /print",
+      "commandLineArgs": "/all /drop /migrate /commit /print /norun",
       "applicationUrl": "https://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

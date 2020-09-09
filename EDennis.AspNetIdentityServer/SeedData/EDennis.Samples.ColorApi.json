@@ -16,76 +16,71 @@
         "EDennis.Samples.ColorApi.RgbController.Patch*",
         "EDennis.Samples.ColorApi.RgbController.Delete*",
         "EDennis.Samples.ColorApi.RgbController.Check"
-      ],
-      "UserClaims": [
-        "name",
-        "phone",
-        "role"
-      ]
-    }
-  ],
-  "Clients": [
-    {
-      "Authority": "https://localhost:5000",
-      "ClientId": "EDennis.Samples.ColorApi",
-      "PlainTextSecret": "secret",
-      "AllowedGrantTypes": [
-        "client_credentials"
-      ],
-      "ClientClaimsPrefix": "",
-      "AllowedScopes": [
-        "EDennis.Samples.ColorApi.*"
       ]
     }
   ],
   "TestUsers": [
     {
       "Email": "maria@a.test",
-      "PlainTextPassword": "test",
-      "Organization": "a.test",
+      "OrganizationAdmin": true,
       "Roles": [
-        "Admin"
-      ],
-      "Claims": {
-        "name": [
-          "Maria"
-        ],
-        "phone": [
-          "999.555.1212"
-        ]
-      }
+        "admin"
+      ]
+    },
+    {
+      "Email": "john@a.test",
+      "PhoneNumber": "999.555.1313",
+      "Roles": [
+        "user"
+      ]
     },
     {
       "Email": "darius@b.test",
-      "PlainTextPassword": "test",
-      "Organization": "b.test",
+      "PhoneNumber": "888.555.1212",
+      "OrganizationAdmin": true,
       "Roles": [
-        "User"
-      ],
+        "user"
+      ]
+    },
+    {
+      "Email": "linda@b.test",
+      "PhoneNumber": "888.555.1313",
+      "Roles": [
+        "readonly"
+      ]
+    },
+    {
+      "Email": "pat@c.test",
+      "PhoneNumber": "777.555.1212",
+      "OrganizationAdmin": true,
+      "Roles": [
+        "user"
+      ]
+    },
+    {
+      "Email": "ebony@c.test",
+      "PhoneNumber": "777.555.1313",
+      "Roles": [
+        "readonly"
+      ]
+    },
+    {
+      "Email": "juan@a.test",
+      "PhoneNumber": "999.555.1414",
+      "SuperAdmin": true
+      /*Sample Custom Claims*/,
       "Claims": {
-        "name": [
-          "Darius"
-        ],
-        "phone": [
-          "888.555.1212"
+        "someClaimType": [
+          "someClaimValue"
         ]
       }
     },
     {
-      "Email": "pat@c.test",
-      "PlainTextPassword": "test",
-      "Organization": "c.test",
+      "Email": "james@b.test",
+      "PhoneNumber": "888.555.1414",
       "Roles": [
-        "Readonly"
-      ],
-      "Claims": {
-        "name": [
-          "Pat"
-        ],
-        "phone": [
-          "777.555.1212"
-        ]
-      }
+        "readonly"
+      ]
     }
   ]
 }

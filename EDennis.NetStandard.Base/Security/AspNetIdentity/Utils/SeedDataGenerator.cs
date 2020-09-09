@@ -141,11 +141,16 @@ namespace EDennis.NetStandard.Base {
             {
                 WriteApiResourcesSection(jw, project, scopes, apiUserClaims, isRazorUserApp);
 
-                if (childApiScopes.Any())
-                    WriteClientsSectionForClientCredentials(jw, project, idpUrl, childApiScopes);
-                if (isRazorUserApp)
-                    WriteClientsSectionForAuthorizationCode(jw, project, idpUrl, apiUrl);
-
+                if (childApiScopes.Any() || isRazorUserApp) {
+                    jw.WriteStartArray("Clients");
+                    {
+                        if (childApiScopes.Any())
+                            WriteClientsSectionForClientCredentials(jw, project, idpUrl, childApiScopes);
+                        if (isRazorUserApp)
+                            WriteClientsSectionForAuthorizationCode(jw, project, idpUrl, apiUrl);
+                    }
+                    jw.WriteEndArray();
+                }
 
                 WriteTestUsersSection(jw, testUsers);
             }
@@ -271,90 +276,77 @@ namespace EDennis.NetStandard.Base {
 
 
         private static void WriteClientsSectionForClientCredentials(Utf8JsonWriter jw, string project, string idpUrl, string[] childApiScopes) {
-            jw.WriteStartArray("Clients");
+            jw.WriteStartObject();
             {
-                jw.WriteStartObject();
+                jw.WriteString("Authority", idpUrl);
+                jw.WriteString("ClientId", $"{project}:API");
+                jw.WriteString("PlainTextSecret", DEFAULT_SECRET);
+                jw.WriteStartArray("AllowedGrantTypes");
                 {
-                    jw.WriteString("Authority", idpUrl);
-                    jw.WriteString("ClientId", $"{project}:API");
-                    jw.WriteString("PlainTextSecret", DEFAULT_SECRET);
-                    jw.WriteStartArray("AllowedGrantTypes");
-                    {
-                        jw.WriteStringValue("client_credentials");
-                    }
-                    jw.WriteEndArray();
-                    jw.WriteString("ClientClaimsPrefix", DEFAULT_CLIENT_CLAIMS_PREFIX);
-                    jw.WriteStartArray("AllowedScopes");
-                    {
-                        foreach (var scope in childApiScopes) {
-                            jw.WriteStringValue(scope);
-                        }
-                    }
-                    jw.WriteEndArray();
-                    jw.WriteStartArray("Applications");
-                    {
-                        jw.WriteStringValue(project);
-                    }
-                    jw.WriteEndArray();
+                    jw.WriteStringValue("client_credentials");
                 }
-                jw.WriteEndObject();
+                jw.WriteEndArray();
+                jw.WriteString("ClientClaimsPrefix", DEFAULT_CLIENT_CLAIMS_PREFIX);
+                jw.WriteStartArray("AllowedScopes");
+                {
+                    foreach (var scope in childApiScopes) {
+                        jw.WriteStringValue(scope);
+                    }
+                }
+                jw.WriteEndArray();
             }
-            jw.WriteEndArray();
+            jw.WriteEndObject();
         }
 
         private static void WriteClientsSectionForAuthorizationCode(Utf8JsonWriter jw, string project, string idpUrl, string apiUrl) {
-            jw.WriteStartArray("Clients");
+            jw.WriteStartObject();
             {
-                jw.WriteStartObject();
+                jw.WriteString("Authority", idpUrl);
+                jw.WriteString("ClientId", $"{project}:ID");
+                jw.WriteString("PlainTextSecret", DEFAULT_SECRET);
+                jw.WriteStartArray("AllowedGrantTypes");
                 {
-                    jw.WriteString("Authority", idpUrl);
-                    jw.WriteString("ClientId", $"{project}:ID");
-                    jw.WriteString("PlainTextSecret", DEFAULT_SECRET);
-                    jw.WriteStartArray("AllowedGrantTypes");
-                    {
-                        jw.WriteStringValue("code");
-                        jw.WriteStringValue("client_credentials");
-                    }
-                    jw.WriteEndArray();
-                    jw.WriteBoolean("RequireConsent", false);
-                    jw.WriteBoolean("RequirePkce", true);
-                    jw.WriteBoolean("AllowOfflineAccess", true);
-                    jw.WriteString("ClientClaimsPrefix", DEFAULT_CLIENT_CLAIMS_PREFIX);
-                    jw.WriteStartArray("AllowedScopes");
-                    {
-                        jw.WriteStringValue("openid");
-                        jw.WriteStringValue("profile");
-                        jw.WriteStringValue("name");
-                        jw.WriteStringValue("email");
-                        jw.WriteStringValue("email_confirmed");
-                        jw.WriteStringValue("offline_access");
-                        jw.WriteStringValue("phone_number");
-                        jw.WriteStringValue("organization");
-                        jw.WriteStringValue("organization_confirmed");
-                        jw.WriteStringValue("organization_admin_for");
-                        jw.WriteStringValue("super_admin");
-                        jw.WriteStringValue($"role:{project}");
-                    }
-                    jw.WriteEndArray();
-                    jw.WriteStartArray("RedirectUris");
-                    {
-                        jw.WriteStringValue($"{apiUrl}/signin-oidc");
-                    }
-                    jw.WriteEndArray();
-                    jw.WriteStartArray("PostLogoutRedirectUris");
-                    {
-                        jw.WriteStringValue($"{apiUrl}/signout-callback-oidc");
-                    }
-                    jw.WriteEndArray();
-                    jw.WriteStartArray("Applications");
-                    {
-                        jw.WriteStringValue(project);
-                    }
-                    jw.WriteEndArray();
+                    jw.WriteStringValue("code");
+                    //jw.WriteStringValue("client_credentials");
                 }
-                jw.WriteEndObject();
+                jw.WriteEndArray();
+                jw.WriteBoolean("RequireConsent", false);
+                jw.WriteBoolean("RequirePkce", true);
+                jw.WriteBoolean("AllowOfflineAccess", true);
+                jw.WriteString("ClientClaimsPrefix", DEFAULT_CLIENT_CLAIMS_PREFIX);
+                jw.WriteStartArray("AllowedScopes");
+                {
+                    jw.WriteStringValue("openid");
+                    jw.WriteStringValue("profile");
+                    jw.WriteStringValue("name");
+                    jw.WriteStringValue("email");
+                    jw.WriteStringValue("email_confirmed");
+                    jw.WriteStringValue("offline_access");
+                    jw.WriteStringValue("phone_number");
+                    jw.WriteStringValue("organization");
+                    jw.WriteStringValue("organization_confirmed");
+                    jw.WriteStringValue("organization_admin_for");
+                    jw.WriteStringValue("super_admin");
+                    jw.WriteStringValue($"role:{project}");
+                }
+                jw.WriteEndArray();
+                jw.WriteStartArray("RedirectUris");
+                {
+                    jw.WriteStringValue($"{apiUrl}/signin-oidc");
+                }
+                jw.WriteEndArray();
+                jw.WriteStartArray("PostLogoutRedirectUris");
+                {
+                    jw.WriteStringValue($"{apiUrl}/signout-callback-oidc");
+                }
+                jw.WriteEndArray();
+                jw.WriteStartArray("Applications");
+                {
+                    jw.WriteStringValue(project);
+                }
+                jw.WriteEndArray();
             }
-            jw.WriteEndArray();
+            jw.WriteEndObject();
         }
 
 

@@ -12,24 +12,34 @@
       ],
       "UserClaims": [
         "name",
-        "email",
-        "email_confirmed",
-        "phone_number",
+        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
         "organization",
-        "organization_confirmed",
+        "role::EDennis.Samples.ColorApp.Razor",
         "organization_admin_for",
-        "super_admin",
-        "role:EDennis.Samples.ColorApp.Razor"
+        "super_admin"
       ]
     }
   ],
   "Clients": [
     {
       "Authority": "https://localhost:5000",
-      "ClientId": "EDennis.Samples.ColorApp.Razor",
+      "ClientId": "EDennis.Samples.ColorApp.Razor:API",
       "PlainTextSecret": "secret",
       "AllowedGrantTypes": [
-        "code"
+        "client_credentials"
+      ],
+      "ClientClaimsPrefix": "",
+      "AllowedScopes": [
+        "EDennis.Samples.ColorApi"
+      ]
+    },
+    {
+      "Authority": "https://localhost:5000",
+      "ClientId": "EDennis.Samples.ColorApp.Razor:ID",
+      "PlainTextSecret": "secret",
+      "AllowedGrantTypes": [
+        "code",
+        "client_credentials"
       ],
       "RequireConsent": false,
       "RequirePkce": true,

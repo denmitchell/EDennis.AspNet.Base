@@ -12,15 +12,30 @@
       ],
       "UserClaims": [
         "name",
-        "phone",
-        "role"
+        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
+        "organization",
+        "role::EDennis.Samples.ColorApp.Razor",
+        "organization_admin_for",
+        "super_admin"
       ]
     }
   ],
   "Clients": [
     {
       "Authority": "https://localhost:5000",
-      "ClientId": "EDennis.Samples.ColorApp.Razor",
+      "ClientId": "EDennis.Samples.ColorApp.Razor:API",
+      "PlainTextSecret": "secret",
+      "AllowedGrantTypes": [
+        "client_credentials"
+      ],
+      "ClientClaimsPrefix": "",
+      "AllowedScopes": [
+        "EDennis.Samples.ColorApi"
+      ]
+    },
+    {
+      "Authority": "https://localhost:5000",
+      "ClientId": "EDennis.Samples.ColorApp.Razor:ID",
       "PlainTextSecret": "secret",
       "AllowedGrantTypes": [
         "code"
@@ -30,69 +45,92 @@
       "AllowOfflineAccess": true,
       "ClientClaimsPrefix": "",
       "AllowedScopes": [
-        "EDennis.Samples.ColorApp.Razor.*",
         "openid",
         "profile",
         "name",
         "email",
-        "role"
+        "email_confirmed",
+        "offline_access",
+        "phone_number",
+        "organization",
+        "organization_confirmed",
+        "organization_admin_for",
+        "super_admin",
+        "role:EDennis.Samples.ColorApp.Razor"
       ],
       "RedirectUris": [
         "https://localhost:44305/signin-oidc"
       ],
       "PostLogoutRedirectUris": [
         "https://localhost:44305/signout-callback-oidc"
+      ],
+      "Applications": [
+        "EDennis.Samples.ColorApp.Razor"
       ]
     }
   ],
   "TestUsers": [
     {
       "Email": "maria@a.test",
-      "PlainTextPassword": "test",
-      "Organization": "a.test",
+      "OrganizationAdmin": true,
       "Roles": [
-        "Admin"
-      ],
-      "Claims": {
-        "name": [
-          "Maria"
-        ],
-        "phone": [
-          "999.555.1212"
-        ]
-      }
+        "admin"
+      ]
+    },
+    {
+      "Email": "john@a.test",
+      "PhoneNumber": "999.555.1313",
+      "Roles": [
+        "user"
+      ]
     },
     {
       "Email": "darius@b.test",
-      "PlainTextPassword": "test",
-      "Organization": "b.test",
+      "PhoneNumber": "888.555.1212",
+      "OrganizationAdmin": true,
       "Roles": [
-        "User"
-      ],
+        "user"
+      ]
+    },
+    {
+      "Email": "linda@b.test",
+      "PhoneNumber": "888.555.1313",
+      "Roles": [
+        "readonly"
+      ]
+    },
+    {
+      "Email": "pat@c.test",
+      "PhoneNumber": "777.555.1212",
+      "OrganizationAdmin": true,
+      "Roles": [
+        "user"
+      ]
+    },
+    {
+      "Email": "ebony@c.test",
+      "PhoneNumber": "777.555.1313",
+      "Roles": [
+        "readonly"
+      ]
+    },
+    {
+      "Email": "juan@a.test",
+      "PhoneNumber": "999.555.1414",
+      "SuperAdmin": true
+      /*Sample Custom Claims*/,
       "Claims": {
-        "name": [
-          "Darius"
-        ],
-        "phone": [
-          "888.555.1212"
+        "someClaimType": [
+          "someClaimValue"
         ]
       }
     },
     {
-      "Email": "pat@c.test",
-      "PlainTextPassword": "test",
-      "Organization": "c.test",
+      "Email": "james@b.test",
+      "PhoneNumber": "888.555.1414",
       "Roles": [
-        "Readonly"
-      ],
-      "Claims": {
-        "name": [
-          "Pat"
-        ],
-        "phone": [
-          "777.555.1212"
-        ]
-      }
+        "readonly"
+      ]
     }
   ]
 }

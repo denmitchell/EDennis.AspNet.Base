@@ -1,12 +1,10 @@
 ﻿using EDennis.NetStandard.Base;
 using IdentityServer4.EntityFramework.DbContexts;
-using IdentityServer4.Services;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Linq;
 
 namespace EDennis.NetApp.Base {
@@ -41,12 +39,11 @@ namespace EDennis.NetApp.Base {
         ///                "organization_admin_for",
         ///                "super_admin",
         ///                "role:EDennis.Samples.ColorApp.Server",
-        ///                "locked"
         ///            ],
         ///            "Scopes": [
         ///                "EDennis.Samples.ColorApp.Server",
         ///            ]
-        ///    }
+        ///        }
         ///    ]
         ///}
         ///  

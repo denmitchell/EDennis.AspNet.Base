@@ -19,36 +19,19 @@
       ]
     }
   ],
-  "Clients": [
-    {
-      "Authority": "https://localhost:5000",
-      "ClientId": "EDennis.Samples.ColorApi",
-      "PlainTextSecret": "secret",
-      "AllowedGrantTypes": [
-        "client_credentials"
-      ],
-      "ClientClaimsPrefix": "",
-      "AllowedScopes": [
-        "EDennis.Samples.ColorApi.*"
-      ],
-      "Applications": [
-        "EDennis.Samples.ColorApi"
-      ]
-    }
-  ],
   "TestUsers": [
     {
       "Email": "maria@a.test",
       "OrganizationAdmin": true,
       "Roles": [
-        "Admin"
+        "admin"
       ]
     },
     {
       "Email": "john@a.test",
       "PhoneNumber": "999.555.1313",
       "Roles": [
-        "User"
+        "user"
       ]
     },
     {
@@ -56,14 +39,14 @@
       "PhoneNumber": "888.555.1212",
       "OrganizationAdmin": true,
       "Roles": [
-        "User"
+        "user"
       ]
     },
     {
       "Email": "linda@b.test",
       "PhoneNumber": "888.555.1313",
       "Roles": [
-        "Readonly"
+        "readonly"
       ]
     },
     {
@@ -71,14 +54,14 @@
       "PhoneNumber": "777.555.1212",
       "OrganizationAdmin": true,
       "Roles": [
-        "User"
+        "user"
       ]
     },
     {
       "Email": "ebony@c.test",
       "PhoneNumber": "777.555.1313",
       "Roles": [
-        "Readonly"
+        "readonly"
       ]
     },
     {
@@ -87,8 +70,8 @@
       "SuperAdmin": true
       /*Sample Custom Claims*/,
       "Claims": {
-        "SomeClaimType": [
-          "SomeClaimValue"
+        "someClaimType": [
+          "someClaimValue"
         ]
       }
     },
@@ -96,7 +79,7 @@
       "Email": "james@b.test",
       "PhoneNumber": "888.555.1414",
       "Roles": [
-        "Readonly"
+        "readonly"
       ]
     }
   ]

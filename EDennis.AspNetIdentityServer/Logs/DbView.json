@@ -15,30 +15,11 @@
       "EDennis.Samples.ColorApi.*.Post*",
       "EDennis.Samples.ColorApi.*.Get*",
       "EDennis.Samples.ColorApi.*"
-    ],
-    "Claims": [
-      "role",
-      "phone",
-      "name"
     ]
   },
   "Clients": [
     {
-      "ClientId": "EDennis.Samples.ColorApi",
-      "RequireConsent": false,
-      "RequirePkce": true,
-      "AllowAccessTokensViaBrowser": false,
-      "AllowOfflineAccess": false,
-      "ClientClaimsPrefix": "",
-      "GrantTypes": [
-        "client_credentials"
-      ],
-      "Scopes": [
-        "EDennis.Samples.ColorApi.*"
-      ]
-    },
-    {
-      "ClientId": "EDennis.Samples.ColorApp.Razor",
+      "ClientId": "EDennis.Samples.ColorApp.Razor:ID",
       "RequireConsent": false,
       "RequirePkce": true,
       "AllowAccessTokensViaBrowser": false,
@@ -54,37 +35,49 @@
         "https://localhost:44305/signout-callback-oidc"
       ],
       "Scopes": [
-        "role",
-        "email",
-        "name",
-        "profile",
         "openid",
-        "EDennis.Samples.ColorApp.Razor.*"
+        "profile",
+        "name",
+        "email",
+        "offline_access",
+        "phone_number",
+        "organization",
+        "organization_confirmed",
+        "organization_admin_for",
+        "super_admin",
+        "role:EDennis.Samples.ColorApp.Razor",
+        "email_confirmed"
+      ],
+      "Applications": [
+        "EDennis.Samples.ColorApp.Razor"
       ]
     },
     {
-      "ClientId": "EDennis.Samples.ColorApp.Server",
+      "ClientId": "EDennis.Samples.ColorApp.Razor:API",
       "RequireConsent": false,
       "RequirePkce": true,
       "AllowAccessTokensViaBrowser": false,
-      "AllowOfflineAccess": true,
+      "AllowOfflineAccess": false,
       "ClientClaimsPrefix": "",
       "GrantTypes": [
-        "code"
-      ],
-      "RedirectUris": [
-        "https://localhost:44336/signin-oidc"
-      ],
-      "PostLogoutRedirectUris": [
-        "https://localhost:44336/signout-callback-oidc"
+        "client_credentials"
       ],
       "Scopes": [
-        "role",
-        "email",
-        "name",
-        "profile",
-        "openid",
-        "EDennis.Samples.ColorApp.Server.*"
+        "EDennis.Samples.ColorApi"
+      ]
+    },
+    {
+      "ClientId": "EDennis.Samples.ColorApp.Server:API",
+      "RequireConsent": false,
+      "RequirePkce": true,
+      "AllowAccessTokensViaBrowser": false,
+      "AllowOfflineAccess": false,
+      "ClientClaimsPrefix": "",
+      "GrantTypes": [
+        "client_credentials"
+      ],
+      "Scopes": [
+        "EDennis.Samples.ColorApi"
       ]
     }
   ],
@@ -94,79 +87,184 @@
       "UserName": "maria@a.test",
       "Email": "maria@a.test",
       "EmailConfirmed": true,
-      "LockoutEnabled": false,
+      "PhoneNumber": "999.555.1212",
+      "PhoneNumberConfirmed": true,
+      "LockoutBegin": "0001-01-01T05:00:00Z",
+      "LockoutEnd": "9999-12-31T23:59:59.9999999Z",
       "Organization": "a.test",
-      "Roles": {
-        "EDennis.Samples.ColorApi": [
-          "Admin"
-        ],
-        "EDennis.Samples.ColorApp.Razor": [
-          "Admin"
-        ],
-        "EDennis.Samples.ColorApp.Server": [
-          "Admin"
-        ]
-      },
+      "OrganizationConfirmed": true,
+      "OrganizationAdmin": true,
       "Claims": {
-        "name": [
-          "Maria"
+        "role:EDennis.Samples.ColorApi": [
+          "admin"
         ],
-        "phone": [
-          "999.555.1212"
+        "role:EDennis.Samples.ColorApp.Razor": [
+          "admin"
+        ],
+        "role:EDennis.Samples.ColorApp.Server": [
+          "admin"
         ]
       }
     },
     {
       "Id": 2,
-      "UserName": "darius@b.test",
-      "Email": "darius@b.test",
+      "UserName": "john@a.test",
+      "Email": "john@a.test",
       "EmailConfirmed": true,
-      "LockoutEnabled": false,
-      "Organization": "b.test",
-      "Roles": {
-        "EDennis.Samples.ColorApi": [
-          "User"
-        ],
-        "EDennis.Samples.ColorApp.Razor": [
-          "User"
-        ],
-        "EDennis.Samples.ColorApp.Server": [
-          "User"
-        ]
-      },
+      "PhoneNumber": "999.555.1313",
+      "PhoneNumberConfirmed": true,
+      "LockoutBegin": "0001-01-01T05:00:00Z",
+      "LockoutEnd": "9999-12-31T23:59:59.9999999Z",
+      "Organization": "a.test",
+      "OrganizationConfirmed": true,
+      "OrganizationAdmin": false,
       "Claims": {
-        "name": [
-          "Darius"
+        "role:EDennis.Samples.ColorApi": [
+          "user"
         ],
-        "phone": [
-          "888.555.1212"
+        "role:EDennis.Samples.ColorApp.Razor": [
+          "user"
+        ],
+        "role:EDennis.Samples.ColorApp.Server": [
+          "user"
         ]
       }
     },
     {
       "Id": 3,
+      "UserName": "darius@b.test",
+      "Email": "darius@b.test",
+      "EmailConfirmed": true,
+      "PhoneNumber": "888.555.1212",
+      "PhoneNumberConfirmed": true,
+      "LockoutBegin": "0001-01-01T05:00:00Z",
+      "LockoutEnd": "9999-12-31T23:59:59.9999999Z",
+      "Organization": "b.test",
+      "OrganizationConfirmed": true,
+      "OrganizationAdmin": true,
+      "Claims": {
+        "role:EDennis.Samples.ColorApi": [
+          "user"
+        ],
+        "role:EDennis.Samples.ColorApp.Razor": [
+          "user"
+        ],
+        "role:EDennis.Samples.ColorApp.Server": [
+          "user"
+        ]
+      }
+    },
+    {
+      "Id": 4,
+      "UserName": "linda@b.test",
+      "Email": "linda@b.test",
+      "EmailConfirmed": true,
+      "PhoneNumber": "888.555.1313",
+      "PhoneNumberConfirmed": true,
+      "LockoutBegin": "0001-01-01T05:00:00Z",
+      "LockoutEnd": "9999-12-31T23:59:59.9999999Z",
+      "Organization": "b.test",
+      "OrganizationConfirmed": true,
+      "OrganizationAdmin": false,
+      "Claims": {
+        "role:EDennis.Samples.ColorApi": [
+          "readonly"
+        ],
+        "role:EDennis.Samples.ColorApp.Razor": [
+          "readonly"
+        ],
+        "role:EDennis.Samples.ColorApp.Server": [
+          "readonly"
+        ]
+      }
+    },
+    {
+      "Id": 5,
       "UserName": "pat@c.test",
       "Email": "pat@c.test",
       "EmailConfirmed": true,
-      "LockoutEnabled": false,
+      "PhoneNumber": "777.555.1212",
+      "PhoneNumberConfirmed": true,
+      "LockoutBegin": "0001-01-01T05:00:00Z",
+      "LockoutEnd": "9999-12-31T23:59:59.9999999Z",
       "Organization": "c.test",
-      "Roles": {
-        "EDennis.Samples.ColorApi": [
-          "Readonly"
-        ],
-        "EDennis.Samples.ColorApp.Razor": [
-          "Readonly"
-        ],
-        "EDennis.Samples.ColorApp.Server": [
-          "Readonly"
-        ]
-      },
+      "OrganizationConfirmed": true,
+      "OrganizationAdmin": true,
       "Claims": {
-        "name": [
-          "Pat"
+        "role:EDennis.Samples.ColorApi": [
+          "user"
         ],
-        "phone": [
-          "777.555.1212"
+        "role:EDennis.Samples.ColorApp.Razor": [
+          "user"
+        ],
+        "role:EDennis.Samples.ColorApp.Server": [
+          "user"
+        ]
+      }
+    },
+    {
+      "Id": 6,
+      "UserName": "ebony@c.test",
+      "Email": "ebony@c.test",
+      "EmailConfirmed": true,
+      "PhoneNumber": "777.555.1313",
+      "PhoneNumberConfirmed": true,
+      "LockoutBegin": "0001-01-01T05:00:00Z",
+      "LockoutEnd": "9999-12-31T23:59:59.9999999Z",
+      "Organization": "c.test",
+      "OrganizationConfirmed": true,
+      "OrganizationAdmin": false,
+      "Claims": {
+        "role:EDennis.Samples.ColorApi": [
+          "readonly"
+        ],
+        "role:EDennis.Samples.ColorApp.Razor": [
+          "readonly"
+        ],
+        "role:EDennis.Samples.ColorApp.Server": [
+          "readonly"
+        ]
+      }
+    },
+    {
+      "Id": 7,
+      "UserName": "juan@a.test",
+      "Email": "juan@a.test",
+      "EmailConfirmed": true,
+      "PhoneNumber": "999.555.1414",
+      "PhoneNumberConfirmed": true,
+      "LockoutBegin": "0001-01-01T05:00:00Z",
+      "LockoutEnd": "9999-12-31T23:59:59.9999999Z",
+      "Organization": "a.test",
+      "OrganizationConfirmed": true,
+      "OrganizationAdmin": false,
+      "Claims": {
+        "someClaimType": [
+          "someClaimValue"
+        ]
+      }
+    },
+    {
+      "Id": 8,
+      "UserName": "james@b.test",
+      "Email": "james@b.test",
+      "EmailConfirmed": true,
+      "PhoneNumber": "888.555.1414",
+      "PhoneNumberConfirmed": true,
+      "LockoutBegin": "0001-01-01T05:00:00Z",
+      "LockoutEnd": "9999-12-31T23:59:59.9999999Z",
+      "Organization": "b.test",
+      "OrganizationConfirmed": true,
+      "OrganizationAdmin": false,
+      "Claims": {
+        "role:EDennis.Samples.ColorApi": [
+          "readonly"
+        ],
+        "role:EDennis.Samples.ColorApp.Razor": [
+          "readonly"
+        ],
+        "role:EDennis.Samples.ColorApp.Server": [
+          "readonly"
         ]
       }
     }
