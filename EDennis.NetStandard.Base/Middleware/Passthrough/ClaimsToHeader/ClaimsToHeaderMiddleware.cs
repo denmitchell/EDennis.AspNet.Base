@@ -31,18 +31,21 @@ namespace EDennis.NetStandard.Base {
     public class ClaimsToHeaderMiddleware {
         private readonly RequestDelegate _next;
         private readonly ClaimsToHeaderOptions _settings;
+        private readonly ILogger<ClaimsToHeaderMiddleware> _logger;
         private readonly List<string> _claimTypes = new List<string>();
 
         public ClaimsToHeaderMiddleware(RequestDelegate next,
             IOptionsMonitor<ClaimsToHeaderOptions> settings,
-            IConfiguration config) {
+            IConfiguration config, 
+            ILogger<ClaimsToHeaderMiddleware> logger) {
             _next = next;
             _settings = settings.CurrentValue;
-            config.BindSectionOrThrow(_settings.ClaimTypesConfigKey,_claimTypes);
+            _logger = logger;
+            _logger.LogDebug("ClaimsToHeaderMiddleware constructed with {@ClaimsToHeaderOptions}", _settings);
+            config.BindSectionOrThrow(_settings.ClaimTypesConfigKey,_claimTypes,_logger);
         }
 
-        public async Task InvokeAsync(HttpContext context,
-            ILogger<ClaimsToHeaderMiddleware> logger) {
+        public async Task InvokeAsync(HttpContext context) {
 
             var req = context.Request;
             var enabled = _settings.Enabled;
@@ -51,21 +54,26 @@ namespace EDennis.NetStandard.Base {
                 await _next(context);
             } else {
 
-                if (!context.User.Identity.IsAuthenticated) {
-                    var ex = new SecurityException($"Cannot invoke ClaimsToHeaderMiddleware with unauthenticated user");
-                    logger.LogError(ex, ex.Message);
-                    throw ex;
+                using (_logger.BeginScope("ClaimsToHeaderMiddleware executing with {@Claims}.", context.User.Claims)) {
+
+                    if (!context.User.Identity.IsAuthenticated) {
+                        var ex = new SecurityException($"Cannot invoke ClaimsToHeaderMiddleware with unauthenticated user");
+                        _logger.LogError(ex, ex.Message);
+                        throw ex;
+                    }
+
+                    var packedClaims = context.User.Claims
+                        .Where(c => _claimTypes.Contains(c.Type))
+                        .PackKeyValues(c => (c.Type, c.Value));
+
+                    _logger.LogDebug("Claims packed into Header ({HeaderKey}, {HeaderValue})", HeaderToClaimsOptions.HEADER_KEY, packedClaims);
+
+                    if (req.Headers.ContainsKey(HeaderToClaimsOptions.HEADER_KEY))
+                        req.Headers[HeaderToClaimsOptions.HEADER_KEY] = packedClaims;
+                    else
+                        req.Headers.Add(HeaderToClaimsOptions.HEADER_KEY, packedClaims);
+
                 }
-
-                var packedClaims = context.User.Claims
-                    .Where(c=>_claimTypes.Contains(c.Type))
-                    .PackKeyValues(c => (c.Type, c.Value));
-
-                if (req.Headers.ContainsKey(HeaderToClaimsOptions.HEADER_KEY))
-                    req.Headers[HeaderToClaimsOptions.HEADER_KEY] = packedClaims;
-                else
-                    req.Headers.Add(HeaderToClaimsOptions.HEADER_KEY, packedClaims);
-
 
                 await _next(context);
             }

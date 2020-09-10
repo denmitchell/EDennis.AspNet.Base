@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -16,13 +17,16 @@ namespace EDennis.NetStandard.Base {
         private readonly RequestDelegate _next;
         private readonly TransactionCache<TContext> _cache;
         private readonly IOptionsMonitor<CachedTransactionOptions> _options;
+        private readonly ILogger<CachedTransactionMiddleware<TContext>> _logger;
         private string[] _enabledForClaims;
 
         public CachedTransactionMiddleware(RequestDelegate next, TransactionCache<TContext> cache,
-            IOptionsMonitor<CachedTransactionOptions> options) {
+            IOptionsMonitor<CachedTransactionOptions> options, ILogger<CachedTransactionMiddleware<TContext>> logger) {
             _next = next;
             _cache = cache;
             _options = options;
+            _logger = logger;
+            _logger.LogDebug("CachedTransactionMiddleware for {TContextName} constructed with {@CachedTransactionOptions}", typeof(TContext).Name, options.CurrentValue);
             UpdateEnabledForClaims(options.CurrentValue.EnabledForClaims);
             _options.OnChange(e => UpdateEnabledForClaims(e.EnabledForClaims));
         }
@@ -34,22 +38,29 @@ namespace EDennis.NetStandard.Base {
             if (claims != null && _enabledForClaims.Any(e => claims.Any(c => $"{c.Type}|{c.Value}" == e))) {
                 var cookieValue = GetOrAddCookie(context, out bool cookieAdded);
 
-                var dbContextProvider = context.RequestServices.GetRequiredService<DbContextProvider<TContext>>();
-                _cache.ReplaceDbContext(Guid.Parse(cookieValue), dbContextProvider);
+                using (_logger.BeginScope("CachedTransactionMiddleware for {TContextName} executing with {@Claims}.", typeof(TContext).Name, context.User.Claims)) {
 
-                if (cookieAdded)
-                    context.Response.OnStarting(state => {
-                        var httpContext = (HttpContext)state;
-                        httpContext.Response.Cookies.Append(CachedTransactionOptions.COOKIE_KEY, cookieValue);
-                        return Task.CompletedTask;
-                    }, context);
+                    var dbContextProvider = context.RequestServices.GetRequiredService<DbContextProvider<TContext>>();
+                    _logger.LogTrace("Replacing DbContext.", typeof(TContext).Name);
+                    _cache.ReplaceDbContext(Guid.Parse(cookieValue), dbContextProvider);
 
-                if (context.Request.Path.Value.EndsWith(CachedTransactionOptions.ROLLBACK_PATH)) {
-                    await _cache.RollbackAsync(Guid.Parse(cookieValue));
-                    return;
-                } else if (context.Request.Path.Value.EndsWith(CachedTransactionOptions.COMMIT_PATH)) { 
-                    await _cache.CommitAsync(Guid.Parse(cookieValue));
-                    return;
+                    if (cookieAdded)
+                        context.Response.OnStarting(state => {
+                            var httpContext = (HttpContext)state;
+                            _logger.LogDebug("Setting cookie ({CookieKey}, {CookieValue}).", typeof(TContext).Name, CachedTransactionOptions.COOKIE_KEY, cookieValue);
+                            httpContext.Response.Cookies.Append(CachedTransactionOptions.COOKIE_KEY, cookieValue);
+                            return Task.CompletedTask;
+                        }, context);
+
+                    if (context.Request.Path.Value.EndsWith(CachedTransactionOptions.ROLLBACK_PATH)) {
+                        _logger.LogDebug("Initiating rollback.", typeof(TContext).Name);
+                        await _cache.RollbackAsync(Guid.Parse(cookieValue));
+                        return;
+                    } else if (context.Request.Path.Value.EndsWith(CachedTransactionOptions.COMMIT_PATH)) {
+                        _logger.LogDebug("Initiating commit.", typeof(TContext).Name);
+                        await _cache.CommitAsync(Guid.Parse(cookieValue));
+                        return;
+                    }
                 }
 
                 await _next(context);

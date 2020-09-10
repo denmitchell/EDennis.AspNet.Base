@@ -225,3 +225,7 @@ System.ArgumentException: The 'CallbackPath' option must be provided. (Parameter
 2020-09-09 16:23:28.320 -04:00 [INF] Hosting environment: Development
 2020-09-09 16:23:28.321 -04:00 [INF] Content root path: C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp.Razor
 2020-09-09 16:23:29.351 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/Rgb  
+2020-09-10 02:53:46.132 -04:00 [INF] Starting host ...
+2020-09-10 02:53:47.712 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-10 02:56:32.759 -04:00 [INF] Starting host ...
+2020-09-10 02:56:33.997 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
