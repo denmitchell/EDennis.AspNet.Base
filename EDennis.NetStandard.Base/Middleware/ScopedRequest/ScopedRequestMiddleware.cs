@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using System;
@@ -19,26 +20,46 @@ namespace EDennis.NetStandard.Base {
     public class ScopedRequestMiddleware {
 
         private readonly RequestDelegate _next;
+        private readonly ILogger<ScopedRequestMessage> _logger;
         private readonly ScopedRequestMessageOptions _options;
 
-        public ScopedRequestMiddleware(RequestDelegate next, IOptionsMonitor<ScopedRequestMessageOptions> options) {
+        public ScopedRequestMiddleware(RequestDelegate next, 
+            IOptionsMonitor<ScopedRequestMessageOptions> options, 
+            ILogger<ScopedRequestMessage> logger) {
             _options = options.CurrentValue;
             _next = next;
+            _logger = logger;
+
+            _logger.LogDebug("ScopedRequestMiddleware constructed with {@ScopedRequestMessageOptions}", _options);
+
         }
 
-        public async Task InvokeAsync(HttpContext context, ScopedRequestMessage scopedRequestMessage,
-            IConfiguration config) {
+        public async Task InvokeAsync(HttpContext context, ScopedRequestMessage scopedRequestMessage) {
 
-            context.Request.Cookies
+
+            using (_logger.BeginScope("ScopedRequestMiddleware executing for user with Claims: {@Claims}.", context.User.Claims)) {
+
+                var cookies = context.Request.Cookies
                 .Where(c => _options.CookiesToCapture.Contains(c.Key, StringComparer.OrdinalIgnoreCase))
-                .ToList()
-                .ForEach(c => scopedRequestMessage.AddCookie(c.Key, c.Value));
+                .ToList();
 
-            context.Request.Headers
-                .Where(h => _options.HeadersToCapture.Contains(h.Key, StringComparer.OrdinalIgnoreCase))
-                .ToList()
-                .ForEach(h => scopedRequestMessage.AddHeader(h.Key, h.Value));
- 
+                _logger.LogDebug("Adding {@Cookies}", cookies);
+
+                foreach (var cookie in cookies)
+                    scopedRequestMessage.AddCookie(cookie.Key, cookie.Value);
+
+
+                var headers = context.Request.Headers
+                    .Where(h => _options.HeadersToCapture.Contains(h.Key, StringComparer.OrdinalIgnoreCase))
+                    .ToList();
+
+                _logger.LogDebug("Adding {@Headers}", headers);
+
+                foreach(var header in headers)
+                    scopedRequestMessage.AddHeader(header.Key, header.Value);
+
+            }
+            
             await _next(context); 
 
         }

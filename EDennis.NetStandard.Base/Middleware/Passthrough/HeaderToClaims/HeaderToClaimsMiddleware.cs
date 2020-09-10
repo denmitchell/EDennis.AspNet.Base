@@ -28,11 +28,15 @@ namespace EDennis.NetStandard.Base {
     public class HeaderToClaimsMiddleware {
         private readonly RequestDelegate _next;
         private readonly HeaderToClaimsOptions _settings;
+        private readonly ILogger<HeaderToClaimsMiddleware> _logger;
 
         public HeaderToClaimsMiddleware(RequestDelegate next,
-            IOptionsMonitor<HeaderToClaimsOptions> settings) {
+            IOptionsMonitor<HeaderToClaimsOptions> settings, 
+            ILogger<HeaderToClaimsMiddleware> logger) {
             _next = next;
             _settings = settings.CurrentValue;
+            _logger = logger;
+            _logger.LogDebug("HeaderToClaimsMiddleware constructed with {@HeaderToClaimsOptions}", _settings);
         }
 
         public async Task InvokeAsync(HttpContext context,
@@ -45,20 +49,27 @@ namespace EDennis.NetStandard.Base {
                 await _next(context);
             } else {
 
-                if (!context.User.Identity.IsAuthenticated) {
-                    var ex = new SecurityException($"Cannot invoke HeaderToClaimsMiddleware with unauthenticated user");
-                    logger.LogError(ex, ex.Message);
-                    throw ex;
+                using (_logger.BeginScope("HeaderToClaimsMiddleware executing for user with Claims: {@Claims}.", context.User.Claims)) {
+
+                    if (!context.User.Identity.IsAuthenticated) {
+                        var ex = new SecurityException($"Cannot invoke HeaderToClaimsMiddleware with unauthenticated user");
+                        logger.LogError(ex, ex.Message);
+                        throw ex;
+                    }
+
+
+                    if (req.Headers.TryGetValue(HeaderToClaimsOptions.HEADER_KEY, out StringValues value)) {
+
+                        _logger.LogDebug("Claims unpacked from Header ({HeaderKey}, {HeaderValue})", HeaderToClaimsOptions.HEADER_KEY, value.ToString());
+
+                        var unpackedClaims = value.ToString().UnpackKeyValues((t, v) => new Claim(t, v));
+
+
+                        var appIdentity = new ClaimsIdentity(unpackedClaims);
+                        context.User.AddIdentity(appIdentity);
+                    }
+
                 }
-
-
-                if (req.Headers.TryGetValue(HeaderToClaimsOptions.HEADER_KEY, out StringValues value)) {
-                    var unpackedClaims = value.ToString().UnpackKeyValues((t, v) => new Claim(t, v));
-
-                    var appIdentity = new ClaimsIdentity(unpackedClaims);
-                    context.User.AddIdentity(appIdentity);
-                }
-
 
                 await _next(context);
             }

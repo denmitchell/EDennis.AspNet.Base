@@ -1,9 +1,9 @@
-﻿using EDennis.NetStandard.Base;
-using IdentityModel.Client;
+﻿using IdentityModel.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -30,19 +30,24 @@ namespace EDennis.NetStandard.Base {
         private readonly RequestDelegate _next;
         private readonly AutoAuthenticationOptions _options;
         private readonly AuthorizationCodeOptions _oidcOptions;
+        private readonly ILogger<AutoAuthenticationMiddleware> _logger;
         private readonly IHttpClientFactory _factory;
 
 
         public AutoAuthenticationMiddleware(RequestDelegate next, 
             IOptionsMonitor<AutoAuthenticationOptions> options,
             IOptionsMonitor<AuthorizationCodeOptions> oidcOptions,
-            IHttpClientFactory factory) {
+            IHttpClientFactory factory, ILogger<AutoAuthenticationMiddleware> logger) {
             _next = next;
             _factory = factory;
             _options = options.CurrentValue;
             _oidcOptions = oidcOptions.CurrentValue;
+            _logger = logger;
             if (!_oidcOptions.Authority.EndsWith("/"))
                 _oidcOptions.Authority += "/";
+
+            _logger.LogDebug("HttpLoggingMiddleware constructed with {@AutoAuthenticationOptions}", options.CurrentValue);
+
         }
 
 
@@ -51,12 +56,16 @@ namespace EDennis.NetStandard.Base {
             if (!_options.Enabled)
                 await _next(context);
             else {
-                var client = _factory.CreateClient("MockOidcClient");
-                client.BaseAddress = new Uri(_oidcOptions.Authority);
+                using (_logger.BeginScope("AutoAuthenticationMiddleware executing.")) {
+                
+                    var client = _factory.CreateClient("MockOidcClient");
+                    client.BaseAddress = new Uri(_oidcOptions.Authority);
 
-                var tokenResponse = await LoginAsync(client);
+                    var tokenResponse = await LoginAsync(client);
 
-                context.Request.Headers.Add("Authorization", $"Bearer {tokenResponse.AccessToken}");
+                    _logger.LogDebug("Adding {@AuthorizationHeader}", $"Bearer {tokenResponse.AccessToken}");
+                    context.Request.Headers.Add("Authorization", $"Bearer {tokenResponse.AccessToken}");
+                }
  
                 await _next(context); 
             }

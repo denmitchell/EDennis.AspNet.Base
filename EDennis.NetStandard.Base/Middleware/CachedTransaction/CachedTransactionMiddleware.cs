@@ -38,7 +38,7 @@ namespace EDennis.NetStandard.Base {
             if (claims != null && _enabledForClaims.Any(e => claims.Any(c => $"{c.Type}|{c.Value}" == e))) {
                 var cookieValue = GetOrAddCookie(context, out bool cookieAdded);
 
-                using (_logger.BeginScope("CachedTransactionMiddleware for {TContextName} executing with {@Claims}.", typeof(TContext).Name, context.User.Claims)) {
+                using (_logger.BeginScope("CachedTransactionMiddleware for {TContextName} executing for user with Claims: {@Claims}.", typeof(TContext).Name, context.User.Claims)) {
 
                     var dbContextProvider = context.RequestServices.GetRequiredService<DbContextProvider<TContext>>();
                     _logger.LogTrace("Replacing DbContext.", typeof(TContext).Name);

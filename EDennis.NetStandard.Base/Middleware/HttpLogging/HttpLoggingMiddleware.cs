@@ -32,6 +32,9 @@ namespace EDennis.NetStandard.Base {
             IConfiguration config) {
             this.next = next;
             _logger = logger;
+
+            _logger.LogDebug("HttpLoggingMiddleware constructed with {@HttpLoggingOptions}", options.CurrentValue);
+
             _recyclableMemoryStreamManager = new RecyclableMemoryStreamManager();
 
             _configFileDir = config.GetValue<string>(WebHostDefaults.ContentRootKey);
@@ -76,6 +79,7 @@ namespace EDennis.NetStandard.Base {
                         .Build();
                     _options = new HttpLoggingConfiguration();
                     config.Bind(_options);
+                    _logger.LogDebug("HttpLoggingMiddleware using HttpLoggingConfiguration: {@HttpLoggingConfiguration}", _options);
                 } catch (Exception ex) {
                     _logger.LogError($"Could not load HttpLogging configuration file at {_configFileDir}\\{_configFileName}: " + ex.Message);
                 }
@@ -87,15 +91,14 @@ namespace EDennis.NetStandard.Base {
 
         public async Task InvokeAsync(HttpContext context) {
 
-            //if (!_options.Enabled
-            //    || (!MatchesQuery(context) && !MatchesClaim(context))) {
-            //    await next.Invoke(context);
-            //    return;
-            //}
+            if (!_options.Enabled
+                || (!MatchesQuery(context) && !MatchesClaim(context))) {
+                await next.Invoke(context);
+                return;
+            }
 
-
-            // create a new log object
-            var log = new HttpLog {
+                // create a new log object
+                var log = new HttpLog {
                 Path = context.Request.Path,
                 Method = context.Request.Method,
                 QueryString = context.Request.QueryString.ToString(),

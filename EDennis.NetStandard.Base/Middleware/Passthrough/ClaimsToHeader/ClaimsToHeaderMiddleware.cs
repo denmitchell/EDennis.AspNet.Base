@@ -54,7 +54,7 @@ namespace EDennis.NetStandard.Base {
                 await _next(context);
             } else {
 
-                using (_logger.BeginScope("ClaimsToHeaderMiddleware executing with {@Claims}.", context.User.Claims)) {
+                using (_logger.BeginScope("ClaimsToHeaderMiddleware executing for user with Claims: {@Claims}.", context.User.Claims)) {
 
                     if (!context.User.Identity.IsAuthenticated) {
                         var ex = new SecurityException($"Cannot invoke ClaimsToHeaderMiddleware with unauthenticated user");
