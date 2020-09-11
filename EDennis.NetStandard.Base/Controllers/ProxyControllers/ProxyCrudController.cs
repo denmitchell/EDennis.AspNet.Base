@@ -46,7 +46,7 @@ namespace EDennis.NetStandard.Base {
 
         [HttpDelete("async/{**key}")]
         public async Task<IActionResult> DeleteAsync([FromRoute] string key) {
-            return await _client.ForwardAsync<StatusCodeResult>(HttpContext.Request, $"{ControllerPath}/{key}");
+            return await _client.ForwardAsync<StatusCodeResult>(HttpContext.Request, $"{ControllerPath}/async/{key}");
         }
 
         [NonAction]
@@ -63,7 +63,7 @@ namespace EDennis.NetStandard.Base {
 
         [HttpGet("async/{**key}")]
         public async Task<IActionResult> GetByIdAsync([FromRoute] string key) {
-            return await _client.ForwardAsync<TEntity>(HttpContext.Request, $"{ControllerPath}/{key}");
+            return await _client.ForwardAsync<TEntity>(HttpContext.Request, $"{ControllerPath}/async/{key}");
         }
 
 
@@ -75,7 +75,7 @@ namespace EDennis.NetStandard.Base {
 
         [HttpPatch("async/{**key}")]
         public async Task<IActionResult> PatchAsync([FromRoute] string key, [FromBody] JsonElement input) {
-            return await _client.ForwardAsync<JsonElement, TEntity>(HttpContext.Request, $"{ControllerPath}/{key}", input);
+            return await _client.ForwardAsync<JsonElement, TEntity>(HttpContext.Request, $"{ControllerPath}/async/{key}", input);
         }
 
 
@@ -86,7 +86,7 @@ namespace EDennis.NetStandard.Base {
 
         [HttpPut("async/{**key}")]
         public async Task<IActionResult> UpdateAsync([FromRoute] string key, [FromBody] TEntity input) {
-            return await _client.ForwardAsync(HttpContext.Request, $"{ControllerPath}/{key}", input);
+            return await _client.ForwardAsync(HttpContext.Request, $"{ControllerPath}/async/{key}", input);
         }
     }
 }
