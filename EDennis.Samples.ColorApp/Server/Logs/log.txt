@@ -11772,3 +11772,168 @@ System.ApplicationException: Could not bind key '' in Configuration to object of
 2020-09-14 14:58:52.435 -04:00 [INF] Content root path: C:\Users\MitchellDenC\source\repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp\Server
 2020-09-14 14:58:55.032 -04:00 [INF] Request starting HTTP/1.1 GET https://localhost:44336/_framework/debug/ws-proxy?browser=ws%3A%2F%2Flocalhost%3A62008%2Fdevtools%2Fbrowser%2F3d005ea6-3dc1-42a8-8ed6-161589995585  
 2020-09-14 14:58:57.543 -04:00 [INF] Request finished in 2517.3685ms 302 
+2020-09-14 15:04:01.837 -04:00 [DBG] Hosting starting
+2020-09-14 15:04:01.911 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-14 15:04:01.953 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-2f5c30d0-a084-4c35-8d2d-8e4a0d052454.xml'.
+2020-09-14 15:04:01.957 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-5ea5f1e4-4b59-4370-8db1-b9ae7bbf8c63.xml'.
+2020-09-14 15:04:01.960 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-604bfd08-e244-4901-bfce-3bc0372b2e4c.xml'.
+2020-09-14 15:04:01.964 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-646446ba-95e9-4794-b5d0-1caf83cf19fa.xml'.
+2020-09-14 15:04:01.966 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-69e60cc4-4e85-49ca-9b50-c12f6bb46b80.xml'.
+2020-09-14 15:04:01.968 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-cd493bdb-3acc-4e26-9708-b7241aa23b1a.xml'.
+2020-09-14 15:04:01.971 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-d9e18831-a0f6-4101-9760-f3e14ecf857a.xml'.
+2020-09-14 15:04:01.975 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-df296e2e-5f74-4e19-9eeb-277396346f82.xml'.
+2020-09-14 15:04:01.977 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-e0589fd9-4240-4b20-8225-56419b92209b.xml'.
+2020-09-14 15:04:01.985 -04:00 [DBG] Found key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454}.
+2020-09-14 15:04:01.993 -04:00 [DBG] Found key {5ea5f1e4-4b59-4370-8db1-b9ae7bbf8c63}.
+2020-09-14 15:04:01.995 -04:00 [DBG] Found key {604bfd08-e244-4901-bfce-3bc0372b2e4c}.
+2020-09-14 15:04:01.997 -04:00 [DBG] Found key {646446ba-95e9-4794-b5d0-1caf83cf19fa}.
+2020-09-14 15:04:01.998 -04:00 [DBG] Found key {69e60cc4-4e85-49ca-9b50-c12f6bb46b80}.
+2020-09-14 15:04:02.000 -04:00 [DBG] Found key {cd493bdb-3acc-4e26-9708-b7241aa23b1a}.
+2020-09-14 15:04:02.002 -04:00 [DBG] Found key {d9e18831-a0f6-4101-9760-f3e14ecf857a}.
+2020-09-14 15:04:02.003 -04:00 [DBG] Found key {df296e2e-5f74-4e19-9eeb-277396346f82}.
+2020-09-14 15:04:02.005 -04:00 [DBG] Found key {e0589fd9-4240-4b20-8225-56419b92209b}.
+2020-09-14 15:04:02.016 -04:00 [DBG] Considering key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} with expiration date 2020-11-19 18:05:30Z as default key.
+2020-09-14 15:04:02.058 -04:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2020-09-14 15:04:02.065 -04:00 [DBG] Decrypting secret element using Windows DPAPI.
+2020-09-14 15:04:02.068 -04:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2020-09-14 15:04:02.076 -04:00 [DBG] Opening CNG algorithm 'AES' from provider 'null' with chaining mode CBC.
+2020-09-14 15:04:02.083 -04:00 [DBG] Opening CNG algorithm 'SHA256' from provider 'null' with HMAC.
+2020-09-14 15:04:02.092 -04:00 [DBG] Using key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} as the default key.
+2020-09-14 15:04:02.095 -04:00 [DBG] Key ring with default key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} was loaded during application startup.
+2020-09-14 15:04:02.181 -04:00 [INF] Starting IdentityServer4 version 3.0.0.0
+2020-09-14 15:04:02.336 -04:00 [INF] Configuring local API resource 'EDennis.Samples.ColorApp.ServerAPI'.
+2020-09-14 15:04:02.372 -04:00 [INF] Configuring client 'EDennis.Samples.ColorApp.Client'.
+2020-09-14 15:04:02.423 -04:00 [INF] Loading development key at 'C:\Users\MitchellDenC\source\repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp\Server\obj/tempkey.json'.
+2020-09-14 15:04:02.659 -04:00 [INF] Resource 'EDennis.Samples.ColorApp.ServerAPI' allows all applications.
+2020-09-14 15:04:02.664 -04:00 [INF] Identity resource 'openid' allows all applications.
+2020-09-14 15:04:02.665 -04:00 [INF] Identity resource 'profile' allows all applications.
+2020-09-14 15:04:02.692 -04:00 [INF] Using explicitly configured authentication scheme Identity.Application for IdentityServer
+2020-09-14 15:04:02.694 -04:00 [DBG] Using IdentityServerJwt as default ASP.NET Core scheme for authentication
+2020-09-14 15:04:02.696 -04:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2020-09-14 15:04:02.697 -04:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2020-09-14 15:04:02.699 -04:00 [DBG] Using IdentityServerJwt as default ASP.NET Core scheme for challenge
+2020-09-14 15:04:02.700 -04:00 [DBG] Using IdentityServerJwt as default ASP.NET Core scheme for forbid
+2020-09-14 15:04:03.089 -04:00 [DBG] ScopedRequestMiddleware constructed with {"HeadersToCapture":["X-CachedTransaction","X-Claims"],"CookiesToCapture":["X-CachedTransaction"],"$type":"ScopedRequestMessageOptions"}
+2020-09-14 15:04:03.119 -04:00 [DBG] ClaimsToHeaderMiddleware constructed with {"ClaimTypesConfigKey":"Security:ClaimsToHeader:ClaimTypes","Enabled":true,"$type":"ClaimsToHeaderOptions"}
+2020-09-14 15:04:03.143 -04:00 [DBG] HttpLoggingMiddleware constructed with {"ConfigFile":"httpLogging.json","$type":"HttpLoggingOptions"}
+2020-09-14 15:04:03.157 -04:00 [DBG] HttpLoggingMiddleware using HttpLoggingConfiguration: {"Enabled":true,"MaxRequestBodyLength":10000,"MaxResponseBodyLength":10000,"IncludeHeaders":true,"IncludeClaims":true,"ForClaims":{"name":["maria@a.test"]},"ForQueryKey":"3af58255-279c-4800-8e28-41cab4fb65b7","$type":"HttpLoggingConfiguration"}
+2020-09-14 15:04:03.196 -04:00 [DBG] Failed to locate the development https certificate at 'null'.
+2020-09-14 15:04:03.427 -04:00 [DBG] Using development certificate: CN=localhost (Thumbprint: 198EBC3B10DE63E96CF91E8DFEDD359F8D00FB82)
+2020-09-14 15:04:03.501 -04:00 [INF] Now listening on: https://localhost:44336
+2020-09-14 15:04:03.503 -04:00 [INF] Now listening on: http://localhost:62727
+2020-09-14 15:04:03.506 -04:00 [DBG] Loaded hosting startup assembly EDennis.Samples.ColorApp.Server
+2020-09-14 15:04:03.508 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2020-09-14 15:04:03.510 -04:00 [INF] Hosting environment: Development
+2020-09-14 15:04:03.514 -04:00 [INF] Content root path: C:\Users\MitchellDenC\source\repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp\Server
+2020-09-14 15:04:03.517 -04:00 [DBG] Hosting started
+2020-09-14 15:04:03.844 -04:00 [DBG] Connection id "0HM2OS3P928QH" received FIN.
+2020-09-14 15:04:03.864 -04:00 [DBG] Connection id "0HM2OS3P928QH" accepted.
+2020-09-14 15:04:03.867 -04:00 [DBG] Connection id "0HM2OS3P928QH" started.
+2020-09-14 15:04:03.904 -04:00 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Authentication failed because the remote party has closed the transport stream.
+   at System.Net.Security.SslStream.StartReadFrame(Byte[] buffer, Int32 readBytes, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.StartReceiveBlob(Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ForceAuthentication(Boolean receiveFirst, Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ProcessAuthentication(LazyAsyncResult lazyResult, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.BeginAuthenticateAsServer(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken, AsyncCallback asyncCallback, Object asyncState)
+   at System.Net.Security.SslStream.<>c.<AuthenticateAsServerAsync>b__69_0(SslServerAuthenticationOptions arg1, CancellationToken arg2, AsyncCallback callback, Object state)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl[TArg1,TArg2](Func`5 beginMethod, Func`2 endFunction, Action`1 endAction, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state)
+   at System.Net.Security.SslStream.AuthenticateAsServerAsync(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.InnerOnConnectionAsync(ConnectionContext context)
+2020-09-14 15:04:03.993 -04:00 [DBG] Connection id "0HM2OS3P928QH" stopped.
+2020-09-14 15:04:04.000 -04:00 [DBG] Connection id "0HM2OS3P928QH" sending FIN because: "The Socket transport's send loop completed gracefully."
+2020-09-14 15:04:04.736 -04:00 [DBG] Connection id "0HM2OS3P928QI" accepted.
+2020-09-14 15:04:04.741 -04:00 [DBG] Connection id "0HM2OS3P928QI" started.
+2020-09-14 15:04:04.883 -04:00 [INF] Request starting HTTP/1.1 GET https://localhost:44336/_framework/debug/ws-proxy?browser=ws%3A%2F%2Flocalhost%3A62008%2Fdevtools%2Fbrowser%2F3d005ea6-3dc1-42a8-8ed6-161589995585  
+2020-09-14 15:04:04.893 -04:00 [DBG] Wildcard detected, all requests with hosts will be allowed.
+2020-09-14 15:04:05.807 -04:00 [DBG] Connection id "0HM2OS3P928QI" received FIN.
+2020-09-14 15:04:05.808 -04:00 [INF] Request finished in 929.2829ms 302 
+2020-09-14 15:04:05.810 -04:00 [DBG] Connection id "0HM2OS3P928QI" sending FIN because: "The client closed the connection."
+2020-09-14 15:04:05.813 -04:00 [DBG] Connection id "0HM2OS3P928QI" disconnecting.
+2020-09-14 15:04:05.828 -04:00 [DBG] Connection id "0HM2OS3P928QI" stopped.
+2020-09-14 15:08:37.196 -04:00 [INF] Application is shutting down...
+2020-09-14 15:08:37.198 -04:00 [DBG] Hosting stopping
+2020-09-14 15:08:37.231 -04:00 [DBG] Hosting stopped
+2020-09-14 15:14:37.771 -04:00 [DBG] Hosting starting
+2020-09-14 15:14:37.851 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-14 15:14:37.901 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-2f5c30d0-a084-4c35-8d2d-8e4a0d052454.xml'.
+2020-09-14 15:14:37.907 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-5ea5f1e4-4b59-4370-8db1-b9ae7bbf8c63.xml'.
+2020-09-14 15:14:37.909 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-604bfd08-e244-4901-bfce-3bc0372b2e4c.xml'.
+2020-09-14 15:14:37.911 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-646446ba-95e9-4794-b5d0-1caf83cf19fa.xml'.
+2020-09-14 15:14:37.914 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-69e60cc4-4e85-49ca-9b50-c12f6bb46b80.xml'.
+2020-09-14 15:14:37.916 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-cd493bdb-3acc-4e26-9708-b7241aa23b1a.xml'.
+2020-09-14 15:14:37.919 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-d9e18831-a0f6-4101-9760-f3e14ecf857a.xml'.
+2020-09-14 15:14:37.925 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-df296e2e-5f74-4e19-9eeb-277396346f82.xml'.
+2020-09-14 15:14:37.927 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-e0589fd9-4240-4b20-8225-56419b92209b.xml'.
+2020-09-14 15:14:37.937 -04:00 [DBG] Found key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454}.
+2020-09-14 15:14:37.945 -04:00 [DBG] Found key {5ea5f1e4-4b59-4370-8db1-b9ae7bbf8c63}.
+2020-09-14 15:14:37.947 -04:00 [DBG] Found key {604bfd08-e244-4901-bfce-3bc0372b2e4c}.
+2020-09-14 15:14:37.948 -04:00 [DBG] Found key {646446ba-95e9-4794-b5d0-1caf83cf19fa}.
+2020-09-14 15:14:37.949 -04:00 [DBG] Found key {69e60cc4-4e85-49ca-9b50-c12f6bb46b80}.
+2020-09-14 15:14:37.952 -04:00 [DBG] Found key {cd493bdb-3acc-4e26-9708-b7241aa23b1a}.
+2020-09-14 15:14:37.954 -04:00 [DBG] Found key {d9e18831-a0f6-4101-9760-f3e14ecf857a}.
+2020-09-14 15:14:37.955 -04:00 [DBG] Found key {df296e2e-5f74-4e19-9eeb-277396346f82}.
+2020-09-14 15:14:37.957 -04:00 [DBG] Found key {e0589fd9-4240-4b20-8225-56419b92209b}.
+2020-09-14 15:14:37.974 -04:00 [DBG] Considering key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} with expiration date 2020-11-19 18:05:30Z as default key.
+2020-09-14 15:14:38.016 -04:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2020-09-14 15:14:38.024 -04:00 [DBG] Decrypting secret element using Windows DPAPI.
+2020-09-14 15:14:38.028 -04:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2020-09-14 15:14:38.035 -04:00 [DBG] Opening CNG algorithm 'AES' from provider 'null' with chaining mode CBC.
+2020-09-14 15:14:38.043 -04:00 [DBG] Opening CNG algorithm 'SHA256' from provider 'null' with HMAC.
+2020-09-14 15:14:38.049 -04:00 [DBG] Using key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} as the default key.
+2020-09-14 15:14:38.052 -04:00 [DBG] Key ring with default key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} was loaded during application startup.
+2020-09-14 15:14:38.148 -04:00 [INF] Starting IdentityServer4 version 3.0.0.0
+2020-09-14 15:14:38.320 -04:00 [INF] Configuring local API resource 'EDennis.Samples.ColorApp.ServerAPI'.
+2020-09-14 15:14:38.359 -04:00 [INF] Configuring client 'EDennis.Samples.ColorApp.Client'.
+2020-09-14 15:14:38.416 -04:00 [INF] Loading development key at 'C:\Users\MitchellDenC\source\repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp\Server\obj/tempkey.json'.
+2020-09-14 15:14:38.712 -04:00 [INF] Resource 'EDennis.Samples.ColorApp.ServerAPI' allows all applications.
+2020-09-14 15:14:38.717 -04:00 [INF] Identity resource 'openid' allows all applications.
+2020-09-14 15:14:38.721 -04:00 [INF] Identity resource 'profile' allows all applications.
+2020-09-14 15:14:38.751 -04:00 [INF] Using explicitly configured authentication scheme Identity.Application for IdentityServer
+2020-09-14 15:14:38.752 -04:00 [DBG] Using IdentityServerJwt as default ASP.NET Core scheme for authentication
+2020-09-14 15:14:38.755 -04:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2020-09-14 15:14:38.757 -04:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2020-09-14 15:14:38.759 -04:00 [DBG] Using IdentityServerJwt as default ASP.NET Core scheme for challenge
+2020-09-14 15:14:38.762 -04:00 [DBG] Using IdentityServerJwt as default ASP.NET Core scheme for forbid
+2020-09-14 15:14:39.173 -04:00 [DBG] ScopedRequestMiddleware constructed with {"HeadersToCapture":["X-CachedTransaction","X-Claims"],"CookiesToCapture":["X-CachedTransaction"],"$type":"ScopedRequestMessageOptions"}
+2020-09-14 15:14:39.213 -04:00 [DBG] ClaimsToHeaderMiddleware constructed with {"ClaimTypesConfigKey":"Security:ClaimsToHeader:ClaimTypes","Enabled":true,"$type":"ClaimsToHeaderOptions"}
+2020-09-14 15:14:39.244 -04:00 [DBG] HttpLoggingMiddleware constructed with {"ConfigFile":"httpLogging.json","$type":"HttpLoggingOptions"}
+2020-09-14 15:14:39.261 -04:00 [DBG] HttpLoggingMiddleware using HttpLoggingConfiguration: {"Enabled":true,"MaxRequestBodyLength":10000,"MaxResponseBodyLength":10000,"IncludeHeaders":true,"IncludeClaims":true,"ForClaims":{"name":["maria@a.test"]},"ForQueryKey":"3af58255-279c-4800-8e28-41cab4fb65b7","$type":"HttpLoggingConfiguration"}
+2020-09-14 15:14:39.295 -04:00 [DBG] Failed to locate the development https certificate at 'null'.
+2020-09-14 15:14:39.590 -04:00 [DBG] Using development certificate: CN=localhost (Thumbprint: 1ED031099A11F655D0A5136B66FCCE7A4543939D)
+2020-09-14 15:14:39.663 -04:00 [INF] Now listening on: https://localhost:44336
+2020-09-14 15:14:39.676 -04:00 [INF] Now listening on: http://localhost:62727
+2020-09-14 15:14:39.678 -04:00 [DBG] Loaded hosting startup assembly EDennis.Samples.ColorApp.Server
+2020-09-14 15:14:39.680 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2020-09-14 15:14:39.681 -04:00 [INF] Hosting environment: Development
+2020-09-14 15:14:39.684 -04:00 [INF] Content root path: C:\Users\MitchellDenC\source\repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp\Server
+2020-09-14 15:14:39.686 -04:00 [DBG] Hosting started
+2020-09-14 15:14:39.867 -04:00 [DBG] Connection id "0HM2OS9MQKP6F" received FIN.
+2020-09-14 15:14:39.879 -04:00 [DBG] Connection id "0HM2OS9MQKP6F" accepted.
+2020-09-14 15:14:39.882 -04:00 [DBG] Connection id "0HM2OS9MQKP6F" started.
+2020-09-14 15:14:39.919 -04:00 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Authentication failed because the remote party has closed the transport stream.
+   at System.Net.Security.SslStream.StartReadFrame(Byte[] buffer, Int32 readBytes, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.StartReceiveBlob(Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ForceAuthentication(Boolean receiveFirst, Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ProcessAuthentication(LazyAsyncResult lazyResult, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.BeginAuthenticateAsServer(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken, AsyncCallback asyncCallback, Object asyncState)
+   at System.Net.Security.SslStream.<>c.<AuthenticateAsServerAsync>b__69_0(SslServerAuthenticationOptions arg1, CancellationToken arg2, AsyncCallback callback, Object state)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl[TArg1,TArg2](Func`5 beginMethod, Func`2 endFunction, Action`1 endAction, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state)
+   at System.Net.Security.SslStream.AuthenticateAsServerAsync(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.InnerOnConnectionAsync(ConnectionContext context)
+2020-09-14 15:14:40.016 -04:00 [DBG] Connection id "0HM2OS9MQKP6F" stopped.
+2020-09-14 15:14:40.023 -04:00 [DBG] Connection id "0HM2OS9MQKP6F" sending FIN because: "The Socket transport's send loop completed gracefully."
+2020-09-14 15:14:40.948 -04:00 [DBG] Connection id "0HM2OS9MQKP6G" accepted.
+2020-09-14 15:14:40.951 -04:00 [DBG] Connection id "0HM2OS9MQKP6G" started.
+2020-09-14 15:14:41.134 -04:00 [INF] Request starting HTTP/1.1 GET https://localhost:44336/_framework/debug/ws-proxy?browser=ws%3A%2F%2Flocalhost%3A62008%2Fdevtools%2Fbrowser%2F3d005ea6-3dc1-42a8-8ed6-161589995585  
+2020-09-14 15:14:41.144 -04:00 [DBG] Wildcard detected, all requests with hosts will be allowed.
+2020-09-14 15:14:42.233 -04:00 [DBG] Connection id "0HM2OS9MQKP6G" received FIN.
+2020-09-14 15:14:42.234 -04:00 [INF] Request finished in 1104.7901ms 302 
+2020-09-14 15:14:42.237 -04:00 [DBG] Connection id "0HM2OS9MQKP6G" sending FIN because: "The client closed the connection."
+2020-09-14 15:14:42.241 -04:00 [DBG] Connection id "0HM2OS9MQKP6G" disconnecting.
+2020-09-14 15:14:42.270 -04:00 [DBG] Connection id "0HM2OS9MQKP6G" stopped.
