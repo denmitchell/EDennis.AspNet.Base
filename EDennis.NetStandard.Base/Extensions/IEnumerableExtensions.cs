@@ -8,6 +8,11 @@ using static Dapper.SqlMapper;
 namespace EDennis.NetStandard.Base {
     public static class IEnumerableExtensions {
 
+
+		public const char DEFAULT_KEY_VALUE_SEPARATOR = '=';
+		public const char DEFAULT_VALUE_KEY_SEPARATOR = ';';
+		public const char DEFAULT_VALUE_VALUE_SEPARATOR = ',';
+
 		/// <summary>
 		/// Packs an IEnumerable<KeyValuePair<string,string>> into a simple string
 		/// where 
@@ -27,7 +32,11 @@ namespace EDennis.NetStandard.Base {
 		/// </code>
 		/// <returns>compact string representation of key value pairs</returns>
 		/// <see cref="UnpackKeyValues{T}(string, Func{string, string, T})"/>
-		public static string PackKeyValues<T>(this IEnumerable<T> kvs, Func<T, ValueTuple<string, string>> tupleFunc) {
+		public static string PackKeyValues<T>(this IEnumerable<T> kvs, Func<T, ValueTuple<string, string>> tupleFunc,
+			char keyValueSeparator = DEFAULT_KEY_VALUE_SEPARATOR,
+			char valueKeySeparator = DEFAULT_VALUE_KEY_SEPARATOR,
+			char valueValueSeparator = DEFAULT_VALUE_VALUE_SEPARATOR			
+			) {
 			Dictionary<string, List<string>> dict = new Dictionary<string, List<string>>();
 			foreach (var kv in kvs) {
 				var (k, v) = tupleFunc(kv);
@@ -37,8 +46,8 @@ namespace EDennis.NetStandard.Base {
 			}
 			var list = new List<string>();
 			foreach (var key in dict.Keys)
-				list.Add($"{key}:{string.Join(",", dict[key])}");
-			return string.Join(";", list);
+				list.Add($"{key}{keyValueSeparator}{string.Join(valueValueSeparator, dict[key])}");
+			return string.Join(valueKeySeparator, list);
 		}
 
 
@@ -49,6 +58,7 @@ namespace EDennis.NetStandard.Base {
 				list.Add($"{key}{separators.KeyValue}{dict[key]}");
 			return string.Join(separators.ValueKey,list);
 		}
+
 
 		public static Dictionary<string, string> UnPackDictionary(this string str,
 			(char KeyValue, char ValueKey) separators) {
@@ -74,29 +84,28 @@ namespace EDennis.NetStandard.Base {
 		/// </code>
 		/// <returns></returns>
 		/// <see cref="PackKeyValues{T}(IEnumerable{T}, Func{T, (string, string)})"/>
-		public static IEnumerable<T> UnpackKeyValues<T>(this string str, Func<string, string, T> ctor) {
+		public static IEnumerable<T> UnpackKeyValues<T>(this string str, Func<string, string, T> ctor,
+			char keyValueSeparator = DEFAULT_KEY_VALUE_SEPARATOR,
+			char valueKeySeparator = DEFAULT_VALUE_KEY_SEPARATOR,
+			char valueValueSeparator = DEFAULT_VALUE_VALUE_SEPARATOR
+			) {
 			var list = new List<T>();
 			var curKey = new StringBuilder();
 			var curVal = new StringBuilder();
 			var curSb = curKey;
 			for (int i = 0; i < str.Length; i++) {
-				switch (str[i]) {
-					case ':':
-						curSb = curVal;
-						break;
-					case ',':
-						list.Add(ctor(curKey.ToString(), curVal.ToString()));
-						curVal.Clear();
-						break;
-					case ';':
-						list.Add(ctor(curKey.ToString(), curVal.ToString()));
-						curVal.Clear();
-						curKey.Clear();
-						curSb = curKey;
-						break;
-					default:
-						curSb.Append(str[i]);
-						break;
+				if(str[i] == keyValueSeparator) {
+					curSb = curVal;
+				} else if (str[i] == valueValueSeparator) {
+					list.Add(ctor(curKey.ToString(), curVal.ToString()));
+					curVal.Clear();
+				} else if (str[i] == valueKeySeparator) {
+					list.Add(ctor(curKey.ToString(), curVal.ToString()));
+					curVal.Clear();
+					curKey.Clear();
+					curSb = curKey;
+				} else {
+					curSb.Append(str[i]);
 				}
 			}
 			if (curVal.Length > 0)

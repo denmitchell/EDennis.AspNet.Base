@@ -66,6 +66,8 @@ namespace EDennis.NetStandard.Base {
                         .Where(c => _claimTypes.Contains(c.Type))
                         .PackKeyValues(c => (c.Type, c.Value));
 
+                    packedClaims = "\"" + packedClaims + "\""; //add quotes for proper header
+
                     _logger.LogDebug("Claims packed into Header ({HeaderKey}, {HeaderValue})", HeaderToClaimsOptions.HEADER_KEY, packedClaims);
 
                     if (req.Headers.ContainsKey(HeaderToClaimsOptions.HEADER_KEY))
@@ -84,7 +86,7 @@ namespace EDennis.NetStandard.Base {
     public static class IServiceCollectionExtensions_ClaimsToHeaderMiddleware {
         public static IServiceCollection AddClaimsToHeader(this IServiceCollection services, IConfiguration config,
             string configKey = "Security:ClaimsToHeader") {
-            services.Configure<MockClaimsPrincipalOptions>(config.GetSection(configKey));
+            services.Configure<ClaimsToHeaderOptions>(config.GetSection(configKey));
             return services;
         }
     }

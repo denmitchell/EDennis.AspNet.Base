@@ -30,7 +30,7 @@
       ],
       "ClientClaimsPrefix": "",
       "AllowedScopes": [
-        "EDennis.Samples.ColorApi"
+        "EDennis.Samples.ColorApi.*"
       ]
     },
     {
@@ -38,8 +38,7 @@
       "ClientId": "EDennis.Samples.ColorApp.Razor:ID",
       "PlainTextSecret": "secret",
       "AllowedGrantTypes": [
-        "code",
-        "client_credentials"
+        "code"
       ],
       "RequireConsent": false,
       "RequirePkce": true,

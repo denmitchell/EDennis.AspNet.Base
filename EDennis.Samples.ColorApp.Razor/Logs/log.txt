@@ -229,3 +229,1233 @@ System.ArgumentException: The 'CallbackPath' option must be provided. (Parameter
 2020-09-10 02:53:47.712 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
 2020-09-10 02:56:32.759 -04:00 [INF] Starting host ...
 2020-09-10 02:56:33.997 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-14 06:58:46.593 -04:00 [INF] Starting host ...
+2020-09-14 06:58:48.850 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-14 06:58:59.461 -04:00 [ERR] Could not bind key '' in Configuration to object of type List<string>
+System.ApplicationException: Could not bind key '' in Configuration to object of type List<string>
+2020-09-14 07:03:43.103 -04:00 [INF] Starting host ...
+2020-09-14 07:03:44.713 -04:00 [DBG] Hosting starting
+2020-09-14 07:03:44.758 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-14 07:03:44.798 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-2f5c30d0-a084-4c35-8d2d-8e4a0d052454.xml'.
+2020-09-14 07:03:44.802 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-5ea5f1e4-4b59-4370-8db1-b9ae7bbf8c63.xml'.
+2020-09-14 07:03:44.804 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-604bfd08-e244-4901-bfce-3bc0372b2e4c.xml'.
+2020-09-14 07:03:44.806 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-646446ba-95e9-4794-b5d0-1caf83cf19fa.xml'.
+2020-09-14 07:03:44.807 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-69e60cc4-4e85-49ca-9b50-c12f6bb46b80.xml'.
+2020-09-14 07:03:44.810 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-cd493bdb-3acc-4e26-9708-b7241aa23b1a.xml'.
+2020-09-14 07:03:44.811 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-d9e18831-a0f6-4101-9760-f3e14ecf857a.xml'.
+2020-09-14 07:03:44.813 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-df296e2e-5f74-4e19-9eeb-277396346f82.xml'.
+2020-09-14 07:03:44.814 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-e0589fd9-4240-4b20-8225-56419b92209b.xml'.
+2020-09-14 07:03:44.823 -04:00 [DBG] Found key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454}.
+2020-09-14 07:03:44.829 -04:00 [DBG] Found key {5ea5f1e4-4b59-4370-8db1-b9ae7bbf8c63}.
+2020-09-14 07:03:44.831 -04:00 [DBG] Found key {604bfd08-e244-4901-bfce-3bc0372b2e4c}.
+2020-09-14 07:03:44.832 -04:00 [DBG] Found key {646446ba-95e9-4794-b5d0-1caf83cf19fa}.
+2020-09-14 07:03:44.834 -04:00 [DBG] Found key {69e60cc4-4e85-49ca-9b50-c12f6bb46b80}.
+2020-09-14 07:03:44.835 -04:00 [DBG] Found key {cd493bdb-3acc-4e26-9708-b7241aa23b1a}.
+2020-09-14 07:03:44.837 -04:00 [DBG] Found key {d9e18831-a0f6-4101-9760-f3e14ecf857a}.
+2020-09-14 07:03:44.838 -04:00 [DBG] Found key {df296e2e-5f74-4e19-9eeb-277396346f82}.
+2020-09-14 07:03:44.839 -04:00 [DBG] Found key {e0589fd9-4240-4b20-8225-56419b92209b}.
+2020-09-14 07:03:44.850 -04:00 [DBG] Considering key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} with expiration date 2020-11-19 18:05:30Z as default key.
+2020-09-14 07:03:44.888 -04:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2020-09-14 07:03:44.896 -04:00 [DBG] Decrypting secret element using Windows DPAPI.
+2020-09-14 07:03:44.901 -04:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2020-09-14 07:03:44.911 -04:00 [DBG] Opening CNG algorithm 'AES' from provider 'null' with chaining mode CBC.
+2020-09-14 07:03:44.922 -04:00 [DBG] Opening CNG algorithm 'SHA256' from provider 'null' with HMAC.
+2020-09-14 07:03:44.929 -04:00 [DBG] Using key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} as the default key.
+2020-09-14 07:03:44.932 -04:00 [DBG] Key ring with default key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} was loaded during application startup.
+2020-09-14 07:03:49.143 -04:00 [DBG] ScopedRequestMiddleware constructed with {"HeadersToCapture":["X-CachedTransaction","X-Claims"],"CookiesToCapture":["X-CachedTransaction"],"$type":"ScopedRequestMessageOptions"}
+2020-09-14 07:03:49.177 -04:00 [DBG] ClaimsToHeaderMiddleware constructed with {"ClaimTypesConfigKey":null,"Enabled":false,"$type":"ClaimsToHeaderOptions"}
+2020-09-14 07:07:27.213 -04:00 [INF] Starting host ...
+2020-09-14 07:07:28.963 -04:00 [DBG] Hosting starting
+2020-09-14 07:07:29.007 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-14 07:07:29.052 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-2f5c30d0-a084-4c35-8d2d-8e4a0d052454.xml'.
+2020-09-14 07:07:29.056 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-5ea5f1e4-4b59-4370-8db1-b9ae7bbf8c63.xml'.
+2020-09-14 07:07:29.057 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-604bfd08-e244-4901-bfce-3bc0372b2e4c.xml'.
+2020-09-14 07:07:29.059 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-646446ba-95e9-4794-b5d0-1caf83cf19fa.xml'.
+2020-09-14 07:07:29.061 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-69e60cc4-4e85-49ca-9b50-c12f6bb46b80.xml'.
+2020-09-14 07:07:29.064 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-cd493bdb-3acc-4e26-9708-b7241aa23b1a.xml'.
+2020-09-14 07:07:29.066 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-d9e18831-a0f6-4101-9760-f3e14ecf857a.xml'.
+2020-09-14 07:07:29.067 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-df296e2e-5f74-4e19-9eeb-277396346f82.xml'.
+2020-09-14 07:07:29.069 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-e0589fd9-4240-4b20-8225-56419b92209b.xml'.
+2020-09-14 07:07:29.077 -04:00 [DBG] Found key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454}.
+2020-09-14 07:07:29.086 -04:00 [DBG] Found key {5ea5f1e4-4b59-4370-8db1-b9ae7bbf8c63}.
+2020-09-14 07:07:29.088 -04:00 [DBG] Found key {604bfd08-e244-4901-bfce-3bc0372b2e4c}.
+2020-09-14 07:07:29.090 -04:00 [DBG] Found key {646446ba-95e9-4794-b5d0-1caf83cf19fa}.
+2020-09-14 07:07:29.092 -04:00 [DBG] Found key {69e60cc4-4e85-49ca-9b50-c12f6bb46b80}.
+2020-09-14 07:07:29.093 -04:00 [DBG] Found key {cd493bdb-3acc-4e26-9708-b7241aa23b1a}.
+2020-09-14 07:07:29.094 -04:00 [DBG] Found key {d9e18831-a0f6-4101-9760-f3e14ecf857a}.
+2020-09-14 07:07:29.095 -04:00 [DBG] Found key {df296e2e-5f74-4e19-9eeb-277396346f82}.
+2020-09-14 07:07:29.096 -04:00 [DBG] Found key {e0589fd9-4240-4b20-8225-56419b92209b}.
+2020-09-14 07:07:29.107 -04:00 [DBG] Considering key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} with expiration date 2020-11-19 18:05:30Z as default key.
+2020-09-14 07:07:29.145 -04:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2020-09-14 07:07:29.153 -04:00 [DBG] Decrypting secret element using Windows DPAPI.
+2020-09-14 07:07:29.158 -04:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2020-09-14 07:07:29.166 -04:00 [DBG] Opening CNG algorithm 'AES' from provider 'null' with chaining mode CBC.
+2020-09-14 07:07:29.174 -04:00 [DBG] Opening CNG algorithm 'SHA256' from provider 'null' with HMAC.
+2020-09-14 07:07:29.183 -04:00 [DBG] Using key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} as the default key.
+2020-09-14 07:07:29.187 -04:00 [DBG] Key ring with default key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} was loaded during application startup.
+2020-09-14 07:07:35.881 -04:00 [DBG] ScopedRequestMiddleware constructed with {"HeadersToCapture":["X-CachedTransaction","X-Claims"],"CookiesToCapture":["X-CachedTransaction"],"$type":"ScopedRequestMessageOptions"}
+2020-09-14 07:07:35.923 -04:00 [DBG] ClaimsToHeaderMiddleware constructed with {"ClaimTypesConfigKey":"Security:OpenIdConnect:Scope","Enabled":true,"$type":"ClaimsToHeaderOptions"}
+2020-09-14 07:08:26.871 -04:00 [DBG] Failed to locate the development https certificate at 'null'.
+2020-09-14 07:08:27.112 -04:00 [DBG] Using development certificate: CN=localhost (Thumbprint: 198EBC3B10DE63E96CF91E8DFEDD359F8D00FB82)
+2020-09-14 07:08:27.128 -04:00 [INF] Now listening on: https://localhost:44305
+2020-09-14 07:08:27.130 -04:00 [INF] Now listening on: http://localhost:64438
+2020-09-14 07:08:27.133 -04:00 [DBG] Loaded hosting startup assembly EDennis.Samples.ColorApp.Razor
+2020-09-14 07:08:27.135 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2020-09-14 07:08:27.137 -04:00 [INF] Hosting environment: Development
+2020-09-14 07:08:27.138 -04:00 [INF] Content root path: C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp.Razor
+2020-09-14 07:08:27.142 -04:00 [DBG] Hosting started
+2020-09-14 07:08:27.457 -04:00 [DBG] Connection id "0HM2OJQ0OQ74F" accepted.
+2020-09-14 07:08:27.457 -04:00 [DBG] Connection id "0HM2OJQ0OQ74G" accepted.
+2020-09-14 07:08:27.461 -04:00 [DBG] Connection id "0HM2OJQ0OQ74F" started.
+2020-09-14 07:08:27.463 -04:00 [DBG] Connection id "0HM2OJQ0OQ74G" started.
+2020-09-14 07:08:27.476 -04:00 [DBG] Connection id "0HM2OJQ0OQ74G" received FIN.
+2020-09-14 07:08:27.476 -04:00 [DBG] Connection id "0HM2OJQ0OQ74F" received FIN.
+2020-09-14 07:08:27.506 -04:00 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Authentication failed because the remote party has closed the transport stream.
+   at System.Net.Security.SslStream.StartReadFrame(Byte[] buffer, Int32 readBytes, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.StartReceiveBlob(Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ForceAuthentication(Boolean receiveFirst, Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ProcessAuthentication(LazyAsyncResult lazyResult, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.BeginAuthenticateAsServer(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken, AsyncCallback asyncCallback, Object asyncState)
+   at System.Net.Security.SslStream.<>c.<AuthenticateAsServerAsync>b__69_0(SslServerAuthenticationOptions arg1, CancellationToken arg2, AsyncCallback callback, Object state)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl[TArg1,TArg2](Func`5 beginMethod, Func`2 endFunction, Action`1 endAction, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state)
+   at System.Net.Security.SslStream.AuthenticateAsServerAsync(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.InnerOnConnectionAsync(ConnectionContext context)
+2020-09-14 07:08:27.506 -04:00 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Authentication failed because the remote party has closed the transport stream.
+   at System.Net.Security.SslStream.StartReadFrame(Byte[] buffer, Int32 readBytes, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.StartReceiveBlob(Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ForceAuthentication(Boolean receiveFirst, Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ProcessAuthentication(LazyAsyncResult lazyResult, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.BeginAuthenticateAsServer(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken, AsyncCallback asyncCallback, Object asyncState)
+   at System.Net.Security.SslStream.<>c.<AuthenticateAsServerAsync>b__69_0(SslServerAuthenticationOptions arg1, CancellationToken arg2, AsyncCallback callback, Object state)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl[TArg1,TArg2](Func`5 beginMethod, Func`2 endFunction, Action`1 endAction, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state)
+   at System.Net.Security.SslStream.AuthenticateAsServerAsync(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.InnerOnConnectionAsync(ConnectionContext context)
+2020-09-14 07:08:27.601 -04:00 [DBG] Connection id "0HM2OJQ0OQ74G" stopped.
+2020-09-14 07:08:27.610 -04:00 [DBG] Connection id "0HM2OJQ0OQ74F" stopped.
+2020-09-14 07:08:27.614 -04:00 [DBG] Connection id "0HM2OJQ0OQ74G" sending FIN because: "The Socket transport's send loop completed gracefully."
+2020-09-14 07:08:27.617 -04:00 [DBG] Connection id "0HM2OJQ0OQ74F" sending FIN because: "The Socket transport's send loop completed gracefully."
+2020-09-14 07:08:28.137 -04:00 [DBG] Connection id "0HM2OJQ0OQ74H" accepted.
+2020-09-14 07:08:28.145 -04:00 [DBG] Connection id "0HM2OJQ0OQ74H" started.
+2020-09-14 07:08:28.361 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/Rgb  
+2020-09-14 07:08:28.371 -04:00 [DBG] Wildcard detected, all requests with hosts will be allowed.
+2020-09-14 07:08:28.376 -04:00 [DBG] The request path /Rgb does not match a supported file type
+2020-09-14 07:08:28.389 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Error.cshtml'.
+2020-09-14 07:08:28.391 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Privacy.cshtml'.
+2020-09-14 07:08:28.395 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Create.cshtml'.
+2020-09-14 07:08:28.398 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Delete.cshtml'.
+2020-09-14 07:08:28.400 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Details.cshtml'.
+2020-09-14 07:08:28.402 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Edit.cshtml'.
+2020-09-14 07:08:28.405 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Index.cshtml'.
+2020-09-14 07:08:28.406 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Shared/_Layout.cshtml'.
+2020-09-14 07:08:28.408 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Shared/_ValidationScriptsPartial.cshtml'.
+2020-09-14 07:08:28.410 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/_ViewImports.cshtml'.
+2020-09-14 07:08:28.411 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/_ViewStart.cshtml'.
+2020-09-14 07:08:28.439 -04:00 [DBG] 1 candidate(s) found for the request path '/Rgb'
+2020-09-14 07:08:28.450 -04:00 [DBG] Endpoint 'Page: /Rgb/Index' with route pattern 'Rgb' is valid for the request path '/Rgb'
+2020-09-14 07:08:28.481 -04:00 [DBG] Request matched endpoint '/Rgb/Index'
+2020-09-14 07:08:58.133 -04:00 [DBG] Claims packed into Header (X-Claims, "email=maria@a.test")
+2020-09-14 07:08:58.159 -04:00 [DBG] Adding []
+2020-09-14 07:08:58.169 -04:00 [DBG] Adding [{"Key":"X-Claims","Value":["\"email=maria@a.test\""],"$type":"KeyValuePair`2"}]
+2020-09-14 07:08:58.180 -04:00 [INF] Executing endpoint '/Rgb/Index'
+2020-09-14 07:08:58.187 -04:00 [DBG] Registered model binder providers, in the following order: ["Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BinderTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ServicesModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.HeaderModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FloatingPointTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.EnumTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CancellationTokenModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ByteArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormFileModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormCollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.KeyValuePairModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DictionaryModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ComplexTypeModelBinderProvider"]
+2020-09-14 07:08:58.271 -04:00 [INF] Route matched with {page = "/Rgb/Index", action = "", controller = ""}. Executing page /Rgb/Index
+2020-09-14 07:08:58.275 -04:00 [DBG] Execution plan of authorization filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.AutoValidateAntiforgeryTokenAuthorizationFilter"]
+2020-09-14 07:08:58.278 -04:00 [DBG] Execution plan of resource filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.SaveTempDataFilter"]
+2020-09-14 07:08:58.280 -04:00 [DBG] Execution plan of action filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000)"]
+2020-09-14 07:08:58.284 -04:00 [DBG] Execution plan of exception filters (in the following order): ["None"]
+2020-09-14 07:08:58.287 -04:00 [DBG] Execution plan of result filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.SaveTempDataFilter"]
+2020-09-14 07:08:58.293 -04:00 [DBG] Executing page model factory for page EDennis.Samples.ColorApp.Razor.Pages.Rgb.Pages_Rgb_Index (EDennis.Samples.ColorApp.Razor.Views)
+2020-09-14 07:08:58.325 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration"
+2020-09-14 07:08:58.330 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration"
+2020-09-14 07:08:59.628 -04:00 [INF] Received HTTP response after 1294.1352ms - "OK"
+2020-09-14 07:08:59.633 -04:00 [INF] End processing HTTP request after 1309.9677ms - "OK"
+2020-09-14 07:08:59.697 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 07:08:59.700 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 07:08:59.786 -04:00 [INF] Received HTTP response after 85.9867ms - "OK"
+2020-09-14 07:08:59.789 -04:00 [INF] End processing HTTP request after 91.6451ms - "OK"
+2020-09-14 07:08:59.953 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 07:08:59.956 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 07:08:59.986 -04:00 [INF] Received HTTP response after 29.5638ms - "OK"
+2020-09-14 07:08:59.988 -04:00 [INF] End processing HTTP request after 35.4493ms - "OK"
+2020-09-14 07:09:00.222 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration"
+2020-09-14 07:09:00.224 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration"
+2020-09-14 07:09:00.387 -04:00 [INF] Received HTTP response after 162.7635ms - "OK"
+2020-09-14 07:09:00.389 -04:00 [INF] End processing HTTP request after 166.8408ms - "OK"
+2020-09-14 07:09:00.392 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 07:09:00.393 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 07:09:00.430 -04:00 [INF] Received HTTP response after 36.3897ms - "OK"
+2020-09-14 07:09:00.432 -04:00 [INF] End processing HTTP request after 39.6719ms - "OK"
+2020-09-14 07:09:00.440 -04:00 [INF] Start processing HTTP request POST "https://localhost:5000/connect/token"
+2020-09-14 07:09:00.443 -04:00 [INF] Sending HTTP request POST "https://localhost:5000/connect/token"
+2020-09-14 07:09:01.391 -04:00 [INF] Received HTTP response after 947.8568ms - "BadRequest"
+2020-09-14 07:09:01.395 -04:00 [INF] End processing HTTP request after 955.7758ms - "BadRequest"
+2020-09-14 07:09:01.402 -04:00 [ERR] [null]
+2020-09-14 07:15:00.232 -04:00 [INF] Starting host ...
+2020-09-14 07:15:01.568 -04:00 [DBG] Hosting starting
+2020-09-14 07:15:01.610 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-14 07:15:01.653 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-2f5c30d0-a084-4c35-8d2d-8e4a0d052454.xml'.
+2020-09-14 07:15:01.656 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-5ea5f1e4-4b59-4370-8db1-b9ae7bbf8c63.xml'.
+2020-09-14 07:15:01.658 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-604bfd08-e244-4901-bfce-3bc0372b2e4c.xml'.
+2020-09-14 07:15:01.659 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-646446ba-95e9-4794-b5d0-1caf83cf19fa.xml'.
+2020-09-14 07:15:01.660 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-69e60cc4-4e85-49ca-9b50-c12f6bb46b80.xml'.
+2020-09-14 07:15:01.664 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-cd493bdb-3acc-4e26-9708-b7241aa23b1a.xml'.
+2020-09-14 07:15:01.665 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-d9e18831-a0f6-4101-9760-f3e14ecf857a.xml'.
+2020-09-14 07:15:01.668 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-df296e2e-5f74-4e19-9eeb-277396346f82.xml'.
+2020-09-14 07:15:01.669 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-e0589fd9-4240-4b20-8225-56419b92209b.xml'.
+2020-09-14 07:15:01.677 -04:00 [DBG] Found key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454}.
+2020-09-14 07:15:01.684 -04:00 [DBG] Found key {5ea5f1e4-4b59-4370-8db1-b9ae7bbf8c63}.
+2020-09-14 07:15:01.686 -04:00 [DBG] Found key {604bfd08-e244-4901-bfce-3bc0372b2e4c}.
+2020-09-14 07:15:01.688 -04:00 [DBG] Found key {646446ba-95e9-4794-b5d0-1caf83cf19fa}.
+2020-09-14 07:15:01.689 -04:00 [DBG] Found key {69e60cc4-4e85-49ca-9b50-c12f6bb46b80}.
+2020-09-14 07:15:01.690 -04:00 [DBG] Found key {cd493bdb-3acc-4e26-9708-b7241aa23b1a}.
+2020-09-14 07:15:01.691 -04:00 [DBG] Found key {d9e18831-a0f6-4101-9760-f3e14ecf857a}.
+2020-09-14 07:15:01.693 -04:00 [DBG] Found key {df296e2e-5f74-4e19-9eeb-277396346f82}.
+2020-09-14 07:15:01.695 -04:00 [DBG] Found key {e0589fd9-4240-4b20-8225-56419b92209b}.
+2020-09-14 07:15:01.706 -04:00 [DBG] Considering key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} with expiration date 2020-11-19 18:05:30Z as default key.
+2020-09-14 07:15:01.744 -04:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2020-09-14 07:15:01.752 -04:00 [DBG] Decrypting secret element using Windows DPAPI.
+2020-09-14 07:15:01.758 -04:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2020-09-14 07:15:01.767 -04:00 [DBG] Opening CNG algorithm 'AES' from provider 'null' with chaining mode CBC.
+2020-09-14 07:15:01.775 -04:00 [DBG] Opening CNG algorithm 'SHA256' from provider 'null' with HMAC.
+2020-09-14 07:15:01.785 -04:00 [DBG] Using key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} as the default key.
+2020-09-14 07:15:01.787 -04:00 [DBG] Key ring with default key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} was loaded during application startup.
+2020-09-14 07:15:08.619 -04:00 [DBG] ScopedRequestMiddleware constructed with {"HeadersToCapture":["X-CachedTransaction","X-Claims"],"CookiesToCapture":["X-CachedTransaction"],"$type":"ScopedRequestMessageOptions"}
+2020-09-14 07:15:08.650 -04:00 [DBG] ClaimsToHeaderMiddleware constructed with {"ClaimTypesConfigKey":"Security:OpenIdConnect:Scope","Enabled":true,"$type":"ClaimsToHeaderOptions"}
+2020-09-14 07:15:10.928 -04:00 [DBG] Failed to locate the development https certificate at 'null'.
+2020-09-14 07:15:11.221 -04:00 [DBG] Using development certificate: CN=localhost (Thumbprint: 198EBC3B10DE63E96CF91E8DFEDD359F8D00FB82)
+2020-09-14 07:15:11.234 -04:00 [INF] Now listening on: https://localhost:44305
+2020-09-14 07:15:11.245 -04:00 [INF] Now listening on: http://localhost:64438
+2020-09-14 07:15:11.247 -04:00 [DBG] Loaded hosting startup assembly EDennis.Samples.ColorApp.Razor
+2020-09-14 07:15:11.251 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2020-09-14 07:15:11.253 -04:00 [INF] Hosting environment: Development
+2020-09-14 07:15:11.254 -04:00 [INF] Content root path: C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp.Razor
+2020-09-14 07:15:11.256 -04:00 [DBG] Hosting started
+2020-09-14 07:15:11.477 -04:00 [DBG] Connection id "0HM2OJTP5SS0D" received FIN.
+2020-09-14 07:15:11.491 -04:00 [DBG] Connection id "0HM2OJTP5SS0D" accepted.
+2020-09-14 07:15:11.494 -04:00 [DBG] Connection id "0HM2OJTP5SS0D" started.
+2020-09-14 07:15:11.535 -04:00 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Authentication failed because the remote party has closed the transport stream.
+   at System.Net.Security.SslStream.StartReadFrame(Byte[] buffer, Int32 readBytes, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.StartReceiveBlob(Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ForceAuthentication(Boolean receiveFirst, Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ProcessAuthentication(LazyAsyncResult lazyResult, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.BeginAuthenticateAsServer(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken, AsyncCallback asyncCallback, Object asyncState)
+   at System.Net.Security.SslStream.<>c.<AuthenticateAsServerAsync>b__69_0(SslServerAuthenticationOptions arg1, CancellationToken arg2, AsyncCallback callback, Object state)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl[TArg1,TArg2](Func`5 beginMethod, Func`2 endFunction, Action`1 endAction, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state)
+   at System.Net.Security.SslStream.AuthenticateAsServerAsync(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.InnerOnConnectionAsync(ConnectionContext context)
+2020-09-14 07:15:11.629 -04:00 [DBG] Connection id "0HM2OJTP5SS0D" stopped.
+2020-09-14 07:15:11.638 -04:00 [DBG] Connection id "0HM2OJTP5SS0D" sending FIN because: "The Socket transport's send loop completed gracefully."
+2020-09-14 07:15:12.181 -04:00 [DBG] Connection id "0HM2OJTP5SS0E" accepted.
+2020-09-14 07:15:12.198 -04:00 [DBG] Connection id "0HM2OJTP5SS0E" started.
+2020-09-14 07:15:12.401 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/Rgb  
+2020-09-14 07:15:12.407 -04:00 [DBG] Wildcard detected, all requests with hosts will be allowed.
+2020-09-14 07:15:12.411 -04:00 [DBG] The request path /Rgb does not match a supported file type
+2020-09-14 07:15:12.424 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Error.cshtml'.
+2020-09-14 07:15:12.425 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Privacy.cshtml'.
+2020-09-14 07:15:12.427 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Create.cshtml'.
+2020-09-14 07:15:12.428 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Delete.cshtml'.
+2020-09-14 07:15:12.430 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Details.cshtml'.
+2020-09-14 07:15:12.431 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Edit.cshtml'.
+2020-09-14 07:15:12.434 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Index.cshtml'.
+2020-09-14 07:15:12.437 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Shared/_Layout.cshtml'.
+2020-09-14 07:15:12.438 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Shared/_ValidationScriptsPartial.cshtml'.
+2020-09-14 07:15:12.440 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/_ViewImports.cshtml'.
+2020-09-14 07:15:12.441 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/_ViewStart.cshtml'.
+2020-09-14 07:15:12.467 -04:00 [DBG] 1 candidate(s) found for the request path '/Rgb'
+2020-09-14 07:15:12.475 -04:00 [DBG] Endpoint 'Page: /Rgb/Index' with route pattern 'Rgb' is valid for the request path '/Rgb'
+2020-09-14 07:15:12.512 -04:00 [DBG] Request matched endpoint '/Rgb/Index'
+2020-09-14 07:15:17.255 -04:00 [DBG] Claims packed into Header (X-Claims, "email=maria@a.test")
+2020-09-14 07:15:17.287 -04:00 [DBG] Adding []
+2020-09-14 07:15:17.312 -04:00 [DBG] Adding [{"Key":"X-Claims","Value":["\"email=maria@a.test\""],"$type":"KeyValuePair`2"}]
+2020-09-14 07:15:17.361 -04:00 [INF] Executing endpoint '/Rgb/Index'
+2020-09-14 07:15:17.372 -04:00 [DBG] Registered model binder providers, in the following order: ["Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BinderTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ServicesModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.HeaderModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FloatingPointTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.EnumTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CancellationTokenModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ByteArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormFileModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormCollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.KeyValuePairModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DictionaryModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ComplexTypeModelBinderProvider"]
+2020-09-14 07:15:17.504 -04:00 [INF] Route matched with {page = "/Rgb/Index", action = "", controller = ""}. Executing page /Rgb/Index
+2020-09-14 07:15:17.506 -04:00 [DBG] Execution plan of authorization filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.AutoValidateAntiforgeryTokenAuthorizationFilter"]
+2020-09-14 07:15:17.509 -04:00 [DBG] Execution plan of resource filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.SaveTempDataFilter"]
+2020-09-14 07:15:17.511 -04:00 [DBG] Execution plan of action filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000)"]
+2020-09-14 07:15:17.513 -04:00 [DBG] Execution plan of exception filters (in the following order): ["None"]
+2020-09-14 07:15:17.517 -04:00 [DBG] Execution plan of result filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.SaveTempDataFilter"]
+2020-09-14 07:15:17.524 -04:00 [DBG] Executing page model factory for page EDennis.Samples.ColorApp.Razor.Pages.Rgb.Pages_Rgb_Index (EDennis.Samples.ColorApp.Razor.Views)
+2020-09-14 07:15:17.558 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration"
+2020-09-14 07:15:17.562 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration"
+2020-09-14 07:15:18.911 -04:00 [INF] Received HTTP response after 1343.2168ms - "OK"
+2020-09-14 07:15:18.917 -04:00 [INF] End processing HTTP request after 1362.6657ms - "OK"
+2020-09-14 07:15:18.981 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 07:15:18.984 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 07:15:19.056 -04:00 [INF] Received HTTP response after 72.269ms - "OK"
+2020-09-14 07:15:19.058 -04:00 [INF] End processing HTTP request after 76.8381ms - "OK"
+2020-09-14 07:15:19.233 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 07:15:19.237 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 07:15:19.282 -04:00 [INF] Received HTTP response after 45.0536ms - "OK"
+2020-09-14 07:15:19.284 -04:00 [INF] End processing HTTP request after 50.1323ms - "OK"
+2020-09-14 07:15:28.998 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration"
+2020-09-14 07:15:29.002 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration"
+2020-09-14 07:15:29.169 -04:00 [INF] Received HTTP response after 167.3114ms - "OK"
+2020-09-14 07:15:29.172 -04:00 [INF] End processing HTTP request after 173.7463ms - "OK"
+2020-09-14 07:15:29.176 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 07:15:29.177 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 07:15:29.222 -04:00 [INF] Received HTTP response after 44.7869ms - "OK"
+2020-09-14 07:15:29.225 -04:00 [INF] End processing HTTP request after 49.0245ms - "OK"
+2020-09-14 07:16:11.378 -04:00 [INF] Start processing HTTP request POST "https://localhost:5000/connect/token"
+2020-09-14 07:16:11.381 -04:00 [INF] Sending HTTP request POST "https://localhost:5000/connect/token"
+2020-09-14 07:16:12.403 -04:00 [INF] Received HTTP response after 1021.8154ms - "BadRequest"
+2020-09-14 07:16:12.407 -04:00 [INF] End processing HTTP request after 1028.8962ms - "BadRequest"
+2020-09-14 07:26:44.361 -04:00 [INF] Starting host ...
+2020-09-14 07:26:44.393 -04:00 [INF] Generating IDP Config file...
+2020-09-14 07:26:44.906 -04:00 [INF] Exiting...
+2020-09-14 07:32:38.677 -04:00 [INF] Starting host ...
+2020-09-14 07:32:40.354 -04:00 [DBG] Hosting starting
+2020-09-14 07:32:40.398 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-14 07:32:40.438 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-2f5c30d0-a084-4c35-8d2d-8e4a0d052454.xml'.
+2020-09-14 07:32:40.442 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-5ea5f1e4-4b59-4370-8db1-b9ae7bbf8c63.xml'.
+2020-09-14 07:32:40.444 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-604bfd08-e244-4901-bfce-3bc0372b2e4c.xml'.
+2020-09-14 07:32:40.446 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-646446ba-95e9-4794-b5d0-1caf83cf19fa.xml'.
+2020-09-14 07:32:40.449 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-69e60cc4-4e85-49ca-9b50-c12f6bb46b80.xml'.
+2020-09-14 07:32:40.451 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-cd493bdb-3acc-4e26-9708-b7241aa23b1a.xml'.
+2020-09-14 07:32:40.452 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-d9e18831-a0f6-4101-9760-f3e14ecf857a.xml'.
+2020-09-14 07:32:40.455 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-df296e2e-5f74-4e19-9eeb-277396346f82.xml'.
+2020-09-14 07:32:40.457 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-e0589fd9-4240-4b20-8225-56419b92209b.xml'.
+2020-09-14 07:32:40.467 -04:00 [DBG] Found key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454}.
+2020-09-14 07:32:40.476 -04:00 [DBG] Found key {5ea5f1e4-4b59-4370-8db1-b9ae7bbf8c63}.
+2020-09-14 07:32:40.478 -04:00 [DBG] Found key {604bfd08-e244-4901-bfce-3bc0372b2e4c}.
+2020-09-14 07:32:40.480 -04:00 [DBG] Found key {646446ba-95e9-4794-b5d0-1caf83cf19fa}.
+2020-09-14 07:32:40.481 -04:00 [DBG] Found key {69e60cc4-4e85-49ca-9b50-c12f6bb46b80}.
+2020-09-14 07:32:40.483 -04:00 [DBG] Found key {cd493bdb-3acc-4e26-9708-b7241aa23b1a}.
+2020-09-14 07:32:40.484 -04:00 [DBG] Found key {d9e18831-a0f6-4101-9760-f3e14ecf857a}.
+2020-09-14 07:32:40.487 -04:00 [DBG] Found key {df296e2e-5f74-4e19-9eeb-277396346f82}.
+2020-09-14 07:32:40.489 -04:00 [DBG] Found key {e0589fd9-4240-4b20-8225-56419b92209b}.
+2020-09-14 07:32:40.501 -04:00 [DBG] Considering key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} with expiration date 2020-11-19 18:05:30Z as default key.
+2020-09-14 07:32:40.539 -04:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2020-09-14 07:32:40.547 -04:00 [DBG] Decrypting secret element using Windows DPAPI.
+2020-09-14 07:32:40.552 -04:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2020-09-14 07:32:40.562 -04:00 [DBG] Opening CNG algorithm 'AES' from provider 'null' with chaining mode CBC.
+2020-09-14 07:32:40.571 -04:00 [DBG] Opening CNG algorithm 'SHA256' from provider 'null' with HMAC.
+2020-09-14 07:32:40.579 -04:00 [DBG] Using key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} as the default key.
+2020-09-14 07:32:40.582 -04:00 [DBG] Key ring with default key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} was loaded during application startup.
+2020-09-14 07:32:43.579 -04:00 [DBG] ScopedRequestMiddleware constructed with {"HeadersToCapture":["X-CachedTransaction","X-Claims"],"CookiesToCapture":["X-CachedTransaction"],"$type":"ScopedRequestMessageOptions"}
+2020-09-14 07:32:43.614 -04:00 [DBG] ClaimsToHeaderMiddleware constructed with {"ClaimTypesConfigKey":"Security:OpenIdConnect:Scope","Enabled":true,"$type":"ClaimsToHeaderOptions"}
+2020-09-14 07:32:46.790 -04:00 [DBG] Failed to locate the development https certificate at 'null'.
+2020-09-14 07:32:47.058 -04:00 [DBG] Using development certificate: CN=localhost (Thumbprint: 198EBC3B10DE63E96CF91E8DFEDD359F8D00FB82)
+2020-09-14 07:32:47.069 -04:00 [INF] Now listening on: https://localhost:44305
+2020-09-14 07:32:47.076 -04:00 [INF] Now listening on: http://localhost:64438
+2020-09-14 07:32:47.079 -04:00 [DBG] Loaded hosting startup assembly EDennis.Samples.ColorApp.Razor
+2020-09-14 07:32:47.082 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2020-09-14 07:32:47.084 -04:00 [INF] Hosting environment: Development
+2020-09-14 07:32:47.086 -04:00 [INF] Content root path: C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp.Razor
+2020-09-14 07:32:47.089 -04:00 [DBG] Hosting started
+2020-09-14 07:32:47.301 -04:00 [DBG] Connection id "0HM2OK7JQVI0I" accepted.
+2020-09-14 07:32:47.301 -04:00 [DBG] Connection id "0HM2OK7JQVI0J" accepted.
+2020-09-14 07:32:47.305 -04:00 [DBG] Connection id "0HM2OK7JQVI0I" started.
+2020-09-14 07:32:47.308 -04:00 [DBG] Connection id "0HM2OK7JQVI0I" received FIN.
+2020-09-14 07:32:47.308 -04:00 [DBG] Connection id "0HM2OK7JQVI0J" received FIN.
+2020-09-14 07:32:47.308 -04:00 [DBG] Connection id "0HM2OK7JQVI0J" started.
+2020-09-14 07:32:47.376 -04:00 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Authentication failed because the remote party has closed the transport stream.
+   at System.Net.Security.SslStream.StartReadFrame(Byte[] buffer, Int32 readBytes, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.StartReceiveBlob(Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ForceAuthentication(Boolean receiveFirst, Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ProcessAuthentication(LazyAsyncResult lazyResult, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.BeginAuthenticateAsServer(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken, AsyncCallback asyncCallback, Object asyncState)
+   at System.Net.Security.SslStream.<>c.<AuthenticateAsServerAsync>b__69_0(SslServerAuthenticationOptions arg1, CancellationToken arg2, AsyncCallback callback, Object state)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl[TArg1,TArg2](Func`5 beginMethod, Func`2 endFunction, Action`1 endAction, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state)
+   at System.Net.Security.SslStream.AuthenticateAsServerAsync(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.InnerOnConnectionAsync(ConnectionContext context)
+2020-09-14 07:32:47.376 -04:00 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Authentication failed because the remote party has closed the transport stream.
+   at System.Net.Security.SslStream.StartReadFrame(Byte[] buffer, Int32 readBytes, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.StartReceiveBlob(Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ForceAuthentication(Boolean receiveFirst, Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ProcessAuthentication(LazyAsyncResult lazyResult, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.BeginAuthenticateAsServer(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken, AsyncCallback asyncCallback, Object asyncState)
+   at System.Net.Security.SslStream.<>c.<AuthenticateAsServerAsync>b__69_0(SslServerAuthenticationOptions arg1, CancellationToken arg2, AsyncCallback callback, Object state)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl[TArg1,TArg2](Func`5 beginMethod, Func`2 endFunction, Action`1 endAction, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state)
+   at System.Net.Security.SslStream.AuthenticateAsServerAsync(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.InnerOnConnectionAsync(ConnectionContext context)
+2020-09-14 07:32:47.480 -04:00 [DBG] Connection id "0HM2OK7JQVI0J" stopped.
+2020-09-14 07:32:47.539 -04:00 [DBG] Connection id "0HM2OK7JQVI0I" stopped.
+2020-09-14 07:32:47.544 -04:00 [DBG] Connection id "0HM2OK7JQVI0I" sending FIN because: "The Socket transport's send loop completed gracefully."
+2020-09-14 07:32:47.544 -04:00 [DBG] Connection id "0HM2OK7JQVI0J" sending FIN because: "The Socket transport's send loop completed gracefully."
+2020-09-14 07:32:48.082 -04:00 [DBG] Connection id "0HM2OK7JQVI0K" accepted.
+2020-09-14 07:32:48.097 -04:00 [DBG] Connection id "0HM2OK7JQVI0K" started.
+2020-09-14 07:32:48.287 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/Rgb  
+2020-09-14 07:32:48.292 -04:00 [DBG] Wildcard detected, all requests with hosts will be allowed.
+2020-09-14 07:32:48.296 -04:00 [DBG] The request path /Rgb does not match a supported file type
+2020-09-14 07:32:48.305 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Error.cshtml'.
+2020-09-14 07:32:48.308 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Privacy.cshtml'.
+2020-09-14 07:32:48.310 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Create.cshtml'.
+2020-09-14 07:32:48.311 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Delete.cshtml'.
+2020-09-14 07:32:48.312 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Details.cshtml'.
+2020-09-14 07:32:48.319 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Edit.cshtml'.
+2020-09-14 07:32:48.320 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Index.cshtml'.
+2020-09-14 07:32:48.322 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Shared/_Layout.cshtml'.
+2020-09-14 07:32:48.323 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Shared/_ValidationScriptsPartial.cshtml'.
+2020-09-14 07:32:48.324 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/_ViewImports.cshtml'.
+2020-09-14 07:32:48.326 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/_ViewStart.cshtml'.
+2020-09-14 07:32:48.354 -04:00 [DBG] 1 candidate(s) found for the request path '/Rgb'
+2020-09-14 07:32:48.362 -04:00 [DBG] Endpoint 'Page: /Rgb/Index' with route pattern 'Rgb' is valid for the request path '/Rgb'
+2020-09-14 07:32:48.391 -04:00 [DBG] Request matched endpoint '/Rgb/Index'
+2020-09-14 07:32:56.542 -04:00 [DBG] Claims packed into Header (X-Claims, "email=darius@b.test")
+2020-09-14 07:32:56.569 -04:00 [DBG] Adding []
+2020-09-14 07:32:56.579 -04:00 [DBG] Adding [{"Key":"X-Claims","Value":["\"email=darius@b.test\""],"$type":"KeyValuePair`2"}]
+2020-09-14 07:32:56.589 -04:00 [INF] Executing endpoint '/Rgb/Index'
+2020-09-14 07:32:56.598 -04:00 [DBG] Registered model binder providers, in the following order: ["Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BinderTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ServicesModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.HeaderModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FloatingPointTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.EnumTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CancellationTokenModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ByteArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormFileModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormCollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.KeyValuePairModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DictionaryModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ComplexTypeModelBinderProvider"]
+2020-09-14 07:32:56.691 -04:00 [INF] Route matched with {page = "/Rgb/Index", action = "", controller = ""}. Executing page /Rgb/Index
+2020-09-14 07:32:56.695 -04:00 [DBG] Execution plan of authorization filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.AutoValidateAntiforgeryTokenAuthorizationFilter"]
+2020-09-14 07:32:56.698 -04:00 [DBG] Execution plan of resource filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.SaveTempDataFilter"]
+2020-09-14 07:32:56.702 -04:00 [DBG] Execution plan of action filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000)"]
+2020-09-14 07:32:56.705 -04:00 [DBG] Execution plan of exception filters (in the following order): ["None"]
+2020-09-14 07:32:56.707 -04:00 [DBG] Execution plan of result filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.SaveTempDataFilter"]
+2020-09-14 07:32:56.715 -04:00 [DBG] Executing page model factory for page EDennis.Samples.ColorApp.Razor.Pages.Rgb.Pages_Rgb_Index (EDennis.Samples.ColorApp.Razor.Views)
+2020-09-14 07:32:56.753 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration"
+2020-09-14 07:32:56.760 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration"
+2020-09-14 07:32:58.122 -04:00 [INF] Received HTTP response after 1358.8684ms - "OK"
+2020-09-14 07:32:58.128 -04:00 [INF] End processing HTTP request after 1377.0063ms - "OK"
+2020-09-14 07:32:58.191 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 07:32:58.193 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 07:32:58.269 -04:00 [INF] Received HTTP response after 75.739ms - "OK"
+2020-09-14 07:32:58.271 -04:00 [INF] End processing HTTP request after 80.0216ms - "OK"
+2020-09-14 07:32:58.441 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 07:32:58.443 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 07:32:58.483 -04:00 [INF] Received HTTP response after 39.8752ms - "OK"
+2020-09-14 07:32:58.485 -04:00 [INF] End processing HTTP request after 44.0312ms - "OK"
+2020-09-14 07:33:07.597 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration"
+2020-09-14 07:33:07.602 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration"
+2020-09-14 07:33:07.771 -04:00 [INF] Received HTTP response after 168.7919ms - "OK"
+2020-09-14 07:33:07.774 -04:00 [INF] End processing HTTP request after 177.2523ms - "OK"
+2020-09-14 07:33:07.784 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 07:33:07.786 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 07:33:07.835 -04:00 [INF] Received HTTP response after 48.5879ms - "OK"
+2020-09-14 07:33:07.838 -04:00 [INF] End processing HTTP request after 53.7614ms - "OK"
+2020-09-14 07:33:13.706 -04:00 [INF] Start processing HTTP request POST "https://localhost:5000/connect/token"
+2020-09-14 07:33:13.709 -04:00 [INF] Sending HTTP request POST "https://localhost:5000/connect/token"
+2020-09-14 07:33:14.679 -04:00 [INF] Received HTTP response after 969.7785ms - "BadRequest"
+2020-09-14 07:33:14.683 -04:00 [INF] End processing HTTP request after 976.3255ms - "BadRequest"
+2020-09-14 07:33:25.763 -04:00 [ERR] invalid_scope
+2020-09-14 07:44:17.253 -04:00 [INF] Starting host ...
+2020-09-14 07:44:17.291 -04:00 [INF] Generating IDP Config file...
+2020-09-14 07:44:17.770 -04:00 [INF] Exiting...
+2020-09-14 07:49:40.834 -04:00 [INF] Starting host ...
+2020-09-14 07:49:42.400 -04:00 [DBG] Hosting starting
+2020-09-14 07:49:42.444 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-14 07:49:42.487 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-2f5c30d0-a084-4c35-8d2d-8e4a0d052454.xml'.
+2020-09-14 07:49:42.491 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-5ea5f1e4-4b59-4370-8db1-b9ae7bbf8c63.xml'.
+2020-09-14 07:49:42.493 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-604bfd08-e244-4901-bfce-3bc0372b2e4c.xml'.
+2020-09-14 07:49:42.495 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-646446ba-95e9-4794-b5d0-1caf83cf19fa.xml'.
+2020-09-14 07:49:42.498 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-69e60cc4-4e85-49ca-9b50-c12f6bb46b80.xml'.
+2020-09-14 07:49:42.500 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-cd493bdb-3acc-4e26-9708-b7241aa23b1a.xml'.
+2020-09-14 07:49:42.502 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-d9e18831-a0f6-4101-9760-f3e14ecf857a.xml'.
+2020-09-14 07:49:42.504 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-df296e2e-5f74-4e19-9eeb-277396346f82.xml'.
+2020-09-14 07:49:42.505 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-e0589fd9-4240-4b20-8225-56419b92209b.xml'.
+2020-09-14 07:49:42.515 -04:00 [DBG] Found key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454}.
+2020-09-14 07:49:42.523 -04:00 [DBG] Found key {5ea5f1e4-4b59-4370-8db1-b9ae7bbf8c63}.
+2020-09-14 07:49:42.526 -04:00 [DBG] Found key {604bfd08-e244-4901-bfce-3bc0372b2e4c}.
+2020-09-14 07:49:42.527 -04:00 [DBG] Found key {646446ba-95e9-4794-b5d0-1caf83cf19fa}.
+2020-09-14 07:49:42.528 -04:00 [DBG] Found key {69e60cc4-4e85-49ca-9b50-c12f6bb46b80}.
+2020-09-14 07:49:42.530 -04:00 [DBG] Found key {cd493bdb-3acc-4e26-9708-b7241aa23b1a}.
+2020-09-14 07:49:42.531 -04:00 [DBG] Found key {d9e18831-a0f6-4101-9760-f3e14ecf857a}.
+2020-09-14 07:49:42.533 -04:00 [DBG] Found key {df296e2e-5f74-4e19-9eeb-277396346f82}.
+2020-09-14 07:49:42.536 -04:00 [DBG] Found key {e0589fd9-4240-4b20-8225-56419b92209b}.
+2020-09-14 07:49:42.548 -04:00 [DBG] Considering key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} with expiration date 2020-11-19 18:05:30Z as default key.
+2020-09-14 07:49:42.608 -04:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2020-09-14 07:49:42.615 -04:00 [DBG] Decrypting secret element using Windows DPAPI.
+2020-09-14 07:49:42.620 -04:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2020-09-14 07:49:42.629 -04:00 [DBG] Opening CNG algorithm 'AES' from provider 'null' with chaining mode CBC.
+2020-09-14 07:49:42.639 -04:00 [DBG] Opening CNG algorithm 'SHA256' from provider 'null' with HMAC.
+2020-09-14 07:49:42.646 -04:00 [DBG] Using key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} as the default key.
+2020-09-14 07:49:42.649 -04:00 [DBG] Key ring with default key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} was loaded during application startup.
+2020-09-14 07:49:44.967 -04:00 [DBG] ScopedRequestMiddleware constructed with {"HeadersToCapture":["X-CachedTransaction","X-Claims"],"CookiesToCapture":["X-CachedTransaction"],"$type":"ScopedRequestMessageOptions"}
+2020-09-14 07:49:45.002 -04:00 [DBG] ClaimsToHeaderMiddleware constructed with {"ClaimTypesConfigKey":"Security:OpenIdConnect:Scope","Enabled":true,"$type":"ClaimsToHeaderOptions"}
+2020-09-14 07:49:47.267 -04:00 [DBG] Failed to locate the development https certificate at 'null'.
+2020-09-14 07:49:47.527 -04:00 [DBG] Using development certificate: CN=localhost (Thumbprint: 198EBC3B10DE63E96CF91E8DFEDD359F8D00FB82)
+2020-09-14 07:49:47.545 -04:00 [INF] Now listening on: https://localhost:44305
+2020-09-14 07:49:47.552 -04:00 [INF] Now listening on: http://localhost:64438
+2020-09-14 07:49:47.557 -04:00 [DBG] Loaded hosting startup assembly EDennis.Samples.ColorApp.Razor
+2020-09-14 07:49:47.560 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2020-09-14 07:49:47.562 -04:00 [INF] Hosting environment: Development
+2020-09-14 07:49:47.563 -04:00 [INF] Content root path: C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp.Razor
+2020-09-14 07:49:47.565 -04:00 [DBG] Hosting started
+2020-09-14 07:49:47.708 -04:00 [DBG] Connection id "0HM2OKH3UCCRS" received FIN.
+2020-09-14 07:49:47.708 -04:00 [DBG] Connection id "0HM2OKH3UCCRR" received FIN.
+2020-09-14 07:49:47.723 -04:00 [DBG] Connection id "0HM2OKH3UCCRR" accepted.
+2020-09-14 07:49:47.723 -04:00 [DBG] Connection id "0HM2OKH3UCCRS" accepted.
+2020-09-14 07:49:47.733 -04:00 [DBG] Connection id "0HM2OKH3UCCRS" started.
+2020-09-14 07:49:47.733 -04:00 [DBG] Connection id "0HM2OKH3UCCRR" started.
+2020-09-14 07:49:47.763 -04:00 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Authentication failed because the remote party has closed the transport stream.
+   at System.Net.Security.SslStream.StartReadFrame(Byte[] buffer, Int32 readBytes, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.StartReceiveBlob(Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ForceAuthentication(Boolean receiveFirst, Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ProcessAuthentication(LazyAsyncResult lazyResult, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.BeginAuthenticateAsServer(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken, AsyncCallback asyncCallback, Object asyncState)
+   at System.Net.Security.SslStream.<>c.<AuthenticateAsServerAsync>b__69_0(SslServerAuthenticationOptions arg1, CancellationToken arg2, AsyncCallback callback, Object state)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl[TArg1,TArg2](Func`5 beginMethod, Func`2 endFunction, Action`1 endAction, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state)
+   at System.Net.Security.SslStream.AuthenticateAsServerAsync(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.InnerOnConnectionAsync(ConnectionContext context)
+2020-09-14 07:49:47.763 -04:00 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Authentication failed because the remote party has closed the transport stream.
+   at System.Net.Security.SslStream.StartReadFrame(Byte[] buffer, Int32 readBytes, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.StartReceiveBlob(Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ForceAuthentication(Boolean receiveFirst, Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ProcessAuthentication(LazyAsyncResult lazyResult, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.BeginAuthenticateAsServer(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken, AsyncCallback asyncCallback, Object asyncState)
+   at System.Net.Security.SslStream.<>c.<AuthenticateAsServerAsync>b__69_0(SslServerAuthenticationOptions arg1, CancellationToken arg2, AsyncCallback callback, Object state)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl[TArg1,TArg2](Func`5 beginMethod, Func`2 endFunction, Action`1 endAction, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state)
+   at System.Net.Security.SslStream.AuthenticateAsServerAsync(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.InnerOnConnectionAsync(ConnectionContext context)
+2020-09-14 07:49:47.882 -04:00 [DBG] Connection id "0HM2OKH3UCCRR" stopped.
+2020-09-14 07:49:47.966 -04:00 [DBG] Connection id "0HM2OKH3UCCRS" stopped.
+2020-09-14 07:49:47.974 -04:00 [DBG] Connection id "0HM2OKH3UCCRS" sending FIN because: "The Socket transport's send loop completed gracefully."
+2020-09-14 07:49:47.974 -04:00 [DBG] Connection id "0HM2OKH3UCCRR" sending FIN because: "The Socket transport's send loop completed gracefully."
+2020-09-14 07:49:48.525 -04:00 [DBG] Connection id "0HM2OKH3UCCRT" accepted.
+2020-09-14 07:49:48.557 -04:00 [DBG] Connection id "0HM2OKH3UCCRT" started.
+2020-09-14 07:49:48.779 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/Rgb  
+2020-09-14 07:49:48.785 -04:00 [DBG] Wildcard detected, all requests with hosts will be allowed.
+2020-09-14 07:49:48.790 -04:00 [DBG] The request path /Rgb does not match a supported file type
+2020-09-14 07:49:48.803 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Error.cshtml'.
+2020-09-14 07:49:48.805 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Privacy.cshtml'.
+2020-09-14 07:49:48.807 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Create.cshtml'.
+2020-09-14 07:49:48.808 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Delete.cshtml'.
+2020-09-14 07:49:48.811 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Details.cshtml'.
+2020-09-14 07:49:48.812 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Edit.cshtml'.
+2020-09-14 07:49:48.813 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Index.cshtml'.
+2020-09-14 07:49:48.815 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Shared/_Layout.cshtml'.
+2020-09-14 07:49:48.816 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Shared/_ValidationScriptsPartial.cshtml'.
+2020-09-14 07:49:48.818 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/_ViewImports.cshtml'.
+2020-09-14 07:49:48.823 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/_ViewStart.cshtml'.
+2020-09-14 07:49:48.853 -04:00 [DBG] 1 candidate(s) found for the request path '/Rgb'
+2020-09-14 07:49:48.863 -04:00 [DBG] Endpoint 'Page: /Rgb/Index' with route pattern 'Rgb' is valid for the request path '/Rgb'
+2020-09-14 07:49:48.896 -04:00 [DBG] Request matched endpoint '/Rgb/Index'
+2020-09-14 07:49:51.705 -04:00 [DBG] Claims packed into Header (X-Claims, "email=darius@b.test")
+2020-09-14 07:49:51.729 -04:00 [DBG] Adding []
+2020-09-14 07:49:51.740 -04:00 [DBG] Adding [{"Key":"X-Claims","Value":["\"email=darius@b.test\""],"$type":"KeyValuePair`2"}]
+2020-09-14 07:49:51.750 -04:00 [INF] Executing endpoint '/Rgb/Index'
+2020-09-14 07:49:51.759 -04:00 [DBG] Registered model binder providers, in the following order: ["Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BinderTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ServicesModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.HeaderModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FloatingPointTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.EnumTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CancellationTokenModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ByteArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormFileModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormCollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.KeyValuePairModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DictionaryModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ComplexTypeModelBinderProvider"]
+2020-09-14 07:49:51.843 -04:00 [INF] Route matched with {page = "/Rgb/Index", action = "", controller = ""}. Executing page /Rgb/Index
+2020-09-14 07:49:51.846 -04:00 [DBG] Execution plan of authorization filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.AutoValidateAntiforgeryTokenAuthorizationFilter"]
+2020-09-14 07:49:51.848 -04:00 [DBG] Execution plan of resource filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.SaveTempDataFilter"]
+2020-09-14 07:49:51.851 -04:00 [DBG] Execution plan of action filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000)"]
+2020-09-14 07:49:51.855 -04:00 [DBG] Execution plan of exception filters (in the following order): ["None"]
+2020-09-14 07:49:51.858 -04:00 [DBG] Execution plan of result filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.SaveTempDataFilter"]
+2020-09-14 07:49:51.865 -04:00 [DBG] Executing page model factory for page EDennis.Samples.ColorApp.Razor.Pages.Rgb.Pages_Rgb_Index (EDennis.Samples.ColorApp.Razor.Views)
+2020-09-14 07:49:51.901 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration"
+2020-09-14 07:49:51.907 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration"
+2020-09-14 07:49:53.267 -04:00 [INF] Received HTTP response after 1356.0668ms - "OK"
+2020-09-14 07:49:53.274 -04:00 [INF] End processing HTTP request after 1376.2887ms - "OK"
+2020-09-14 07:49:53.340 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 07:49:53.343 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 07:49:53.415 -04:00 [INF] Received HTTP response after 72.2361ms - "OK"
+2020-09-14 07:49:53.418 -04:00 [INF] End processing HTTP request after 77.2177ms - "OK"
+2020-09-14 07:49:53.589 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 07:49:53.592 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 07:49:53.628 -04:00 [INF] Received HTTP response after 35.7605ms - "OK"
+2020-09-14 07:49:53.629 -04:00 [INF] End processing HTTP request after 40.6486ms - "OK"
+2020-09-14 07:50:01.148 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration"
+2020-09-14 07:50:01.152 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration"
+2020-09-14 07:50:01.363 -04:00 [INF] Received HTTP response after 210.9704ms - "OK"
+2020-09-14 07:50:01.366 -04:00 [INF] End processing HTTP request after 217.3543ms - "OK"
+2020-09-14 07:50:01.370 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 07:50:01.372 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 07:50:01.428 -04:00 [INF] Received HTTP response after 56.1824ms - "OK"
+2020-09-14 07:50:01.431 -04:00 [INF] End processing HTTP request after 60.3122ms - "OK"
+2020-09-14 07:50:06.308 -04:00 [INF] Start processing HTTP request POST "https://localhost:5000/connect/token"
+2020-09-14 07:50:06.311 -04:00 [INF] Sending HTTP request POST "https://localhost:5000/connect/token"
+2020-09-14 07:50:07.271 -04:00 [INF] Received HTTP response after 959.4833ms - "BadRequest"
+2020-09-14 07:50:07.275 -04:00 [INF] End processing HTTP request after 967.3483ms - "BadRequest"
+2020-09-14 07:52:53.152 -04:00 [ERR] invalid_scope
+2020-09-14 08:18:34.736 -04:00 [INF] Starting host ...
+2020-09-14 08:18:36.035 -04:00 [DBG] Hosting starting
+2020-09-14 08:18:36.083 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-14 08:18:36.124 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-2f5c30d0-a084-4c35-8d2d-8e4a0d052454.xml'.
+2020-09-14 08:18:36.127 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-5ea5f1e4-4b59-4370-8db1-b9ae7bbf8c63.xml'.
+2020-09-14 08:18:36.129 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-604bfd08-e244-4901-bfce-3bc0372b2e4c.xml'.
+2020-09-14 08:18:36.131 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-646446ba-95e9-4794-b5d0-1caf83cf19fa.xml'.
+2020-09-14 08:18:36.132 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-69e60cc4-4e85-49ca-9b50-c12f6bb46b80.xml'.
+2020-09-14 08:18:36.134 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-cd493bdb-3acc-4e26-9708-b7241aa23b1a.xml'.
+2020-09-14 08:18:36.137 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-d9e18831-a0f6-4101-9760-f3e14ecf857a.xml'.
+2020-09-14 08:18:36.139 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-df296e2e-5f74-4e19-9eeb-277396346f82.xml'.
+2020-09-14 08:18:36.141 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-e0589fd9-4240-4b20-8225-56419b92209b.xml'.
+2020-09-14 08:18:36.149 -04:00 [DBG] Found key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454}.
+2020-09-14 08:18:36.156 -04:00 [DBG] Found key {5ea5f1e4-4b59-4370-8db1-b9ae7bbf8c63}.
+2020-09-14 08:18:36.158 -04:00 [DBG] Found key {604bfd08-e244-4901-bfce-3bc0372b2e4c}.
+2020-09-14 08:18:36.160 -04:00 [DBG] Found key {646446ba-95e9-4794-b5d0-1caf83cf19fa}.
+2020-09-14 08:18:36.161 -04:00 [DBG] Found key {69e60cc4-4e85-49ca-9b50-c12f6bb46b80}.
+2020-09-14 08:18:36.162 -04:00 [DBG] Found key {cd493bdb-3acc-4e26-9708-b7241aa23b1a}.
+2020-09-14 08:18:36.165 -04:00 [DBG] Found key {d9e18831-a0f6-4101-9760-f3e14ecf857a}.
+2020-09-14 08:18:36.166 -04:00 [DBG] Found key {df296e2e-5f74-4e19-9eeb-277396346f82}.
+2020-09-14 08:18:36.167 -04:00 [DBG] Found key {e0589fd9-4240-4b20-8225-56419b92209b}.
+2020-09-14 08:18:36.180 -04:00 [DBG] Considering key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} with expiration date 2020-11-19 18:05:30Z as default key.
+2020-09-14 08:18:36.216 -04:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2020-09-14 08:18:36.225 -04:00 [DBG] Decrypting secret element using Windows DPAPI.
+2020-09-14 08:18:36.230 -04:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2020-09-14 08:18:36.241 -04:00 [DBG] Opening CNG algorithm 'AES' from provider 'null' with chaining mode CBC.
+2020-09-14 08:18:36.250 -04:00 [DBG] Opening CNG algorithm 'SHA256' from provider 'null' with HMAC.
+2020-09-14 08:18:36.259 -04:00 [DBG] Using key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} as the default key.
+2020-09-14 08:18:36.261 -04:00 [DBG] Key ring with default key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} was loaded during application startup.
+2020-09-14 08:18:44.650 -04:00 [DBG] ScopedRequestMiddleware constructed with {"HeadersToCapture":["X-CachedTransaction","X-Claims"],"CookiesToCapture":["X-CachedTransaction"],"$type":"ScopedRequestMessageOptions"}
+2020-09-14 08:18:44.689 -04:00 [DBG] ClaimsToHeaderMiddleware constructed with {"ClaimTypesConfigKey":"Security:OpenIdConnect:Scope","Enabled":true,"$type":"ClaimsToHeaderOptions"}
+2020-09-14 08:18:46.330 -04:00 [DBG] Failed to locate the development https certificate at 'null'.
+2020-09-14 08:18:46.592 -04:00 [DBG] Using development certificate: CN=localhost (Thumbprint: 198EBC3B10DE63E96CF91E8DFEDD359F8D00FB82)
+2020-09-14 08:18:46.602 -04:00 [INF] Now listening on: https://localhost:44305
+2020-09-14 08:18:46.609 -04:00 [INF] Now listening on: http://localhost:64438
+2020-09-14 08:18:46.611 -04:00 [DBG] Loaded hosting startup assembly EDennis.Samples.ColorApp.Razor
+2020-09-14 08:18:46.615 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2020-09-14 08:18:46.617 -04:00 [INF] Hosting environment: Development
+2020-09-14 08:18:46.618 -04:00 [INF] Content root path: C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp.Razor
+2020-09-14 08:18:46.620 -04:00 [DBG] Hosting started
+2020-09-14 08:18:46.820 -04:00 [DBG] Connection id "0HM2OL1A7R9D6" received FIN.
+2020-09-14 08:18:46.820 -04:00 [DBG] Connection id "0HM2OL1A7R9D5" received FIN.
+2020-09-14 08:18:46.839 -04:00 [DBG] Connection id "0HM2OL1A7R9D5" accepted.
+2020-09-14 08:18:46.839 -04:00 [DBG] Connection id "0HM2OL1A7R9D6" accepted.
+2020-09-14 08:18:46.842 -04:00 [DBG] Connection id "0HM2OL1A7R9D5" started.
+2020-09-14 08:18:46.843 -04:00 [DBG] Connection id "0HM2OL1A7R9D6" started.
+2020-09-14 08:18:46.871 -04:00 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Authentication failed because the remote party has closed the transport stream.
+   at System.Net.Security.SslStream.StartReadFrame(Byte[] buffer, Int32 readBytes, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.StartReceiveBlob(Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ForceAuthentication(Boolean receiveFirst, Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ProcessAuthentication(LazyAsyncResult lazyResult, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.BeginAuthenticateAsServer(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken, AsyncCallback asyncCallback, Object asyncState)
+   at System.Net.Security.SslStream.<>c.<AuthenticateAsServerAsync>b__69_0(SslServerAuthenticationOptions arg1, CancellationToken arg2, AsyncCallback callback, Object state)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl[TArg1,TArg2](Func`5 beginMethod, Func`2 endFunction, Action`1 endAction, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state)
+   at System.Net.Security.SslStream.AuthenticateAsServerAsync(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.InnerOnConnectionAsync(ConnectionContext context)
+2020-09-14 08:18:46.871 -04:00 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Authentication failed because the remote party has closed the transport stream.
+   at System.Net.Security.SslStream.StartReadFrame(Byte[] buffer, Int32 readBytes, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.StartReceiveBlob(Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ForceAuthentication(Boolean receiveFirst, Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ProcessAuthentication(LazyAsyncResult lazyResult, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.BeginAuthenticateAsServer(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken, AsyncCallback asyncCallback, Object asyncState)
+   at System.Net.Security.SslStream.<>c.<AuthenticateAsServerAsync>b__69_0(SslServerAuthenticationOptions arg1, CancellationToken arg2, AsyncCallback callback, Object state)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl[TArg1,TArg2](Func`5 beginMethod, Func`2 endFunction, Action`1 endAction, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state)
+   at System.Net.Security.SslStream.AuthenticateAsServerAsync(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.InnerOnConnectionAsync(ConnectionContext context)
+2020-09-14 08:18:46.975 -04:00 [DBG] Connection id "0HM2OL1A7R9D5" stopped.
+2020-09-14 08:18:46.975 -04:00 [DBG] Connection id "0HM2OL1A7R9D6" stopped.
+2020-09-14 08:18:47.006 -04:00 [DBG] Connection id "0HM2OL1A7R9D5" sending FIN because: "The Socket transport's send loop completed gracefully."
+2020-09-14 08:18:47.064 -04:00 [DBG] Connection id "0HM2OL1A7R9D6" sending FIN because: "The Socket transport's send loop completed gracefully."
+2020-09-14 08:18:47.613 -04:00 [DBG] Connection id "0HM2OL1A7R9D7" accepted.
+2020-09-14 08:18:47.630 -04:00 [DBG] Connection id "0HM2OL1A7R9D7" started.
+2020-09-14 08:18:47.835 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/Rgb  
+2020-09-14 08:18:47.839 -04:00 [DBG] Wildcard detected, all requests with hosts will be allowed.
+2020-09-14 08:18:47.843 -04:00 [DBG] The request path /Rgb does not match a supported file type
+2020-09-14 08:18:47.856 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Error.cshtml'.
+2020-09-14 08:18:47.858 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Privacy.cshtml'.
+2020-09-14 08:18:47.860 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Create.cshtml'.
+2020-09-14 08:18:47.863 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Delete.cshtml'.
+2020-09-14 08:18:47.867 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Details.cshtml'.
+2020-09-14 08:18:47.868 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Edit.cshtml'.
+2020-09-14 08:18:47.870 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Rgb/Index.cshtml'.
+2020-09-14 08:18:47.873 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Shared/_Layout.cshtml'.
+2020-09-14 08:18:47.878 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Shared/_ValidationScriptsPartial.cshtml'.
+2020-09-14 08:18:47.879 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/_ViewImports.cshtml'.
+2020-09-14 08:18:47.881 -04:00 [DBG] Initializing Razor view compiler with compiled view: '/Pages/_ViewStart.cshtml'.
+2020-09-14 08:18:47.915 -04:00 [DBG] 1 candidate(s) found for the request path '/Rgb'
+2020-09-14 08:18:47.927 -04:00 [DBG] Endpoint 'Page: /Rgb/Index' with route pattern 'Rgb' is valid for the request path '/Rgb'
+2020-09-14 08:18:47.965 -04:00 [DBG] Request matched endpoint '/Rgb/Index'
+2020-09-14 08:18:50.754 -04:00 [DBG] Claims packed into Header (X-Claims, "email=darius@b.test")
+2020-09-14 08:18:50.780 -04:00 [DBG] Adding []
+2020-09-14 08:18:50.789 -04:00 [DBG] Adding [{"Key":"X-Claims","Value":["\"email=darius@b.test\""],"$type":"KeyValuePair`2"}]
+2020-09-14 08:18:50.801 -04:00 [INF] Executing endpoint '/Rgb/Index'
+2020-09-14 08:18:50.811 -04:00 [DBG] Registered model binder providers, in the following order: ["Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BinderTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ServicesModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.HeaderModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FloatingPointTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.EnumTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CancellationTokenModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ByteArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormFileModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormCollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.KeyValuePairModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DictionaryModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ComplexTypeModelBinderProvider"]
+2020-09-14 08:18:50.902 -04:00 [INF] Route matched with {page = "/Rgb/Index", action = "", controller = ""}. Executing page /Rgb/Index
+2020-09-14 08:18:50.904 -04:00 [DBG] Execution plan of authorization filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.AutoValidateAntiforgeryTokenAuthorizationFilter"]
+2020-09-14 08:18:50.907 -04:00 [DBG] Execution plan of resource filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.SaveTempDataFilter"]
+2020-09-14 08:18:50.910 -04:00 [DBG] Execution plan of action filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000)"]
+2020-09-14 08:18:50.916 -04:00 [DBG] Execution plan of exception filters (in the following order): ["None"]
+2020-09-14 08:18:50.919 -04:00 [DBG] Execution plan of result filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.SaveTempDataFilter"]
+2020-09-14 08:18:50.924 -04:00 [DBG] Executing page model factory for page EDennis.Samples.ColorApp.Razor.Pages.Rgb.Pages_Rgb_Index (EDennis.Samples.ColorApp.Razor.Views)
+2020-09-14 08:18:50.960 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration"
+2020-09-14 08:18:50.965 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration"
+2020-09-14 08:18:52.440 -04:00 [INF] Received HTTP response after 1470.3376ms - "OK"
+2020-09-14 08:18:52.447 -04:00 [INF] End processing HTTP request after 1489.4321ms - "OK"
+2020-09-14 08:18:52.510 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 08:18:52.512 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 08:18:52.594 -04:00 [INF] Received HTTP response after 81.6586ms - "OK"
+2020-09-14 08:18:52.597 -04:00 [INF] End processing HTTP request after 86.955ms - "OK"
+2020-09-14 08:18:52.781 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 08:18:52.782 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 08:18:52.833 -04:00 [INF] Received HTTP response after 50.7288ms - "OK"
+2020-09-14 08:18:52.836 -04:00 [INF] End processing HTTP request after 55.0336ms - "OK"
+2020-09-14 08:18:58.376 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration"
+2020-09-14 08:18:58.380 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration"
+2020-09-14 08:18:58.687 -04:00 [INF] Received HTTP response after 307.2432ms - "OK"
+2020-09-14 08:18:58.691 -04:00 [INF] End processing HTTP request after 314.6355ms - "OK"
+2020-09-14 08:18:58.699 -04:00 [INF] Start processing HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 08:18:58.706 -04:00 [INF] Sending HTTP request GET "https://localhost:5000/.well-known/openid-configuration/jwks"
+2020-09-14 08:18:58.772 -04:00 [INF] Received HTTP response after 66.1205ms - "OK"
+2020-09-14 08:18:58.775 -04:00 [INF] End processing HTTP request after 76.4972ms - "OK"
+2020-09-14 08:19:04.443 -04:00 [INF] Start processing HTTP request POST "https://localhost:5000/connect/token"
+2020-09-14 08:19:04.446 -04:00 [INF] Sending HTTP request POST "https://localhost:5000/connect/token"
+2020-09-14 08:19:05.869 -04:00 [INF] Received HTTP response after 1422.9188ms - "OK"
+2020-09-14 08:19:05.873 -04:00 [INF] End processing HTTP request after 1429.8099ms - "OK"
+2020-09-14 08:19:37.155 -04:00 [DBG] Executed page model factory for page EDennis.Samples.ColorApp.Razor.Pages.Rgb.Pages_Rgb_Index (EDennis.Samples.ColorApp.Razor.Views)
+2020-09-14 08:19:37.169 -04:00 [DBG] Attempting to bind parameter 'fld0' of type 'System.String' ...
+2020-09-14 08:19:37.174 -04:00 [DBG] Could not find a value in the request with name '' for binding parameter 'fld0' of type 'System.String'.
+2020-09-14 08:19:37.177 -04:00 [DBG] Done attempting to bind parameter 'fld0' of type 'System.String'.
+2020-09-14 08:19:37.178 -04:00 [DBG] Done attempting to bind parameter 'fld0' of type 'System.String'.
+2020-09-14 08:19:37.180 -04:00 [DBG] Attempting to validate the bound parameter 'fld0' of type 'System.String' ...
+2020-09-14 08:19:37.191 -04:00 [DBG] Done attempting to validate the bound parameter 'fld0' of type 'System.String'.
+2020-09-14 08:19:37.195 -04:00 [DBG] Attempting to bind parameter 'op0' of type 'EDennis.NetStandard.Base.ComparisonOperator' ...
+2020-09-14 08:19:37.199 -04:00 [DBG] Could not find a value in the request with name '' for binding parameter 'op0' of type 'EDennis.NetStandard.Base.ComparisonOperator'.
+2020-09-14 08:19:37.202 -04:00 [DBG] Done attempting to bind parameter 'op0' of type 'EDennis.NetStandard.Base.ComparisonOperator'.
+2020-09-14 08:19:37.204 -04:00 [DBG] Done attempting to bind parameter 'op0' of type 'EDennis.NetStandard.Base.ComparisonOperator'.
+2020-09-14 08:19:37.207 -04:00 [DBG] Attempting to validate the bound parameter 'op0' of type 'EDennis.NetStandard.Base.ComparisonOperator' ...
+2020-09-14 08:19:37.213 -04:00 [DBG] Done attempting to validate the bound parameter 'op0' of type 'EDennis.NetStandard.Base.ComparisonOperator'.
+2020-09-14 08:19:37.217 -04:00 [DBG] Attempting to bind parameter 'val0' of type 'System.String' ...
+2020-09-14 08:19:37.219 -04:00 [DBG] Could not find a value in the request with name '' for binding parameter 'val0' of type 'System.String'.
+2020-09-14 08:19:37.221 -04:00 [DBG] Done attempting to bind parameter 'val0' of type 'System.String'.
+2020-09-14 08:19:37.224 -04:00 [DBG] Done attempting to bind parameter 'val0' of type 'System.String'.
+2020-09-14 08:19:37.228 -04:00 [DBG] Attempting to validate the bound parameter 'val0' of type 'System.String' ...
+2020-09-14 08:19:37.231 -04:00 [DBG] Done attempting to validate the bound parameter 'val0' of type 'System.String'.
+2020-09-14 08:19:37.234 -04:00 [DBG] Attempting to bind parameter 'fld1' of type 'System.String' ...
+2020-09-14 08:19:37.237 -04:00 [DBG] Could not find a value in the request with name '' for binding parameter 'fld1' of type 'System.String'.
+2020-09-14 08:19:37.239 -04:00 [DBG] Done attempting to bind parameter 'fld1' of type 'System.String'.
+2020-09-14 08:19:37.240 -04:00 [DBG] Done attempting to bind parameter 'fld1' of type 'System.String'.
+2020-09-14 08:19:37.242 -04:00 [DBG] Attempting to validate the bound parameter 'fld1' of type 'System.String' ...
+2020-09-14 08:19:37.244 -04:00 [DBG] Done attempting to validate the bound parameter 'fld1' of type 'System.String'.
+2020-09-14 08:19:37.248 -04:00 [DBG] Attempting to bind parameter 'op1' of type 'EDennis.NetStandard.Base.ComparisonOperator' ...
+2020-09-14 08:19:37.250 -04:00 [DBG] Could not find a value in the request with name '' for binding parameter 'op1' of type 'EDennis.NetStandard.Base.ComparisonOperator'.
+2020-09-14 08:19:37.257 -04:00 [DBG] Done attempting to bind parameter 'op1' of type 'EDennis.NetStandard.Base.ComparisonOperator'.
+2020-09-14 08:19:37.260 -04:00 [DBG] Done attempting to bind parameter 'op1' of type 'EDennis.NetStandard.Base.ComparisonOperator'.
+2020-09-14 08:19:37.263 -04:00 [DBG] Attempting to validate the bound parameter 'op1' of type 'EDennis.NetStandard.Base.ComparisonOperator' ...
+2020-09-14 08:19:37.269 -04:00 [DBG] Done attempting to validate the bound parameter 'op1' of type 'EDennis.NetStandard.Base.ComparisonOperator'.
+2020-09-14 08:19:37.272 -04:00 [DBG] Attempting to bind parameter 'val1' of type 'System.String' ...
+2020-09-14 08:19:37.274 -04:00 [DBG] Could not find a value in the request with name '' for binding parameter 'val1' of type 'System.String'.
+2020-09-14 08:19:37.276 -04:00 [DBG] Done attempting to bind parameter 'val1' of type 'System.String'.
+2020-09-14 08:19:37.282 -04:00 [DBG] Done attempting to bind parameter 'val1' of type 'System.String'.
+2020-09-14 08:19:37.283 -04:00 [DBG] Attempting to validate the bound parameter 'val1' of type 'System.String' ...
+2020-09-14 08:19:37.285 -04:00 [DBG] Done attempting to validate the bound parameter 'val1' of type 'System.String'.
+2020-09-14 08:19:37.287 -04:00 [DBG] Attempting to bind parameter 'pageNumber' of type 'System.Int32' ...
+2020-09-14 08:19:37.288 -04:00 [DBG] Could not find a value in the request with name '' for binding parameter 'pageNumber' of type 'System.Int32'.
+2020-09-14 08:19:37.292 -04:00 [DBG] Done attempting to bind parameter 'pageNumber' of type 'System.Int32'.
+2020-09-14 08:19:37.295 -04:00 [DBG] Done attempting to bind parameter 'pageNumber' of type 'System.Int32'.
+2020-09-14 08:19:37.298 -04:00 [DBG] Attempting to validate the bound parameter 'pageNumber' of type 'System.Int32' ...
+2020-09-14 08:19:37.301 -04:00 [DBG] Done attempting to validate the bound parameter 'pageNumber' of type 'System.Int32'.
+2020-09-14 08:19:37.302 -04:00 [DBG] Attempting to bind parameter 'totalRecords' of type 'System.Nullable`1[System.Int32]' ...
+2020-09-14 08:19:37.304 -04:00 [DBG] Could not find a value in the request with name '' for binding parameter 'totalRecords' of type 'System.Nullable`1[System.Int32]'.
+2020-09-14 08:19:37.306 -04:00 [DBG] Done attempting to bind parameter 'totalRecords' of type 'System.Nullable`1[System.Int32]'.
+2020-09-14 08:19:37.308 -04:00 [DBG] Done attempting to bind parameter 'totalRecords' of type 'System.Nullable`1[System.Int32]'.
+2020-09-14 08:19:37.312 -04:00 [DBG] Attempting to validate the bound parameter 'totalRecords' of type 'System.Nullable`1[System.Int32]' ...
+2020-09-14 08:19:37.315 -04:00 [DBG] Done attempting to validate the bound parameter 'totalRecords' of type 'System.Nullable`1[System.Int32]'.
+2020-09-14 08:19:37.330 -04:00 [INF] Executing handler method EDennis.Samples.ColorApp.Razor.Pages.Rgb.IndexModel.OnGetAsync - ModelState is "Valid"
+2020-09-14 08:19:40.171 -04:00 [INF] Start processing HTTP request GET "https://localhost:44341/api/Rgb/linq/async?orderBy=Name&skip=0&take=10"
+2020-09-14 08:19:40.174 -04:00 [INF] Sending HTTP request GET "https://localhost:44341/api/Rgb/linq/async?orderBy=Name&skip=0&take=10"
+2020-09-14 08:20:51.687 -04:00 [DBG] HttpMessageHandler expired after 120000ms for client 'ClientCredentialsTokenService'
+2020-09-14 08:20:58.685 -04:00 [DBG] HttpMessageHandler expired after 120000ms for client 'RgbApiClient'
+2020-09-14 08:21:06.610 -04:00 [DBG] Starting HttpMessageHandler cleanup cycle with 2 items
+2020-09-14 08:21:06.620 -04:00 [DBG] Ending HttpMessageHandler cleanup cycle after 0.0207ms - processed: 0 items - remaining: 2 items
+2020-09-14 08:21:08.566 -04:00 [INF] Received HTTP response after 88390.9852ms - "OK"
+2020-09-14 08:21:08.569 -04:00 [INF] End processing HTTP request after 88397.5178ms - "OK"
+2020-09-14 08:21:08.608 -04:00 [INF] Executed handler method OnGetAsync, returned result .
+2020-09-14 08:21:08.618 -04:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2020-09-14 08:21:08.622 -04:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2020-09-14 08:21:08.695 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Create"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:08.711 -04:00 [DBG] Successfully processed template Rgb/Create for Page: /Rgb/Create resulting in /Rgb/Create and 
+2020-09-14 08:21:08.724 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Create"] with result /Rgb/Create
+2020-09-14 08:21:08.734 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Index"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:08.736 -04:00 [DBG] Successfully processed template Rgb for Page: /Rgb/Index resulting in /Rgb and 
+2020-09-14 08:21:08.739 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Index"] with result /Rgb
+2020-09-14 08:21:08.823 -04:00 [DBG] View lookup cache miss for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:08.838 -04:00 [DBG] View lookup cache miss for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:08.841 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:08.844 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:08.846 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:08.851 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:08.854 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:08.856 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:08.857 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:08.860 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Edit"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:08.863 -04:00 [DBG] Successfully processed template Rgb/Edit for Page: /Rgb/Edit resulting in /Rgb/Edit and ?id=-999001
+2020-09-14 08:21:08.868 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Edit"] with result /Rgb/Edit?id=-999001
+2020-09-14 08:21:08.872 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Details"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:08.875 -04:00 [DBG] Successfully processed template Rgb/Details for Page: /Rgb/Details resulting in /Rgb/Details and ?id=-999001
+2020-09-14 08:21:08.877 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Details"] with result /Rgb/Details?id=-999001
+2020-09-14 08:21:08.881 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Delete"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:08.885 -04:00 [DBG] Successfully processed template Rgb/Delete for Page: /Rgb/Delete resulting in /Rgb/Delete and ?id=-999001
+2020-09-14 08:21:08.887 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Delete"] with result /Rgb/Delete?id=-999001
+2020-09-14 08:21:08.890 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:08.895 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:08.901 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:08.904 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:08.906 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:08.908 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:08.910 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:08.914 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:08.916 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:08.918 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Edit"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:08.920 -04:00 [DBG] Successfully processed template Rgb/Edit for Page: /Rgb/Edit resulting in /Rgb/Edit and ?id=-999002
+2020-09-14 08:21:08.923 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Edit"] with result /Rgb/Edit?id=-999002
+2020-09-14 08:21:08.926 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Details"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:08.928 -04:00 [DBG] Successfully processed template Rgb/Details for Page: /Rgb/Details resulting in /Rgb/Details and ?id=-999002
+2020-09-14 08:21:08.934 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Details"] with result /Rgb/Details?id=-999002
+2020-09-14 08:21:08.937 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Delete"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:08.939 -04:00 [DBG] Successfully processed template Rgb/Delete for Page: /Rgb/Delete resulting in /Rgb/Delete and ?id=-999002
+2020-09-14 08:21:08.941 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Delete"] with result /Rgb/Delete?id=-999002
+2020-09-14 08:21:08.945 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:08.948 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:08.951 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:08.958 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:08.961 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:08.964 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:08.973 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:08.975 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:08.977 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:08.981 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Edit"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:08.984 -04:00 [DBG] Successfully processed template Rgb/Edit for Page: /Rgb/Edit resulting in /Rgb/Edit and ?id=-999003
+2020-09-14 08:21:08.986 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Edit"] with result /Rgb/Edit?id=-999003
+2020-09-14 08:21:08.987 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Details"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:08.992 -04:00 [DBG] Successfully processed template Rgb/Details for Page: /Rgb/Details resulting in /Rgb/Details and ?id=-999003
+2020-09-14 08:21:08.994 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Details"] with result /Rgb/Details?id=-999003
+2020-09-14 08:21:08.996 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Delete"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:08.998 -04:00 [DBG] Successfully processed template Rgb/Delete for Page: /Rgb/Delete resulting in /Rgb/Delete and ?id=-999003
+2020-09-14 08:21:09.002 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Delete"] with result /Rgb/Delete?id=-999003
+2020-09-14 08:21:09.005 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.006 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.010 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.015 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.017 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.019 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.023 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.026 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.028 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.033 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Edit"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.035 -04:00 [DBG] Successfully processed template Rgb/Edit for Page: /Rgb/Edit resulting in /Rgb/Edit and ?id=-999004
+2020-09-14 08:21:09.038 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Edit"] with result /Rgb/Edit?id=-999004
+2020-09-14 08:21:09.044 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Details"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.047 -04:00 [DBG] Successfully processed template Rgb/Details for Page: /Rgb/Details resulting in /Rgb/Details and ?id=-999004
+2020-09-14 08:21:09.050 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Details"] with result /Rgb/Details?id=-999004
+2020-09-14 08:21:09.057 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Delete"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.059 -04:00 [DBG] Successfully processed template Rgb/Delete for Page: /Rgb/Delete resulting in /Rgb/Delete and ?id=-999004
+2020-09-14 08:21:09.062 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Delete"] with result /Rgb/Delete?id=-999004
+2020-09-14 08:21:09.067 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.069 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.072 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.073 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.076 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.079 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.081 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.087 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.088 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.091 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Edit"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.092 -04:00 [DBG] Successfully processed template Rgb/Edit for Page: /Rgb/Edit resulting in /Rgb/Edit and ?id=-999005
+2020-09-14 08:21:09.096 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Edit"] with result /Rgb/Edit?id=-999005
+2020-09-14 08:21:09.098 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Details"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.101 -04:00 [DBG] Successfully processed template Rgb/Details for Page: /Rgb/Details resulting in /Rgb/Details and ?id=-999005
+2020-09-14 08:21:09.108 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Details"] with result /Rgb/Details?id=-999005
+2020-09-14 08:21:09.113 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Delete"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.119 -04:00 [DBG] Successfully processed template Rgb/Delete for Page: /Rgb/Delete resulting in /Rgb/Delete and ?id=-999005
+2020-09-14 08:21:09.122 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Delete"] with result /Rgb/Delete?id=-999005
+2020-09-14 08:21:09.125 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.128 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.132 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.134 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.135 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.139 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.141 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.143 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.144 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.149 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Edit"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.152 -04:00 [DBG] Successfully processed template Rgb/Edit for Page: /Rgb/Edit resulting in /Rgb/Edit and ?id=-999006
+2020-09-14 08:21:09.154 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Edit"] with result /Rgb/Edit?id=-999006
+2020-09-14 08:21:09.157 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Details"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.160 -04:00 [DBG] Successfully processed template Rgb/Details for Page: /Rgb/Details resulting in /Rgb/Details and ?id=-999006
+2020-09-14 08:21:09.163 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Details"] with result /Rgb/Details?id=-999006
+2020-09-14 08:21:09.168 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Delete"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.170 -04:00 [DBG] Successfully processed template Rgb/Delete for Page: /Rgb/Delete resulting in /Rgb/Delete and ?id=-999006
+2020-09-14 08:21:09.174 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Delete"] with result /Rgb/Delete?id=-999006
+2020-09-14 08:21:09.177 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.184 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.188 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.192 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.194 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.197 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.199 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.205 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.207 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.212 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Edit"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.215 -04:00 [DBG] Successfully processed template Rgb/Edit for Page: /Rgb/Edit resulting in /Rgb/Edit and ?id=-999007
+2020-09-14 08:21:09.217 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Edit"] with result /Rgb/Edit?id=-999007
+2020-09-14 08:21:09.224 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Details"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.227 -04:00 [DBG] Successfully processed template Rgb/Details for Page: /Rgb/Details resulting in /Rgb/Details and ?id=-999007
+2020-09-14 08:21:09.233 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Details"] with result /Rgb/Details?id=-999007
+2020-09-14 08:21:09.237 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Delete"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.240 -04:00 [DBG] Successfully processed template Rgb/Delete for Page: /Rgb/Delete resulting in /Rgb/Delete and ?id=-999007
+2020-09-14 08:21:09.247 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Delete"] with result /Rgb/Delete?id=-999007
+2020-09-14 08:21:09.252 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.255 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.259 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.263 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.266 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.270 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.271 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.275 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.276 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.278 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Edit"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.280 -04:00 [DBG] Successfully processed template Rgb/Edit for Page: /Rgb/Edit resulting in /Rgb/Edit and ?id=-999008
+2020-09-14 08:21:09.282 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Edit"] with result /Rgb/Edit?id=-999008
+2020-09-14 08:21:09.286 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Details"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.287 -04:00 [DBG] Successfully processed template Rgb/Details for Page: /Rgb/Details resulting in /Rgb/Details and ?id=-999008
+2020-09-14 08:21:09.290 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Details"] with result /Rgb/Details?id=-999008
+2020-09-14 08:21:09.292 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Delete"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.296 -04:00 [DBG] Successfully processed template Rgb/Delete for Page: /Rgb/Delete resulting in /Rgb/Delete and ?id=-999008
+2020-09-14 08:21:09.299 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Delete"] with result /Rgb/Delete?id=-999008
+2020-09-14 08:21:09.303 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.306 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.308 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.310 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.311 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.313 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.316 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.318 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.321 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.322 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Edit"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.326 -04:00 [DBG] Successfully processed template Rgb/Edit for Page: /Rgb/Edit resulting in /Rgb/Edit and ?id=-999009
+2020-09-14 08:21:09.328 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Edit"] with result /Rgb/Edit?id=-999009
+2020-09-14 08:21:09.330 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Details"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.331 -04:00 [DBG] Successfully processed template Rgb/Details for Page: /Rgb/Details resulting in /Rgb/Details and ?id=-999009
+2020-09-14 08:21:09.337 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Details"] with result /Rgb/Details?id=-999009
+2020-09-14 08:21:09.339 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Delete"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.340 -04:00 [DBG] Successfully processed template Rgb/Delete for Page: /Rgb/Delete resulting in /Rgb/Delete and ?id=-999009
+2020-09-14 08:21:09.342 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Delete"] with result /Rgb/Delete?id=-999009
+2020-09-14 08:21:09.345 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.349 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.352 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.353 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.355 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.358 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.359 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.361 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:09.364 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:09.368 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Edit"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.370 -04:00 [DBG] Successfully processed template Rgb/Edit for Page: /Rgb/Edit resulting in /Rgb/Edit and ?id=-999010
+2020-09-14 08:21:09.371 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Edit"] with result /Rgb/Edit?id=-999010
+2020-09-14 08:21:09.373 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Details"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.375 -04:00 [DBG] Successfully processed template Rgb/Details for Page: /Rgb/Details resulting in /Rgb/Details and ?id=-999010
+2020-09-14 08:21:09.380 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Details"] with result /Rgb/Details?id=-999010
+2020-09-14 08:21:09.384 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Delete"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.391 -04:00 [DBG] Successfully processed template Rgb/Delete for Page: /Rgb/Delete resulting in /Rgb/Delete and ?id=-999010
+2020-09-14 08:21:09.393 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Delete"] with result /Rgb/Delete?id=-999010
+2020-09-14 08:21:09.396 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Index"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.400 -04:00 [DBG] Successfully processed template Rgb for Page: /Rgb/Index resulting in /Rgb and ?op0=Equals&op1=Equals&pageNumber=0&totalRecords=148
+2020-09-14 08:21:09.403 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Index"] with result /Rgb?op0=Equals&op1=Equals&pageNumber=0&totalRecords=148
+2020-09-14 08:21:09.406 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Index"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.407 -04:00 [DBG] Successfully processed template Rgb for Page: /Rgb/Index resulting in /Rgb and ?op0=Equals&op1=Equals&pageNumber=2&totalRecords=148
+2020-09-14 08:21:09.411 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Index"] with result /Rgb?op0=Equals&op1=Equals&pageNumber=2&totalRecords=148
+2020-09-14 08:21:09.416 -04:00 [DBG] View lookup cache miss for view '_Layout' in controller 'null'.
+2020-09-14 08:21:09.439 -04:00 [DBG] No endpoints found for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.441 -04:00 [DBG] No endpoints found for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.444 -04:00 [DBG] Found the endpoints ["Page: /Privacy"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.447 -04:00 [DBG] Successfully processed template Privacy for Page: /Privacy resulting in /Privacy and 
+2020-09-14 08:21:09.451 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Privacy"] with result /Privacy
+2020-09-14 08:21:09.454 -04:00 [DBG] Found the endpoints ["Page: /Privacy"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:09.456 -04:00 [DBG] Successfully processed template Privacy for Page: /Privacy resulting in /Privacy and 
+2020-09-14 08:21:09.460 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Privacy"] with result /Privacy
+2020-09-14 08:21:09.503 -04:00 [INF] Executed page /Rgb/Index in 138575.3237ms
+2020-09-14 08:21:09.506 -04:00 [INF] Executed endpoint '/Rgb/Index'
+2020-09-14 08:21:09.520 -04:00 [INF] Request finished in 141687.4416ms 200 text/html; charset=utf-8
+2020-09-14 08:21:09.540 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/lib/bootstrap/dist/css/bootstrap.min.css  
+2020-09-14 08:21:09.542 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/js/site.js?v=dLGP40S79Xnx6GqUthRF6NWvjvhQ1nOvdVSwaNcgG18  
+2020-09-14 08:21:09.542 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/css/site.css  
+2020-09-14 08:21:09.542 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/lib/bootstrap/dist/js/bootstrap.bundle.min.js  
+2020-09-14 08:21:09.542 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/lib/jquery/dist/jquery.min.js  
+2020-09-14 08:21:09.551 -04:00 [INF] The file /css/site.css was not modified
+2020-09-14 08:21:09.551 -04:00 [INF] The file /lib/bootstrap/dist/css/bootstrap.min.css was not modified
+2020-09-14 08:21:09.555 -04:00 [INF] Sending file. Request path: '/js/site.js'. Physical path: 'C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp.Razor\wwwroot\js\site.js'
+2020-09-14 08:21:09.562 -04:00 [DBG] Handled. Status code: 304 File: /css/site.css
+2020-09-14 08:21:09.566 -04:00 [DBG] Handled. Status code: 304 File: /lib/bootstrap/dist/css/bootstrap.min.css
+2020-09-14 08:21:09.570 -04:00 [INF] Request finished in 28.108ms 200 application/javascript
+2020-09-14 08:21:09.572 -04:00 [INF] Request finished in 29.9948ms 304 text/css
+2020-09-14 08:21:09.577 -04:00 [INF] Request finished in 43.9532ms 304 text/css
+2020-09-14 08:21:09.590 -04:00 [INF] Sending file. Request path: '/lib/bootstrap/dist/js/bootstrap.bundle.min.js'. Physical path: 'C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp.Razor\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js'
+2020-09-14 08:21:09.590 -04:00 [INF] Sending file. Request path: '/lib/jquery/dist/jquery.min.js'. Physical path: 'C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp.Razor\wwwroot\lib\jquery\dist\jquery.min.js'
+2020-09-14 08:21:09.593 -04:00 [INF] Request finished in 50.8277ms 200 application/javascript
+2020-09-14 08:21:09.598 -04:00 [INF] Request finished in 55.354ms 200 application/javascript
+2020-09-14 08:21:16.624 -04:00 [DBG] Starting HttpMessageHandler cleanup cycle with 2 items
+2020-09-14 08:21:16.627 -04:00 [DBG] Ending HttpMessageHandler cleanup cycle after 0.0103ms - processed: 0 items - remaining: 2 items
+2020-09-14 08:21:26.630 -04:00 [DBG] Starting HttpMessageHandler cleanup cycle with 2 items
+2020-09-14 08:21:26.633 -04:00 [DBG] Ending HttpMessageHandler cleanup cycle after 0.0115ms - processed: 0 items - remaining: 2 items
+2020-09-14 08:21:31.531 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/Rgb?fld0=Name&op0=8&val0=A&fld1=Id&op1=0&val1=&pageNumber=1  
+2020-09-14 08:21:31.534 -04:00 [DBG] The request path /Rgb does not match a supported file type
+2020-09-14 08:21:31.538 -04:00 [DBG] 1 candidate(s) found for the request path '/Rgb'
+2020-09-14 08:21:31.541 -04:00 [DBG] Endpoint 'Page: /Rgb/Index' with route pattern 'Rgb' is valid for the request path '/Rgb'
+2020-09-14 08:21:31.546 -04:00 [DBG] Request matched endpoint '/Rgb/Index'
+2020-09-14 08:21:31.548 -04:00 [DBG] Claims packed into Header (X-Claims, "email=darius@b.test")
+2020-09-14 08:21:31.550 -04:00 [DBG] Adding []
+2020-09-14 08:21:31.556 -04:00 [DBG] Adding [{"Key":"X-Claims","Value":["\"email=darius@b.test\""],"$type":"KeyValuePair`2"}]
+2020-09-14 08:21:31.561 -04:00 [INF] Executing endpoint '/Rgb/Index'
+2020-09-14 08:21:31.568 -04:00 [INF] Route matched with {page = "/Rgb/Index", action = "", controller = ""}. Executing page /Rgb/Index
+2020-09-14 08:21:31.569 -04:00 [DBG] Execution plan of authorization filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.AutoValidateAntiforgeryTokenAuthorizationFilter"]
+2020-09-14 08:21:31.573 -04:00 [DBG] Execution plan of resource filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.SaveTempDataFilter"]
+2020-09-14 08:21:31.577 -04:00 [DBG] Execution plan of action filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000)"]
+2020-09-14 08:21:31.580 -04:00 [DBG] Execution plan of exception filters (in the following order): ["None"]
+2020-09-14 08:21:31.582 -04:00 [DBG] Execution plan of result filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.SaveTempDataFilter"]
+2020-09-14 08:21:31.587 -04:00 [DBG] Executing page model factory for page EDennis.Samples.ColorApp.Razor.Pages.Rgb.Pages_Rgb_Index (EDennis.Samples.ColorApp.Razor.Views)
+2020-09-14 08:21:34.571 -04:00 [DBG] Executed page model factory for page EDennis.Samples.ColorApp.Razor.Pages.Rgb.Pages_Rgb_Index (EDennis.Samples.ColorApp.Razor.Views)
+2020-09-14 08:21:34.577 -04:00 [DBG] Attempting to bind parameter 'fld0' of type 'System.String' ...
+2020-09-14 08:21:34.581 -04:00 [DBG] Attempting to bind parameter 'fld0' of type 'System.String' using the name 'fld0' in request data ...
+2020-09-14 08:21:34.584 -04:00 [DBG] Done attempting to bind parameter 'fld0' of type 'System.String'.
+2020-09-14 08:21:34.585 -04:00 [DBG] Done attempting to bind parameter 'fld0' of type 'System.String'.
+2020-09-14 08:21:34.587 -04:00 [DBG] Attempting to validate the bound parameter 'fld0' of type 'System.String' ...
+2020-09-14 08:21:34.592 -04:00 [DBG] Done attempting to validate the bound parameter 'fld0' of type 'System.String'.
+2020-09-14 08:21:34.595 -04:00 [DBG] Attempting to bind parameter 'op0' of type 'EDennis.NetStandard.Base.ComparisonOperator' ...
+2020-09-14 08:21:34.597 -04:00 [DBG] Attempting to bind parameter 'op0' of type 'EDennis.NetStandard.Base.ComparisonOperator' using the name 'op0' in request data ...
+2020-09-14 08:21:34.599 -04:00 [DBG] Done attempting to bind parameter 'op0' of type 'EDennis.NetStandard.Base.ComparisonOperator'.
+2020-09-14 08:21:34.603 -04:00 [DBG] Done attempting to bind parameter 'op0' of type 'EDennis.NetStandard.Base.ComparisonOperator'.
+2020-09-14 08:21:34.605 -04:00 [DBG] Attempting to validate the bound parameter 'op0' of type 'EDennis.NetStandard.Base.ComparisonOperator' ...
+2020-09-14 08:21:34.608 -04:00 [DBG] Done attempting to validate the bound parameter 'op0' of type 'EDennis.NetStandard.Base.ComparisonOperator'.
+2020-09-14 08:21:34.610 -04:00 [DBG] Attempting to bind parameter 'val0' of type 'System.String' ...
+2020-09-14 08:21:34.614 -04:00 [DBG] Attempting to bind parameter 'val0' of type 'System.String' using the name 'val0' in request data ...
+2020-09-14 08:21:34.617 -04:00 [DBG] Done attempting to bind parameter 'val0' of type 'System.String'.
+2020-09-14 08:21:34.618 -04:00 [DBG] Done attempting to bind parameter 'val0' of type 'System.String'.
+2020-09-14 08:21:34.620 -04:00 [DBG] Attempting to validate the bound parameter 'val0' of type 'System.String' ...
+2020-09-14 08:21:34.622 -04:00 [DBG] Done attempting to validate the bound parameter 'val0' of type 'System.String'.
+2020-09-14 08:21:34.626 -04:00 [DBG] Attempting to bind parameter 'fld1' of type 'System.String' ...
+2020-09-14 08:21:34.628 -04:00 [DBG] Attempting to bind parameter 'fld1' of type 'System.String' using the name 'fld1' in request data ...
+2020-09-14 08:21:34.630 -04:00 [DBG] Done attempting to bind parameter 'fld1' of type 'System.String'.
+2020-09-14 08:21:34.632 -04:00 [DBG] Done attempting to bind parameter 'fld1' of type 'System.String'.
+2020-09-14 08:21:34.636 -04:00 [DBG] Attempting to validate the bound parameter 'fld1' of type 'System.String' ...
+2020-09-14 08:21:34.638 -04:00 [DBG] Done attempting to validate the bound parameter 'fld1' of type 'System.String'.
+2020-09-14 08:21:34.640 -04:00 [DBG] Attempting to bind parameter 'op1' of type 'EDennis.NetStandard.Base.ComparisonOperator' ...
+2020-09-14 08:21:34.643 -04:00 [DBG] Attempting to bind parameter 'op1' of type 'EDennis.NetStandard.Base.ComparisonOperator' using the name 'op1' in request data ...
+2020-09-14 08:21:34.648 -04:00 [DBG] Done attempting to bind parameter 'op1' of type 'EDennis.NetStandard.Base.ComparisonOperator'.
+2020-09-14 08:21:34.650 -04:00 [DBG] Done attempting to bind parameter 'op1' of type 'EDennis.NetStandard.Base.ComparisonOperator'.
+2020-09-14 08:21:34.652 -04:00 [DBG] Attempting to validate the bound parameter 'op1' of type 'EDennis.NetStandard.Base.ComparisonOperator' ...
+2020-09-14 08:21:34.657 -04:00 [DBG] Done attempting to validate the bound parameter 'op1' of type 'EDennis.NetStandard.Base.ComparisonOperator'.
+2020-09-14 08:21:34.660 -04:00 [DBG] Attempting to bind parameter 'val1' of type 'System.String' ...
+2020-09-14 08:21:34.662 -04:00 [DBG] Attempting to bind parameter 'val1' of type 'System.String' using the name 'val1' in request data ...
+2020-09-14 08:21:34.667 -04:00 [DBG] Done attempting to bind parameter 'val1' of type 'System.String'.
+2020-09-14 08:21:34.668 -04:00 [DBG] Done attempting to bind parameter 'val1' of type 'System.String'.
+2020-09-14 08:21:34.670 -04:00 [DBG] Attempting to validate the bound parameter 'val1' of type 'System.String' ...
+2020-09-14 08:21:34.672 -04:00 [DBG] Done attempting to validate the bound parameter 'val1' of type 'System.String'.
+2020-09-14 08:21:34.674 -04:00 [DBG] Attempting to bind parameter 'pageNumber' of type 'System.Int32' ...
+2020-09-14 08:21:34.679 -04:00 [DBG] Attempting to bind parameter 'pageNumber' of type 'System.Int32' using the name 'pageNumber' in request data ...
+2020-09-14 08:21:34.682 -04:00 [DBG] Done attempting to bind parameter 'pageNumber' of type 'System.Int32'.
+2020-09-14 08:21:34.684 -04:00 [DBG] Done attempting to bind parameter 'pageNumber' of type 'System.Int32'.
+2020-09-14 08:21:34.685 -04:00 [DBG] Attempting to validate the bound parameter 'pageNumber' of type 'System.Int32' ...
+2020-09-14 08:21:34.689 -04:00 [DBG] Done attempting to validate the bound parameter 'pageNumber' of type 'System.Int32'.
+2020-09-14 08:21:34.692 -04:00 [DBG] Attempting to bind parameter 'totalRecords' of type 'System.Nullable`1[System.Int32]' ...
+2020-09-14 08:21:34.695 -04:00 [DBG] Could not find a value in the request with name '' for binding parameter 'totalRecords' of type 'System.Nullable`1[System.Int32]'.
+2020-09-14 08:21:34.699 -04:00 [DBG] Done attempting to bind parameter 'totalRecords' of type 'System.Nullable`1[System.Int32]'.
+2020-09-14 08:21:34.701 -04:00 [DBG] Done attempting to bind parameter 'totalRecords' of type 'System.Nullable`1[System.Int32]'.
+2020-09-14 08:21:34.703 -04:00 [DBG] Attempting to validate the bound parameter 'totalRecords' of type 'System.Nullable`1[System.Int32]' ...
+2020-09-14 08:21:34.704 -04:00 [DBG] Done attempting to validate the bound parameter 'totalRecords' of type 'System.Nullable`1[System.Int32]'.
+2020-09-14 08:21:34.709 -04:00 [INF] Executing handler method EDennis.Samples.ColorApp.Razor.Pages.Rgb.IndexModel.OnGetAsync - ModelState is "Valid"
+2020-09-14 08:21:36.058 -04:00 [INF] Start processing HTTP request GET "https://localhost:44341/api/Rgb/linq/async?where=Name.StartsWith(A)&orderBy=Name&skip=0&take=10"
+2020-09-14 08:21:36.063 -04:00 [INF] Sending HTTP request GET "https://localhost:44341/api/Rgb/linq/async?where=Name.StartsWith(A)&orderBy=Name&skip=0&take=10"
+2020-09-14 08:21:40.026 -04:00 [DBG] Starting HttpMessageHandler cleanup cycle with 2 items
+2020-09-14 08:21:40.034 -04:00 [DBG] Ending HttpMessageHandler cleanup cycle after 0.0149ms - processed: 0 items - remaining: 2 items
+2020-09-14 08:21:40.340 -04:00 [INF] Received HTTP response after 4276.3053ms - "OK"
+2020-09-14 08:21:40.344 -04:00 [INF] End processing HTTP request after 4285.5496ms - "OK"
+2020-09-14 08:21:40.351 -04:00 [INF] Executed handler method OnGetAsync, returned result .
+2020-09-14 08:21:40.354 -04:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2020-09-14 08:21:40.357 -04:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2020-09-14 08:21:40.362 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Create"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:40.367 -04:00 [DBG] Successfully processed template Rgb/Create for Page: /Rgb/Create resulting in /Rgb/Create and 
+2020-09-14 08:21:40.373 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Create"] with result /Rgb/Create
+2020-09-14 08:21:40.376 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Index"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:40.378 -04:00 [DBG] Successfully processed template Rgb for Page: /Rgb/Index resulting in /Rgb and 
+2020-09-14 08:21:40.380 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Index"] with result /Rgb
+2020-09-14 08:21:40.389 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:40.394 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.397 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.399 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:40.403 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.406 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:40.408 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.411 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:40.414 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.416 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Edit"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:40.418 -04:00 [DBG] Successfully processed template Rgb/Edit for Page: /Rgb/Edit resulting in /Rgb/Edit and ?id=-999001
+2020-09-14 08:21:40.420 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Edit"] with result /Rgb/Edit?id=-999001
+2020-09-14 08:21:40.423 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Details"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:40.426 -04:00 [DBG] Successfully processed template Rgb/Details for Page: /Rgb/Details resulting in /Rgb/Details and ?id=-999001
+2020-09-14 08:21:40.434 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Details"] with result /Rgb/Details?id=-999001
+2020-09-14 08:21:40.437 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Delete"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:40.439 -04:00 [DBG] Successfully processed template Rgb/Delete for Page: /Rgb/Delete resulting in /Rgb/Delete and ?id=-999001
+2020-09-14 08:21:40.442 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Delete"] with result /Rgb/Delete?id=-999001
+2020-09-14 08:21:40.449 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:40.450 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.453 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.454 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:40.457 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.460 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:40.463 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.467 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:40.469 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.471 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Edit"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:40.472 -04:00 [DBG] Successfully processed template Rgb/Edit for Page: /Rgb/Edit resulting in /Rgb/Edit and ?id=-999002
+2020-09-14 08:21:40.477 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Edit"] with result /Rgb/Edit?id=-999002
+2020-09-14 08:21:40.480 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Details"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:40.482 -04:00 [DBG] Successfully processed template Rgb/Details for Page: /Rgb/Details resulting in /Rgb/Details and ?id=-999002
+2020-09-14 08:21:40.484 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Details"] with result /Rgb/Details?id=-999002
+2020-09-14 08:21:40.490 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Delete"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:40.495 -04:00 [DBG] Successfully processed template Rgb/Delete for Page: /Rgb/Delete resulting in /Rgb/Delete and ?id=-999002
+2020-09-14 08:21:40.499 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Delete"] with result /Rgb/Delete?id=-999002
+2020-09-14 08:21:40.502 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:40.503 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.506 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.510 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:40.511 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.513 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:40.514 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.516 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:40.519 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.521 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Edit"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:40.522 -04:00 [DBG] Successfully processed template Rgb/Edit for Page: /Rgb/Edit resulting in /Rgb/Edit and ?id=-999003
+2020-09-14 08:21:40.525 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Edit"] with result /Rgb/Edit?id=-999003
+2020-09-14 08:21:40.529 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Details"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:40.531 -04:00 [DBG] Successfully processed template Rgb/Details for Page: /Rgb/Details resulting in /Rgb/Details and ?id=-999003
+2020-09-14 08:21:40.533 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Details"] with result /Rgb/Details?id=-999003
+2020-09-14 08:21:40.535 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Delete"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:40.539 -04:00 [DBG] Successfully processed template Rgb/Delete for Page: /Rgb/Delete resulting in /Rgb/Delete and ?id=-999003
+2020-09-14 08:21:40.541 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Delete"] with result /Rgb/Delete?id=-999003
+2020-09-14 08:21:40.545 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:40.546 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.550 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.553 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:40.555 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.560 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:40.562 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.565 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:40.566 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.570 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Edit"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:40.573 -04:00 [DBG] Successfully processed template Rgb/Edit for Page: /Rgb/Edit resulting in /Rgb/Edit and ?id=-999004
+2020-09-14 08:21:40.575 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Edit"] with result /Rgb/Edit?id=-999004
+2020-09-14 08:21:40.578 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Details"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:40.581 -04:00 [DBG] Successfully processed template Rgb/Details for Page: /Rgb/Details resulting in /Rgb/Details and ?id=-999004
+2020-09-14 08:21:40.583 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Details"] with result /Rgb/Details?id=-999004
+2020-09-14 08:21:40.586 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Delete"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:40.591 -04:00 [DBG] Successfully processed template Rgb/Delete for Page: /Rgb/Delete resulting in /Rgb/Delete and ?id=-999004
+2020-09-14 08:21:40.595 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Delete"] with result /Rgb/Delete?id=-999004
+2020-09-14 08:21:40.599 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:40.602 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.605 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.607 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:40.609 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.612 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:40.614 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.617 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/Int32' in controller 'null'.
+2020-09-14 08:21:40.618 -04:00 [DBG] View lookup cache hit for view 'DisplayTemplates/String' in controller 'null'.
+2020-09-14 08:21:40.622 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Edit"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:40.624 -04:00 [DBG] Successfully processed template Rgb/Edit for Page: /Rgb/Edit resulting in /Rgb/Edit and ?id=-999005
+2020-09-14 08:21:40.626 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Edit"] with result /Rgb/Edit?id=-999005
+2020-09-14 08:21:40.628 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Details"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:40.629 -04:00 [DBG] Successfully processed template Rgb/Details for Page: /Rgb/Details resulting in /Rgb/Details and ?id=-999005
+2020-09-14 08:21:40.636 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Details"] with result /Rgb/Details?id=-999005
+2020-09-14 08:21:40.639 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Delete"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:40.643 -04:00 [DBG] Successfully processed template Rgb/Delete for Page: /Rgb/Delete resulting in /Rgb/Delete and ?id=-999005
+2020-09-14 08:21:40.645 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Delete"] with result /Rgb/Delete?id=-999005
+2020-09-14 08:21:40.647 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Index"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:40.648 -04:00 [DBG] Successfully processed template Rgb for Page: /Rgb/Index resulting in /Rgb and ?fld0=Name&op0=StartsWith&val0=A&fld1=Id&op1=Equals&pageNumber=0&totalRecords=5
+2020-09-14 08:21:40.651 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Index"] with result /Rgb?fld0=Name&op0=StartsWith&val0=A&fld1=Id&op1=Equals&pageNumber=0&totalRecords=5
+2020-09-14 08:21:40.656 -04:00 [DBG] Found the endpoints ["Page: /Rgb/Index"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:40.658 -04:00 [DBG] Successfully processed template Rgb for Page: /Rgb/Index resulting in /Rgb and ?fld0=Name&op0=StartsWith&val0=A&fld1=Id&op1=Equals&pageNumber=2&totalRecords=5
+2020-09-14 08:21:40.662 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Rgb/Index"] with result /Rgb?fld0=Name&op0=StartsWith&val0=A&fld1=Id&op1=Equals&pageNumber=2&totalRecords=5
+2020-09-14 08:21:40.666 -04:00 [DBG] View lookup cache hit for view '_Layout' in controller 'null'.
+2020-09-14 08:21:40.669 -04:00 [DBG] No endpoints found for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:40.670 -04:00 [DBG] No endpoints found for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:40.672 -04:00 [DBG] Found the endpoints ["Page: /Privacy"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:40.676 -04:00 [DBG] Successfully processed template Privacy for Page: /Privacy resulting in /Privacy and 
+2020-09-14 08:21:40.680 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Privacy"] with result /Privacy
+2020-09-14 08:21:40.684 -04:00 [DBG] Found the endpoints ["Page: /Privacy"] for address Microsoft.AspNetCore.Routing.RouteValuesAddress
+2020-09-14 08:21:40.686 -04:00 [DBG] Successfully processed template Privacy for Page: /Privacy resulting in /Privacy and 
+2020-09-14 08:21:40.689 -04:00 [DBG] Link generation succeeded for endpoints ["Page: /Privacy"] with result /Privacy
+2020-09-14 08:21:40.692 -04:00 [INF] Executed page /Rgb/Index in 9105.7463ms
+2020-09-14 08:21:40.696 -04:00 [INF] Executed endpoint '/Rgb/Index'
+2020-09-14 08:21:40.698 -04:00 [INF] Request finished in 9167.1413ms 200 text/html; charset=utf-8
+2020-09-14 08:21:50.051 -04:00 [DBG] Starting HttpMessageHandler cleanup cycle with 2 items
+2020-09-14 08:21:50.053 -04:00 [DBG] Ending HttpMessageHandler cleanup cycle after 0.0145ms - processed: 0 items - remaining: 2 items
+2020-09-14 08:22:00.060 -04:00 [DBG] Starting HttpMessageHandler cleanup cycle with 2 items
+2020-09-14 08:22:00.087 -04:00 [DBG] Ending HttpMessageHandler cleanup cycle after 0.0168ms - processed: 0 items - remaining: 2 items
+2020-09-14 08:22:07.295 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44305/Rgb?fld0=Name&op0=8&val0=B&fld1=Id&op1=0&val1=&pageNumber=1  
+2020-09-14 08:22:07.299 -04:00 [DBG] The request path /Rgb does not match a supported file type
+2020-09-14 08:22:07.303 -04:00 [DBG] 1 candidate(s) found for the request path '/Rgb'
+2020-09-14 08:22:07.307 -04:00 [DBG] Endpoint 'Page: /Rgb/Index' with route pattern 'Rgb' is valid for the request path '/Rgb'
+2020-09-14 08:22:07.311 -04:00 [DBG] Request matched endpoint '/Rgb/Index'
+2020-09-14 08:22:07.315 -04:00 [DBG] Claims packed into Header (X-Claims, "email=darius@b.test")
+2020-09-14 08:22:07.321 -04:00 [DBG] Adding []
+2020-09-14 08:22:07.325 -04:00 [DBG] Adding [{"Key":"X-Claims","Value":["\"email=darius@b.test\""],"$type":"KeyValuePair`2"}]
+2020-09-14 08:22:07.330 -04:00 [INF] Executing endpoint '/Rgb/Index'
+2020-09-14 08:22:07.331 -04:00 [INF] Route matched with {page = "/Rgb/Index", action = "", controller = ""}. Executing page /Rgb/Index
+2020-09-14 08:22:07.332 -04:00 [DBG] Execution plan of authorization filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.AutoValidateAntiforgeryTokenAuthorizationFilter"]
+2020-09-14 08:22:07.335 -04:00 [DBG] Execution plan of resource filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.SaveTempDataFilter"]
+2020-09-14 08:22:07.341 -04:00 [DBG] Execution plan of action filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000)"]
+2020-09-14 08:22:07.344 -04:00 [DBG] Execution plan of exception filters (in the following order): ["None"]
+2020-09-14 08:22:07.346 -04:00 [DBG] Execution plan of result filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.SaveTempDataFilter"]
+2020-09-14 08:22:07.350 -04:00 [DBG] Executing page model factory for page EDennis.Samples.ColorApp.Razor.Pages.Rgb.Pages_Rgb_Index (EDennis.Samples.ColorApp.Razor.Views)
+2020-09-14 08:22:13.466 -04:00 [DBG] Starting HttpMessageHandler cleanup cycle with 2 items
+2020-09-14 08:22:13.467 -04:00 [DBG] Executed page model factory for page EDennis.Samples.ColorApp.Razor.Pages.Rgb.Pages_Rgb_Index (EDennis.Samples.ColorApp.Razor.Views)
+2020-09-14 08:22:13.470 -04:00 [DBG] Ending HttpMessageHandler cleanup cycle after 0.0132ms - processed: 0 items - remaining: 2 items
+2020-09-14 08:22:13.481 -04:00 [DBG] Attempting to bind parameter 'fld0' of type 'System.String' ...
+2020-09-14 08:22:13.486 -04:00 [DBG] Attempting to bind parameter 'fld0' of type 'System.String' using the name 'fld0' in request data ...
+2020-09-14 08:22:13.493 -04:00 [DBG] Done attempting to bind parameter 'fld0' of type 'System.String'.
+2020-09-14 08:22:13.496 -04:00 [DBG] Done attempting to bind parameter 'fld0' of type 'System.String'.
+2020-09-14 08:22:13.498 -04:00 [DBG] Attempting to validate the bound parameter 'fld0' of type 'System.String' ...
+2020-09-14 08:22:13.502 -04:00 [DBG] Done attempting to validate the bound parameter 'fld0' of type 'System.String'.
+2020-09-14 08:22:13.504 -04:00 [DBG] Attempting to bind parameter 'op0' of type 'EDennis.NetStandard.Base.ComparisonOperator' ...
+2020-09-14 08:22:13.507 -04:00 [DBG] Attempting to bind parameter 'op0' of type 'EDennis.NetStandard.Base.ComparisonOperator' using the name 'op0' in request data ...
+2020-09-14 08:22:13.511 -04:00 [DBG] Done attempting to bind parameter 'op0' of type 'EDennis.NetStandard.Base.ComparisonOperator'.
+2020-09-14 08:22:13.513 -04:00 [DBG] Done attempting to bind parameter 'op0' of type 'EDennis.NetStandard.Base.ComparisonOperator'.
+2020-09-14 08:22:13.515 -04:00 [DBG] Attempting to validate the bound parameter 'op0' of type 'EDennis.NetStandard.Base.ComparisonOperator' ...
+2020-09-14 08:22:13.518 -04:00 [DBG] Done attempting to validate the bound parameter 'op0' of type 'EDennis.NetStandard.Base.ComparisonOperator'.
+2020-09-14 08:22:13.523 -04:00 [DBG] Attempting to bind parameter 'val0' of type 'System.String' ...
+2020-09-14 08:22:13.526 -04:00 [DBG] Attempting to bind parameter 'val0' of type 'System.String' using the name 'val0' in request data ...
+2020-09-14 08:22:13.528 -04:00 [DBG] Done attempting to bind parameter 'val0' of type 'System.String'.
+2020-09-14 08:22:13.529 -04:00 [DBG] Done attempting to bind parameter 'val0' of type 'System.String'.
+2020-09-14 08:22:13.532 -04:00 [DBG] Attempting to validate the bound parameter 'val0' of type 'System.String' ...
+2020-09-14 08:22:13.534 -04:00 [DBG] Done attempting to validate the bound parameter 'val0' of type 'System.String'.
+2020-09-14 08:22:13.536 -04:00 [DBG] Attempting to bind parameter 'fld1' of type 'System.String' ...
+2020-09-14 08:22:13.539 -04:00 [DBG] Attempting to bind parameter 'fld1' of type 'System.String' using the name 'fld1' in request data ...
+2020-09-14 08:22:13.545 -04:00 [DBG] Done attempting to bind parameter 'fld1' of type 'System.String'.
+2020-09-14 08:22:13.548 -04:00 [DBG] Done attempting to bind parameter 'fld1' of type 'System.String'.
+2020-09-14 08:22:13.549 -04:00 [DBG] Attempting to validate the bound parameter 'fld1' of type 'System.String' ...
+2020-09-14 08:22:13.552 -04:00 [DBG] Done attempting to validate the bound parameter 'fld1' of type 'System.String'.
+2020-09-14 08:22:13.555 -04:00 [DBG] Attempting to bind parameter 'op1' of type 'EDennis.NetStandard.Base.ComparisonOperator' ...
+2020-09-14 08:22:13.558 -04:00 [DBG] Attempting to bind parameter 'op1' of type 'EDennis.NetStandard.Base.ComparisonOperator' using the name 'op1' in request data ...
+2020-09-14 08:22:13.563 -04:00 [DBG] Done attempting to bind parameter 'op1' of type 'EDennis.NetStandard.Base.ComparisonOperator'.
+2020-09-14 08:22:13.566 -04:00 [DBG] Done attempting to bind parameter 'op1' of type 'EDennis.NetStandard.Base.ComparisonOperator'.
+2020-09-14 08:22:13.568 -04:00 [DBG] Attempting to validate the bound parameter 'op1' of type 'EDennis.NetStandard.Base.ComparisonOperator' ...
+2020-09-14 08:22:13.570 -04:00 [DBG] Done attempting to validate the bound parameter 'op1' of type 'EDennis.NetStandard.Base.ComparisonOperator'.
+2020-09-14 08:22:13.577 -04:00 [DBG] Attempting to bind parameter 'val1' of type 'System.String' ...
+2020-09-14 08:22:13.579 -04:00 [DBG] Attempting to bind parameter 'val1' of type 'System.String' using the name 'val1' in request data ...
+2020-09-14 08:22:13.581 -04:00 [DBG] Done attempting to bind parameter 'val1' of type 'System.String'.
+2020-09-14 08:22:13.582 -04:00 [DBG] Done attempting to bind parameter 'val1' of type 'System.String'.
+2020-09-14 08:22:13.586 -04:00 [DBG] Attempting to validate the bound parameter 'val1' of type 'System.String' ...
+2020-09-14 08:22:13.588 -04:00 [DBG] Done attempting to validate the bound parameter 'val1' of type 'System.String'.
+2020-09-14 08:22:13.592 -04:00 [DBG] Attempting to bind parameter 'pageNumber' of type 'System.Int32' ...
+2020-09-14 08:22:13.594 -04:00 [DBG] Attempting to bind parameter 'pageNumber' of type 'System.Int32' using the name 'pageNumber' in request data ...
+2020-09-14 08:22:13.599 -04:00 [DBG] Done attempting to bind parameter 'pageNumber' of type 'System.Int32'.
+2020-09-14 08:22:13.602 -04:00 [DBG] Done attempting to bind parameter 'pageNumber' of type 'System.Int32'.
+2020-09-14 08:22:13.604 -04:00 [DBG] Attempting to validate the bound parameter 'pageNumber' of type 'System.Int32' ...
+2020-09-14 08:22:13.607 -04:00 [DBG] Done attempting to validate the bound parameter 'pageNumber' of type 'System.Int32'.
+2020-09-14 08:22:13.609 -04:00 [DBG] Attempting to bind parameter 'totalRecords' of type 'System.Nullable`1[System.Int32]' ...
+2020-09-14 08:22:13.610 -04:00 [DBG] Could not find a value in the request with name '' for binding parameter 'totalRecords' of type 'System.Nullable`1[System.Int32]'.
+2020-09-14 08:22:13.612 -04:00 [DBG] Done attempting to bind parameter 'totalRecords' of type 'System.Nullable`1[System.Int32]'.
+2020-09-14 08:22:13.614 -04:00 [DBG] Done attempting to bind parameter 'totalRecords' of type 'System.Nullable`1[System.Int32]'.
+2020-09-14 08:22:13.619 -04:00 [DBG] Attempting to validate the bound parameter 'totalRecords' of type 'System.Nullable`1[System.Int32]' ...
+2020-09-14 08:22:13.622 -04:00 [DBG] Done attempting to validate the bound parameter 'totalRecords' of type 'System.Nullable`1[System.Int32]'.
+2020-09-14 08:22:13.624 -04:00 [INF] Executing handler method EDennis.Samples.ColorApp.Razor.Pages.Rgb.IndexModel.OnGetAsync - ModelState is "Valid"
+2020-09-14 08:22:18.866 -04:00 [INF] Start processing HTTP request GET "https://localhost:44341/api/Rgb/linq/async?where=Name.StartsWith(B)&orderBy=Name&skip=0&take=10"
+2020-09-14 08:22:18.871 -04:00 [INF] Sending HTTP request GET "https://localhost:44341/api/Rgb/linq/async?where=Name.StartsWith(B)&orderBy=Name&skip=0&take=10"

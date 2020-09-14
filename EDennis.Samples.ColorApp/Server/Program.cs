@@ -12,7 +12,7 @@ namespace EDennis.Samples.ColorApp.Server {
 
             if (args.Contains("/idp-config")) {
                 Log.Information("Generating IDP Config file...");
-                SeedDataGenerator.GenerateIdpConfigStub<Startup>(5000, 44336, false, new string[] { "EDennis.Samples.ColorApi" });
+                SeedDataGenerator.GenerateIdpConfigStub<Startup>(5000, 44336, false, new string[] { "EDennis.Samples.ColorApi.*" });
                 Log.Information("Exiting...");
                 return;
             }

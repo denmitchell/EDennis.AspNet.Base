@@ -30,7 +30,7 @@
       ],
       "ClientClaimsPrefix": "",
       "AllowedScopes": [
-        "EDennis.Samples.ColorApi"
+        "EDennis.Samples.ColorApi.*"
       ]
     },
     {

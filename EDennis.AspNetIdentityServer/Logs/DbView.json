@@ -2,19 +2,19 @@
   "ApiResources": {
     "Name": "EDennis.Samples.ColorApi",
     "Scopes": [
-      "EDennis.Samples.ColorApi.RgbController.Check",
-      "EDennis.Samples.ColorApi.RgbController.Delete*",
-      "EDennis.Samples.ColorApi.RgbController.Patch*",
-      "EDennis.Samples.ColorApi.RgbController.Put*",
-      "EDennis.Samples.ColorApi.RgbController.Post*",
-      "EDennis.Samples.ColorApi.RgbController.Get*",
-      "EDennis.Samples.ColorApi.RgbController.*",
-      "EDennis.Samples.ColorApi.*.Delete*",
       "EDennis.Samples.ColorApi.*.Patch*",
       "EDennis.Samples.ColorApi.*.Put*",
       "EDennis.Samples.ColorApi.*.Post*",
       "EDennis.Samples.ColorApi.*.Get*",
-      "EDennis.Samples.ColorApi.*"
+      "EDennis.Samples.ColorApi.*",
+      "EDennis.Samples.ColorApi.*.Delete*",
+      "EDennis.Samples.ColorApi.Rgb.*",
+      "EDennis.Samples.ColorApi.Rgb.Get*",
+      "EDennis.Samples.ColorApi.Rgb.Post*",
+      "EDennis.Samples.ColorApi.Rgb.Put*",
+      "EDennis.Samples.ColorApi.Rgb.Patch*",
+      "EDennis.Samples.ColorApi.Rgb.Delete*",
+      "EDennis.Samples.ColorApi.Rgb.Check"
     ]
   },
   "Clients": [
@@ -35,18 +35,18 @@
         "https://localhost:44305/signout-callback-oidc"
       ],
       "Scopes": [
-        "openid",
-        "profile",
-        "name",
-        "email",
-        "offline_access",
-        "phone_number",
-        "organization",
-        "organization_confirmed",
-        "organization_admin_for",
         "super_admin",
+        "organization_admin_for",
+        "organization_confirmed",
+        "organization",
+        "offline_access",
+        "email_confirmed",
+        "email",
+        "name",
+        "profile",
+        "openid",
         "role:EDennis.Samples.ColorApp.Razor",
-        "email_confirmed"
+        "phone_number"
       ],
       "Applications": [
         "EDennis.Samples.ColorApp.Razor"
@@ -63,7 +63,7 @@
         "client_credentials"
       ],
       "Scopes": [
-        "EDennis.Samples.ColorApi"
+        "EDennis.Samples.ColorApi.*"
       ]
     },
     {
@@ -77,7 +77,7 @@
         "client_credentials"
       ],
       "Scopes": [
-        "EDennis.Samples.ColorApi"
+        "EDennis.Samples.ColorApi.*"
       ]
     }
   ],

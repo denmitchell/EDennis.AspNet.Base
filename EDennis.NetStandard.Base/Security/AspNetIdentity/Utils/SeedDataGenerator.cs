@@ -359,7 +359,7 @@ namespace EDennis.NetStandard.Base {
                 .Where(method => method.IsPublic && !method.IsDefined(typeof(NonActionAttribute))
                     && !method.GetCustomAttributes(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute), true).Any())
                 .Select(x => KeyValuePair.Create(x.DeclaringType.Name, x.Name))
-                .ToDictionary(x => (x.Key, x.Value));
+                .ToDictionary(x => (x.Key.Replace("Controller", ""), x.Value));
 
             var scopes = new List<string>();
             project = assembly.GetName().Name;

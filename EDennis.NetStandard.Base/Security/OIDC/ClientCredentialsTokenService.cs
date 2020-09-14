@@ -127,7 +127,7 @@ namespace EDennis.NetStandard.Base {
             });
 
             if (tokenResponse.IsError) {
-                _logger.LogError(disco.Error);
+                _logger.LogError(tokenResponse.Error);
                 return;
             }
 

@@ -14,7 +14,7 @@ namespace EDennis.Samples.ColorApp.Razor {
 
             if (args.Contains("/idp-config")) {
                 Log.Information("Generating IDP Config file...");
-                SeedDataGenerator.GenerateIdpConfigStub<Startup>(5000, 44305, true, new string[] { "EDennis.Samples.ColorApi" });
+                SeedDataGenerator.GenerateIdpConfigStub<Startup>(5000, 44305, true, new string[] { "EDennis.Samples.ColorApi.*" });
                 Log.Information("Exiting...");
                 return;
             }

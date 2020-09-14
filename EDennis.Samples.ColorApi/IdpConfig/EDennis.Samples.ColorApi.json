@@ -9,13 +9,13 @@
         "EDennis.Samples.ColorApi.*.Put*",
         "EDennis.Samples.ColorApi.*.Patch*",
         "EDennis.Samples.ColorApi.*.Delete*",
-        "EDennis.Samples.ColorApi.RgbController.*",
-        "EDennis.Samples.ColorApi.RgbController.Get*",
-        "EDennis.Samples.ColorApi.RgbController.Post*",
-        "EDennis.Samples.ColorApi.RgbController.Put*",
-        "EDennis.Samples.ColorApi.RgbController.Patch*",
-        "EDennis.Samples.ColorApi.RgbController.Delete*",
-        "EDennis.Samples.ColorApi.RgbController.Check"
+        "EDennis.Samples.ColorApi.Rgb.*",
+        "EDennis.Samples.ColorApi.Rgb.Get*",
+        "EDennis.Samples.ColorApi.Rgb.Post*",
+        "EDennis.Samples.ColorApi.Rgb.Put*",
+        "EDennis.Samples.ColorApi.Rgb.Patch*",
+        "EDennis.Samples.ColorApi.Rgb.Delete*",
+        "EDennis.Samples.ColorApi.Rgb.Check"
       ]
     }
   ],

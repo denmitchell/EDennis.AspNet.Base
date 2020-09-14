@@ -62,7 +62,7 @@ namespace EDennis.NetStandard.Base {
 
                         _logger.LogDebug("Claims unpacked from Header ({HeaderKey}, {HeaderValue})", HeaderToClaimsOptions.HEADER_KEY, value.ToString());
 
-                        var unpackedClaims = value.ToString().UnpackKeyValues((t, v) => new Claim(t, v));
+                        var unpackedClaims = value.ToString()[1..^1].UnpackKeyValues((t, v) => new Claim(t, v));
 
 
                         var appIdentity = new ClaimsIdentity(unpackedClaims);
@@ -80,7 +80,7 @@ namespace EDennis.NetStandard.Base {
     public static class IServiceCollectionExtensions_HeaderToClaimsMiddleware {
         public static IServiceCollection AddHeaderToClaims(this IServiceCollection services, IConfiguration config,
             string configKey = "Security:HeaderToClaims") {
-            services.Configure<MockClaimsPrincipalOptions>(config.GetSection(configKey));
+            services.Configure<HeaderToClaimsOptions>(config.GetSection(configKey));
             return services;
         }
     }

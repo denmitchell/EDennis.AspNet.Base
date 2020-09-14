@@ -166,6 +166,9 @@ namespace EDennis.AspNetIdentityServer {
                         cContext.ApiResources.Remove(existing);
                         cContext.SaveChanges();
                     }
+                    foreach (var scope in api.Scopes)
+                        if (!cContext.ApiScopes.Any(x => x.Name == scope))
+                            cContext.ApiScopes.Add(new ApiScope { Name = scope, Description = scope }.ToEntity());
                     cContext.ApiResources.Add(api.ToEntity());
                 }
                 cContext.SaveChanges();

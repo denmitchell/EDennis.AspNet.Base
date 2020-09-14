@@ -9,19 +9,19 @@
         "EDennis.Samples.ColorApp.Server.*.Put*",
         "EDennis.Samples.ColorApp.Server.*.Patch*",
         "EDennis.Samples.ColorApp.Server.*.Delete*",
-        "EDennis.Samples.ColorApp.Server.RgbController.*",
-        "EDennis.Samples.ColorApp.Server.RgbController.Get*",
-        "EDennis.Samples.ColorApp.Server.RgbController.Post*",
-        "EDennis.Samples.ColorApp.Server.RgbController.Put*",
-        "EDennis.Samples.ColorApp.Server.RgbController.Patch*",
-        "EDennis.Samples.ColorApp.Server.RgbController.Delete*",
-        "EDennis.Samples.ColorApp.Server.RgbController.get_ClientName",
-        "EDennis.Samples.ColorApp.Server.OidcConfigurationController.*",
-        "EDennis.Samples.ColorApp.Server.OidcConfigurationController.Get*",
-        "EDennis.Samples.ColorApp.Server.OidcConfigurationController.Post*",
-        "EDennis.Samples.ColorApp.Server.OidcConfigurationController.Put*",
-        "EDennis.Samples.ColorApp.Server.OidcConfigurationController.Patch*",
-        "EDennis.Samples.ColorApp.Server.OidcConfigurationController.Delete*"
+        "EDennis.Samples.ColorApp.Server.Rgb.*",
+        "EDennis.Samples.ColorApp.Server.Rgb.Get*",
+        "EDennis.Samples.ColorApp.Server.Rgb.Post*",
+        "EDennis.Samples.ColorApp.Server.Rgb.Put*",
+        "EDennis.Samples.ColorApp.Server.Rgb.Patch*",
+        "EDennis.Samples.ColorApp.Server.Rgb.Delete*",
+        "EDennis.Samples.ColorApp.Server.Rgb.get_ClientName",
+        "EDennis.Samples.ColorApp.Server.OidcConfiguration.*",
+        "EDennis.Samples.ColorApp.Server.OidcConfiguration.Get*",
+        "EDennis.Samples.ColorApp.Server.OidcConfiguration.Post*",
+        "EDennis.Samples.ColorApp.Server.OidcConfiguration.Put*",
+        "EDennis.Samples.ColorApp.Server.OidcConfiguration.Patch*",
+        "EDennis.Samples.ColorApp.Server.OidcConfiguration.Delete*"
       ]
     }
   ],
@@ -35,7 +35,7 @@
       ],
       "ClientClaimsPrefix": "",
       "AllowedScopes": [
-        "EDennis.Samples.ColorApi"
+        "EDennis.Samples.ColorApi.*"
       ]
     }
   ],
