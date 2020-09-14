@@ -11712,3 +11712,63 @@ System.InvalidOperationException: SignInAsync when principal.Identity.IsAuthenti
 2020-09-14 07:28:11.129 -04:00 [INF] Exiting...
 2020-09-14 07:45:24.084 -04:00 [INF] Generating IDP Config file...
 2020-09-14 07:45:24.610 -04:00 [INF] Exiting...
+2020-09-14 10:02:22.853 -04:00 [INF] Generating IDP Config file...
+2020-09-14 10:02:23.709 -04:00 [INF] Exiting...
+2020-09-14 11:49:51.005 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-14 11:49:51.569 -04:00 [INF] Starting IdentityServer4 version 3.0.0.0
+2020-09-14 13:21:58.603 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-14 13:21:58.844 -04:00 [INF] Starting IdentityServer4 version 3.0.0.0
+2020-09-14 13:29:21.712 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-14 13:29:21.938 -04:00 [INF] Starting IdentityServer4 version 3.0.0.0
+2020-09-14 13:29:22.085 -04:00 [INF] Configuring local API resource 'EDennis.Samples.ColorApp.ServerAPI'.
+2020-09-14 13:29:22.116 -04:00 [INF] Configuring client 'EDennis.Samples.ColorApp.Client'.
+2020-09-14 13:51:12.349 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-14 13:51:12.597 -04:00 [INF] Starting IdentityServer4 version 3.0.0.0
+2020-09-14 13:51:12.742 -04:00 [INF] Configuring local API resource 'EDennis.Samples.ColorApp.ServerAPI'.
+2020-09-14 13:51:12.776 -04:00 [INF] Configuring client 'EDennis.Samples.ColorApp.Client'.
+2020-09-14 13:52:51.654 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-14 13:52:51.886 -04:00 [INF] Starting IdentityServer4 version 3.0.0.0
+2020-09-14 13:52:52.041 -04:00 [INF] Configuring local API resource 'EDennis.Samples.ColorApp.ServerAPI'.
+2020-09-14 13:52:52.077 -04:00 [INF] Configuring client 'EDennis.Samples.ColorApp.Client'.
+2020-09-14 13:57:52.535 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-14 13:57:52.782 -04:00 [INF] Starting IdentityServer4 version 3.0.0.0
+2020-09-14 13:57:52.929 -04:00 [INF] Configuring local API resource 'EDennis.Samples.ColorApp.ServerAPI'.
+2020-09-14 13:57:52.973 -04:00 [INF] Configuring client 'EDennis.Samples.ColorApp.Client'.
+2020-09-14 13:57:53.031 -04:00 [INF] Loading development key at 'C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp\Server\obj/tempkey.json'.
+2020-09-14 13:57:53.516 -04:00 [INF] Resource 'EDennis.Samples.ColorApp.ServerAPI' allows all applications.
+2020-09-14 13:57:53.523 -04:00 [INF] Identity resource 'openid' allows all applications.
+2020-09-14 13:57:53.524 -04:00 [INF] Identity resource 'profile' allows all applications.
+2020-09-14 13:57:53.558 -04:00 [INF] Using explicitly configured authentication scheme Identity.Application for IdentityServer
+2020-09-14 13:57:54.344 -04:00 [ERR] Could not bind key '' in Configuration to object of type List<string>
+System.ApplicationException: Could not bind key '' in Configuration to object of type List<string>
+2020-09-14 14:26:15.106 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-14 14:26:15.338 -04:00 [INF] Starting IdentityServer4 version 3.0.0.0
+2020-09-14 14:26:15.481 -04:00 [INF] Configuring local API resource 'EDennis.Samples.ColorApp.ServerAPI'.
+2020-09-14 14:26:15.519 -04:00 [INF] Configuring client 'EDennis.Samples.ColorApp.Client'.
+2020-09-14 14:26:15.576 -04:00 [INF] Loading development key at 'C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp\Server\obj/tempkey.json'.
+2020-09-14 14:26:15.808 -04:00 [INF] Resource 'EDennis.Samples.ColorApp.ServerAPI' allows all applications.
+2020-09-14 14:26:15.812 -04:00 [INF] Identity resource 'openid' allows all applications.
+2020-09-14 14:26:15.813 -04:00 [INF] Identity resource 'profile' allows all applications.
+2020-09-14 14:26:15.838 -04:00 [INF] Using explicitly configured authentication scheme Identity.Application for IdentityServer
+2020-09-14 14:26:16.606 -04:00 [INF] Now listening on: https://localhost:44336
+2020-09-14 14:26:16.613 -04:00 [INF] Now listening on: http://localhost:62727
+2020-09-14 14:26:16.615 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2020-09-14 14:26:16.618 -04:00 [INF] Hosting environment: Development
+2020-09-14 14:26:16.621 -04:00 [INF] Content root path: C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp\Server
+2020-09-14 14:26:20.998 -04:00 [INF] Request starting HTTP/1.1 GET https://localhost:44336/_framework/debug/ws-proxy?browser=ws%3A%2F%2Flocalhost%3A62008%2Fdevtools%2Fbrowser%2F3d005ea6-3dc1-42a8-8ed6-161589995585  
+2020-09-14 14:58:51.006 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-14 14:58:51.233 -04:00 [INF] Starting IdentityServer4 version 3.0.0.0
+2020-09-14 14:58:51.381 -04:00 [INF] Configuring local API resource 'EDennis.Samples.ColorApp.ServerAPI'.
+2020-09-14 14:58:51.416 -04:00 [INF] Configuring client 'EDennis.Samples.ColorApp.Client'.
+2020-09-14 14:58:51.468 -04:00 [INF] Loading development key at 'C:\Users\MitchellDenC\source\repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp\Server\obj/tempkey.json'.
+2020-09-14 14:58:51.701 -04:00 [INF] Resource 'EDennis.Samples.ColorApp.ServerAPI' allows all applications.
+2020-09-14 14:58:51.705 -04:00 [INF] Identity resource 'openid' allows all applications.
+2020-09-14 14:58:51.707 -04:00 [INF] Identity resource 'profile' allows all applications.
+2020-09-14 14:58:51.733 -04:00 [INF] Using explicitly configured authentication scheme Identity.Application for IdentityServer
+2020-09-14 14:58:52.421 -04:00 [INF] Now listening on: https://localhost:44336
+2020-09-14 14:58:52.429 -04:00 [INF] Now listening on: http://localhost:62727
+2020-09-14 14:58:52.431 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2020-09-14 14:58:52.433 -04:00 [INF] Hosting environment: Development
+2020-09-14 14:58:52.435 -04:00 [INF] Content root path: C:\Users\MitchellDenC\source\repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApp\Server
+2020-09-14 14:58:55.032 -04:00 [INF] Request starting HTTP/1.1 GET https://localhost:44336/_framework/debug/ws-proxy?browser=ws%3A%2F%2Flocalhost%3A62008%2Fdevtools%2Fbrowser%2F3d005ea6-3dc1-42a8-8ed6-161589995585  
+2020-09-14 14:58:57.543 -04:00 [INF] Request finished in 2517.3685ms 302 

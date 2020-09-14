@@ -1,10 +1,16 @@
 ﻿using EDennis.NetStandard.Base;
+using IdentityModel;
+using IdentityServer4;
+using IdentityServer4.AspNetIdentity;
 using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics;
 using System.Linq;
 
 namespace EDennis.NetApp.Base {
@@ -58,11 +64,6 @@ namespace EDennis.NetApp.Base {
                     string identityServerConfigKey = "Security:IdentityServer") {
 
 
-            //Step 1. Get options from configuration
-            var apiAuthorizationOptions = new ApiAuthorizationOptions();
-            config.BindSectionOrThrow(identityServerConfigKey, apiAuthorizationOptions);
-            services.Configure<ApiAuthorizationOptions>(config.GetSection(identityServerConfigKey));
-
 
             //Step 2: Add the DbContext for ASP.NET Identity
             var cxnString = config.GetValueOrThrow<string>(dbContextConfigKey);
@@ -71,8 +72,7 @@ namespace EDennis.NetApp.Base {
 
 
             //Step 3: Add common ASP.NET Identity services, including default UI
-            services.AddDefaultIdentity<DomainUser>(options =>
-            {
+            services.AddDefaultIdentity<DomainUser>(options => {
                 options.SignIn.RequireConfirmedAccount = true;
             })
 
@@ -80,31 +80,83 @@ namespace EDennis.NetApp.Base {
                 //So, instead of AddEntityFrameworkStores<ApplicationDbContext> ...
                 .AddUserStore<DomainUserStore>()
 
-                //DomainUserClaimsPrincipalFactory adds user properties as claims
-                //  by calling DomainUser.ToClaims();
-                //So, instead of default UserClaimsPrincipalFacory ...
-                .AddClaimsPrincipalFactory<DomainUserClaimsPrincipalFactory>();
+            //DomainUserClaimsPrincipalFactory adds user properties as claims
+            //  by calling DomainUser.ToClaims();
+            //So, instead of default UserClaimsPrincipalFacory ...
+            //.AddClaimsPrincipalFactory<DomainUserClaimsPrincipalFactory>();
             ;
 
 
             //Step 4: Add integrated identity server, with clients and API resources
             //        created from configuration
-            services.AddIdentityServer()
-                .AddApiAuthorization<DomainUser, PersistedGrantDbContext>(opt =>
-                {
+            var isBuilder = services.AddIdentityServer()
+                .AddApiAuthorization<DomainUser, PersistedGrantDbContext>();
+                //opt => {
                     //having invoked Configure on the options, this may not be needed ...
-                    opt.Clients = apiAuthorizationOptions.Clients;
-                    opt.ApiResources = apiAuthorizationOptions.ApiResources;
-                })
-                //provides the integration with ASP.NET identity;
-                //NOTE: with this call, IdentityServer should use DomainManager<DomainUser>, 
-                //      which should in turn use DomainUserStore
-                .AddAspNetIdentity<DomainUser>();
+                //    opt.Clients = apiAuthorizationOptions.Clients;
+                //    opt.ApiResources = apiAuthorizationOptions.ApiResources;
+                //});
+
+            //provides the integration with ASP.NET identity;
+            //NOTE: with this call, IdentityServer should use DomainManager<DomainUser>, 
+            //      which should in turn use DomainUserStore
+
+            services.RemoveServiceImplementations("IdentityServer4.AspNetIdentity.Decorator`1[[Microsoft.AspNetCore.Identity.IUserClaimsPrincipalFactory`1[");
+            services.ReplaceServiceImplementations<IUserClaimsPrincipalFactory<DomainUser>, DomainUserClaimsPrincipalFactory>(ServiceLifetime.Transient);
+
+
+            services.Configure<IdentityOptions>(options => {
+                options.ClaimsIdentity.UserIdClaimType = JwtClaimTypes.Subject;
+                options.ClaimsIdentity.UserNameClaimType = JwtClaimTypes.Name;
+                options.ClaimsIdentity.RoleClaimType = JwtClaimTypes.Role;
+            });
+
+            services.Configure<SecurityStampValidatorOptions>(opts => {
+                opts.OnRefreshingPrincipal = SecurityStampValidatorCallback.UpdatePrincipal;
+            });
+
+            services.ConfigureApplicationCookie(options => {
+                options.Cookie.IsEssential = true;
+                // needed for iframe
+                options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
+            });
+
+            services.ConfigureExternalCookie(options => {
+                options.Cookie.IsEssential = true;
+                // https://github.com/IdentityServer/IdentityServer4/issues/2595
+                options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
+            });
+
+            services.Configure<CookieAuthenticationOptions>(IdentityConstants.TwoFactorRememberMeScheme, options => {
+                options.Cookie.IsEssential = true;
+            });
+
+            services.Configure<CookieAuthenticationOptions>(IdentityConstants.TwoFactorUserIdScheme, options => {
+                options.Cookie.IsEssential = true;
+            });
+
+            services.AddAuthentication(options => {
+                if (options.DefaultAuthenticateScheme == null &&
+                    options.DefaultScheme == IdentityServerConstants.DefaultCookieAuthenticationScheme) {
+                    options.DefaultScheme = IdentityConstants.ApplicationScheme;
+                }
+            }).AddIdentityServerJwt();
+
+            isBuilder.AddResourceOwnerValidator<ResourceOwnerPasswordValidator<DomainUser>>();
+            isBuilder.AddProfileService<ProfileService<DomainUser>>();
 
             
+            //Step 1. Get options from configuration
+            //var apiAuthorizationOptions = new ApiAuthorizationOptions();
+            //config.BindSectionOrThrow(identityServerConfigKey, apiAuthorizationOptions);
+            //services.Configure<ApiAuthorizationOptions>(config.GetSection(identityServerConfigKey));
+
+
+            //isBuilder.AddAspNetIdentity<DomainUser>();
+
+
             //Step 5: Ensure correct implementations for IUserClaimsPrincipalFactory,
             //        As this may have been altered by the call to .AddAspNetIdentity, above.
-            services.ReplaceServiceImplementations<IUserClaimsPrincipalFactory<DomainUser>, DomainUserClaimsPrincipalFactory>(ServiceLifetime.Scoped);
 
 
             return services;
@@ -193,6 +245,29 @@ namespace EDennis.NetApp.Base {
                         services.AddTransient<IServiceType, TReplacementImplementation>();
                         break;
                 }
+            }
+
+        }
+
+        public static void RemoveServiceImplementations<IServiceType>(this IServiceCollection services)
+            where IServiceType : class {
+
+            //note: workaround to prevent double-registering services
+            var servicesToRemove = services.Where(s => s.ServiceType == typeof(IServiceType)).ToArray();
+            for (int i = 0; i < servicesToRemove.Length; i++) {
+                services.Remove(servicesToRemove[i]);
+            }
+
+        }
+
+
+        public static void RemoveServiceImplementations(this IServiceCollection services, string serviceTypeFullNameStartsWith) {
+
+            //note: workaround to prevent double-registering services
+            var servicesToRemove = services.Where(s => s.ServiceType.FullName.StartsWith(serviceTypeFullNameStartsWith)).ToArray();
+            for (int i = 0; i < servicesToRemove.Length; i++) {
+                Debug.WriteLine(servicesToRemove[i].ServiceType.Name);
+                services.Remove(servicesToRemove[i]);
             }
 
         }
