@@ -45,12 +45,14 @@ namespace EDennis.NetStandard.Base {
             if (claims != null && _enabledForClaims.Any(e => claims.Any(c => $"{c.Type}|{c.Value}" == e))) {
                 var cookieValue = GetOrAddCookie(context, out bool cookieAdded);
 
-                if (cookieAdded)
+                if (cookieAdded) {
+                    context.Request.Headers.Add(CachedTransactionOptions.COOKIE_KEY, cookieValue);
                     context.Response.OnStarting(state => {
                         var httpContext = (HttpContext)state;
                         httpContext.Response.Cookies.Append(CachedTransactionOptions.COOKIE_KEY, cookieValue);
                         return Task.CompletedTask;
                     }, context);
+                }
 
                 await _next(context);
 

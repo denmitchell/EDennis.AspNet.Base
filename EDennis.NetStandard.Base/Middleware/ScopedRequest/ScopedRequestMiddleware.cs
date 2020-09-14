@@ -50,7 +50,8 @@ namespace EDennis.NetStandard.Base {
 
 
                 var headers = context.Request.Headers
-                    .Where(h => _options.HeadersToCapture.Contains(h.Key, StringComparer.OrdinalIgnoreCase))
+                    .Where(h => h.Key == CachedTransactionOptions.COOKIE_KEY 
+                        || _options.HeadersToCapture.Contains(h.Key, StringComparer.OrdinalIgnoreCase))
                     .ToList();
 
                 _logger.LogDebug("Adding {@Headers}", headers);

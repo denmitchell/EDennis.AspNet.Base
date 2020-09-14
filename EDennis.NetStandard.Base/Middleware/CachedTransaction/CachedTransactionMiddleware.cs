@@ -44,13 +44,15 @@ namespace EDennis.NetStandard.Base {
                     _logger.LogTrace("Replacing DbContext.", typeof(TContext).Name);
                     _cache.ReplaceDbContext(Guid.Parse(cookieValue), dbContextProvider);
 
-                    if (cookieAdded)
+                    if (cookieAdded) {
+                        context.Request.Headers.Add(CachedTransactionOptions.COOKIE_KEY, cookieValue);
                         context.Response.OnStarting(state => {
                             var httpContext = (HttpContext)state;
                             _logger.LogDebug("Setting cookie ({CookieKey}, {CookieValue}).", typeof(TContext).Name, CachedTransactionOptions.COOKIE_KEY, cookieValue);
                             httpContext.Response.Cookies.Append(CachedTransactionOptions.COOKIE_KEY, cookieValue);
                             return Task.CompletedTask;
                         }, context);
+                    }
 
                     if (context.Request.Path.Value.EndsWith(CachedTransactionOptions.ROLLBACK_PATH)) {
                         _logger.LogDebug("Initiating rollback.", typeof(TContext).Name);
