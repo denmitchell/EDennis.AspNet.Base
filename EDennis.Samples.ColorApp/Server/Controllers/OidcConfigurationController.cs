@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace EDennis.Samples.ColorApp.Server.Controllers {
+    [AllowAnonymous]
     public class OidcConfigurationController : Controller {
         private readonly ILogger<OidcConfigurationController> _logger;
 

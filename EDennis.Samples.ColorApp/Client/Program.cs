@@ -11,13 +11,13 @@ namespace EDennis.Samples.ColorApp.Client {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
 
-            builder.Services.AddHttpClient("EDennis.Samples.ColorApp.ServerAPI", 
+            builder.Services.AddHttpClient("EDennis.Samples.ColorApp.Client", 
                 client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
                 .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
             // Supply HttpClient instances that include access tokens when making requests to the server project
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
-                .CreateClient("EDennis.Samples.ColorApp.ServerAPI"));
+                .CreateClient("EDennis.Samples.ColorApp.Client"));
 
             builder.Services.AddScoped<RgbApiClient>();
 

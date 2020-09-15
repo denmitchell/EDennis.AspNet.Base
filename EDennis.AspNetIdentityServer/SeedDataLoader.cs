@@ -305,8 +305,8 @@ namespace EDennis.AspNetIdentityServer {
                         OrganizationConfirmed = entry.OrganizationConfirmed,
                         OrganizationAdmin = entry.OrganizationAdmin,
                         SuperAdmin = entry.SuperAdmin,
-                        LockoutBegin = entry.LockedOut ? DateTime.MinValue.ToUniversalTime() : default,
-                        LockoutEnd = entry.LockedOut ? DateTime.MaxValue.ToUniversalTime() : default
+                        LockoutBegin = entry.LockedOut ? (DateTimeOffset?)DateTime.MinValue.ToUniversalTime() : null,
+                        LockoutEnd = entry.LockedOut ? (DateTimeOffset?)DateTime.MaxValue.ToUniversalTime() : null
                     };
                     user.PasswordHash = HashPassword(entry.PlainTextPassword);
                     context.Users.Add(user);

@@ -3,6 +3,8 @@ using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.AspNetIdentity;
 using IdentityServer4.EntityFramework.DbContexts;
+using IdentityServer4.EntityFramework.Interfaces;
+using IdentityServer4.EntityFramework.Options;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -60,8 +62,8 @@ namespace EDennis.NetApp.Base {
         /// <returns></returns>
         public static IServiceCollection AddIntegratedIdentityServerAndAspNetIdentity(
                     this IServiceCollection services, IConfiguration config,
-                    string dbContextConfigKey = "ConnectionStrings:DomainIdentityDbContext",
-                    string identityServerConfigKey = "Security:IdentityServer") {
+                    string dbContextConfigKey = "ConnectionStrings:DomainIdentityDbContext"/*,
+                    string identityServerConfigKey = "Security:IdentityServer"*/) {
 
 
 
@@ -70,6 +72,14 @@ namespace EDennis.NetApp.Base {
             services.AddDbContext<DomainIdentityDbContext>(options =>
                 options.UseSqlServer(cxnString));
 
+            services.AddSingleton(new ConfigurationStoreOptions());
+            services.AddSingleton(new OperationalStoreOptions());
+
+            services.AddDbContext<IConfigurationDbContext, ConfigurationDbContext>(options =>
+                            options.UseSqlServer(cxnString));
+
+            services.AddDbContext<IPersistedGrantDbContext, PersistedGrantDbContext>(options =>
+                options.UseSqlServer(cxnString));
 
             //Step 3: Add common ASP.NET Identity services, including default UI
             services.AddDefaultIdentity<DomainUser>(options => {

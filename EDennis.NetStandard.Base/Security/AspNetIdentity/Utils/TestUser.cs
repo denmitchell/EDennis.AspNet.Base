@@ -9,7 +9,7 @@ namespace EDennis.NetStandard.Base {
         public const bool ORGANIZATION_CONFIRMED_DEFAULT = true;
         public const bool ORGANIZATION_ADMIN_DEFAULT = false;
         public const bool SUPER_ADMIN_DEFAULT = false;
-        public const bool LOCKED_OUT_DEFAULT = true;
+        public const bool LOCKED_OUT_DEFAULT = false;
 
         public const string PASSWORD_DEFAULT = "test";
 
