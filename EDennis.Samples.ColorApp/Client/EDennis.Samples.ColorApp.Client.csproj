@@ -20,4 +20,8 @@
     <ProjectReference Include="..\Shared\EDennis.Samples.ColorApp.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="IdpConfig\" />
+  </ItemGroup>
+
 </Project>

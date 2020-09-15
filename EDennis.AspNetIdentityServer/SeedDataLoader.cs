@@ -152,26 +152,42 @@ namespace EDennis.AspNetIdentityServer {
                     .AddJsonFile($"{SeedDataDir}\\{project}.json")
                     .Build();
 
+
+                _logger.LogInformation($"\tEnsuring Identity Resource for role:{project} claim ...");
+
+                //ensure that the project's role claim is represented as a standalone identity resource and user claim
+                var idUserClaims = cContext.IdentityResources.SelectMany(a => a.UserClaims).Select(c => c.Type).Distinct();
+                if (!idUserClaims.Any(a => a == $"role:{project}")) {
+                    cContext.IdentityResources.Add(
+                        new IdentityResource {
+                            Name = $"role:{project}",
+                            UserClaims = new string[] { $"role:{project}" }
+                        }.ToEntity());
+                }
+
+
+
                 _logger.LogInformation($"\tLoading Apis for {project} ...");
                 var apis = new List<ApiResource>();
                 config.GetSection("ApiResources").Bind(apis);
 
-                if (apis.Count == 0)
-                    throw new Exception($"Could not find/bind ApiResources section in {SeedDataDir}\\{project}");
+                if (apis.Count > 0) {
 
-                foreach (var api in apis) {
-                    _logger.LogInformation($"\t\tLoading {api.Name} ...");
-                    var existing = cContext.ApiResources.FirstOrDefault(x => x.Name == api.Name);
-                    if (existing != null) {
-                        cContext.ApiResources.Remove(existing);
-                        cContext.SaveChanges();
+                    foreach (var api in apis) {
+                        _logger.LogInformation($"\t\tLoading {api.Name} ...");
+                        var existing = cContext.ApiResources.FirstOrDefault(x => x.Name == api.Name);
+                        if (existing != null) {
+                            cContext.ApiResources.Remove(existing);
+                            cContext.SaveChanges();
+                        }
+                        foreach (var scope in api.Scopes)
+                            if (!cContext.ApiScopes.Any(x => x.Name == scope))
+                                cContext.ApiScopes.Add(new ApiScope { Name = scope, Description = scope }.ToEntity());
+                        cContext.ApiResources.Add(api.ToEntity());
+
                     }
-                    foreach (var scope in api.Scopes)
-                        if (!cContext.ApiScopes.Any(x => x.Name == scope))
-                            cContext.ApiScopes.Add(new ApiScope { Name = scope, Description = scope }.ToEntity());
-                    cContext.ApiResources.Add(api.ToEntity());
+                    cContext.SaveChanges();
                 }
-                cContext.SaveChanges();
 
                 _logger.LogInformation($"\tLoading Clients for {project} ...");
                 var clients = new List<ClientConfig>();
@@ -194,7 +210,6 @@ namespace EDennis.AspNetIdentityServer {
                 config.GetSection("TestUsers").Bind(users);
                 if (users.Count == 0) {
                     _logger.LogInformation($"\tNo TestUsers found for {project} ...");
-                    return;
                 } else {
                     _logger.LogInformation($"\tLoading TestUsers for {project} ...");
                     LoadTestUsers(diContext, project, users);
@@ -306,7 +321,8 @@ namespace EDennis.AspNetIdentityServer {
                         OrganizationAdmin = entry.OrganizationAdmin,
                         SuperAdmin = entry.SuperAdmin,
                         LockoutBegin = entry.LockedOut ? (DateTimeOffset?)DateTime.MinValue.ToUniversalTime() : null,
-                        LockoutEnd = entry.LockedOut ? (DateTimeOffset?)DateTime.MaxValue.ToUniversalTime() : null
+                        LockoutEnd = entry.LockedOut ? (DateTimeOffset?)DateTime.MaxValue.ToUniversalTime() : null,
+                        SecurityStamp = Guid.NewGuid().ToString()
                     };
                     user.PasswordHash = HashPassword(entry.PlainTextPassword);
                     context.Users.Add(user);

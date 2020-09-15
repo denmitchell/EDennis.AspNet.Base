@@ -1,13 +1,19 @@
 using EDennis.NetApp.Base;
 using EDennis.NetStandard.Base;
 using EDennis.Samples.ColorApp.Client;
+using IdentityServer4.EntityFramework.DbContexts;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace EDennis.Samples.ColorApp.Server {
     public class Startup {
@@ -23,10 +29,44 @@ namespace EDennis.Samples.ColorApp.Server {
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services) {
 
-            //add integrated IdentityServer
-            //see EDennis.AspNetIdentityServer.ICollectionExtensions:
-            services.AddIntegratedIdentityServerAndAspNetIdentity(Configuration, 
-               "ConnectionStrings:DomainIdentityDbContext");
+
+
+            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+            var connectionString = Configuration.GetValueOrThrow<string>("ConnectionStrings:DomainIdentityDbContext");
+
+            services.AddDbContext<DomainIdentityDbContext>(options =>
+                options.UseSqlServer(connectionString));
+
+            services.AddDefaultIdentity<DomainUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<DomainIdentityDbContext>();
+
+            services.AddIdentityServer()
+                /*
+                .AddConfigurationStore(options =>
+                {
+                    options.ConfigureDbContext = b => b.UseSqlServer(connectionString,
+                        sql => sql.MigrationsAssembly(migrationsAssembly));
+                })
+                .AddOperationalStore(options => {
+                    options.ConfigureDbContext = b => b.UseSqlServer(connectionString,
+                        sql => sql.MigrationsAssembly(migrationsAssembly));
+                })
+                */                
+                .AddApiAuthorization<DomainUser, PersistedGrantDbContext>();
+
+
+            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //    .AddJwtBearer(options => {
+            //        options.Authority = "https://localhost:5000";
+            //        options.Audience = "EDennis.Samples.ColorApp.Server";
+            //        options.TokenValidationParameters = new TokenValidationParameters() {
+            //            NameClaimType = "name",
+            //            RoleClaimType = "role:EDennis.Samples.ColorApp.Server"
+            //        };
+            //    });
+
+            services.AddAuthentication()
+                .AddIdentityServerJwt();
 
 
             services.AddControllersWithViews(options=>
@@ -90,8 +130,8 @@ namespace EDennis.Samples.ColorApp.Server {
             //app.UseMockClaimsPrincipalFor("/Rgb");
             app.UseIdentityServer();
             app.UseAuthentication();
-            app.UseClaimsToHeaderFor("/Rgb");
             app.UseAuthorization();
+            app.UseClaimsToHeaderFor("/Rgb");
             app.UseCachedTransactionCookieFor("/Rgb");
             app.UseScopedRequestMessageFor("/Rgb");
 

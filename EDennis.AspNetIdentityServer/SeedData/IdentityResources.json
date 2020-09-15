@@ -12,19 +12,13 @@
       "DisplayName": "User profile",
       "UserClaims": [
         "name",
-        "family_name",
-        "given_name",
-        "middle_name",
-        "nickname",
-        "preferred_username",
-        "profile",
-        "picture",
-        "website",
-        "gender",
-        "birthdate",
-        "zoneinfo",
-        "locale",
-        "updated_at"
+        "email",
+        "email_confirmed",
+        "organization",
+        "organization_confirmed",
+        "organization_admin_for",
+        "super_admin",
+        "phone_number"
       ],
       "Required": false,
       "Emphasize": true

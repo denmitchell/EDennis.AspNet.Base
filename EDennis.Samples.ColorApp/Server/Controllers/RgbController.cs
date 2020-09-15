@@ -1,10 +1,12 @@
 ﻿using EDennis.NetStandard.Base;
 using EDennis.Samples.ColorApp;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
 
 namespace EDennis.Samples.ColorApi.Controllers {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public class RgbController : ProxyCrudController<Rgb> {
 

@@ -14,14 +14,10 @@
         "EDennis.Samples.ColorApp.Server.Rgb.Post*",
         "EDennis.Samples.ColorApp.Server.Rgb.Put*",
         "EDennis.Samples.ColorApp.Server.Rgb.Patch*",
-        "EDennis.Samples.ColorApp.Server.Rgb.Delete*",
-        "EDennis.Samples.ColorApp.Server.Rgb.get_ClientName",
-        "EDennis.Samples.ColorApp.Server.OidcConfiguration.*",
-        "EDennis.Samples.ColorApp.Server.OidcConfiguration.Get*",
-        "EDennis.Samples.ColorApp.Server.OidcConfiguration.Post*",
-        "EDennis.Samples.ColorApp.Server.OidcConfiguration.Put*",
-        "EDennis.Samples.ColorApp.Server.OidcConfiguration.Patch*",
-        "EDennis.Samples.ColorApp.Server.OidcConfiguration.Delete*"
+        "EDennis.Samples.ColorApp.Server.Rgb.Delete*"
+      ],
+      "UserClaims": [
+        "role:EDennis.Samples.ColorApp.Server"
       ]
     }
   ],

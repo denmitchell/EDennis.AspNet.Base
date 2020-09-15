@@ -2,11 +2,11 @@
   "ApiResources": {
     "Name": "EDennis.Samples.ColorApi",
     "Scopes": [
-      "EDennis.Samples.ColorApi.*.Patch*",
-      "EDennis.Samples.ColorApi.*.Put*",
-      "EDennis.Samples.ColorApi.*.Post*",
-      "EDennis.Samples.ColorApi.*.Get*",
       "EDennis.Samples.ColorApi.*",
+      "EDennis.Samples.ColorApi.*.Get*",
+      "EDennis.Samples.ColorApi.*.Post*",
+      "EDennis.Samples.ColorApi.*.Put*",
+      "EDennis.Samples.ColorApi.*.Patch*",
       "EDennis.Samples.ColorApi.*.Delete*",
       "EDennis.Samples.ColorApi.Rgb.*",
       "EDennis.Samples.ColorApi.Rgb.Get*",
@@ -15,9 +15,34 @@
       "EDennis.Samples.ColorApi.Rgb.Patch*",
       "EDennis.Samples.ColorApi.Rgb.Delete*",
       "EDennis.Samples.ColorApi.Rgb.Check"
+    ],
+    "Claims": [
+      "role:EDennis.Samples.ColorApi"
     ]
   },
   "Clients": [
+    {
+      "ClientId": "EDennis.Samples.ColorApp.Client",
+      "RequireConsent": false,
+      "RequirePkce": true,
+      "AllowAccessTokensViaBrowser": false,
+      "AllowOfflineAccess": false,
+      "ClientClaimsPrefix": "",
+      "GrantTypes": [
+        "authorization_code"
+      ],
+      "RedirectUris": [
+        "https://localhost:44336/authentication/login-callback"
+      ],
+      "PostLogoutRedirectUris": [
+        "https://localhost:44336/"
+      ],
+      "Scopes": [
+        "role:EDennis.Samples.ColorApp.Server",
+        "profile",
+        "openid"
+      ]
+    },
     {
       "ClientId": "EDennis.Samples.ColorApp.Razor:ID",
       "RequireConsent": false,
@@ -26,7 +51,7 @@
       "AllowOfflineAccess": true,
       "ClientClaimsPrefix": "",
       "GrantTypes": [
-        "code"
+        "authorization_code"
       ],
       "RedirectUris": [
         "https://localhost:44305/signin-oidc"
@@ -35,18 +60,9 @@
         "https://localhost:44305/signout-callback-oidc"
       ],
       "Scopes": [
-        "super_admin",
-        "organization_admin_for",
-        "organization_confirmed",
-        "organization",
-        "offline_access",
-        "email_confirmed",
-        "email",
-        "name",
-        "profile",
-        "openid",
         "role:EDennis.Samples.ColorApp.Razor",
-        "phone_number"
+        "profile",
+        "openid"
       ],
       "Applications": [
         "EDennis.Samples.ColorApp.Razor"

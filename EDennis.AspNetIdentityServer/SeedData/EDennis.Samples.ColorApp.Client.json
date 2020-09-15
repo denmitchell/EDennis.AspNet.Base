@@ -1,0 +1,24 @@
+{
+  "Clients": [
+    {
+      "Authority": "https://localhost:5000",
+      "ClientId": "EDennis.Samples.ColorApp.Client",
+      "PlainTextSecret": "secret",
+      "AllowedGrantTypes": [
+        "authorization_code"
+      ],
+      "RequirePkce": true,
+      "RequireClientSecret": false,
+      "ClientClaimsPrefix": "",
+      "AllowedCorsOrigins": [ "https://localhost:44336" ],
+      "AllowedScopes": [
+        "openid",
+        "profile",
+        "role:EDennis.Samples.ColorApp.Server"
+      ],
+      "RedirectUris": [ "https://localhost:44336/authentication/login-callback" ],
+      "PostLogoutRedirectUris": [ "https://localhost:44336/" ],
+      "Enabled": true
+    }
+  ]
+}

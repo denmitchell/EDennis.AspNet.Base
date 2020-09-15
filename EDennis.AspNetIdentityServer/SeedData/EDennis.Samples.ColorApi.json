@@ -16,6 +16,9 @@
         "EDennis.Samples.ColorApi.Rgb.Patch*",
         "EDennis.Samples.ColorApi.Rgb.Delete*",
         "EDennis.Samples.ColorApi.Rgb.Check"
+      ],
+      "UserClaims": [
+        "role:EDennis.Samples.ColorApi"
       ]
     }
   ],

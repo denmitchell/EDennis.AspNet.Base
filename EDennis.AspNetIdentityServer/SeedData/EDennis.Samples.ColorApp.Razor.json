@@ -11,12 +11,7 @@
         "EDennis.Samples.ColorApp.Razor.*.Delete*"
       ],
       "UserClaims": [
-        "name",
-        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
-        "organization",
-        "role::EDennis.Samples.ColorApp.Razor",
-        "organization_admin_for",
-        "super_admin"
+        "role:EDennis.Samples.ColorApp.Razor"
       ]
     }
   ],
@@ -38,7 +33,7 @@
       "ClientId": "EDennis.Samples.ColorApp.Razor:ID",
       "PlainTextSecret": "secret",
       "AllowedGrantTypes": [
-        "code"
+        "authorization_code"
       ],
       "RequireConsent": false,
       "RequirePkce": true,
@@ -47,15 +42,6 @@
       "AllowedScopes": [
         "openid",
         "profile",
-        "name",
-        "email",
-        "email_confirmed",
-        "offline_access",
-        "phone_number",
-        "organization",
-        "organization_confirmed",
-        "organization_admin_for",
-        "super_admin",
         "role:EDennis.Samples.ColorApp.Razor"
       ],
       "RedirectUris": [

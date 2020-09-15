@@ -79,7 +79,7 @@ namespace EDennis.NetStandard.Base {
         public static void GenerateIdpConfigStub<TStartup>(
             dynamic idpPortOrUrl,
             dynamic apiPortOrUrl,
-            bool isRazorUserApp,
+            bool usesOIDC,
             string[] childApiScopes = null,
             string childClaimsConfigKey = null,
             IEnumerable<TestUser> testUsers = null) {
@@ -118,12 +118,12 @@ namespace EDennis.NetStandard.Base {
             //what user claims will be included in access tokens
             var apiUserClaims =
                 new string[] {
-                    JwtClaimTypes.Name,
-                    ClaimTypes.Name,
-                    DomainClaimTypes.Organization,
+                    //JwtClaimTypes.Name,
+                    //ClaimTypes.Name,
+                    //DomainClaimTypes.Organization,
                     DomainClaimTypes.ApplicationRole(project),
-                    DomainClaimTypes.OrganizationAdminFor,
-                    DomainClaimTypes.SuperAdmin
+                    //DomainClaimTypes.OrganizationAdminFor,
+                    //DomainClaimTypes.SuperAdmin
                 };
 
             var path = $"{OUTPUT_DIR}\\{project}.json";
@@ -139,14 +139,14 @@ namespace EDennis.NetStandard.Base {
 
             jw.WriteStartObject();
             {
-                WriteApiResourcesSection(jw, project, scopes, apiUserClaims, isRazorUserApp);
+                WriteApiResourcesSection(jw, project, scopes, apiUserClaims, usesOIDC);
 
-                if (childApiScopes.Any() || isRazorUserApp) {
+                if (childApiScopes.Any() || usesOIDC) {
                     jw.WriteStartArray("Clients");
                     {
                         if (childApiScopes.Any())
                             WriteClientsSectionForClientCredentials(jw, project, idpUrl, childApiScopes);
-                        if (isRazorUserApp)
+                        if (usesOIDC)
                             WriteClientsSectionForAuthorizationCode(jw, project, idpUrl, apiUrl);
                     }
                     jw.WriteEndArray();
@@ -306,7 +306,7 @@ namespace EDennis.NetStandard.Base {
                 jw.WriteString("PlainTextSecret", DEFAULT_SECRET);
                 jw.WriteStartArray("AllowedGrantTypes");
                 {
-                    jw.WriteStringValue("code");
+                    jw.WriteStringValue("authorization_code");
                     //jw.WriteStringValue("client_credentials");
                 }
                 jw.WriteEndArray();
