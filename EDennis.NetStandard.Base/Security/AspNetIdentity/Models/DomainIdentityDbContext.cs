@@ -1,8 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using IdentityServer4.EntityFramework.Entities;
+using IdentityServer4.EntityFramework.Extensions;
+using IdentityServer4.EntityFramework.Interfaces;
+using IdentityServer4.EntityFramework.Options;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 
 namespace EDennis.NetStandard.Base {
 
@@ -14,6 +19,14 @@ namespace EDennis.NetStandard.Base {
     public class DomainIdentityDbContext : IdentityDbContext<DomainUser,IdentityRole<int>,int> {
         public DomainIdentityDbContext(DbContextOptions<DomainIdentityDbContext> options)
             : base(options) {
+        }
+
+        /// <summary>
+        /// for subclasses only; not for DI
+        /// </summary>
+        /// <param name="options"></param>
+        protected DomainIdentityDbContext(DbContextOptions options)
+                : base(options) {
         }
 
         public DbSet<DomainApplication> Applications { get; set; }
@@ -351,8 +364,6 @@ namespace EDennis.NetStandard.Base {
             Buffer.BlockCopy(buffer2, 0, dst, 0x11, 0x20);
             return Convert.ToBase64String(dst);
         }
-
-
 
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 namespace EDennis.Samples.ColorApp.Razor {
     public class Startup {
@@ -17,7 +18,9 @@ namespace EDennis.Samples.ColorApp.Razor {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
-            services.AddRazorPages();
+            services.AddRazorPages(options=> {
+                options.Conventions.AuthorizeFolder("/Rgb");
+            });
 
             //for swagger
             services.AddMvcCore()
@@ -26,8 +29,14 @@ namespace EDennis.Samples.ColorApp.Razor {
             //for generating the OAuth Access Token
             services.AddSecureTokenService<ClientCredentialsTokenService>(Configuration);
 
-            services.AddAuthentication()
-                .AddOpenIdConnect(Configuration);
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = "Cookies";
+                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            })
+            .AddCookie("Cookies")
+            .AddOpenIdConnect(Configuration);
+
 
             //for propagating headers and cookies to child API (ColorApi)
             services.AddScopedRequestMessage(Configuration);
@@ -73,8 +82,8 @@ namespace EDennis.Samples.ColorApp.Razor {
 
             app.UseMockClaimsPrincipalFor("/Rgb");
             app.UseAuthentication();
-            app.UseClaimsToHeaderFor("/Rgb");
             app.UseAuthorization();
+            app.UseClaimsToHeaderFor("/Rgb");
             app.UseCachedTransactionCookieFor("/Rgb");
             app.UseScopedRequestMessageFor("/Rgb");
 

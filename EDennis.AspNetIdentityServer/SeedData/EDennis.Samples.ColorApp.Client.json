@@ -14,7 +14,8 @@
       "AllowedScopes": [
         "openid",
         "profile",
-        "role:EDennis.Samples.ColorApp.Server"
+        "role:EDennis.Samples.ColorApp.Server",
+        "EDennis.Samples.ColorApp.ServerAPI"
       ],
       "RedirectUris": [ "https://localhost:44336/authentication/login-callback" ],
       "PostLogoutRedirectUris": [ "https://localhost:44336/" ],

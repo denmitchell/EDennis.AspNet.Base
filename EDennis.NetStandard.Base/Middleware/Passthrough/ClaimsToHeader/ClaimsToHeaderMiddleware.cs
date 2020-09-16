@@ -56,24 +56,22 @@ namespace EDennis.NetStandard.Base {
 
                 using (_logger.BeginScope("ClaimsToHeaderMiddleware executing for user with Claims: {@Claims}.", context.User.Claims)) {
 
-                    if (!context.User.Identity.IsAuthenticated) {
-                        var ex = new SecurityException($"Cannot invoke ClaimsToHeaderMiddleware with unauthenticated user");
-                        _logger.LogError(ex, ex.Message);
-                        throw ex;
+                    if (context.User.Identity.IsAuthenticated) {
+
+                        var packedClaims = context.User.Claims
+                            .Where(c => _claimTypes.Contains(c.Type))
+                            .PackKeyValues(c => (c.Type, c.Value));
+
+                        packedClaims = "\"" + packedClaims + "\""; //add quotes for proper header
+
+                        _logger.LogDebug("Claims packed into Header ({HeaderKey}, {HeaderValue})", HeaderToClaimsOptions.HEADER_KEY, packedClaims);
+
+                        if (req.Headers.ContainsKey(HeaderToClaimsOptions.HEADER_KEY))
+                            req.Headers[HeaderToClaimsOptions.HEADER_KEY] = packedClaims;
+                        else
+                            req.Headers.Add(HeaderToClaimsOptions.HEADER_KEY, packedClaims);
+
                     }
-
-                    var packedClaims = context.User.Claims
-                        .Where(c => _claimTypes.Contains(c.Type))
-                        .PackKeyValues(c => (c.Type, c.Value));
-
-                    packedClaims = "\"" + packedClaims + "\""; //add quotes for proper header
-
-                    _logger.LogDebug("Claims packed into Header ({HeaderKey}, {HeaderValue})", HeaderToClaimsOptions.HEADER_KEY, packedClaims);
-
-                    if (req.Headers.ContainsKey(HeaderToClaimsOptions.HEADER_KEY))
-                        req.Headers[HeaderToClaimsOptions.HEADER_KEY] = packedClaims;
-                    else
-                        req.Headers.Add(HeaderToClaimsOptions.HEADER_KEY, packedClaims);
 
                 }
 

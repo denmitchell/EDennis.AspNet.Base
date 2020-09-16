@@ -14,7 +14,8 @@
         "EDennis.Samples.ColorApp.Server.Rgb.Post*",
         "EDennis.Samples.ColorApp.Server.Rgb.Put*",
         "EDennis.Samples.ColorApp.Server.Rgb.Patch*",
-        "EDennis.Samples.ColorApp.Server.Rgb.Delete*"
+        "EDennis.Samples.ColorApp.Server.Rgb.Delete*",
+        "EDennis.Samples.ColorApp.ServerAPI"
       ],
       "UserClaims": [
         "role:EDennis.Samples.ColorApp.Server"

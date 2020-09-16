@@ -21,19 +21,6 @@ namespace EDennis.Samples.ColorApp.Client {
             var clientName = typeof(Program).Namespace;
 
 
-            OidcProviderOptions oidcOptions = new OidcProviderOptions();
-
-
-            /*
-            builder.Services.AddOidcAuthentication(options => {
-                builder.Configuration.Bind("Security:OidcProviderOptions", options.ProviderOptions);
-                oidcOptions = options.ProviderOptions;
-                options.UserOptions.NameClaim = JwtClaimTypes.Name;
-                options.UserOptions.RoleClaim = options.ProviderOptions.DefaultScopes.FirstOrDefault(s => s.StartsWith("role:"));
-            })
-            .AddAccountClaimsPrincipalFactory<DomainAccountClaimsPrincipalFactory<RemoteUserAccount>>();
-            */
-
            builder.Services.AddHttpClient(clientName, 
                 client => client.BaseAddress = new Uri(baseAddress))
                 .AddHttpMessageHandler(sp=> {
@@ -43,7 +30,7 @@ namespace EDennis.Samples.ColorApp.Client {
                             scopes: new string[] {  
                             "openid",
                             "profile",
-                            "role:EDennis.Samples.ColorApp.Server"
+                            "EDennis.Samples.ColorApp.ServerAPI"
                             }
                         );
                     return handler;
@@ -56,18 +43,12 @@ namespace EDennis.Samples.ColorApp.Client {
 
             builder.Services.AddScoped<RgbApiClient>();
 
-            builder.Services.AddOidcAuthentication(options => {
-                //options.ProviderOptions.Authority = "https://localhost:5001/";
-                // Configure your authentication provider options here.
-                // For more information, see https://aka.ms/blazor-standalone-auth
-                builder.Configuration.Bind("Security:OidcProviderOptions", options.ProviderOptions);
-            });
-            /*
             builder.Services.AddApiAuthorization(configure=> {
                 configure.UserOptions.RoleClaim = "role:EDennis.Samples.ColorApp.Server";
                 configure.UserOptions.NameClaim = "name";
+                configure.ProviderOptions.ConfigurationEndpoint = "_configuration/EDennis.Samples.ColorApp.Client";
                 });
-            */
+
             await builder.Build().RunAsync();
         }
     }

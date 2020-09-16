@@ -8,6 +8,16 @@
     }
   },
   "profiles": {
+    "Challenge": {
+      "commandName": "Project",
+      "commandLineArgs": "mcp=",
+      "launchBrowser": true,
+      "launchUrl": "Rgb",
+      "applicationUrl": "https://localhost:44305;http://localhost:64438",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
     "Maria": {
       "commandName": "Project",
       "commandLineArgs": "mcp=Maria",

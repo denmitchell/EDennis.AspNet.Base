@@ -1,18 +1,19 @@
-using EDennis.NetApp.Base;
 using EDennis.NetStandard.Base;
-using EDennis.Samples.ColorApp.Client;
-using IdentityServer4.EntityFramework.DbContexts;
+using EDennis.Samples.ColorApp.Server.Models;
+using IdentityServer4.EntityFramework.Mappers;
+using IdentityServer4.Models;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace EDennis.Samples.ColorApp.Server {
@@ -34,47 +35,104 @@ namespace EDennis.Samples.ColorApp.Server {
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
             var connectionString = Configuration.GetValueOrThrow<string>("ConnectionStrings:DomainIdentityDbContext");
 
-            services.AddDbContext<DomainIdentityDbContext>(options =>
+            services.AddDbContext<IntegratedDomainIdentityDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
             services.AddDefaultIdentity<DomainUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<DomainIdentityDbContext>();
+                .AddEntityFrameworkStores<IntegratedDomainIdentityDbContext>();
 
+
+
+            services.AddSingleton<IClientRequestParametersProvider>(new ClientRequestParametersProvider(
+                "https://localhost:5000",
+                "EDennis.Samples.ColorApp.Client",
+                "https://localhost:44336/authentication/login-callback",/*"https://localhost:44336/signin-oidc",*/
+                "https://localhost:44336/",/*"https://localhost:44336/signout-callback-oidc",*/
+                "code",
+                "openid profile EDennis.Samples.ColorApp.ServerAPI"
+                ));
+
+
+
+            //the current Microsoft templates are not compatible with IdentityServer4.x
+            //https://github.com/IdentityServer/IdentityServer4/issues/4752
             services.AddIdentityServer()
+                .AddAspNetIdentity<DomainUser>()
+                .AddDeveloperSigningCredential()
+                .AddInMemoryPersistedGrants()
+                .AddInMemoryIdentityResources(new List<IdentityResource> {
+                    new IdentityResource {
+                        Name="openid",
+                        UserClaims = new string[] {
+                            "sub"
+                        }
+                    },
+                    new IdentityResource {
+                        Name = "profile",
+                        Description = "User Profile",
+                        UserClaims = new string[] {
+                            "name",
+                            "email",
+                            "organization",
+                            "organization_confirmed",
+                            "organization_admin_for",
+                            "super_admin",
+                            "role:EDennis.Samples.ColorApp.Server"
+                        }
+                    }
+                })
+                .AddInMemoryApiResources(new List<ApiResource>() {
+                    new ApiResource {
+                        Name = "EDennis.Samples.ColorApp.ServerAPI",
+                        Scopes = { "EDennis.Samples.ColorApp.ServerAPI" }
+                    }
+                })
+                .AddInMemoryApiScopes(new List<ApiScope>() {
+                    new ApiScope {
+                        Name = "EDennis.Samples.ColorApp.ServerAPI"
+                    }
+                })
+                .AddInMemoryClients(new List<IdentityServer4.Models.Client> {
+                    new IdentityServer4.Models.Client {
+                        ClientId="EDennis.Samples.ColorApp.Client",
+                        AlwaysIncludeUserClaimsInIdToken=true,
+                        AllowedGrantTypes={ GrantType.AuthorizationCode },
+                        RedirectUris={ "https://localhost:44336/signin-oidc" },
+                        PostLogoutRedirectUris= { "https://localhost:44336/signout-callback-oidc" },
+                        //RequirePkce = true,
+                        AllowedScopes ={"openid","profile","EDennis.Samples.ColorApp.ServerAPI"}
+                    }
+                });
                 /*
-                .AddConfigurationStore(options =>
-                {
-                    options.ConfigureDbContext = b => b.UseSqlServer(connectionString,
-                        sql => sql.MigrationsAssembly(migrationsAssembly));
-                })
-                .AddOperationalStore(options => {
-                    options.ConfigureDbContext = b => b.UseSqlServer(connectionString,
-                        sql => sql.MigrationsAssembly(migrationsAssembly));
-                })
-                */                
-                .AddApiAuthorization<DomainUser, PersistedGrantDbContext>();
+                .AddApiAuthorization<DomainUser, IntegratedDomainIdentityDbContext>(options => {
+                    var profile = options.IdentityResources.FirstOrDefault(x => x.Name == "profile");
+                    if (profile != null)
+                        options.IdentityResources.Remove(profile);
 
-
-            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            //    .AddJwtBearer(options => {
-            //        options.Authority = "https://localhost:5000";
-            //        options.Audience = "EDennis.Samples.ColorApp.Server";
-            //        options.TokenValidationParameters = new TokenValidationParameters() {
-            //            NameClaimType = "name",
-            //            RoleClaimType = "role:EDennis.Samples.ColorApp.Server"
-            //        };
-            //    });
+                    profile = new IdentityResource { Name = "profile", Description = "User Profile" };
+                    profile.UserClaims.Clear();
+                    profile.UserClaims.Add("name");
+                    profile.UserClaims.Add("email");
+                    profile.UserClaims.Add("organization");
+                    profile.UserClaims.Add("organization_confirmed");
+                    profile.UserClaims.Add("organization_admin_for");
+                    profile.UserClaims.Add("super_admin");
+                    profile.UserClaims.Add("role:EDennis.Samples.ColorApp.Server");
+                    options.IdentityResources.Add(profile);
+                });
+                */
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
 
 
-            services.AddControllersWithViews(options=>
+            services.AddControllersWithViews(options => {
                 //add default policies that allow pattern matching on scopes
-                options.AddDefaultPolicies<Startup>(services, HostEnvironment, Configuration));
+                //options.AddDefaultPolicies<Startup>(services, HostEnvironment, Configuration);
+            });
 
             services.AddAuthorization(options => {
-                IServiceCollectionExtensions_DefaultPolicies.LoadDefaultPolicies<Startup>(options, new List<string> { "scope" });
+                //IServiceCollectionExtensions_DefaultPolicies.LoadDefaultPolicies<Startup>(options, new List<string> { "scope" });
             });
 
 
@@ -83,7 +141,7 @@ namespace EDennis.Samples.ColorApp.Server {
             services.AddHttpLogging(Configuration);
 
 
-            services.AddProxyClient(Configuration,"RgbClient");
+            services.AddProxyClient(Configuration, "RgbClient");
 
 
             //for generating the OAuth Access Token
@@ -100,11 +158,6 @@ namespace EDennis.Samples.ColorApp.Server {
 
             //for creating a cookie that holds the database transaction key
             services.AddCachedTransactionCookie(Configuration);
-
-            //for interactively testing the APIs directly
-            services.AddSwaggerGen(c => {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ColorApi (via Blazor App)", Version = "v1" });
-            });
 
         }
 
@@ -136,16 +189,10 @@ namespace EDennis.Samples.ColorApp.Server {
             app.UseScopedRequestMessageFor("/Rgb");
 
 
-            app.UseEndpoints(endpoints =>
-            {
+            app.UseEndpoints(endpoints => {
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
                 endpoints.MapFallbackToFile("index.html");
-            });
-
-            app.UseSwagger();
-            app.UseSwaggerUI(c => {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ColorApi Via Blazor App");
             });
 
         }

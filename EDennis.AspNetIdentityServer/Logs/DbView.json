@@ -38,6 +38,7 @@
         "https://localhost:44336/"
       ],
       "Scopes": [
+        "EDennis.Samples.ColorApp.ServerAPI",
         "role:EDennis.Samples.ColorApp.Server",
         "profile",
         "openid"
