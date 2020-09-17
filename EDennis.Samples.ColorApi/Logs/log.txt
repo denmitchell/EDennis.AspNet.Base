@@ -14469,3 +14469,330 @@ System.IO.IOException: Authentication failed because the remote party has closed
 2020-09-17 11:43:44.377 -04:00 [DBG] Request did not match any endpoints
 2020-09-17 11:43:44.379 -04:00 [DBG] AuthenticationScheme: Bearer was not authenticated.
 2020-09-17 11:43:44.581 -04:00 [INF] Request finished in 207.5776ms 200 application/json;charset=utf-8
+2020-09-17 12:23:46.874 -04:00 [INF] Starting host ...
+2020-09-17 12:23:47.993 -04:00 [DBG] Hosting starting
+2020-09-17 12:23:48.033 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-17 12:23:48.066 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-2f5c30d0-a084-4c35-8d2d-8e4a0d052454.xml'.
+2020-09-17 12:23:48.068 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-5ea5f1e4-4b59-4370-8db1-b9ae7bbf8c63.xml'.
+2020-09-17 12:23:48.070 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-604bfd08-e244-4901-bfce-3bc0372b2e4c.xml'.
+2020-09-17 12:23:48.074 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-646446ba-95e9-4794-b5d0-1caf83cf19fa.xml'.
+2020-09-17 12:23:48.079 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-69e60cc4-4e85-49ca-9b50-c12f6bb46b80.xml'.
+2020-09-17 12:23:48.083 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-cd493bdb-3acc-4e26-9708-b7241aa23b1a.xml'.
+2020-09-17 12:23:48.087 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-d9e18831-a0f6-4101-9760-f3e14ecf857a.xml'.
+2020-09-17 12:23:48.092 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-df296e2e-5f74-4e19-9eeb-277396346f82.xml'.
+2020-09-17 12:23:48.097 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-e0589fd9-4240-4b20-8225-56419b92209b.xml'.
+2020-09-17 12:23:48.104 -04:00 [DBG] Found key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454}.
+2020-09-17 12:23:48.116 -04:00 [DBG] Found key {5ea5f1e4-4b59-4370-8db1-b9ae7bbf8c63}.
+2020-09-17 12:23:48.122 -04:00 [DBG] Found key {604bfd08-e244-4901-bfce-3bc0372b2e4c}.
+2020-09-17 12:23:48.124 -04:00 [DBG] Found key {646446ba-95e9-4794-b5d0-1caf83cf19fa}.
+2020-09-17 12:23:48.130 -04:00 [DBG] Found key {69e60cc4-4e85-49ca-9b50-c12f6bb46b80}.
+2020-09-17 12:23:48.131 -04:00 [DBG] Found key {cd493bdb-3acc-4e26-9708-b7241aa23b1a}.
+2020-09-17 12:23:48.133 -04:00 [DBG] Found key {d9e18831-a0f6-4101-9760-f3e14ecf857a}.
+2020-09-17 12:23:48.134 -04:00 [DBG] Found key {df296e2e-5f74-4e19-9eeb-277396346f82}.
+2020-09-17 12:23:48.135 -04:00 [DBG] Found key {e0589fd9-4240-4b20-8225-56419b92209b}.
+2020-09-17 12:23:48.146 -04:00 [DBG] Considering key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} with expiration date 2020-11-19 18:05:30Z as default key.
+2020-09-17 12:23:48.196 -04:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2020-09-17 12:23:48.208 -04:00 [DBG] Decrypting secret element using Windows DPAPI.
+2020-09-17 12:23:48.211 -04:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2020-09-17 12:23:48.217 -04:00 [DBG] Opening CNG algorithm 'AES' from provider 'null' with chaining mode CBC.
+2020-09-17 12:23:48.223 -04:00 [DBG] Opening CNG algorithm 'SHA256' from provider 'null' with HMAC.
+2020-09-17 12:23:48.229 -04:00 [DBG] Using key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} as the default key.
+2020-09-17 12:23:48.232 -04:00 [DBG] Key ring with default key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} was loaded during application startup.
+2020-09-17 12:23:48.928 -04:00 [DBG] ScopedRequestMiddleware constructed with {"HeadersToCapture":["X-CachedTransaction","X-Claims"],"CookiesToCapture":["X-CachedTransaction"],"$type":"ScopedRequestMessageOptions"}
+2020-09-17 12:23:48.965 -04:00 [DBG] CachedTransactionMiddleware for ColorContext constructed with {"EnabledForClaims":{"email":["maria@a.test","darius@b.test"]},"$type":"CachedTransactionOptions"}
+2020-09-17 12:23:48.973 -04:00 [DBG] HeaderToClaimsMiddleware constructed with {"Enabled":true,"$type":"HeaderToClaimsOptions"}
+2020-09-17 12:23:49.029 -04:00 [DBG] Failed to locate the development https certificate at 'null'.
+2020-09-17 12:23:49.399 -04:00 [DBG] Using development certificate: CN=localhost (Thumbprint: 1ED031099A11F655D0A5136B66FCCE7A4543939D)
+2020-09-17 12:23:49.410 -04:00 [INF] Now listening on: https://localhost:44341
+2020-09-17 12:23:49.431 -04:00 [INF] Now listening on: http://localhost:61244
+2020-09-17 12:23:49.432 -04:00 [DBG] Loaded hosting startup assembly EDennis.Samples.ColorApi
+2020-09-17 12:23:49.434 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2020-09-17 12:23:49.435 -04:00 [INF] Hosting environment: Development
+2020-09-17 12:23:49.436 -04:00 [INF] Content root path: C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApi
+2020-09-17 12:23:49.439 -04:00 [DBG] Hosting started
+2020-09-17 12:23:49.647 -04:00 [DBG] Connection id "0HM2R4O7KOGEP" received FIN.
+2020-09-17 12:23:49.663 -04:00 [DBG] Connection id "0HM2R4O7KOGEP" accepted.
+2020-09-17 12:23:49.665 -04:00 [DBG] Connection id "0HM2R4O7KOGEP" started.
+2020-09-17 12:23:49.704 -04:00 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Authentication failed because the remote party has closed the transport stream.
+   at System.Net.Security.SslStream.StartReadFrame(Byte[] buffer, Int32 readBytes, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.StartReceiveBlob(Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ForceAuthentication(Boolean receiveFirst, Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ProcessAuthentication(LazyAsyncResult lazyResult, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.BeginAuthenticateAsServer(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken, AsyncCallback asyncCallback, Object asyncState)
+   at System.Net.Security.SslStream.<>c.<AuthenticateAsServerAsync>b__69_0(SslServerAuthenticationOptions arg1, CancellationToken arg2, AsyncCallback callback, Object state)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl[TArg1,TArg2](Func`5 beginMethod, Func`2 endFunction, Action`1 endAction, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state)
+   at System.Net.Security.SslStream.AuthenticateAsServerAsync(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.InnerOnConnectionAsync(ConnectionContext context)
+2020-09-17 12:23:49.859 -04:00 [DBG] Connection id "0HM2R4O7KOGEP" stopped.
+2020-09-17 12:23:49.893 -04:00 [DBG] Connection id "0HM2R4O7KOGEP" sending FIN because: "The Socket transport's send loop completed gracefully."
+2020-09-17 12:23:50.268 -04:00 [DBG] Connection id "0HM2R4O7KOGEQ" accepted.
+2020-09-17 12:23:50.295 -04:00 [DBG] Connection id "0HM2R4O7KOGEQ" started.
+2020-09-17 12:23:50.584 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44341/swagger/index.html  
+2020-09-17 12:23:50.614 -04:00 [DBG] Wildcard detected, all requests with hosts will be allowed.
+2020-09-17 12:23:50.663 -04:00 [DBG] No candidates found for the request path '/swagger/index.html'
+2020-09-17 12:23:50.692 -04:00 [DBG] Request did not match any endpoints
+2020-09-17 12:23:50.913 -04:00 [DBG] AuthenticationScheme: Bearer was not authenticated.
+2020-09-17 12:23:50.990 -04:00 [INF] Request finished in 409.0552ms 200 text/html;charset=utf-8
+2020-09-17 12:23:51.289 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44341/swagger/v1/swagger.json  
+2020-09-17 12:23:51.291 -04:00 [DBG] No candidates found for the request path '/swagger/v1/swagger.json'
+2020-09-17 12:23:51.292 -04:00 [DBG] Request did not match any endpoints
+2020-09-17 12:23:51.295 -04:00 [DBG] AuthenticationScheme: Bearer was not authenticated.
+2020-09-17 12:23:51.509 -04:00 [INF] Request finished in 220.1444ms 200 application/json;charset=utf-8
+2020-09-17 14:14:43.665 -04:00 [INF] Starting host ...
+2020-09-17 14:14:44.724 -04:00 [DBG] Hosting starting
+2020-09-17 14:14:44.765 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-17 14:14:44.805 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-2f5c30d0-a084-4c35-8d2d-8e4a0d052454.xml'.
+2020-09-17 14:14:44.809 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-5ea5f1e4-4b59-4370-8db1-b9ae7bbf8c63.xml'.
+2020-09-17 14:14:44.811 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-604bfd08-e244-4901-bfce-3bc0372b2e4c.xml'.
+2020-09-17 14:14:44.814 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-646446ba-95e9-4794-b5d0-1caf83cf19fa.xml'.
+2020-09-17 14:14:44.817 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-69e60cc4-4e85-49ca-9b50-c12f6bb46b80.xml'.
+2020-09-17 14:14:44.820 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-cd493bdb-3acc-4e26-9708-b7241aa23b1a.xml'.
+2020-09-17 14:14:44.822 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-d9e18831-a0f6-4101-9760-f3e14ecf857a.xml'.
+2020-09-17 14:14:44.824 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-df296e2e-5f74-4e19-9eeb-277396346f82.xml'.
+2020-09-17 14:14:44.828 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-e0589fd9-4240-4b20-8225-56419b92209b.xml'.
+2020-09-17 14:14:44.838 -04:00 [DBG] Found key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454}.
+2020-09-17 14:14:44.845 -04:00 [DBG] Found key {5ea5f1e4-4b59-4370-8db1-b9ae7bbf8c63}.
+2020-09-17 14:14:44.846 -04:00 [DBG] Found key {604bfd08-e244-4901-bfce-3bc0372b2e4c}.
+2020-09-17 14:14:44.847 -04:00 [DBG] Found key {646446ba-95e9-4794-b5d0-1caf83cf19fa}.
+2020-09-17 14:14:44.848 -04:00 [DBG] Found key {69e60cc4-4e85-49ca-9b50-c12f6bb46b80}.
+2020-09-17 14:14:44.849 -04:00 [DBG] Found key {cd493bdb-3acc-4e26-9708-b7241aa23b1a}.
+2020-09-17 14:14:44.850 -04:00 [DBG] Found key {d9e18831-a0f6-4101-9760-f3e14ecf857a}.
+2020-09-17 14:14:44.852 -04:00 [DBG] Found key {df296e2e-5f74-4e19-9eeb-277396346f82}.
+2020-09-17 14:14:44.853 -04:00 [DBG] Found key {e0589fd9-4240-4b20-8225-56419b92209b}.
+2020-09-17 14:14:44.867 -04:00 [DBG] Considering key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} with expiration date 2020-11-19 18:05:30Z as default key.
+2020-09-17 14:14:44.907 -04:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2020-09-17 14:14:44.913 -04:00 [DBG] Decrypting secret element using Windows DPAPI.
+2020-09-17 14:14:44.915 -04:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2020-09-17 14:14:44.926 -04:00 [DBG] Opening CNG algorithm 'AES' from provider 'null' with chaining mode CBC.
+2020-09-17 14:14:44.934 -04:00 [DBG] Opening CNG algorithm 'SHA256' from provider 'null' with HMAC.
+2020-09-17 14:14:44.939 -04:00 [DBG] Using key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} as the default key.
+2020-09-17 14:14:44.941 -04:00 [DBG] Key ring with default key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} was loaded during application startup.
+2020-09-17 14:14:45.557 -04:00 [DBG] ScopedRequestMiddleware constructed with {"HeadersToCapture":["X-CachedTransaction","X-Claims"],"CookiesToCapture":["X-CachedTransaction"],"$type":"ScopedRequestMessageOptions"}
+2020-09-17 14:14:45.590 -04:00 [DBG] CachedTransactionMiddleware for ColorContext constructed with {"EnabledForClaims":{"email":["maria@a.test","darius@b.test"]},"$type":"CachedTransactionOptions"}
+2020-09-17 14:14:45.604 -04:00 [DBG] HeaderToClaimsMiddleware constructed with {"Enabled":true,"$type":"HeaderToClaimsOptions"}
+2020-09-17 14:14:45.638 -04:00 [DBG] Failed to locate the development https certificate at 'null'.
+2020-09-17 14:14:45.935 -04:00 [DBG] Using development certificate: CN=localhost (Thumbprint: 1ED031099A11F655D0A5136B66FCCE7A4543939D)
+2020-09-17 14:14:45.946 -04:00 [INF] Now listening on: https://localhost:44341
+2020-09-17 14:14:45.953 -04:00 [INF] Now listening on: http://localhost:61244
+2020-09-17 14:14:45.955 -04:00 [DBG] Loaded hosting startup assembly EDennis.Samples.ColorApi
+2020-09-17 14:14:45.957 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2020-09-17 14:14:45.959 -04:00 [INF] Hosting environment: Development
+2020-09-17 14:14:45.962 -04:00 [INF] Content root path: C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApi
+2020-09-17 14:14:45.966 -04:00 [DBG] Hosting started
+2020-09-17 14:14:46.342 -04:00 [DBG] Connection id "0HM2R6M7FUDRS" received FIN.
+2020-09-17 14:14:46.364 -04:00 [DBG] Connection id "0HM2R6M7FUDRS" accepted.
+2020-09-17 14:14:46.368 -04:00 [DBG] Connection id "0HM2R6M7FUDRS" started.
+2020-09-17 14:14:46.400 -04:00 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Authentication failed because the remote party has closed the transport stream.
+   at System.Net.Security.SslStream.StartReadFrame(Byte[] buffer, Int32 readBytes, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.StartReceiveBlob(Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ForceAuthentication(Boolean receiveFirst, Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ProcessAuthentication(LazyAsyncResult lazyResult, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.BeginAuthenticateAsServer(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken, AsyncCallback asyncCallback, Object asyncState)
+   at System.Net.Security.SslStream.<>c.<AuthenticateAsServerAsync>b__69_0(SslServerAuthenticationOptions arg1, CancellationToken arg2, AsyncCallback callback, Object state)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl[TArg1,TArg2](Func`5 beginMethod, Func`2 endFunction, Action`1 endAction, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state)
+   at System.Net.Security.SslStream.AuthenticateAsServerAsync(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.InnerOnConnectionAsync(ConnectionContext context)
+2020-09-17 14:14:46.509 -04:00 [DBG] Connection id "0HM2R6M7FUDRS" stopped.
+2020-09-17 14:14:46.516 -04:00 [DBG] Connection id "0HM2R6M7FUDRS" sending FIN because: "The Socket transport's send loop completed gracefully."
+2020-09-17 14:14:47.138 -04:00 [DBG] Connection id "0HM2R6M7FUDRT" accepted.
+2020-09-17 14:14:47.387 -04:00 [DBG] Connection id "0HM2R6M7FUDRT" started.
+2020-09-17 14:14:47.676 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44341/swagger/index.html  
+2020-09-17 14:14:47.687 -04:00 [DBG] Wildcard detected, all requests with hosts will be allowed.
+2020-09-17 14:14:47.767 -04:00 [DBG] No candidates found for the request path '/swagger/index.html'
+2020-09-17 14:14:47.774 -04:00 [DBG] Request did not match any endpoints
+2020-09-17 14:14:47.892 -04:00 [DBG] AuthenticationScheme: Bearer was not authenticated.
+2020-09-17 14:14:48.085 -04:00 [INF] Request finished in 412.717ms 200 text/html;charset=utf-8
+2020-09-17 14:14:48.207 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44341/swagger/swagger-ui.css  
+2020-09-17 14:14:48.265 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44341/swagger/swagger-ui-standalone-preset.js  
+2020-09-17 14:14:48.228 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44341/swagger/swagger-ui-bundle.js  
+2020-09-17 14:14:48.514 -04:00 [DBG] No candidates found for the request path '/swagger/swagger-ui.css'
+2020-09-17 14:14:48.515 -04:00 [DBG] No candidates found for the request path '/swagger/swagger-ui-standalone-preset.js'
+2020-09-17 14:14:48.517 -04:00 [DBG] No candidates found for the request path '/swagger/swagger-ui-bundle.js'
+2020-09-17 14:14:48.519 -04:00 [DBG] Request did not match any endpoints
+2020-09-17 14:14:48.521 -04:00 [DBG] Request did not match any endpoints
+2020-09-17 14:14:48.525 -04:00 [DBG] Request did not match any endpoints
+2020-09-17 14:14:48.527 -04:00 [DBG] AuthenticationScheme: Bearer was not authenticated.
+2020-09-17 14:14:48.529 -04:00 [DBG] AuthenticationScheme: Bearer was not authenticated.
+2020-09-17 14:14:48.531 -04:00 [DBG] AuthenticationScheme: Bearer was not authenticated.
+2020-09-17 14:14:48.569 -04:00 [INF] The file /swagger-ui-standalone-preset.js was not modified
+2020-09-17 14:14:48.569 -04:00 [INF] The file /swagger-ui-bundle.js was not modified
+2020-09-17 14:14:48.569 -04:00 [INF] The file /swagger-ui.css was not modified
+2020-09-17 14:14:48.580 -04:00 [DBG] Handled. Status code: 304 File: /swagger-ui.css
+2020-09-17 14:14:48.580 -04:00 [DBG] Handled. Status code: 304 File: /swagger-ui-standalone-preset.js
+2020-09-17 14:14:48.580 -04:00 [DBG] Handled. Status code: 304 File: /swagger-ui-bundle.js
+2020-09-17 14:14:48.584 -04:00 [INF] Request finished in 376.9333ms 304 text/css
+2020-09-17 14:14:48.586 -04:00 [INF] Request finished in 321.1094ms 304 application/javascript
+2020-09-17 14:14:48.588 -04:00 [INF] Request finished in 362.1374ms 304 application/javascript
+2020-09-17 14:14:48.888 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44341/swagger/v1/swagger.json  
+2020-09-17 14:14:48.892 -04:00 [DBG] No candidates found for the request path '/swagger/v1/swagger.json'
+2020-09-17 14:14:48.894 -04:00 [DBG] Request did not match any endpoints
+2020-09-17 14:14:48.899 -04:00 [DBG] AuthenticationScheme: Bearer was not authenticated.
+2020-09-17 14:14:49.110 -04:00 [INF] Request finished in 222.0122ms 200 application/json;charset=utf-8
+2020-09-17 14:24:45.138 -04:00 [INF] Starting host ...
+2020-09-17 14:24:46.036 -04:00 [DBG] Hosting starting
+2020-09-17 14:24:46.078 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-17 14:24:46.125 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-2f5c30d0-a084-4c35-8d2d-8e4a0d052454.xml'.
+2020-09-17 14:24:46.127 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-5ea5f1e4-4b59-4370-8db1-b9ae7bbf8c63.xml'.
+2020-09-17 14:24:46.129 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-604bfd08-e244-4901-bfce-3bc0372b2e4c.xml'.
+2020-09-17 14:24:46.131 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-646446ba-95e9-4794-b5d0-1caf83cf19fa.xml'.
+2020-09-17 14:24:46.132 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-69e60cc4-4e85-49ca-9b50-c12f6bb46b80.xml'.
+2020-09-17 14:24:46.134 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-cd493bdb-3acc-4e26-9708-b7241aa23b1a.xml'.
+2020-09-17 14:24:46.137 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-d9e18831-a0f6-4101-9760-f3e14ecf857a.xml'.
+2020-09-17 14:24:46.139 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-df296e2e-5f74-4e19-9eeb-277396346f82.xml'.
+2020-09-17 14:24:46.141 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-e0589fd9-4240-4b20-8225-56419b92209b.xml'.
+2020-09-17 14:24:46.149 -04:00 [DBG] Found key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454}.
+2020-09-17 14:24:46.155 -04:00 [DBG] Found key {5ea5f1e4-4b59-4370-8db1-b9ae7bbf8c63}.
+2020-09-17 14:24:46.156 -04:00 [DBG] Found key {604bfd08-e244-4901-bfce-3bc0372b2e4c}.
+2020-09-17 14:24:46.158 -04:00 [DBG] Found key {646446ba-95e9-4794-b5d0-1caf83cf19fa}.
+2020-09-17 14:24:46.159 -04:00 [DBG] Found key {69e60cc4-4e85-49ca-9b50-c12f6bb46b80}.
+2020-09-17 14:24:46.160 -04:00 [DBG] Found key {cd493bdb-3acc-4e26-9708-b7241aa23b1a}.
+2020-09-17 14:24:46.161 -04:00 [DBG] Found key {d9e18831-a0f6-4101-9760-f3e14ecf857a}.
+2020-09-17 14:24:46.162 -04:00 [DBG] Found key {df296e2e-5f74-4e19-9eeb-277396346f82}.
+2020-09-17 14:24:46.165 -04:00 [DBG] Found key {e0589fd9-4240-4b20-8225-56419b92209b}.
+2020-09-17 14:24:46.179 -04:00 [DBG] Considering key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} with expiration date 2020-11-19 18:05:30Z as default key.
+2020-09-17 14:24:46.218 -04:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2020-09-17 14:24:46.223 -04:00 [DBG] Decrypting secret element using Windows DPAPI.
+2020-09-17 14:24:46.227 -04:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2020-09-17 14:24:46.238 -04:00 [DBG] Opening CNG algorithm 'AES' from provider 'null' with chaining mode CBC.
+2020-09-17 14:24:46.244 -04:00 [DBG] Opening CNG algorithm 'SHA256' from provider 'null' with HMAC.
+2020-09-17 14:24:46.252 -04:00 [DBG] Using key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} as the default key.
+2020-09-17 14:24:46.254 -04:00 [DBG] Key ring with default key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} was loaded during application startup.
+2020-09-17 14:24:46.773 -04:00 [DBG] ScopedRequestMiddleware constructed with {"HeadersToCapture":["X-CachedTransaction","X-Claims"],"CookiesToCapture":["X-CachedTransaction"],"$type":"ScopedRequestMessageOptions"}
+2020-09-17 14:24:46.808 -04:00 [DBG] CachedTransactionMiddleware for ColorContext constructed with {"EnabledForClaims":{"email":["maria@a.test","darius@b.test"]},"$type":"CachedTransactionOptions"}
+2020-09-17 14:24:46.820 -04:00 [DBG] HeaderToClaimsMiddleware constructed with {"Enabled":true,"$type":"HeaderToClaimsOptions"}
+2020-09-17 14:24:46.856 -04:00 [DBG] Failed to locate the development https certificate at 'null'.
+2020-09-17 14:24:47.105 -04:00 [DBG] Using development certificate: CN=localhost (Thumbprint: 1ED031099A11F655D0A5136B66FCCE7A4543939D)
+2020-09-17 14:24:47.122 -04:00 [INF] Now listening on: https://localhost:44341
+2020-09-17 14:24:47.129 -04:00 [INF] Now listening on: http://localhost:61244
+2020-09-17 14:24:47.131 -04:00 [DBG] Loaded hosting startup assembly EDennis.Samples.ColorApi
+2020-09-17 14:24:47.135 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2020-09-17 14:24:47.137 -04:00 [INF] Hosting environment: Development
+2020-09-17 14:24:47.139 -04:00 [INF] Content root path: C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApi
+2020-09-17 14:24:47.141 -04:00 [DBG] Hosting started
+2020-09-17 14:24:47.347 -04:00 [DBG] Connection id "0HM2R6RQJHJ60" accepted.
+2020-09-17 14:24:47.347 -04:00 [DBG] Connection id "0HM2R6RQJHJ5V" accepted.
+2020-09-17 14:24:47.361 -04:00 [DBG] Connection id "0HM2R6RQJHJ60" started.
+2020-09-17 14:24:47.362 -04:00 [DBG] Connection id "0HM2R6RQJHJ5V" started.
+2020-09-17 14:24:47.364 -04:00 [DBG] Connection id "0HM2R6RQJHJ5V" received FIN.
+2020-09-17 14:24:47.364 -04:00 [DBG] Connection id "0HM2R6RQJHJ60" received FIN.
+2020-09-17 14:24:47.407 -04:00 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Authentication failed because the remote party has closed the transport stream.
+   at System.Net.Security.SslStream.StartReadFrame(Byte[] buffer, Int32 readBytes, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.StartReceiveBlob(Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ForceAuthentication(Boolean receiveFirst, Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ProcessAuthentication(LazyAsyncResult lazyResult, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.BeginAuthenticateAsServer(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken, AsyncCallback asyncCallback, Object asyncState)
+   at System.Net.Security.SslStream.<>c.<AuthenticateAsServerAsync>b__69_0(SslServerAuthenticationOptions arg1, CancellationToken arg2, AsyncCallback callback, Object state)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl[TArg1,TArg2](Func`5 beginMethod, Func`2 endFunction, Action`1 endAction, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state)
+   at System.Net.Security.SslStream.AuthenticateAsServerAsync(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.InnerOnConnectionAsync(ConnectionContext context)
+2020-09-17 14:24:47.407 -04:00 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Authentication failed because the remote party has closed the transport stream.
+   at System.Net.Security.SslStream.StartReadFrame(Byte[] buffer, Int32 readBytes, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.StartReceiveBlob(Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ForceAuthentication(Boolean receiveFirst, Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ProcessAuthentication(LazyAsyncResult lazyResult, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.BeginAuthenticateAsServer(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken, AsyncCallback asyncCallback, Object asyncState)
+   at System.Net.Security.SslStream.<>c.<AuthenticateAsServerAsync>b__69_0(SslServerAuthenticationOptions arg1, CancellationToken arg2, AsyncCallback callback, Object state)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl[TArg1,TArg2](Func`5 beginMethod, Func`2 endFunction, Action`1 endAction, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state)
+   at System.Net.Security.SslStream.AuthenticateAsServerAsync(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.InnerOnConnectionAsync(ConnectionContext context)
+2020-09-17 14:24:47.511 -04:00 [DBG] Connection id "0HM2R6RQJHJ60" stopped.
+2020-09-17 14:24:47.513 -04:00 [DBG] Connection id "0HM2R6RQJHJ5V" stopped.
+2020-09-17 14:24:47.521 -04:00 [DBG] Connection id "0HM2R6RQJHJ60" sending FIN because: "The Socket transport's send loop completed gracefully."
+2020-09-17 14:24:47.521 -04:00 [DBG] Connection id "0HM2R6RQJHJ5V" sending FIN because: "The Socket transport's send loop completed gracefully."
+2020-09-17 14:24:47.893 -04:00 [DBG] Connection id "0HM2R6RQJHJ61" accepted.
+2020-09-17 14:24:47.897 -04:00 [DBG] Connection id "0HM2R6RQJHJ61" started.
+2020-09-17 14:24:48.145 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44341/swagger/index.html  
+2020-09-17 14:24:48.153 -04:00 [DBG] Wildcard detected, all requests with hosts will be allowed.
+2020-09-17 14:24:48.209 -04:00 [DBG] No candidates found for the request path '/swagger/index.html'
+2020-09-17 14:24:48.408 -04:00 [DBG] Request did not match any endpoints
+2020-09-17 14:24:48.732 -04:00 [DBG] AuthenticationScheme: Bearer was not authenticated.
+2020-09-17 14:24:48.832 -04:00 [INF] Request finished in 690.2236ms 200 text/html;charset=utf-8
+2020-09-17 14:24:49.193 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44341/swagger/v1/swagger.json  
+2020-09-17 14:24:49.195 -04:00 [DBG] No candidates found for the request path '/swagger/v1/swagger.json'
+2020-09-17 14:24:49.196 -04:00 [DBG] Request did not match any endpoints
+2020-09-17 14:24:49.198 -04:00 [DBG] AuthenticationScheme: Bearer was not authenticated.
+2020-09-17 14:24:49.378 -04:00 [INF] Request finished in 184.238ms 200 application/json;charset=utf-8
+2020-09-17 14:56:05.682 -04:00 [INF] Starting host ...
+2020-09-17 14:56:06.656 -04:00 [DBG] Hosting starting
+2020-09-17 14:56:06.699 -04:00 [INF] User profile is available. Using 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-09-17 14:56:06.743 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-2f5c30d0-a084-4c35-8d2d-8e4a0d052454.xml'.
+2020-09-17 14:56:06.746 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-5ea5f1e4-4b59-4370-8db1-b9ae7bbf8c63.xml'.
+2020-09-17 14:56:06.748 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-604bfd08-e244-4901-bfce-3bc0372b2e4c.xml'.
+2020-09-17 14:56:06.750 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-646446ba-95e9-4794-b5d0-1caf83cf19fa.xml'.
+2020-09-17 14:56:06.752 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-69e60cc4-4e85-49ca-9b50-c12f6bb46b80.xml'.
+2020-09-17 14:56:06.755 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-cd493bdb-3acc-4e26-9708-b7241aa23b1a.xml'.
+2020-09-17 14:56:06.757 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-d9e18831-a0f6-4101-9760-f3e14ecf857a.xml'.
+2020-09-17 14:56:06.759 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-df296e2e-5f74-4e19-9eeb-277396346f82.xml'.
+2020-09-17 14:56:06.761 -04:00 [DBG] Reading data from file 'C:\Users\MitchellDenC\AppData\Local\ASP.NET\DataProtection-Keys\key-e0589fd9-4240-4b20-8225-56419b92209b.xml'.
+2020-09-17 14:56:06.773 -04:00 [DBG] Found key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454}.
+2020-09-17 14:56:06.782 -04:00 [DBG] Found key {5ea5f1e4-4b59-4370-8db1-b9ae7bbf8c63}.
+2020-09-17 14:56:06.784 -04:00 [DBG] Found key {604bfd08-e244-4901-bfce-3bc0372b2e4c}.
+2020-09-17 14:56:06.785 -04:00 [DBG] Found key {646446ba-95e9-4794-b5d0-1caf83cf19fa}.
+2020-09-17 14:56:06.787 -04:00 [DBG] Found key {69e60cc4-4e85-49ca-9b50-c12f6bb46b80}.
+2020-09-17 14:56:06.788 -04:00 [DBG] Found key {cd493bdb-3acc-4e26-9708-b7241aa23b1a}.
+2020-09-17 14:56:06.791 -04:00 [DBG] Found key {d9e18831-a0f6-4101-9760-f3e14ecf857a}.
+2020-09-17 14:56:06.793 -04:00 [DBG] Found key {df296e2e-5f74-4e19-9eeb-277396346f82}.
+2020-09-17 14:56:06.794 -04:00 [DBG] Found key {e0589fd9-4240-4b20-8225-56419b92209b}.
+2020-09-17 14:56:06.808 -04:00 [DBG] Considering key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} with expiration date 2020-11-19 18:05:30Z as default key.
+2020-09-17 14:56:06.856 -04:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2020-09-17 14:56:06.864 -04:00 [DBG] Decrypting secret element using Windows DPAPI.
+2020-09-17 14:56:06.870 -04:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2020-09-17 14:56:06.879 -04:00 [DBG] Opening CNG algorithm 'AES' from provider 'null' with chaining mode CBC.
+2020-09-17 14:56:06.885 -04:00 [DBG] Opening CNG algorithm 'SHA256' from provider 'null' with HMAC.
+2020-09-17 14:56:06.893 -04:00 [DBG] Using key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} as the default key.
+2020-09-17 14:56:06.895 -04:00 [DBG] Key ring with default key {2f5c30d0-a084-4c35-8d2d-8e4a0d052454} was loaded during application startup.
+2020-09-17 14:56:07.502 -04:00 [DBG] ScopedRequestMiddleware constructed with {"HeadersToCapture":["X-CachedTransaction","X-Claims"],"CookiesToCapture":["X-CachedTransaction"],"$type":"ScopedRequestMessageOptions"}
+2020-09-17 14:56:07.539 -04:00 [DBG] CachedTransactionMiddleware for ColorContext constructed with {"EnabledForClaims":{"email":["maria@a.test","darius@b.test"]},"$type":"CachedTransactionOptions"}
+2020-09-17 14:56:07.552 -04:00 [DBG] HeaderToClaimsMiddleware constructed with {"Enabled":true,"$type":"HeaderToClaimsOptions"}
+2020-09-17 14:56:07.598 -04:00 [DBG] Failed to locate the development https certificate at 'null'.
+2020-09-17 14:56:07.876 -04:00 [DBG] Using development certificate: CN=localhost (Thumbprint: 1ED031099A11F655D0A5136B66FCCE7A4543939D)
+2020-09-17 14:56:07.895 -04:00 [INF] Now listening on: https://localhost:44341
+2020-09-17 14:56:07.906 -04:00 [INF] Now listening on: http://localhost:61244
+2020-09-17 14:56:07.908 -04:00 [DBG] Loaded hosting startup assembly EDennis.Samples.ColorApi
+2020-09-17 14:56:07.910 -04:00 [INF] Application started. Press Ctrl+C to shut down.
+2020-09-17 14:56:07.911 -04:00 [INF] Hosting environment: Development
+2020-09-17 14:56:07.913 -04:00 [INF] Content root path: C:\Users\MitchellDenC\Source\Repos\denmitchell\EDennis.AspNet.Base\EDennis.Samples.ColorApi
+2020-09-17 14:56:07.917 -04:00 [DBG] Hosting started
+2020-09-17 14:56:08.318 -04:00 [DBG] Connection id "0HM2R7DB5RFNJ" accepted.
+2020-09-17 14:56:08.321 -04:00 [DBG] Connection id "0HM2R7DB5RFNJ" started.
+2020-09-17 14:56:08.321 -04:00 [DBG] Connection id "0HM2R7DB5RFNJ" received FIN.
+2020-09-17 14:56:08.349 -04:00 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Authentication failed because the remote party has closed the transport stream.
+   at System.Net.Security.SslStream.StartReadFrame(Byte[] buffer, Int32 readBytes, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.StartReceiveBlob(Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ForceAuthentication(Boolean receiveFirst, Byte[] buffer, AsyncProtocolRequest asyncRequest)
+   at System.Net.Security.SslStream.ProcessAuthentication(LazyAsyncResult lazyResult, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.BeginAuthenticateAsServer(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken, AsyncCallback asyncCallback, Object asyncState)
+   at System.Net.Security.SslStream.<>c.<AuthenticateAsServerAsync>b__69_0(SslServerAuthenticationOptions arg1, CancellationToken arg2, AsyncCallback callback, Object state)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl[TArg1,TArg2](Func`5 beginMethod, Func`2 endFunction, Action`1 endAction, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory.FromAsync[TArg1,TArg2](Func`5 beginMethod, Action`1 endMethod, TArg1 arg1, TArg2 arg2, Object state)
+   at System.Net.Security.SslStream.AuthenticateAsServerAsync(SslServerAuthenticationOptions sslServerAuthenticationOptions, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.InnerOnConnectionAsync(ConnectionContext context)
+2020-09-17 14:56:08.453 -04:00 [DBG] Connection id "0HM2R7DB5RFNJ" stopped.
+2020-09-17 14:56:08.464 -04:00 [DBG] Connection id "0HM2R7DB5RFNJ" sending FIN because: "The Socket transport's send loop completed gracefully."
+2020-09-17 14:56:08.843 -04:00 [DBG] Connection id "0HM2R7DB5RFNK" accepted.
+2020-09-17 14:56:08.851 -04:00 [DBG] Connection id "0HM2R7DB5RFNK" started.
+2020-09-17 14:56:09.123 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44341/swagger/index.html  
+2020-09-17 14:56:09.296 -04:00 [DBG] Wildcard detected, all requests with hosts will be allowed.
+2020-09-17 14:56:09.354 -04:00 [DBG] No candidates found for the request path '/swagger/index.html'
+2020-09-17 14:56:09.658 -04:00 [DBG] Request did not match any endpoints
+2020-09-17 14:56:09.971 -04:00 [DBG] AuthenticationScheme: Bearer was not authenticated.
+2020-09-17 14:56:10.063 -04:00 [INF] Request finished in 944.9368ms 200 text/html;charset=utf-8
+2020-09-17 14:56:10.278 -04:00 [INF] Request starting HTTP/2 GET https://localhost:44341/swagger/v1/swagger.json  
+2020-09-17 14:56:10.280 -04:00 [DBG] No candidates found for the request path '/swagger/v1/swagger.json'
+2020-09-17 14:56:10.282 -04:00 [DBG] Request did not match any endpoints
+2020-09-17 14:56:10.285 -04:00 [DBG] AuthenticationScheme: Bearer was not authenticated.
+2020-09-17 14:56:10.460 -04:00 [INF] Request finished in 181.8478ms 200 application/json;charset=utf-8

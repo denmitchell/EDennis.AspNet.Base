@@ -37,13 +37,16 @@ namespace EDennis.Samples.ColorApp.Client {
                 });
 
 
-            builder.Services.AddScopedRequestMessage(builder.Configuration);
+            builder.Services.AddHttpClient("RgbClient", client => {
+                client.BaseAddress = new Uri("https://localhost:44336");
+            });
+            builder.Services.AddScoped<RgbApiClient>();
+
 
             // Supply HttpClient instances that include access tokens when making requests to the server project
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
                 .CreateClient(clientName));
 
-            builder.Services.AddScoped<RgbApiClient>();
 
             builder.Services.AddApiAuthorization(configure=> {
                 configure.UserOptions.RoleClaim = "role:EDennis.Samples.ColorApp.Server";

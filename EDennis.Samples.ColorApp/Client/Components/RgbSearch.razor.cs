@@ -1,5 +1,6 @@
 ﻿using EDennis.NetStandard.Base;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using System.Threading.Tasks;
 
 namespace EDennis.Samples.ColorApp.Client.Components {
@@ -14,7 +15,11 @@ namespace EDennis.Samples.ColorApp.Client.Components {
         protected Pager Pager { get; set; }
 
         protected override async Task OnInitializedAsync() {
-            await base.OnInitializedAsync();
+            try {
+                await ExecuteSearchAsync(true);
+            } catch (AccessTokenNotAvailableException exception) {
+                exception.Redirect();
+            }
         }
 
 
@@ -31,7 +36,7 @@ namespace EDennis.Samples.ColorApp.Client.Components {
                 result = await Client.GetWithDynamicLinqAsync(SearchTable.Where, "Id", null, null, null, Pager.PageSize, null);
             else
                 result = await Client.GetWithDynamicLinqAsync(SearchTable.Where, "Id", null, null, null, Pager.PageSize, RowCount);
-            
+
             var dlr = result.TypedValue;
             Data = dlr.Data;
             RowCount = dlr.RowCount;
