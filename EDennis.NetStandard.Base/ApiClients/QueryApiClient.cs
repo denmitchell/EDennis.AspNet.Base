@@ -42,14 +42,14 @@ namespace EDennis.NetStandard.Base {
         }
 
 
-        public ObjectResult<DeserializableLoadResult<TEntity>> GetWithDevExtreme(string select, string include, string sort, string filter, int skip, int take, string totalSummary, string group, string groupSummary) {
-            var qString = BuildDevExtremeQueryString(select, include, sort, filter, skip, take, totalSummary, group, groupSummary);
+        public ObjectResult<DeserializableLoadResult<TEntity>> GetWithDevExtreme(string select, string include, string sort, string filter, int skip, int take, string totalSummary, string group, string groupSummary, bool requireTotalCount, bool requireGroupCount) {
+            var qString = BuildDevExtremeQueryString(select, include, sort, filter, skip, take, totalSummary, group, groupSummary, requireTotalCount, requireGroupCount);
             _scopedRequestMessage.AddQueryString(qString);
             return _client.Get<DeserializableLoadResult<TEntity>>($"{ControllerPath}/devextreme", _scopedRequestMessage);
         }
 
-        public async Task<ObjectResult<DeserializableLoadResult<TEntity>>> GetWithDevExtremeAsync(string select, string include, string sort, string filter, int skip, int take, string totalSummary, string group, string groupSummary) {
-            var qString = BuildDevExtremeQueryString(select, include, sort, filter, skip, take, totalSummary, group, groupSummary);
+        public async Task<ObjectResult<DeserializableLoadResult<TEntity>>> GetWithDevExtremeAsync(string select, string include, string sort, string filter, int skip, int take, string totalSummary, string group, string groupSummary, bool requireTotalCount, bool requireGroupCount) {
+            var qString = BuildDevExtremeQueryString(select, include, sort, filter, skip, take, totalSummary, group, groupSummary, requireTotalCount, requireGroupCount);
             _scopedRequestMessage.AddQueryString(qString);
             return await _client.GetAsync<DeserializableLoadResult<TEntity>>($"{ControllerPath}/devextreme/async", _scopedRequestMessage);
         }
@@ -81,7 +81,7 @@ namespace EDennis.NetStandard.Base {
         public abstract string ControllerName { get; }
 
 
-        private static string BuildDevExtremeQueryString(string select, string include, string sort, string filter, int skip, int take, string totalSummary, string group, string groupSummary) {
+        private static string BuildDevExtremeQueryString(string select, string include, string sort, string filter, int skip, int take, string totalSummary, string group, string groupSummary, bool requireTotalCount, bool requireGroupCount) {
             var list = new List<string>();
             if (select != default)
                 list.Add($"select={select}");
@@ -101,7 +101,12 @@ namespace EDennis.NetStandard.Base {
                 list.Add($"group={group}");
             if (groupSummary != default)
                 list.Add($"groupSummary={groupSummary}");
+            if (requireTotalCount)
+                list.Add($"requireTotalCount=true");
+            if (requireGroupCount)
+                list.Add($"requireGroupCount=true");
 
+            //, bool requireTotalCount, bool requireGroupCount
             if (list.Count == 0)
                 return "";
 

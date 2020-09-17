@@ -76,16 +76,18 @@ namespace EDennis.NetStandard.Base {
                 [FromQuery] int take,
                 [FromQuery] string totalSummary,
                 [FromQuery] string group,
-                [FromQuery] string groupSummary
+                [FromQuery] string groupSummary,
+                [FromQuery] bool requireTotalCount,
+                [FromQuery] bool requireGroupCount
             ) {
             DataSourceLoadOptions loadOptions;
             try {
                 loadOptions = DataSourceLoadOptionsBuilder.Build(
                     select, sort, filter, skip, take, totalSummary,
-                    group, groupSummary);
+                    group, groupSummary, requireTotalCount, requireGroupCount);
             } catch (ArgumentException ex) {
 
-                using (_logger.BeginScope(GetLoggerScope(new { select, include, sort, filter, skip, take, totalSummary, group, groupSummary })))
+                using (_logger.BeginScope(GetLoggerScope(new { select, include, sort, filter, skip, take, totalSummary, group, groupSummary, requireTotalCount, requireGroupCount })))
                     _logger.LogError(ex.Message);
                 ModelState.AddModelError("", ex.Message);
                 return new BadRequestObjectResult(ModelState);
@@ -103,13 +105,13 @@ namespace EDennis.NetStandard.Base {
                 var result = DataSourceLoader.Load(qry, loadOptions);
                 return Ok(result);
             } catch (ArgumentOutOfRangeException ex) {
-                using (_logger.BeginScope(GetLoggerScope(new { select, sort, filter, skip, take, totalSummary, group, groupSummary })))
+                using (_logger.BeginScope(GetLoggerScope(new { select, sort, filter, skip, take, totalSummary, group, groupSummary, requireTotalCount, requireGroupCount })))
                     _logger.LogError(ex.Message);
                 var obj =
                     new {
                         Exception = "Failed executing DevExtreme load expression",
                         ProvidedArguments = new {
-                            select, sort, filter, skip, take, totalSummary, group, groupSummary
+                            select, sort, filter, skip, take, totalSummary, group, groupSummary, requireTotalCount, requireGroupCount
                         }
                     };
                 return new BadRequestObjectResult(obj);
@@ -132,9 +134,11 @@ namespace EDennis.NetStandard.Base {
                 [FromQuery] int take,
                 [FromQuery] string totalSummary,
                 [FromQuery] string group,
-                [FromQuery] string groupSummary
+                [FromQuery] string groupSummary,
+                [FromQuery] bool requireTotalCount,
+                [FromQuery] bool requireGroupCount
             ) {           
-            return await Task.Run(() => GetWithDevExtreme(select, include, sort, filter, skip, take, totalSummary, group, groupSummary));
+            return await Task.Run(() => GetWithDevExtreme(select, include, sort, filter, skip, take, totalSummary, group, groupSummary, requireTotalCount, requireGroupCount));
         }
 
 

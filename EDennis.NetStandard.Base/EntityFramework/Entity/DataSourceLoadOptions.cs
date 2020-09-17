@@ -15,11 +15,14 @@ namespace EDennis.NetStandard.Base
     public static class DataSourceLoadOptionsBuilder{
         public static DataSourceLoadOptions Build(
             string select, string sort, string filter, int skip, int take,
-            string totalSummary, string group, string groupSummary) {
+            string totalSummary, string group, string groupSummary, 
+            bool requireTotalCount, bool requireGroupCount) {
 
             var loadOptions = new DataSourceLoadOptions() {
                 Skip = skip,
-                Take = take
+                Take = take,
+                RequireTotalCount = requireTotalCount,
+                RequireGroupCount = requireGroupCount
             };
 
             try {
