@@ -23,7 +23,7 @@ namespace EDennis.Samples.ColorApi {
                 return;
             } else if (args.Contains("/migrate")) {
                 var host = CreateHostBuilder(args).Build();
-                Migrator<ColorContext>.Migrate(host, Log.Logger, "MigrationsSql");
+                Migrator<ColorContext>.Migrate(host, Log.Logger, "..\\EDennis.Samples.ColorApp\\Shared\\MigrationsInserts");
                 return;
             }
 

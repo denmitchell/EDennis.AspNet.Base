@@ -6,6 +6,13 @@ using Microsoft.Extensions.Logging;
 using Serilog.Extensions.Logging;
 using System.Diagnostics;
 using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+using EDennis.MigrationsExtensions;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace EDennis.NetStandard.Base {
 
@@ -28,35 +35,75 @@ namespace EDennis.NetStandard.Base {
         where TContext : DbContext {
 
 
-        public static void Migrate(IHost host, Serilog.ILogger logger, string sqlFolder = null) {
-            Migrate(host, new SerilogLoggerProvider(logger).CreateLogger(nameof(Migrator<TContext>)), sqlFolder );
+        public static void Migrate(IHost host, Serilog.ILogger logger, string pathToSqlFolder = null) {
+            Migrate(host, new SerilogLoggerProvider(logger).CreateLogger(nameof(Migrator<TContext>)), pathToSqlFolder);
         }
 
-        public static void Migrate(IHost host, ILogger logger = null, string sqlFolder = null ) {
+        public static void Migrate(IHost host, ILogger logger = null, string pathToSqlFolder = null) {
 
-                using var scope = host.Services.CreateScope();
+            using var scope = host.Services.CreateScope();
 
-                var context = scope.ServiceProvider
-                    .GetRequiredService<TContext>();
+            var context = scope.ServiceProvider
+                .GetRequiredService<TContext>();
 
-                Log("Dropping Database...", logger);
-                context.Database.EnsureDeleted();
+            //replace the IMigrationsSqlGenerator with custom generator that can generate system versioned tables 
+            var optionsBuilder = new DbContextOptionsBuilder<TContext>();
+            optionsBuilder.UseSqlServer(context.Database.GetDbConnection().ConnectionString)
+                .ReplaceService<IMigrationsSqlGenerator, MigrationsExtensionsSqlGenerator>();
+            context = Activator.CreateInstance(typeof(TContext), new object[] { optionsBuilder.Options }) as TContext;
 
-                Log("Migrating Database...", logger);
-                context.Database.Migrate();
 
-                if (Directory.Exists(sqlFolder)) {
-                    var cxn = context.Database.GetDbConnection() as SqlConnection;
-                    var sqlFiles = Directory.EnumerateFiles(sqlFolder);
-                    foreach (var file in sqlFiles) {
-                        var sql = File.ReadAllText(file);
-                        Log($"Executing {file}...");
-                        var cmd = new SqlCommand(sql, cxn);
-                        cmd.ExecuteScalar();
+
+            Log("Dropping Database...", logger);
+            context.Database.EnsureDeleted();
+
+            Log("Migrating Database...", logger);
+            context.Database.Migrate();
+
+            var env = scope.ServiceProvider.GetRequiredService<IHostEnvironment>();
+            var contentRoot = env.ContentRootPath;
+
+
+            if (pathToSqlFolder == null)
+                return;
+
+            pathToSqlFolder = ResolveDirectory(contentRoot, pathToSqlFolder, logger);
+
+            if (Directory.Exists(pathToSqlFolder)) {
+                using var cxn = context.Database.GetDbConnection() as SqlConnection;
+                if (cxn.State != System.Data.ConnectionState.Open)
+                    cxn.Open();
+                var sqlFiles = Directory.EnumerateFiles(pathToSqlFolder);
+                foreach (var file in sqlFiles) {
+                    var sql = File.ReadAllText(file);
+                    Log($"Executing {file}...",logger);
+                    var cmd = new SqlCommand(sql, cxn);
+                    cmd.ExecuteScalar();
+                }
+            }
+
+        }
+
+
+        private static string ResolveDirectory(string referenceDirectory, string relativePath, ILogger logger = null) {
+            var folders = relativePath.Split('/', '\\');
+            var di = new DirectoryInfo(referenceDirectory);
+            foreach (var folder in folders) {
+                if (folder == "..")
+                    di = di.Parent;
+                else {
+                    try {
+                        var dirs = di.GetDirectories();
+                        di = di.GetDirectories().Single(s=>s.Name.Equals(folder));
+                    } catch (Exception ex) {
+                        Log($"relativePath {relativePath} is not valid from {referenceDirectory}.", logger);
+                        throw new ArgumentException(ex.Message);
                     }
                 }
-
+            }
+            return di.FullName;
         }
+
 
         private static void Log(string message, ILogger logger = null) {
             if (logger != null)
