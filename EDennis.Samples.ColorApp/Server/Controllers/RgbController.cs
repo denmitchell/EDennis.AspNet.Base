@@ -6,12 +6,12 @@ using System.Net.Http;
 
 namespace EDennis.Samples.ColorApi.Controllers {
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [Route("[controller]")]
     public class RgbController : ProxyCrudController<Rgb> {
 
         public RgbController(IHttpClientFactory clientFactory, 
-            ClientCredentialsTokenService tokenService) 
+            ITokenService tokenService) 
             : base(clientFactory, tokenService) {
         }
 

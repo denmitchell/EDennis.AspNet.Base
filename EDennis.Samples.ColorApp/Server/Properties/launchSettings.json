@@ -8,6 +8,17 @@
       }
     },
   "profiles": {
+    "NoMcp": {
+      "commandName": "Project",
+      "commandLineArgs": "mcp=",
+      "launchBrowser": true,
+      "launchUrl": "",
+      "applicationUrl": "https://localhost:44336;http://localhost:62727",
+      "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
     "Maria": {
       "commandName": "Project",
       "commandLineArgs": "mcp=Maria",
