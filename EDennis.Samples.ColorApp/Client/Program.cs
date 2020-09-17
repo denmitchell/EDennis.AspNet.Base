@@ -37,9 +37,9 @@ namespace EDennis.Samples.ColorApp.Client {
                 });
 
 
-            builder.Services.AddHttpClient("RgbClient", client => {
-                client.BaseAddress = new Uri("https://localhost:44336");
-            });
+            //builder.Services.AddHttpClient("RgbClient", client => {
+            //    client.BaseAddress = new Uri(baseAddress);
+            //});
             builder.Services.AddScoped<RgbApiClient>();
 
 

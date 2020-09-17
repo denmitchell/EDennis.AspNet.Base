@@ -15,7 +15,7 @@ namespace EDennis.NetStandard.Base {
     /// </summary>
     public abstract class BlazorCrudApiClient<TEntity> : BlazorQueryApiClient<TEntity>, ICrudApiClient<TEntity> where TEntity : class, ICrudEntity {
 
-        protected BlazorCrudApiClient(HttpClient client) : base(client) {
+        protected BlazorCrudApiClient(IHttpClientFactory clientFactory) : base(clientFactory) {
         }
 
         public ObjectResult<TEntity> Create([FromBody] TEntity input) {

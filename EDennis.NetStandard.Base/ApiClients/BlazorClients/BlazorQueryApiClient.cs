@@ -16,8 +16,8 @@ namespace EDennis.NetStandard.Base {
         protected readonly HttpClient _client;
         protected readonly ScopedRequestMessage _scopedRequestMessage;
 
-        public BlazorQueryApiClient(HttpClient client) {
-            _client = client;
+        public BlazorQueryApiClient(IHttpClientFactory clientFactory) {
+            _client = clientFactory.CreateClient(ClientName);
             _scopedRequestMessage = new ScopedRequestMessage();
         }
 

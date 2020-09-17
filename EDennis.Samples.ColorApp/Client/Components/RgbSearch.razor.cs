@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace EDennis.Samples.ColorApp.Client.Components {
     public partial class RgbSearchBase : DynamicLinqComponentBase<Rgb> {
-        [Inject] public RgbApiClient Client { get; set; }
-        [Inject] public NavigationManager NavigationManager { get; set; }
+        [Inject] protected RgbApiClient Client { get; set; }
+        [Inject] protected NavigationManager NavigationManager { get; set; }
 
         public const int PAGE_SIZE = 10;
 
