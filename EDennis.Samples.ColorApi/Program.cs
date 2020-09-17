@@ -1,4 +1,5 @@
 using EDennis.NetStandard.Base;
+using EDennis.Samples.ColorApp;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -20,8 +21,11 @@ namespace EDennis.Samples.ColorApi {
                 SeedDataGenerator.GenerateIdpConfigStub<Startup>(5000, 44341, false);
                 Log.Information("Exiting...");
                 return;
+            } else if (args.Contains("/migrate")) {
+                var host = CreateHostBuilder(args).Build();
+                Migrator<ColorContext>.Migrate(host, Log.Logger, "MigrationsSql");
+                return;
             }
-
 
             CreateHostBuilder(args).Build().Run();
         }
