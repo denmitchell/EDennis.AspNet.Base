@@ -65,7 +65,16 @@
                         @Html.DisplayFor(modelItem => item.Organization)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Applications)
+                        @{ 
+                            var apps = item.Applications.Split(",");
+                            if (apps.Count() > 0) {
+                                <ul>
+                                @foreach(var app in apps) {
+                                    <li>@app</li>
+                                }
+                                </ul>
+                            }
+                        }
                     </td>
                 </tr>
             }

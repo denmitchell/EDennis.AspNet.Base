@@ -6,7 +6,7 @@
         public string PhoneNumber { get; set; }
         public string Organization { get; set; }
         public bool OrganizationAdmin { get; set; }
+        public bool SuperAdmin { get; set; }
         public string Applications { get; set; } 
-        //public long ApplicationCount { get; set; }
     }
 }
