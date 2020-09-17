@@ -20,15 +20,7 @@ namespace EDennis.NetStandard.Base {
     /// Performs code-first migrations on a context.
     /// Ensure that TContext has a constructor that takes DbContextOptions<TContext> as an argument.
     /// Also, if using SQL, rather than HasData for seeding the database, ensure that you
-    /// create a link in the project that is executing this Migrator.
-    /// <code>
-    ///   <ItemGroup>
-    ///     <Content Include = "..\EDennis.Samples.ColorApp\Shared\MigrationsInserts\**\*.*" >
-    ///       <Link> MigrationsSql\%(RecursiveDir)%(FileName)%(Extension)</Link>
-    ///       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    ///     </Content>
-    ///   </ItemGroup>
-    /// </code>
+    /// provide the pathToSqlFolder argument (e.g., "..\\EDennis.Samples.ColorApp\\Shared\\MigrationsInserts".
     /// </summary>
     /// <typeparam name="TContext"></typeparam>
     public static class Migrator<TContext>
@@ -93,7 +85,6 @@ namespace EDennis.NetStandard.Base {
                     di = di.Parent;
                 else {
                     try {
-                        var dirs = di.GetDirectories();
                         di = di.GetDirectories().Single(s=>s.Name.Equals(folder));
                     } catch (Exception ex) {
                         Log($"relativePath {relativePath} is not valid from {referenceDirectory}.", logger);
