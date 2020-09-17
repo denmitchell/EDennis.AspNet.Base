@@ -7,7 +7,7 @@ using System.Net.Http;
 namespace EDennis.Samples.ColorApi.Controllers {
     [ApiController]
     //[Authorize]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class RgbController : ProxyCrudController<Rgb> {
 
         public RgbController(IHttpClientFactory clientFactory, 

@@ -24,7 +24,7 @@ namespace EDennis.Samples.ColorApp.Client {
            builder.Services.AddHttpClient(clientName, 
                 client => client.BaseAddress = new Uri(baseAddress))
                 .AddHttpMessageHandler(sp=> {
-                    var handler = sp.GetService<BaseAddressAuthorizationMessageHandler>()
+                    var handler = sp.GetService<AuthorizationMessageHandler>()
                         .ConfigureHandler(
                             authorizedUrls: new string[] { baseAddress },
                             scopes: new string[] {  
@@ -36,6 +36,8 @@ namespace EDennis.Samples.ColorApp.Client {
                     return handler;
                 });
 
+
+            builder.Services.AddScopedRequestMessage(builder.Configuration);
 
             // Supply HttpClient instances that include access tokens when making requests to the server project
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
