@@ -184,6 +184,10 @@ namespace EDennis.Samples.ColorApp.Server {
             app.UseIdentityServer();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.Use(async(context, next) => {
+
+                await next();
+            });
             app.UseClaimsToHeaderFor("/Rgb");
             app.UseCachedTransactionCookieFor("/Rgb");
             app.UseScopedRequestMessageFor("/Rgb");

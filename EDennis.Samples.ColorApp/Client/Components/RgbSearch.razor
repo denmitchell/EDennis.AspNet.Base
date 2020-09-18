@@ -3,6 +3,8 @@
 <h3>RGB Search</h3>
 @if (this.Data == null) {
     <p><em>Loading...</em></p>
+    <p>@Client.HttpClient.BaseAddress.ToString()</p>
+    <p>@Token</p>
 } else {
     <EditForm Model="SearchTable" OnSubmit="@OnSearchAsync">
         <div class="form-group row filter-row">

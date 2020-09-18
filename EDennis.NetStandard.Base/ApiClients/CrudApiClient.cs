@@ -23,19 +23,19 @@ namespace EDennis.NetStandard.Base {
         }
 
         public ObjectResult<TEntity> Create([FromBody] TEntity input) {
-            return _client.Post($"{ControllerPath}", input, _scopedRequestMessage);
+            return HttpClient.Post($"{ControllerPath}", input, _scopedRequestMessage);
         }
 
         public async Task<ObjectResult<TEntity>> CreateAsync([FromBody] TEntity input) {
-            return await _client.PostAsync($"{ControllerPath}/async", input, _scopedRequestMessage);
+            return await HttpClient.PostAsync($"{ControllerPath}/async", input, _scopedRequestMessage);
         }
 
         public StatusCodeResult Delete([FromRoute] string key) {
-            return _client.Delete<TEntity>($"{ControllerPath}/{key}", _scopedRequestMessage);
+            return HttpClient.Delete<TEntity>($"{ControllerPath}/{key}", _scopedRequestMessage);
         }
 
         public async Task<StatusCodeResult> DeleteAsync([FromRoute] string key) {
-            return await _client.DeleteAsync<TEntity>($"{ControllerPath}/async/{key}", _scopedRequestMessage);
+            return await HttpClient.DeleteAsync<TEntity>($"{ControllerPath}/async/{key}", _scopedRequestMessage);
         }
 
         public IQueryable<TEntity> Find(string pathParameter) {
@@ -44,31 +44,31 @@ namespace EDennis.NetStandard.Base {
 
 
         public ObjectResult<TEntity> GetById([FromRoute] string key) {
-            return _client.Get<TEntity>($"{ControllerPath}/{key}", _scopedRequestMessage);
+            return HttpClient.Get<TEntity>($"{ControllerPath}/{key}", _scopedRequestMessage);
         }
 
 
         public async Task<ObjectResult<TEntity>> GetByIdAsync([FromRoute] string key) {
-            return await _client.GetAsync<TEntity>($"{ControllerPath}/async/{key}", _scopedRequestMessage);
+            return await HttpClient.GetAsync<TEntity>($"{ControllerPath}/async/{key}", _scopedRequestMessage);
         }
 
 
         public ObjectResult<TEntity> Patch([FromRoute] string key, [FromBody] JsonElement input) {
-            return _client.Patch<JsonElement, TEntity>($"{ControllerPath}/{key}", input, _scopedRequestMessage);
+            return HttpClient.Patch<JsonElement, TEntity>($"{ControllerPath}/{key}", input, _scopedRequestMessage);
         }
 
 
         public async Task<ObjectResult<TEntity>> PatchAsync([FromRoute] string key, [FromBody] JsonElement input) {
-            return await _client.PatchAsync<JsonElement, TEntity>($"{ControllerPath}/async/{key}", input, _scopedRequestMessage);
+            return await HttpClient.PatchAsync<JsonElement, TEntity>($"{ControllerPath}/async/{key}", input, _scopedRequestMessage);
         }
 
 
         public ObjectResult<TEntity> Update([FromRoute] string key, [FromBody] TEntity input) {
-            return _client.Put($"{ControllerPath}/{key}", input, _scopedRequestMessage);
+            return HttpClient.Put($"{ControllerPath}/{key}", input, _scopedRequestMessage);
         }
 
         public async Task<ObjectResult<TEntity>> UpdateAsync([FromRoute] string key, [FromBody] TEntity input) {
-            return await _client.PutAsync($"{ControllerPath}/async/{key}", input, _scopedRequestMessage);
+            return await HttpClient.PutAsync($"{ControllerPath}/async/{key}", input, _scopedRequestMessage);
         }
     }
 }

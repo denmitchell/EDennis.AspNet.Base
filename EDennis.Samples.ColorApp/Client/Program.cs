@@ -20,39 +20,21 @@ namespace EDennis.Samples.ColorApp.Client {
             var baseAddress = builder.HostEnvironment.BaseAddress;
             var clientName = typeof(Program).Namespace;
 
+            builder.Services.Configure<AuthorizationMessageHandlerOptions>(
+                builder.Configuration.GetSection("AuthorizationMessageHandler"));
 
-           builder.Services.AddHttpClient(clientName, 
-                client => client.BaseAddress = new Uri(baseAddress))
-                .AddHttpMessageHandler(sp=> {
-                    var handler = sp.GetService<AuthorizationMessageHandler>()
-                        .ConfigureHandler(
-                            authorizedUrls: new string[] { baseAddress },
-                            scopes: new string[] {  
-                            "openid",
-                            "profile",
-                            "EDennis.Samples.ColorApp.ServerAPI"
-                            }
-                        );
-                    return handler;
-                });
+            builder.Services.AddScoped<ConfigurableAuthorizationMessageHandler>();
+
+            builder.Services.AddHttpClient<RgbApiClient>(
+                     client => client.BaseAddress = new Uri(baseAddress))
+                 .AddHttpMessageHandler<ConfigurableAuthorizationMessageHandler>();
 
 
-            //builder.Services.AddHttpClient("RgbClient", client => {
-            //    client.BaseAddress = new Uri(baseAddress);
-            //});
-            builder.Services.AddScoped<RgbApiClient>();
-
-
-            // Supply HttpClient instances that include access tokens when making requests to the server project
-            builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
-                .CreateClient(clientName));
-
-
-            builder.Services.AddApiAuthorization(configure=> {
+            builder.Services.AddApiAuthorization(configure => {
                 configure.UserOptions.RoleClaim = "role:EDennis.Samples.ColorApp.Server";
                 configure.UserOptions.NameClaim = "name";
                 configure.ProviderOptions.ConfigurationEndpoint = "_configuration/EDennis.Samples.ColorApp.Client";
-                });
+            });
 
             await builder.Build().RunAsync();
         }

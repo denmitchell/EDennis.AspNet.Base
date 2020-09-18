@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace EDennis.NetStandard.Base {
     public interface IQueryApiClient<TEntity> where TEntity : class {
+        public HttpClient HttpClient { get; }
         string ControllerName { get; }
         string ControllerPath { get; }
 
