@@ -585,7 +585,8 @@ namespace EDennis.NetStandard.Base {
                 msg.Method = HttpMethod.Get;
             else if (req.Method.ToUpper() == "HEAD")
                 msg.Method = HttpMethod.Head;
-
+            else if (req.Method.ToUpper() == "PATCH")
+                msg.Method = HttpMethod.Patch;
             return msg;
         }
 
