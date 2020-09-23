@@ -47,7 +47,7 @@ namespace EDennis.Samples.ColorApp.Server {
                 "https://localhost:5000",
                 "EDennis.Samples.ColorApp.Client",
                 "https://localhost:44336/authentication/login-callback",/*"https://localhost:44336/signin-oidc",*/
-                "https://localhost:44336/",/*"https://localhost:44336/signout-callback-oidc",*/
+                "https://localhost:44336/authentication/logout-callback",/*"https://localhost:44336/signout-callback-oidc",*/
                 "code",
                 "openid profile EDennis.Samples.ColorApp.ServerAPI"
                 ));
