@@ -57,70 +57,71 @@ namespace EDennis.Samples.ColorApp.Server {
             //the current Microsoft templates are not compatible with IdentityServer4.x
             //https://github.com/IdentityServer/IdentityServer4/issues/4752
             services.AddIdentityServer()
-                .AddAspNetIdentity<DomainUser>()
-                .AddDeveloperSigningCredential()
-                .AddInMemoryPersistedGrants()
-                .AddInMemoryIdentityResources(new List<IdentityResource> {
-                    new IdentityResource {
-                        Name="openid",
-                        UserClaims = new string[] {
-                            "sub"
-                        }
-                    },
-                    new IdentityResource {
-                        Name = "profile",
-                        Description = "User Profile",
-                        UserClaims = new string[] {
-                            "name",
-                            "email",
-                            "organization",
-                            "organization_confirmed",
-                            "organization_admin_for",
-                            "super_admin",
-                            "role:EDennis.Samples.ColorApp.Server"
-                        }
-                    }
-                })
-                .AddInMemoryApiResources(new List<ApiResource>() {
-                    new ApiResource {
-                        Name = "EDennis.Samples.ColorApp.ServerAPI",
-                        Scopes = { "EDennis.Samples.ColorApp.ServerAPI" }
-                    }
-                })
-                .AddInMemoryApiScopes(new List<ApiScope>() {
-                    new ApiScope {
-                        Name = "EDennis.Samples.ColorApp.ServerAPI"
-                    }
-                })
-                .AddInMemoryClients(new List<IdentityServer4.Models.Client> {
-                    new IdentityServer4.Models.Client {
-                        ClientId="EDennis.Samples.ColorApp.Client",
-                        AlwaysIncludeUserClaimsInIdToken=true,
-                        AllowedGrantTypes={ GrantType.AuthorizationCode },
-                        RedirectUris={ "https://localhost:44336/signin-oidc" },
-                        PostLogoutRedirectUris= { "https://localhost:44336/signout-callback-oidc" },
-                        //RequirePkce = true,
-                        AllowedScopes ={"openid","profile","EDennis.Samples.ColorApp.ServerAPI"}
-                    }
-                });
-                /*
-                .AddApiAuthorization<DomainUser, IntegratedDomainIdentityDbContext>(options => {
-                    var profile = options.IdentityResources.FirstOrDefault(x => x.Name == "profile");
-                    if (profile != null)
-                        options.IdentityResources.Remove(profile);
+                .AddApiAuthorization<DomainUser, IntegratedDomainIdentityDbContext>();
+            //.AddAspNetIdentity<DomainUser>()
+            //.AddDeveloperSigningCredential()
+            //.AddInMemoryPersistedGrants()
+            //.AddInMemoryIdentityResources(new List<IdentityResource> {
+            //    new IdentityResource {
+            //        Name="openid",
+            //        UserClaims = new string[] {
+            //            "sub"
+            //        }
+            //    },
+            //    new IdentityResource {
+            //        Name = "profile",
+            //        Description = "User Profile",
+            //        UserClaims = new string[] {
+            //            "name",
+            //            "email",
+            //            "organization",
+            //            "organization_confirmed",
+            //            "organization_admin_for",
+            //            "super_admin",
+            //            "role:EDennis.Samples.ColorApp.Server"
+            //        }
+            //    }
+            //})
+            //.AddInMemoryApiResources(new List<ApiResource>() {
+            //    new ApiResource {
+            //        Name = "EDennis.Samples.ColorApp.ServerAPI",
+            //        Scopes = { "EDennis.Samples.ColorApp.ServerAPI" }
+            //    }
+            //})
+            //.AddInMemoryApiScopes(new List<ApiScope>() {
+            //    new ApiScope {
+            //        Name = "EDennis.Samples.ColorApp.ServerAPI"
+            //    }
+            //})
+            //.AddInMemoryClients(new List<IdentityServer4.Models.Client> {
+            //    new IdentityServer4.Models.Client {
+            //        ClientId="EDennis.Samples.ColorApp.Client",
+            //        AlwaysIncludeUserClaimsInIdToken=true,
+            //        AllowedGrantTypes={ GrantType.AuthorizationCode },
+            //        RedirectUris={ "https://localhost:44336/signin-oidc" },
+            //        PostLogoutRedirectUris= { "https://localhost:44336/signout-callback-oidc" },
+            //        //RequirePkce = true,
+            //        AllowedScopes ={"openid","profile","EDennis.Samples.ColorApp.ServerAPI"}
+            //    }
+            //});
+            /*
+            .AddApiAuthorization<DomainUser, IntegratedDomainIdentityDbContext>(options => {
+                var profile = options.IdentityResources.FirstOrDefault(x => x.Name == "profile");
+                if (profile != null)
+                    options.IdentityResources.Remove(profile);
 
-                    profile = new IdentityResource { Name = "profile", Description = "User Profile" };
-                    profile.UserClaims.Clear();
-                    profile.UserClaims.Add("name");
-                    profile.UserClaims.Add("email");
-                    profile.UserClaims.Add("organization");
-                    profile.UserClaims.Add("organization_confirmed");
-                    profile.UserClaims.Add("organization_admin_for");
-                    profile.UserClaims.Add("super_admin");
-                    profile.UserClaims.Add("role:EDennis.Samples.ColorApp.Server");
-                    options.IdentityResources.Add(profile);
-                });
-                */
+                profile = new IdentityResource { Name = "profile", Description = "User Profile" };
+                profile.UserClaims.Clear();
+                profile.UserClaims.Add("name");
+                profile.UserClaims.Add("email");
+                profile.UserClaims.Add("organization");
+                profile.UserClaims.Add("organization_confirmed");
+                profile.UserClaims.Add("organization_admin_for");
+                profile.UserClaims.Add("super_admin");
+                profile.UserClaims.Add("role:EDennis.Samples.ColorApp.Server");
+                options.IdentityResources.Add(profile);
+            });
+            */
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
