@@ -1,5 +1,6 @@
 ﻿using EDennis.NetStandard.Base;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +11,57 @@ using System.Linq;
 namespace EDennis.NetApp.Base {
 
     public static class IServiceCollectionExtensions_NetCoreApp {
+
+
+
+        public static IServiceCollection AddOpenIdConnectBFF(this IServiceCollection services,
+            IConfiguration config, 
+            string openIdConnectConfigKey = "Security:OpenIdConnect") {
+
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = "cookies";
+                options.DefaultChallengeScheme = "oidc";
+            })
+            .AddCookie("cookies", options =>
+            {
+                options.Cookie.Name = "bff";
+                options.Cookie.SameSite = SameSiteMode.Strict;
+            })
+            .AddOpenIdConnect("oidc", options =>
+            {
+                var settings = new OpenIdConnectSettings();
+                config.BindSectionOrThrow("Security:OpenIdConnect", settings);
+
+                options.Authority = settings.Authority;
+                options.ClientId = settings.ClientId;
+                options.ClientSecret = settings.ClientSecret;
+
+                options.ResponseType = "code";
+                options.GetClaimsFromUserInfoEndpoint = true;
+                options.SaveTokens = true;
+
+                options.Scope.Clear();
+                foreach (var scope in settings.Scope)
+                    options.Scope.Add(scope);
+                if (!options.Scope.Contains("openid"))
+                    options.Scope.Add("openid");
+                if (!options.Scope.Contains("offline_access"))
+                    options.Scope.Add("offline_access");
+
+                options.TokenValidationParameters = new TokenValidationParameters {
+                    NameClaimType = "name",
+                    RoleClaimType = "role"
+                };
+            });
+
+            return services;
+
+        }
+
+
+
 
 
         /// <summary>

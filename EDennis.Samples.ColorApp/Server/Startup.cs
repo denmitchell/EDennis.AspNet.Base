@@ -1,3 +1,4 @@
+using EDennis.NetApp.Base;
 using EDennis.NetStandard.Base;
 using IdentityModel.AspNetCore;
 using IdentityModel.Client;
@@ -34,37 +35,11 @@ namespace EDennis.Samples.ColorApp.Server {
             services.AddControllers();
             services.AddDistributedMemoryCache();
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = "cookies";
-                options.DefaultChallengeScheme = "oidc";
-            })
-            .AddCookie("cookies", options =>
-            {
-                options.Cookie.Name = "bff";
-                options.Cookie.SameSite = SameSiteMode.Strict;
-            })
-            .AddOpenIdConnect("oidc", options =>
-            {
-                options.Authority = "https://demo.identityserver.io";
-                options.ClientId = "interactive.confidential";
-                options.ClientSecret = "secret";
 
-                options.ResponseType = "code";
-                options.GetClaimsFromUserInfoEndpoint = true;
-                options.SaveTokens = true;
+            //Proxy forwarding with OIDC user access token 
+            //(Adapted from Dominick Baier: https://github.com/leastprivilege/AspNetCoreSecuritySamples/tree/aspnetcore21/BFF)
+            services.AddOpenIdConnectBFF(Configuration);
 
-                options.Scope.Clear();
-                options.Scope.Add("openid");
-                options.Scope.Add("profile");
-                options.Scope.Add("api");
-                options.Scope.Add("offline_access");
-
-                options.TokenValidationParameters = new TokenValidationParameters {
-                    NameClaimType = "name",
-                    RoleClaimType = "role"
-                };
-            });
 
             services.AddRazorPages();
 
@@ -82,6 +57,7 @@ namespace EDennis.Samples.ColorApp.Server {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
                 app.UseWebAssemblyDebugging();
+                app.UseCachedTransactionCookieFor("Rgb"); //to auto-rollback database
             } else {
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
@@ -90,34 +66,19 @@ namespace EDennis.Samples.ColorApp.Server {
             app.UseHttpsRedirection();
             app.UseBlazorFrameworkFiles();
 
-            app.UseCachedTransactionCookieFor("/Rgb");
+            //Proxy forwarding with OIDC user access token 
+            //(Adapted from Dominick Baier: https://github.com/leastprivilege/AspNetCoreSecuritySamples/tree/aspnetcore21/BFF)
+            //
+            //NOTE: for routes that match "Apis:{SomeApiKey}" = {SomeApiControllerUrl}
+            //      in Configuration, the request will be forwarded to that API, 
+            //      and the rest of the pipeline is short-circuited.
+            app.UseSecureForwarding(Configuration, "Apis");
 
 
-            app.UseMiddleware<StrictSameSiteExternalAuthenticationMiddleware>();
-            app.UseAuthentication();
-
-            app.Use(async (context, next) =>
-            {
-                if (!context.User.Identity.IsAuthenticated) {
-                    await context.ChallengeAsync();
-                    return;
-                }
-
-                await next();
-            });
-
-            app.Map("/api", api =>
-            {
-                api.RunProxy(async context =>
-                {
-                    var forwardContext = context.ForwardTo("http://localhost:5001");
-
-                    var token = await context.GetUserAccessTokenAsync();
-                    forwardContext.UpstreamRequest.SetBearerToken(token);
-
-                    return await forwardContext.Send();
-                });
-            });
+            //-----------------------------------------------------------------
+            //Continue the pipeline for routes that don't match any key in the 
+            //      Apis section of Configuration ...
+            //-----------------------------------------------------------------
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
