@@ -1,26 +1,23 @@
 using EDennis.NetStandard.Base;
-using EDennis.Samples.ColorApp.Server.Models;
-using IdentityServer4.EntityFramework.Mappers;
-using IdentityServer4.Models;
-using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+using IdentityModel.AspNetCore;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+using Microsoft.IdentityModel.Tokens;
+using ProxyKit;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace EDennis.Samples.ColorApp.Server {
     public class Startup {
         public Startup(IConfiguration configuration, IHostEnvironment env) {
             Configuration = configuration;
             HostEnvironment = env;
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
         }
 
         public IConfiguration Configuration { get; }
@@ -31,131 +28,49 @@ namespace EDennis.Samples.ColorApp.Server {
         public void ConfigureServices(IServiceCollection services) {
 
 
+            services.AddProxy();
+            services.AddAccessTokenManagement();
 
-            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
-            var connectionString = Configuration.GetValueOrThrow<string>("ConnectionStrings:DomainIdentityDbContext");
+            services.AddControllers();
+            services.AddDistributedMemoryCache();
 
-            services.AddDbContext<IntegratedDomainIdentityDbContext>(options =>
-                options.UseSqlServer(connectionString));
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = "cookies";
+                options.DefaultChallengeScheme = "oidc";
+            })
+            .AddCookie("cookies", options =>
+            {
+                options.Cookie.Name = "bff";
+                options.Cookie.SameSite = SameSiteMode.Strict;
+            })
+            .AddOpenIdConnect("oidc", options =>
+            {
+                options.Authority = "https://demo.identityserver.io";
+                options.ClientId = "interactive.confidential";
+                options.ClientSecret = "secret";
 
-            services.AddDefaultIdentity<DomainUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<IntegratedDomainIdentityDbContext>();
+                options.ResponseType = "code";
+                options.GetClaimsFromUserInfoEndpoint = true;
+                options.SaveTokens = true;
 
+                options.Scope.Clear();
+                options.Scope.Add("openid");
+                options.Scope.Add("profile");
+                options.Scope.Add("api");
+                options.Scope.Add("offline_access");
 
-
-            services.AddSingleton<IClientRequestParametersProvider>(new ClientRequestParametersProvider(
-                "https://localhost:5000",
-                "EDennis.Samples.ColorApp.Client",
-                "https://localhost:44336/authentication/login-callback",/*"https://localhost:44336/signin-oidc",*/
-                "https://localhost:44336/authentication/logout-callback",/*"https://localhost:44336/signout-callback-oidc",*/
-                "code",
-                "openid profile EDennis.Samples.ColorApp.ServerAPI"
-                ));
-
-
-
-            //the current Microsoft templates are not compatible with IdentityServer4.x
-            //https://github.com/IdentityServer/IdentityServer4/issues/4752
-            services.AddIdentityServer()
-                .AddApiAuthorization<DomainUser, IntegratedDomainIdentityDbContext>();
-            //.AddAspNetIdentity<DomainUser>()
-            //.AddDeveloperSigningCredential()
-            //.AddInMemoryPersistedGrants()
-            //.AddInMemoryIdentityResources(new List<IdentityResource> {
-            //    new IdentityResource {
-            //        Name="openid",
-            //        UserClaims = new string[] {
-            //            "sub"
-            //        }
-            //    },
-            //    new IdentityResource {
-            //        Name = "profile",
-            //        Description = "User Profile",
-            //        UserClaims = new string[] {
-            //            "name",
-            //            "email",
-            //            "organization",
-            //            "organization_confirmed",
-            //            "organization_admin_for",
-            //            "super_admin",
-            //            "role:EDennis.Samples.ColorApp.Server"
-            //        }
-            //    }
-            //})
-            //.AddInMemoryApiResources(new List<ApiResource>() {
-            //    new ApiResource {
-            //        Name = "EDennis.Samples.ColorApp.ServerAPI",
-            //        Scopes = { "EDennis.Samples.ColorApp.ServerAPI" }
-            //    }
-            //})
-            //.AddInMemoryApiScopes(new List<ApiScope>() {
-            //    new ApiScope {
-            //        Name = "EDennis.Samples.ColorApp.ServerAPI"
-            //    }
-            //})
-            //.AddInMemoryClients(new List<IdentityServer4.Models.Client> {
-            //    new IdentityServer4.Models.Client {
-            //        ClientId="EDennis.Samples.ColorApp.Client",
-            //        AlwaysIncludeUserClaimsInIdToken=true,
-            //        AllowedGrantTypes={ GrantType.AuthorizationCode },
-            //        RedirectUris={ "https://localhost:44336/signin-oidc" },
-            //        PostLogoutRedirectUris= { "https://localhost:44336/signout-callback-oidc" },
-            //        //RequirePkce = true,
-            //        AllowedScopes ={"openid","profile","EDennis.Samples.ColorApp.ServerAPI"}
-            //    }
-            //});
-            /*
-            .AddApiAuthorization<DomainUser, IntegratedDomainIdentityDbContext>(options => {
-                var profile = options.IdentityResources.FirstOrDefault(x => x.Name == "profile");
-                if (profile != null)
-                    options.IdentityResources.Remove(profile);
-
-                profile = new IdentityResource { Name = "profile", Description = "User Profile" };
-                profile.UserClaims.Clear();
-                profile.UserClaims.Add("name");
-                profile.UserClaims.Add("email");
-                profile.UserClaims.Add("organization");
-                profile.UserClaims.Add("organization_confirmed");
-                profile.UserClaims.Add("organization_admin_for");
-                profile.UserClaims.Add("super_admin");
-                profile.UserClaims.Add("role:EDennis.Samples.ColorApp.Server");
-                options.IdentityResources.Add(profile);
+                options.TokenValidationParameters = new TokenValidationParameters {
+                    NameClaimType = "name",
+                    RoleClaimType = "role"
+                };
             });
-            */
-
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
-
-
-            services.AddControllersWithViews(options => {
-                //add default policies that allow pattern matching on scopes
-                //options.AddDefaultPolicies<Startup>(services, HostEnvironment, Configuration);
-            });
-
-            services.AddAuthorization(options => {
-                //IServiceCollectionExtensions_DefaultPolicies.LoadDefaultPolicies<Startup>(options, new List<string> { "scope" });
-            });
-
 
             services.AddRazorPages();
 
-            services.AddHttpLogging(Configuration);
-
-
-            services.AddProxyClient(Configuration, "RgbClient");
-
-
-            //for generating the OAuth Access Token
-            services.AddSecureTokenService<MockTokenService>(Configuration);
-
-            //for propagating headers and cookies to child API (ColorApi)
-            services.AddScopedRequestMessage(Configuration);
 
             //for mocking the user/client
             services.AddMockClaimsPrincipal(Configuration);
-
-            //for propagating user claims to the child API (ColorApi) via headers
-            services.AddClaimsToHeader(Configuration);
 
             //for creating a cookie that holds the database transaction key
             services.AddCachedTransactionCookie(Configuration);
@@ -166,37 +81,57 @@ namespace EDennis.Samples.ColorApp.Server {
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
                 app.UseWebAssemblyDebugging();
             } else {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
             app.UseHttpsRedirection();
             app.UseBlazorFrameworkFiles();
+
+            app.UseCachedTransactionCookieFor("/Rgb");
+
+
+            app.UseMiddleware<StrictSameSiteExternalAuthenticationMiddleware>();
+            app.UseAuthentication();
+
+            app.Use(async (context, next) =>
+            {
+                if (!context.User.Identity.IsAuthenticated) {
+                    await context.ChallengeAsync();
+                    return;
+                }
+
+                await next();
+            });
+
+            app.Map("/api", api =>
+            {
+                api.RunProxy(async context =>
+                {
+                    var forwardContext = context.ForwardTo("http://localhost:5001");
+
+                    var token = await context.GetUserAccessTokenAsync();
+                    forwardContext.UpstreamRequest.SetBearerToken(token);
+
+                    return await forwardContext.Send();
+                });
+            });
+
+            app.UseDefaultFiles();
             app.UseStaticFiles();
 
             app.UseRouting();
 
-            app.UseHttpLogging();
-            //app.UseMockClaimsPrincipalFor("/Rgb");
-            app.UseIdentityServer();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.Use(async(context, next) => {
 
-                await next();
-            });
-            app.UseClaimsToHeaderFor("/Rgb");
-            app.UseCachedTransactionCookieFor("/Rgb");
-            app.UseScopedRequestMessageFor("/Rgb");
-
-
-            app.UseEndpoints(endpoints => {
+            app.UseEndpoints(endpoints =>
+            {
                 endpoints.MapRazorPages();
-                endpoints.MapControllers();
+                endpoints.MapControllers()
+                    .RequireAuthorization();
                 endpoints.MapFallbackToFile("index.html");
             });
 
