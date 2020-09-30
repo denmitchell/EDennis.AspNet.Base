@@ -1,39 +1,28 @@
 {
-  "ApiResources": [
-    {
-      "Name": "EDennis.Samples.ColorApp.Server",
-      "Scopes": [
-        "EDennis.Samples.ColorApp.Server.*",
-        "EDennis.Samples.ColorApp.Server.*.Get*",
-        "EDennis.Samples.ColorApp.Server.*.Post*",
-        "EDennis.Samples.ColorApp.Server.*.Put*",
-        "EDennis.Samples.ColorApp.Server.*.Patch*",
-        "EDennis.Samples.ColorApp.Server.*.Delete*",
-        "EDennis.Samples.ColorApp.Server.Rgb.*",
-        "EDennis.Samples.ColorApp.Server.Rgb.Get*",
-        "EDennis.Samples.ColorApp.Server.Rgb.Post*",
-        "EDennis.Samples.ColorApp.Server.Rgb.Put*",
-        "EDennis.Samples.ColorApp.Server.Rgb.Patch*",
-        "EDennis.Samples.ColorApp.Server.Rgb.Delete*",
-        "EDennis.Samples.ColorApp.ServerAPI"
-      ],
-      "UserClaims": [
-        "role:EDennis.Samples.ColorApp.Server"
-      ]
-    }
-  ],
   "Clients": [
     {
       "Authority": "https://localhost:5000",
-      "ClientId": "EDennis.Samples.ColorApp.Server:API",
+      "ClientId": "EDennis.Samples.ColorApp.Server",
       "PlainTextSecret": "secret",
       "AllowedGrantTypes": [
-        "client_credentials"
+        "authorization_code"
       ],
+      "RequirePkce": true,
+      "RequireClientSecret": false,
       "ClientClaimsPrefix": "",
       "AllowedScopes": [
+        "openid",
+        "profile",
+        "role:EDennis.Samples.ColorApi",
         "EDennis.Samples.ColorApi.*"
-      ]
+      ],
+      "RedirectUris": [
+        "https://localhost:44336/signin-oidc"
+      ],
+      "PostLogoutRedirectUris": [
+        "https://localhost:44336/signout-callback-oidc"
+      ],
+      "Enabled": true
     }
   ],
   "TestUsers": [
