@@ -32,7 +32,7 @@ namespace EDennis.NetApp.Base {
             .AddOpenIdConnect("oidc", options =>
             {
                 var settings = new OpenIdConnectSettings();
-                config.BindSectionOrThrow("Security:OpenIdConnect", settings);
+                config.BindSectionOrThrow(openIdConnectConfigKey, settings);
 
                 options.Authority = settings.Authority;
                 options.ClientId = settings.ClientId;

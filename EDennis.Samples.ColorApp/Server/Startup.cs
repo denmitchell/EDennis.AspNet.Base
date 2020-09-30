@@ -45,7 +45,7 @@ namespace EDennis.Samples.ColorApp.Server {
 
 
             //for mocking the user/client
-            services.AddMockClaimsPrincipal(Configuration);
+            //services.AddMockClaimsPrincipal(Configuration);
 
             //for creating a cookie that holds the database transaction key
             services.AddCachedTransactionCookie(Configuration);
@@ -57,7 +57,7 @@ namespace EDennis.Samples.ColorApp.Server {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
                 app.UseWebAssemblyDebugging();
-                app.UseCachedTransactionCookieFor("Rgb"); //to auto-rollback database
+                app.UseCachedTransactionCookieFor("/Rgb"); //to auto-rollback database
             } else {
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
@@ -74,7 +74,6 @@ namespace EDennis.Samples.ColorApp.Server {
             //      and the rest of the pipeline is short-circuited.
             app.UseSecureForwarding(Configuration, "Apis");
 
-
             //-----------------------------------------------------------------
             //Continue the pipeline for routes that don't match any key in the 
             //      Apis section of Configuration ...
@@ -87,6 +86,8 @@ namespace EDennis.Samples.ColorApp.Server {
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseClaimsCookieFor("/Rgb");
 
             app.UseEndpoints(endpoints =>
             {

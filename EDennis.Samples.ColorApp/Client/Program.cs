@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -15,7 +16,8 @@ namespace EDennis.Samples.ColorApp.Client {
 
             builder.Services.AddHttpClient<RgbApiClient>(
                      client => client.BaseAddress = new Uri(baseAddress));
-
+            
+            builder.Services.AddScoped<AuthenticationStateProvider, AuthenticationStateProvider>();
 
             await builder.Build().RunAsync();
         }

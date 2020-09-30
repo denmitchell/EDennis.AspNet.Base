@@ -10,6 +10,7 @@
       "RequirePkce": true,
       "RequireClientSecret": false,
       "ClientClaimsPrefix": "",
+      "AllowOfflineAccess":  true,
       "AllowedScopes": [
         "openid",
         "profile",
