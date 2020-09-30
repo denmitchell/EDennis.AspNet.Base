@@ -32,5 +32,9 @@
     <ProjectReference Include="..\EDennis.Samples.ColorApp\Shared\EDennis.Samples.ColorApp.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Logs\" />
+  </ItemGroup>
+
 
 </Project>
