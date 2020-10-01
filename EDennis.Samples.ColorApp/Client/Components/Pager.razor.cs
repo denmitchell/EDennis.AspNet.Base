@@ -39,8 +39,8 @@ namespace EDennis.Samples.ColorApp.Client.Components {
 
 
         protected override async Task OnAfterRenderAsync(bool firstRender) {
-            if (firstRender)
-                await PagerChangedAsync();
+            //if (firstRender)
+            //    await PagerChangedAsync();
         }
 
 

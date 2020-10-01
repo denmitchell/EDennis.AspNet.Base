@@ -1,3 +1,4 @@
+using EDennis.NetStandard.Base;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,8 +17,9 @@ namespace EDennis.Samples.ColorApp.Client {
 
             builder.Services.AddHttpClient<RgbApiClient>(
                      client => client.BaseAddress = new Uri(baseAddress));
-            
-            builder.Services.AddScoped<AuthenticationStateProvider, AuthenticationStateProvider>();
+
+            builder.Services.AddAuthorizationCore();
+            builder.Services.AddScoped<AuthenticationStateProvider, BlazorAuthenticationStateProvider>();
 
             await builder.Build().RunAsync();
         }

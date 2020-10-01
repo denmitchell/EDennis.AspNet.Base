@@ -10,7 +10,7 @@ using System.Collections.Generic;
 namespace EDennis.NetApp.Base {
     public class OpenIdConnectSettings {
 
-        private static OpenIdConnectOptions _defaults = new OpenIdConnectOptions();
+        private static readonly OpenIdConnectOptions _defaults = new OpenIdConnectOptions();
 
         public void LoadOptions(OpenIdConnectOptions options) {
 

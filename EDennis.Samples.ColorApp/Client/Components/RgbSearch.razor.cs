@@ -10,11 +10,12 @@ namespace EDennis.Samples.ColorApp.Client.Components {
     public partial class RgbSearchBase : DynamicLinqComponentBase<Rgb> {
         [Inject] protected RgbApiClient Client { get; set; }
         [Inject] protected NavigationManager NavigationManager { get; set; }
-        [Inject] protected IAccessTokenProvider AccessTokenProvider { get; set; }
 
         public const int PAGE_SIZE = 10;
 
         public const string ORDER_BY = "Name";
+
+        public int? StatusCode { get; set; }
 
         protected Pager Pager { get; set; } = new Pager();
 
@@ -33,27 +34,8 @@ namespace EDennis.Samples.ColorApp.Client.Components {
         private async Task ExecuteSearchAsync(bool resetRowCount) {
             ObjectResult<DynamicLinqResult<Rgb>> result;
 
-            //Token = AccessTokenProvider.GetType().FullName;
-
-
-            //var tokenResult = await AccessTokenProvider.RequestAccessToken(
-            //    new AccessTokenRequestOptions {
-            //        Scopes = new[] { "openid", "profile" }
-            //    });
-
-            //if (tokenResult.TryGetToken(out var token)) {
-            //    //Token = token.Value;
-            //}
-            //Client.HttpClient.SetBearerToken(Token);
-            //try {
-            //    var result1 = await Client.HttpClient.GetFromJsonAsync<Rgb[]>("https://localhost:44336/api/Rgb");
-            //    Data = result1.ToList();
-            //    RowCount = Data.Count();
-            //} catch (AccessTokenNotAvailableException ex) {
-            //    ex.Redirect();
-            //}
-
             result = await Client.GetWithDynamicLinqAsync(SearchTable?.Where, null, null, null, null, Pager?.PageSize ?? PAGE_SIZE, resetRowCount ? default(int?) : RowCount);
+            StatusCode = result.StatusCode;
             var dlr = result.TypedValue;
             Data = dlr.Data;
             RowCount = dlr.RowCount;

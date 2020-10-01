@@ -6,89 +6,91 @@
     <p>@Client.HttpClient.BaseAddress.ToString()</p>
     <p>@Token</p>
 } else {
-    <EditForm Model="SearchTable" OnSubmit="@OnSearchAsync">
-        <div class="form-group row filter-row">
-            <InputSelect class="form-control form-control-sm" @bind-Value="SearchTable[0].FieldName">
-                <option value="Id">Id</option>
-                <option value="Name">Name</option>
-                <option value="Red">Red</option>
-                <option value="Green">Green</option>
-                <option value="Blue">Blue</option>
-            </InputSelect>
-            <InputSelect class="form-control form-control-sm" @bind-Value="SearchTable[0].Operator">
-                <option value="0" title="equals">Equals</option>
-                <option value="1" title="does not equal">Not Equals</option>
-                <option value="2" title="in comma-delimited list">In  a,b,c ...</option>
-                <option value="3" title="not in comma-delimited list">Not In  a,b,c ...</option>
-                <option value="4" title="less than">Less Than</option>
-                <option value="5" title="less than or equal to">Less Than or Equal</option>
-                <option value="6" title="greater than">Greater Than</option>
-                <option value="7" title="greater than or equal to">Greater Than or Equal</option>
-                <option value="8" title="starts with">Starts With</option>
-                <option value="9" title="ends with">Ends With</option>
-                <option value="10" title="contains">Contains</option>
-                <option value="11" title="like (use % wildcard)">Like</option>
-            </InputSelect>
-            <InputText class="form-control form-control-sm" @bind-Value="@SearchTable[0].FieldValue"></InputText>
-        </div>
-        <div class="form-group row filter-row">
-            <InputSelect class="form-control form-control-sm" @bind-Value="SearchTable[1].FieldName">
-                <option value="Id">Id</option>
-                <option value="Name">Name</option>
-                <option value="Red">Red</option>
-                <option value="Green">Green</option>
-                <option value="Blue">Blue</option>
-            </InputSelect>
-            <InputSelect class="form-control form-control-sm" @bind-Value="SearchTable[1].Operator">
-                <option value="0" title="equals">Equals</option>
-                <option value="1" title="does not equal">Not Equals</option>
-                <option value="2" title="in comma-delimited list">In  a,b,c ...</option>
-                <option value="3" title="not in comma-delimited list">Not In  a,b,c ...</option>
-                <option value="4" title="less than">Less Than</option>
-                <option value="5" title="less than or equal to">Less Than or Equal</option>
-                <option value="6" title="greater than">Greater Than</option>
-                <option value="7" title="greater than or equal to">Greater Than or Equal</option>
-                <option value="8" title="starts with">Starts With</option>
-                <option value="9" title="ends with">Ends With</option>
-                <option value="10" title="contains">Contains</option>
-                <option value="11" title="like (use % wildcard)">Like</option>
-            </InputSelect>
-            <InputText class="form-control form-control-sm" @bind-Value="@SearchTable[1].FieldValue"></InputText>
-        </div>
-        <div class="form-group row filter-row">
-            <div class="col-sm-2 offset-sm-5 button-column">
-                <input type="submit" value="Search" class="btn btn-secondary btn-block" />
+    <div class="container">
+        <EditForm Model="SearchTable" OnSubmit="@OnSearchAsync" class="form">
+            <div class="form-group row filter-row">
+                <InputSelect class="form-control form-control-sm-3" @bind-Value="SearchTable[0].FieldName">
+                    <option value="Id">Id</option>
+                    <option value="Name">Name</option>
+                    <option value="Red">Red</option>
+                    <option value="Green">Green</option>
+                    <option value="Blue">Blue</option>
+                </InputSelect>
+                <InputSelect class="form-control form-control-sm-3" @bind-Value="SearchTable[0].Operator">
+                    <option value="0" title="equals">Equals</option>
+                    <option value="1" title="does not equal">Not Equals</option>
+                    <option value="2" title="in comma-delimited list">In  a,b,c ...</option>
+                    <option value="3" title="not in comma-delimited list">Not In  a,b,c ...</option>
+                    <option value="4" title="less than">Less Than</option>
+                    <option value="5" title="less than or equal to">Less Than or Equal</option>
+                    <option value="6" title="greater than">Greater Than</option>
+                    <option value="7" title="greater than or equal to">Greater Than or Equal</option>
+                    <option value="8" title="starts with">Starts With</option>
+                    <option value="9" title="ends with">Ends With</option>
+                    <option value="10" title="contains">Contains</option>
+                    <option value="11" title="like (use % wildcard)">Like</option>
+                </InputSelect>
+                <InputText class="form-control form-control-sm-6" @bind-Value="@SearchTable[0].FieldValue"></InputText>
             </div>
-        </div>
+            <div class="form-group row filter-row">
+                <InputSelect class="form-control form-control-sm-3" @bind-Value="SearchTable[1].FieldName">
+                    <option value="Id">Id</option>
+                    <option value="Name">Name</option>
+                    <option value="Red">Red</option>
+                    <option value="Green">Green</option>
+                    <option value="Blue">Blue</option>
+                </InputSelect>
+                <InputSelect class="form-control form-control-sm-3" @bind-Value="SearchTable[1].Operator">
+                    <option value="0" title="equals">Equals</option>
+                    <option value="1" title="does not equal">Not Equals</option>
+                    <option value="2" title="in comma-delimited list">In  a,b,c ...</option>
+                    <option value="3" title="not in comma-delimited list">Not In  a,b,c ...</option>
+                    <option value="4" title="less than">Less Than</option>
+                    <option value="5" title="less than or equal to">Less Than or Equal</option>
+                    <option value="6" title="greater than">Greater Than</option>
+                    <option value="7" title="greater than or equal to">Greater Than or Equal</option>
+                    <option value="8" title="starts with">Starts With</option>
+                    <option value="9" title="ends with">Ends With</option>
+                    <option value="10" title="contains">Contains</option>
+                    <option value="11" title="like (use % wildcard)">Like</option>
+                </InputSelect>
+                <InputText class="form-control form-control-sm-6" @bind-Value="@SearchTable[1].FieldValue"></InputText>
+            </div>
+            <div class="form-group row filter-row">
+                <div class="col-sm-2 offset-sm-5 button-column">
+                    <input type="submit" value="Search" class="btn btn-secondary btn-block" />
+                </div>
+            </div>
 
-        <table class="table table-sm">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Red</th>
-                    <th>Green</th>
-                    <th>Blue</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Data) {
+            <table class="table table-sm">
+                <thead>
                     <tr>
-                        <td>
-                            <a href="@($"Rgb/Detail/{item.Id}?editable=true")">
-                                <span class="oi oi-pencil" />
-                            </a>
-                        </td>
-                        <td><a href="@($"Rgb/Detail/{item.Id}")">@item.Id</a></td>
-                        <td>@item.Name</td>
-                        <td>@item.Red</td>
-                        <td>@item.Green</td>
-                        <td>@item.Blue</td>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Red</th>
+                        <th>Green</th>
+                        <th>Blue</th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    </EditForm>
+                </thead>
+                <tbody>
+                    @foreach (var item in Data) {
+                        <tr>
+                            <td>
+                                <a href="@($"Rgb/Detail/{item.Id}?editable=true")">
+                                    <span class="oi oi-pencil" />
+                                </a>
+                            </td>
+                            <td><a href="@($"Rgb/Detail/{item.Id}")">@item.Id</a></td>
+                            <td>@item.Name</td>
+                            <td>@item.Red</td>
+                            <td>@item.Green</td>
+                            <td>@item.Blue</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </EditForm>
+    </div>
     <Pager RowCount="@RowCount" @ref="Pager" PagerChangedCallback="OnPagerChangedAsync" NewCallback="OnNewAsync" />
 }

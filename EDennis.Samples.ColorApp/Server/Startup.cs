@@ -66,6 +66,10 @@ namespace EDennis.Samples.ColorApp.Server {
             app.UseHttpsRedirection();
             app.UseBlazorFrameworkFiles();
 
+            app.Use(async (context, next) => {
+                await next();
+            });
+
             //Proxy forwarding with OIDC user access token 
             //(Adapted from Dominick Baier: https://github.com/leastprivilege/AspNetCoreSecuritySamples/tree/aspnetcore21/BFF)
             //
