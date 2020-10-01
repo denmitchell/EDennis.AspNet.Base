@@ -13,59 +13,16 @@
 <div class="container">
     <form class="form" asp-page="./Index" method="get">
         <div class="form-group row filter-row">
-            <select asp-for="SearchTable[0].FieldName" class="form-control col-sm-3" name="fld0" id="fld0">
-                <option value="Id">Id</option>
-                <option value="Name">Name</option>
-                <option value="Red">Red</option>
-                <option value="Green">Green</option>
-                <option value="Blue">Blue</option>
-            </select>
-            <select asp-for="SearchTable[0].Operator" class="form-control col-sm-3" name="op0" id="op0">
-                <option value="0" title="equals">Equals</option>
-                <option value="1" title="does not equal">Not Equals</option>
-                <option value="2" title="in comma-delimited list">In  a,b,c ...</option> <!-- .Where("Name in (\"Brown\",\"Grey\"))") -->
-                <option value="3" title="not in comma-delimited list">Not In  a,b,c ...</option> <!-- .Where("not(Name in (\"Brown\",\"Grey\"))") -->
-                <option value="4" title="less than">Less Than</option>
-                <option value="5" title="less than or equal to">Less Than or Equal</option>
-                <option value="6" title="greater than">Greater Than</option>
-                <option value="7" title="greater than or equal to">Greater Than or Equal</option>
-                <option value="8" title="starts with">Starts With</option>
-                <option value="9" title="ends with">Ends With</option>
-                <option value="10" title="contains">Contains</option>
-                <option value="11" title="like (use % wildcard)">Like</option>
-            </select>
-            <input asp-for="SearchTable[0].FieldValue" type="text" class="form-control col-sm-6" name="val0" id="val0"> <!-- style="width:500px!important"> -->
+            <select asp-for="Fld0" asp-items="Model.FieldList" class="form-control col-sm-3"></select>
+            <select asp-for="Op0" asp-items="Model.OpList" class="form-control col-sm-3"></select>
+            <input asp-for="Val0" type="text" class="form-control col-sm-6"> <!-- style="width:500px!important"> -->
         </div>
         <div class="form-group row filter-row">
-            <select asp-for="SearchTable[1].FieldName" class="form-control col-sm-3" name="fld1" id="fld1">
-                <option value="Id">Id</option>
-                <option value="Name">Name</option>
-                <option value="Red">Red</option>
-                <option value="Green">Green</option>
-                <option value="Blue">Blue</option>
-            </select>
-            <select asp-for="SearchTable[1].Operator" class="form-control col-sm-3" name="op1" id="op1">
-                <option value="0" title="equals">Equals</option>
-                <option value="1" title="does not equal">Not Equals</option>
-                <option value="2" title="in comma-delimited list">In  a,b,c ...</option> <!-- .Where("Name in (\"Brown\",\"Grey\"))") -->
-                <option value="3" title="not in comma-delimited list">Not In  a,b,c ...</option> <!-- .Where("not(Name in (\"Brown\",\"Grey\"))") -->
-                <option value="4" title="less than">Less Than</option>
-                <option value="5" title="less than or equal to">Less Than or Equal</option>
-                <option value="6" title="greater than">Greater Than</option>
-                <option value="7" title="greater than or equal to">Greater Than or Equal</option>
-                <option value="8" title="starts with">Starts With</option>
-                <option value="9" title="ends with">Ends With</option>
-                <option value="10" title="contains">Contains</option>
-                <option value="11" title="like (use % wildcard)">Like</option>
-            </select>
-            <input asp-for="SearchTable[1].FieldValue" type="text" class="form-control col-sm-6" name="val1" id="val1"> <!-- style="width:500px!important"> -->
+            <select asp-for="Fld1" asp-items="Model.FieldList" class="form-control col-sm-3"></select>
+            <select asp-for="Op1" asp-items="Model.OpList" class="form-control col-sm-3"></select>
+            <input asp-for="Val1" type="text" class="form-control col-sm-6"> <!-- style="width:500px!important"> -->
             <input type="hidden" name="pageNumber" id="pageNumber" value="1" />
         </div>
-        <!--TODO: Get this working -->
-        <!--
-    <component type="typeof(BlazorSearchButton)" render-mode="ServerPrerendered"
-               param-Url="./Index" param-Model="@Model" />
-    -->
 
         <div class="form-group row filter-row">
             <div class="col-sm-2 offset-sm-5 button-column">
@@ -129,24 +86,24 @@
 }
 
 <a asp-page="./Index"
-   asp-route-fld0="@Model.SearchTable[0].FieldName"
-   asp-route-op0="@Model.SearchTable[0].Operator"
-   asp-route-val0="@Model.SearchTable[0].FieldValue"
-   asp-route-fld1="@Model.SearchTable[1].FieldName"
-   asp-route-op1="@Model.SearchTable[1].Operator"
-   asp-route-val1="@Model.SearchTable[1].FieldValue"
+   asp-route-fld0="@Model.Fld0"
+   asp-route-op0="@Model.Op0"
+   asp-route-val0="@Model.Val0"
+   asp-route-fld1="@Model.Fld1"
+   asp-route-op1="@Model.Op1"
+   asp-route-val1="@Model.Val1"
    asp-route-pageNumber="@(Model.CurrentPage - 1)"
    asp-route-totalRecords="@Model.RowCount"
    class="btn btn-secondary @prevDisabled">
     Previous
 </a>
 <a asp-page="./Index"
-   asp-route-fld0="@Model.SearchTable[0].FieldName"
-   asp-route-op0="@Model.SearchTable[0].Operator"
-   asp-route-val0="@Model.SearchTable[0].FieldValue"
-   asp-route-fld1="@Model.SearchTable[1].FieldName"
-   asp-route-op1="@Model.SearchTable[1].Operator"
-   asp-route-val1="@Model.SearchTable[1].FieldValue"
+   asp-route-fld0="@Model.Fld0"
+   asp-route-op0="@Model.Op0"
+   asp-route-val0="@Model.Val0"
+   asp-route-fld1="@Model.Fld1"
+   asp-route-op1="@Model.Op1"
+   asp-route-val1="@Model.Val1"
    asp-route-pageNumber="@(Model.CurrentPage + 1)"
    asp-route-totalRecords="@Model.RowCount"
    class="btn btn-secondary @nextDisabled">

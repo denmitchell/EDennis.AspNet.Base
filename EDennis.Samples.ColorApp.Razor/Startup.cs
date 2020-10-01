@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Identity;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace EDennis.Samples.ColorApp.Razor {
     public class Startup {
@@ -29,12 +31,15 @@ namespace EDennis.Samples.ColorApp.Razor {
             //for generating the OAuth Access Token
             services.AddSecureTokenService<ClientCredentialsTokenService>(Configuration);
 
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
             services.AddAuthentication(options =>
             {
-                options.DefaultScheme = "Cookies";
-                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                options.DefaultScheme = "idsrv.external";
+                options.DefaultChallengeScheme = "oidc";
             })
-            .AddCookie("Cookies")
+            .AddCookie("idsrv.external")
+            //.AddCookie("idsrv.external")
             .AddOpenIdConnect(Configuration);
 
 
@@ -81,8 +86,10 @@ namespace EDennis.Samples.ColorApp.Razor {
             app.UseRouting();
 
             app.UseMockClaimsPrincipalFor("/Rgb");
+
             app.UseAuthentication();
             app.UseAuthorization();
+
             app.UseClaimsToHeaderFor("/Rgb");
             app.UseCachedTransactionCookieFor("/Rgb");
             app.UseScopedRequestMessageFor("/Rgb");

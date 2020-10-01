@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using System.Linq;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace EDennis.Samples.ColorApp.Client.Components {
@@ -33,6 +34,8 @@ namespace EDennis.Samples.ColorApp.Client.Components {
 
         private async Task ExecuteSearchAsync(bool resetRowCount) {
             ObjectResult<DynamicLinqResult<Rgb>> result;
+
+            System.Diagnostics.Debug.WriteLine(JsonSerializer.Serialize(SearchTable));
 
             result = await Client.GetWithDynamicLinqAsync(SearchTable?.Where, null, null, null, null, Pager?.PageSize ?? PAGE_SIZE, resetRowCount ? default(int?) : RowCount);
             StatusCode = result.StatusCode;

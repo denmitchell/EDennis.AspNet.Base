@@ -14,7 +14,7 @@ namespace EDennis.NetApp.Base {
             config.BindSectionOrThrow(configKey, settings);
 
             builder
-                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme,
+                .AddOpenIdConnect("oidc",
                     OpenIdConnectDefaults.DisplayName,
                     opt => settings.LoadOptions(opt)
             );
