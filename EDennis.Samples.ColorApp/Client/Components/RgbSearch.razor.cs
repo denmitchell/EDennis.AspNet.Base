@@ -20,10 +20,13 @@ namespace EDennis.Samples.ColorApp.Client.Components {
 
         protected Pager Pager { get; set; } = new Pager();
 
-        protected override async Task OnInitializedAsync() {
+        //protected override async Task OnInitializedAsync() {
+        //}
+
+        protected override async Task OnAfterRenderAsync(bool firstRender) {
+            if (firstRender)
                 await ExecuteSearchAsync(true);
         }
-
 
         public async Task OnPagerChangedAsync(bool _) => await ExecuteSearchAsync(false);
 
