@@ -1,15 +1,15 @@
 ﻿@page "/Rgb/Search"
+@using EDennis.NetStandard.Base
 @inherits RgbSearchBase
 <h3>RGB Search</h3>
 @if (this.Data == null) {
     <p><em>Loading...</em></p>
-    <p>@Client.HttpClient.BaseAddress.ToString()</p>
-    <p>@Token</p>
 } else {
     <div class="container">
         <EditForm Model="SearchTable" OnSubmit="@OnSearchAsync" class="form">
             <div class="form-group row filter-row">
                 <InputSelect class="form-control form-control-sm-3" @bind-Value="SearchTable[0].FieldName">
+                    <option value=""></option>
                     <option value="Id">Id</option>
                     <option value="Name">Name</option>
                     <option value="Red">Red</option>
@@ -17,7 +17,7 @@
                     <option value="Blue">Blue</option>
                 </InputSelect>
                 <InputSelect class="form-control form-control-sm-3" @bind-Value="SearchTable[0].Operator">
-                    <option value="0" title="equals">Equals</option>
+                    <option value="@ComparisonOperator.Equals" title="equals">Equals</option>
                     <option value="1" title="does not equal">Not Equals</option>
                     <option value="2" title="in comma-delimited list">In  a,b,c ...</option>
                     <option value="3" title="not in comma-delimited list">Not In  a,b,c ...</option>
@@ -34,6 +34,7 @@
             </div>
             <div class="form-group row filter-row">
                 <InputSelect class="form-control form-control-sm-3" @bind-Value="SearchTable[1].FieldName">
+                    <option value=""></option>
                     <option value="Id">Id</option>
                     <option value="Name">Name</option>
                     <option value="Red">Red</option>
@@ -65,6 +66,7 @@
             <table class="table table-sm">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Id</th>
                         <th>Name</th>
                         <th>Red</th>

@@ -30,7 +30,6 @@ namespace EDennis.Samples.ColorApp.Client.Components {
 
         public async Task OnSearchAsync() => await ExecuteSearchAsync(true);
 
-        public string Token { get; set; }
 
         private async Task ExecuteSearchAsync(bool resetRowCount) {
             ObjectResult<DynamicLinqResult<Rgb>> result;
@@ -46,7 +45,7 @@ namespace EDennis.Samples.ColorApp.Client.Components {
         }
 
         protected void OnNewAsync(bool _) {
-            NavigationManager.NavigateTo("/Rgb/Detail/0?Editable=true");
+            NavigationManager.NavigateTo("/Rgb/Details/0?Editable=true");
         }
 
     }
