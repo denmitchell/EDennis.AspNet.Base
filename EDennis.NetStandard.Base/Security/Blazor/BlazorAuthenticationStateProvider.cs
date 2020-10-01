@@ -3,6 +3,7 @@ using Microsoft.JSInterop;
 using System.Text.Json;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Linq;
 
 
 namespace EDennis.NetStandard.Base {
@@ -19,7 +20,10 @@ namespace EDennis.NetStandard.Base {
             var claimsJson = await _jsRuntime.InvokeAsync<string>("EDennisApplication.getCookie", ClaimsCookieMiddleware.COOKIE_KEY);
 
             try {
-                var claims = JsonSerializer.Deserialize<Claim[]>(claimsJson);
+                var claims = JsonSerializer
+                    .Deserialize<ClaimView[]>(claimsJson)
+                    .Select(c=> new Claim(c.Type,c.Value))
+                    .ToArray();
 
                 var identity = new ClaimsIdentity(claims, "MyClaims");
                 var user = new ClaimsPrincipal(identity);
