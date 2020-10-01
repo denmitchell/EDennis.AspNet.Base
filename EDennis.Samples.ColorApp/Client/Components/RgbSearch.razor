@@ -77,11 +77,11 @@
                     @foreach (var item in Data) {
                         <tr>
                             <td>
-                                <a href="@($"Rgb/Detail/{item.Id}?editable=true")">
+                                <a href="@($"Rgb/Details/{item.Id}?editable=true")">
                                     <span class="oi oi-pencil" />
                                 </a>
                             </td>
-                            <td><a href="@($"Rgb/Detail/{item.Id}")">@item.Id</a></td>
+                            <td><a href="@($"Rgb/Details/{item.Id}")">@item.Id</a></td>
                             <td>@item.Name</td>
                             <td>@item.Red</td>
                             <td>@item.Green</td>

@@ -83,6 +83,12 @@ namespace EDennis.AspNetIdentityServer {
                 .AddUserManager<UserManager<DomainUser>>()
                 .AddClaimsPrincipalFactory<DomainUserClaimsPrincipalFactory>();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Cors",
+                    builder => builder.WithOrigins("https://localhost:44336"));
+            });
+
 
             services.AddTransient<IEmailSender, MockEmailSender>();
 

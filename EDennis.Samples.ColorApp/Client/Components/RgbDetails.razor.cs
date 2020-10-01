@@ -1,5 +1,6 @@
 ﻿using EDennis.NetStandard.Base;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.JSInterop;
 using System.Threading.Tasks;
 using M = EDennis.Samples.ColorApp;
@@ -27,7 +28,23 @@ namespace EDennis.Samples.ColorApp.Client.Components {
 
         public string InputClass => Editable ? "form-control" : "form-control-plaintext";
 
+        protected override async Task OnInitializedAsync() {
+            var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+            if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("editable", out var strEditable)
+                && bool.TryParse(strEditable, out bool booEditable))
+                Editable = booEditable;
 
+            int.TryParse(Id, out var id);
+            if (id == default)
+                Rgb = new Rgb();
+            else {
+                if (id != default) {
+                    var result = await Client.GetByIdAsync(Id);
+                    if (result.StatusCode < 299)
+                        Rgb = result.TypedValue;
+                }
+            }
+        }
 
         protected async Task HandleValidSubmit() {
             ObjectResult<M.Rgb> result;
