@@ -145,7 +145,7 @@ namespace EDennis.NetStandard.Base {
                     jw.WriteStartArray("Clients");
                     {
                         if (childApiScopes.Any())
-                            WriteClientsSectionForClientCredentials(jw, project, idpUrl, childApiScopes);
+                            WriteClientsSectionForClientCredentials(jw, project, idpUrl, apiUrl, childApiScopes);
                         if (usesOIDC)
                             WriteClientsSectionForAuthorizationCode(jw, project, idpUrl, apiUrl);
                     }
@@ -275,7 +275,7 @@ namespace EDennis.NetStandard.Base {
         }
 
 
-        private static void WriteClientsSectionForClientCredentials(Utf8JsonWriter jw, string project, string idpUrl, string[] childApiScopes) {
+        private static void WriteClientsSectionForClientCredentials(Utf8JsonWriter jw, string project, string idpUrl, string apiUrl, string[] childApiScopes) {
             jw.WriteStartObject();
             {
                 jw.WriteString("Authority", idpUrl);
@@ -284,6 +284,11 @@ namespace EDennis.NetStandard.Base {
                 jw.WriteStartArray("AllowedGrantTypes");
                 {
                     jw.WriteStringValue("client_credentials");
+                }
+                jw.WriteEndArray();
+                jw.WriteStartArray("AllowedCorsOrigins");
+                {
+                    jw.WriteStringValue(apiUrl);
                 }
                 jw.WriteEndArray();
                 jw.WriteString("ClientClaimsPrefix", DEFAULT_CLIENT_CLAIMS_PREFIX);
@@ -328,6 +333,11 @@ namespace EDennis.NetStandard.Base {
                     jw.WriteStringValue("organization_admin_for");
                     jw.WriteStringValue("super_admin");
                     jw.WriteStringValue($"role:{project}");
+                }
+                jw.WriteEndArray();
+                jw.WriteStartArray("AllowedCorsOrigins");
+                {
+                    jw.WriteStringValue(apiUrl);
                 }
                 jw.WriteEndArray();
                 jw.WriteStartArray("RedirectUris");

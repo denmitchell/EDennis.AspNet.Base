@@ -10,12 +10,15 @@
       "RequirePkce": true,
       "RequireClientSecret": false,
       "ClientClaimsPrefix": "",
-      "AllowOfflineAccess":  true,
+      "AllowOfflineAccess": true,
       "AllowedScopes": [
         "openid",
         "profile",
         "role:EDennis.Samples.ColorApi",
         "EDennis.Samples.ColorApi.*"
+      ],
+      "AllowedCorsOrigins": [
+        "https://localhost:44336"
       ],
       "RedirectUris": [
         "https://localhost:44336/signin-oidc"
