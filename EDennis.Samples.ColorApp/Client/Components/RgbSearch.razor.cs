@@ -20,13 +20,10 @@ namespace EDennis.Samples.ColorApp.Client.Components {
 
         protected Pager Pager { get; set; } = new Pager();
 
-        //protected override async Task OnInitializedAsync() {
-        //}
-
-        protected override async Task OnAfterRenderAsync(bool firstRender) {
-            if (firstRender)
-                await ExecuteSearchAsync(true);
+        protected override async Task OnInitializedAsync() {
+            await ExecuteSearchAsync(true);
         }
+
 
         public async Task OnPagerChangedAsync(bool _) => await ExecuteSearchAsync(false);
 
@@ -39,11 +36,19 @@ namespace EDennis.Samples.ColorApp.Client.Components {
 
             System.Diagnostics.Debug.WriteLine(JsonSerializer.Serialize(SearchTable));
 
-            result = await Client.GetWithDynamicLinqAsync(SearchTable?.Where, null, null, null, null, Pager?.PageSize ?? PAGE_SIZE, resetRowCount ? default(int?) : RowCount);
+            var where = SearchTable?.Where;
+            var take = Pager?.PageSize ?? PAGE_SIZE;
+
+            if(resetRowCount)
+                result = await Client.GetWithDynamicLinqAsync(where, null, null, null, 0, take, default(int?));
+            else
+                result = await Client.GetWithDynamicLinqAsync(where, null, null, null, Pager.CurrentPage - 1, take, RowCount);
+
             StatusCode = result.StatusCode;
             var dlr = result.TypedValue;
             Data = dlr.Data;
             RowCount = dlr.RowCount;
+
 
         }
 

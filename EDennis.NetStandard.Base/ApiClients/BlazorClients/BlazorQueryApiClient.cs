@@ -15,11 +15,9 @@ namespace EDennis.NetStandard.Base {
     public abstract class BlazorQueryApiClient<TEntity> : IQueryApiClient<TEntity> where TEntity : class {
 
         public HttpClient HttpClient { get; }
-        protected readonly ScopedRequestMessage _scopedRequestMessage;
 
         public BlazorQueryApiClient(HttpClient client) {
             HttpClient = client;
-            _scopedRequestMessage = new ScopedRequestMessage();
         }
 
 
@@ -38,28 +36,24 @@ namespace EDennis.NetStandard.Base {
 
         public ObjectResult<DeserializableLoadResult<TEntity>> GetWithDevExtreme(string select, string include, string sort, string filter, int skip, int take, string totalSummary, string group, string groupSummary, bool requireTotalCount, bool requireGroupCount) {
             var qString = BuildDevExtremeQueryString(select, include, sort, filter, skip, take, totalSummary, group, groupSummary, requireTotalCount, requireGroupCount);
-            _scopedRequestMessage.AddQueryString(qString);
-            return HttpClient.Get<DeserializableLoadResult<TEntity>>($"{ControllerPath}/devextreme", _scopedRequestMessage);
+            return HttpClient.Get<DeserializableLoadResult<TEntity>>($"{ControllerPath}/devextreme{qString}");
         }
 
         public async Task<ObjectResult<DeserializableLoadResult<TEntity>>> GetWithDevExtremeAsync(string select, string include, string sort, string filter, int skip, int take, string totalSummary, string group, string groupSummary, bool requireTotalCount, bool requireGroupCount) {
             var qString = BuildDevExtremeQueryString(select, include, sort, filter, skip, take, totalSummary, group, groupSummary, requireTotalCount, requireGroupCount);
-            _scopedRequestMessage.AddQueryString(qString);
-            return await HttpClient.GetAsync<DeserializableLoadResult<TEntity>>($"{ControllerPath}/devextreme/async", _scopedRequestMessage);
+            return await HttpClient.GetAsync<DeserializableLoadResult<TEntity>>($"{ControllerPath}/devextreme/async{qString}");
         }
 
 
         public ObjectResult<DynamicLinqResult<TEntity>> GetWithDynamicLinq(string where = null, string orderBy = null, string select = null, string include = null, int? skip = null, int? take = null, int? totalRecords = null) {
             var qString = BuildDynamicLinqQueryString(where, orderBy, select, include, skip, take, totalRecords);
-            _scopedRequestMessage.AddQueryString(qString);
-            return HttpClient.Get<DynamicLinqResult<TEntity>>($"{ControllerPath}/linq", _scopedRequestMessage);
+            return HttpClient.Get<DynamicLinqResult<TEntity>>($"{ControllerPath}/linq{qString}");
         }
 
 
         public async Task<ObjectResult<DynamicLinqResult<TEntity>>> GetWithDynamicLinqAsync(string where = null, string orderBy = null, string select = null, string include = null, int? skip = null, int? take = null, int? totalRecords = null) {
             var qString = BuildDynamicLinqQueryString(where, orderBy, select, include, skip, take, totalRecords);
-            _scopedRequestMessage.AddQueryString(qString);
-            return await HttpClient.GetAsync<DynamicLinqResult<TEntity>>($"{ControllerPath}/linq/async", _scopedRequestMessage);
+            return await HttpClient.GetAsync<DynamicLinqResult<TEntity>>($"{ControllerPath}/linq/async{qString}");
         }
 
         public IEnumerable<TEntity> GetWithOData(string select, string orderBy, string filter, string expand, int skip, int top) {
