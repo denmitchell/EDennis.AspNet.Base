@@ -8,54 +8,66 @@
     <div class="container">
         <EditForm Model="SearchTable" OnSubmit="@OnSearchAsync" class="form">
             <div class="form-group row filter-row">
-                <InputSelect class="form-control form-control-sm-3" @bind-Value="SearchTable[0].FieldName">
-                    <option value=""></option>
-                    <option value="Id">Id</option>
-                    <option value="Name">Name</option>
-                    <option value="Red">Red</option>
-                    <option value="Green">Green</option>
-                    <option value="Blue">Blue</option>
-                </InputSelect>
-                <InputSelect class="form-control form-control-sm-3" @bind-Value="SearchTable[0].Operator">
-                    <option value="@ComparisonOperator.Equals" title="equals">Equals</option>
-                    <option value="@ComparisonOperator.NotEquals" title="does not equal">Not Equals</option>
-                    <option value="@ComparisonOperator.In" title="in comma-delimited list">In  a,b,c ...</option>
-                    <option value="@ComparisonOperator.NotIn" title="not in comma-delimited list">Not In  a,b,c ...</option>
-                    <option value="@ComparisonOperator.LessThan" title="less than">Less Than</option>
-                    <option value="@ComparisonOperator.LessOrEqual" title="less than or equal to">Less Than or Equal</option>
-                    <option value="@ComparisonOperator.GreaterThan" title="greater than">Greater Than</option>
-                    <option value="@ComparisonOperator.GreaterOrEqual" title="greater than or equal to">Greater Than or Equal</option>
-                    <option value="@ComparisonOperator.StartsWith" title="starts with">Starts With</option>
-                    <option value="@ComparisonOperator.EndsWith" title="ends with">Ends With</option>
-                    <option value="@ComparisonOperator.Contains" title="contains">Contains</option>
-                    <option value="@ComparisonOperator.Like" title="like (use % wildcard)">Like</option>
-                </InputSelect>
-                <InputText class="form-control form-control-sm-6" @bind-Value="@SearchTable[0].FieldValue"></InputText>
+                <div class="col-sm-3 px-0">
+                    <InputSelect class="form-control" @bind-Value="SearchTable[0].FieldName">
+                        <option value=""></option>
+                        <option value="Id">Id</option>
+                        <option value="Name">Name</option>
+                        <option value="Red">Red</option>
+                        <option value="Green">Green</option>
+                        <option value="Blue">Blue</option>
+                    </InputSelect>
+                </div>
+                <div class="col-sm-3 px-0">
+                    <InputSelect class="form-control " @bind-Value="SearchTable[0].Operator">
+                        <option value="@ComparisonOperator.Equals" title="equals">Equals</option>
+                        <option value="@ComparisonOperator.NotEquals" title="does not equal">Not Equals</option>
+                        <option value="@ComparisonOperator.In" title="in comma-delimited list">In  a,b,c ...</option>
+                        <option value="@ComparisonOperator.NotIn" title="not in comma-delimited list">Not In  a,b,c ...</option>
+                        <option value="@ComparisonOperator.LessThan" title="less than">Less Than</option>
+                        <option value="@ComparisonOperator.LessOrEqual" title="less than or equal to">Less Than or Equal</option>
+                        <option value="@ComparisonOperator.GreaterThan" title="greater than">Greater Than</option>
+                        <option value="@ComparisonOperator.GreaterOrEqual" title="greater than or equal to">Greater Than or Equal</option>
+                        <option value="@ComparisonOperator.StartsWith" title="starts with">Starts With</option>
+                        <option value="@ComparisonOperator.EndsWith" title="ends with">Ends With</option>
+                        <option value="@ComparisonOperator.Contains" title="contains">Contains</option>
+                        <option value="@ComparisonOperator.Like" title="like (use % wildcard)">Like</option>
+                    </InputSelect>
+                </div>
+                <div class="col-sm-6 px-0">
+                    <InputText class="form-control form-control" @bind-Value="@SearchTable[0].FieldValue"></InputText>
+                </div>
             </div>
             <div class="form-group row filter-row">
-                <InputSelect class="form-control form-control-sm-3" @bind-Value="SearchTable[1].FieldName">
-                    <option value=""></option>
-                    <option value="Id">Id</option>
-                    <option value="Name">Name</option>
-                    <option value="Red">Red</option>
-                    <option value="Green">Green</option>
-                    <option value="Blue">Blue</option>
-                </InputSelect>
-                <InputSelect class="form-control form-control-sm-3" @bind-Value="SearchTable[1].Operator">
-                    <option value="@ComparisonOperator.Equals" title="equals">Equals</option>
-                    <option value="@ComparisonOperator.NotEquals" title="does not equal">Not Equals</option>
-                    <option value="@ComparisonOperator.In" title="in comma-delimited list">In  a,b,c ...</option>
-                    <option value="@ComparisonOperator.NotIn" title="not in comma-delimited list">Not In  a,b,c ...</option>
-                    <option value="@ComparisonOperator.LessThan" title="less than">Less Than</option>
-                    <option value="@ComparisonOperator.LessOrEqual" title="less than or equal to">Less Than or Equal</option>
-                    <option value="@ComparisonOperator.GreaterThan" title="greater than">Greater Than</option>
-                    <option value="@ComparisonOperator.GreaterOrEqual" title="greater than or equal to">Greater Than or Equal</option>
-                    <option value="@ComparisonOperator.StartsWith" title="starts with">Starts With</option>
-                    <option value="@ComparisonOperator.EndsWith" title="ends with">Ends With</option>
-                    <option value="@ComparisonOperator.Contains" title="contains">Contains</option>
-                    <option value="@ComparisonOperator.Like" title="like (use % wildcard)">Like</option>
-                </InputSelect>
-                <InputText class="form-control form-control-sm-6" @bind-Value="@SearchTable[1].FieldValue"></InputText>
+                <div class="col-sm-3 px-0">
+                    <InputSelect class="form-control form-control-sm-3" @bind-Value="SearchTable[1].FieldName">
+                        <option value=""></option>
+                        <option value="Id">Id</option>
+                        <option value="Name">Name</option>
+                        <option value="Red">Red</option>
+                        <option value="Green">Green</option>
+                        <option value="Blue">Blue</option>
+                    </InputSelect>
+                </div>
+                <div class="col-sm-3 px-0">
+                    <InputSelect class="form-control form-control-sm-3" @bind-Value="SearchTable[1].Operator">
+                        <option value="@ComparisonOperator.Equals" title="equals">Equals</option>
+                        <option value="@ComparisonOperator.NotEquals" title="does not equal">Not Equals</option>
+                        <option value="@ComparisonOperator.In" title="in comma-delimited list">In  a,b,c ...</option>
+                        <option value="@ComparisonOperator.NotIn" title="not in comma-delimited list">Not In  a,b,c ...</option>
+                        <option value="@ComparisonOperator.LessThan" title="less than">Less Than</option>
+                        <option value="@ComparisonOperator.LessOrEqual" title="less than or equal to">Less Than or Equal</option>
+                        <option value="@ComparisonOperator.GreaterThan" title="greater than">Greater Than</option>
+                        <option value="@ComparisonOperator.GreaterOrEqual" title="greater than or equal to">Greater Than or Equal</option>
+                        <option value="@ComparisonOperator.StartsWith" title="starts with">Starts With</option>
+                        <option value="@ComparisonOperator.EndsWith" title="ends with">Ends With</option>
+                        <option value="@ComparisonOperator.Contains" title="contains">Contains</option>
+                        <option value="@ComparisonOperator.Like" title="like (use % wildcard)">Like</option>
+                    </InputSelect>
+                </div>
+                <div class="col-sm-6 px-0">
+                    <InputText class="form-control form-control-sm-6" @bind-Value="@SearchTable[1].FieldValue"></InputText>
+                </div>
             </div>
             <div class="form-group row filter-row">
                 <div class="col-sm-2 offset-sm-5 button-column">
