@@ -1,6 +1,8 @@
 using EDennis.NetStandard.Base;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
@@ -18,8 +20,15 @@ namespace EDennis.Samples.ColorApp.Client {
             builder.Services.AddHttpClient<RgbApiClient>(
                      client => client.BaseAddress = new Uri(baseAddress));
 
-            builder.Services.AddAuthorizationCore();
-            builder.Services.AddScoped<AuthenticationStateProvider, BlazorAuthenticationStateProvider>();
+            builder.Services.AddOidcAuthentication(options =>
+            {
+                builder.Configuration.Bind("Local", options.ProviderOptions);
+            });
+
+            //builder.Services.AddAuthorizationCore();
+            //builder.Services.AddTransient<SignOutSessionStateManager, SignOutSessionStateManager>();
+            //builder.Services.AddTransient<IRemoteAuthenticationService,RemoteAuthenticationService<TRemoteAuthenticationState, TAccount, TProviderOptions>>
+            //builder.Services.AddScoped<AuthenticationStateProvider, BlazorAuthenticationStateProvider>();
 
             await builder.Build().RunAsync();
         }
