@@ -78,7 +78,7 @@ namespace EDennis.Samples.ColorApp.Client.Components {
             if (confirmed) {
                 await Client.DeleteAsync(Rgb.Id.ToString());
                 Dirty = false;
-                NavigationManager.NavigateTo("/Rgb/Index");
+                NavigationManager.NavigateTo("/Rgb/Search");
             }
         }
 
@@ -88,7 +88,7 @@ namespace EDennis.Samples.ColorApp.Client.Components {
                 if (!confirmed)
                     return;
             }
-            NavigationManager.NavigateTo("/Rgb/Index");
+            NavigationManager.NavigateTo("/Rgb/Search");
         }
 
 
