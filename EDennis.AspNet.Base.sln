@@ -7,12 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.AspNetIdentityServe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.Samples.ColorApi", "EDennis.Samples.ColorApi\EDennis.Samples.ColorApi.csproj", "{8333618D-32B8-4D98-A14F-52B461F9FB29}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.Samples.ColorApp.Server", "EDennis.Samples.ColorApp\Server\EDennis.Samples.ColorApp.Server.csproj", "{03A04F99-05DE-4FCC-8A96-9D973CBC1CBC}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.Samples.ColorApp.Client", "EDennis.Samples.ColorApp\Client\EDennis.Samples.ColorApp.Client.csproj", "{2D726535-F774-409B-AD24-FB21C66578C3}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.Samples.ColorApp.Shared", "EDennis.Samples.ColorApp\Shared\EDennis.Samples.ColorApp.Shared.csproj", "{29E8F922-5EE4-4893-A7C4-A20C27C43DF9}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.NetStandard.Base", "EDennis.NetStandard.Base\EDennis.NetStandard.Base.csproj", "{B5191F45-2A1D-4CDA-9E68-BD4624D71F17}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.Samples.ColorApp.Razor", "EDennis.Samples.ColorApp.Razor\EDennis.Samples.ColorApp.Razor.csproj", "{5CA41857-AC8D-45C5-AE49-CA9DDFD3E3AA}"
@@ -22,6 +16,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.Samples.ColorApp.Migrations", "EDennis.Samples.ColorApp.Migrations\EDennis.Samples.ColorApp.Migrations.csproj", "{3C32C0A8-62F4-4981-9358-E7B6A63A3FFE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.NetApp.Base", "EDennis.NetApp.Base\EDennis.NetApp.Base.csproj", "{CD272059-9C1E-4F0B-9086-4DF2F0286ABB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDennis.Samples.ColorApp.Blazor", "EDennis.Samples.ColorApp.Blazor\EDennis.Samples.ColorApp.Blazor.csproj", "{08CE019D-3984-458C-AB26-0700EB149798}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDennis.Samples.ColorApp.Shared", "EDennis.Samples.ColorApp.Shared\EDennis.Samples.ColorApp.Shared.csproj", "{315C5CC9-8E7B-412B-A00A-F79D3D1CEAD8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,18 +35,6 @@ Global
 		{8333618D-32B8-4D98-A14F-52B461F9FB29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8333618D-32B8-4D98-A14F-52B461F9FB29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8333618D-32B8-4D98-A14F-52B461F9FB29}.Release|Any CPU.Build.0 = Release|Any CPU
-		{03A04F99-05DE-4FCC-8A96-9D973CBC1CBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{03A04F99-05DE-4FCC-8A96-9D973CBC1CBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{03A04F99-05DE-4FCC-8A96-9D973CBC1CBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{03A04F99-05DE-4FCC-8A96-9D973CBC1CBC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2D726535-F774-409B-AD24-FB21C66578C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2D726535-F774-409B-AD24-FB21C66578C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2D726535-F774-409B-AD24-FB21C66578C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2D726535-F774-409B-AD24-FB21C66578C3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{29E8F922-5EE4-4893-A7C4-A20C27C43DF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{29E8F922-5EE4-4893-A7C4-A20C27C43DF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{29E8F922-5EE4-4893-A7C4-A20C27C43DF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{29E8F922-5EE4-4893-A7C4-A20C27C43DF9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B5191F45-2A1D-4CDA-9E68-BD4624D71F17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B5191F45-2A1D-4CDA-9E68-BD4624D71F17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5191F45-2A1D-4CDA-9E68-BD4624D71F17}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -69,6 +55,14 @@ Global
 		{CD272059-9C1E-4F0B-9086-4DF2F0286ABB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD272059-9C1E-4F0B-9086-4DF2F0286ABB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD272059-9C1E-4F0B-9086-4DF2F0286ABB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08CE019D-3984-458C-AB26-0700EB149798}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08CE019D-3984-458C-AB26-0700EB149798}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08CE019D-3984-458C-AB26-0700EB149798}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08CE019D-3984-458C-AB26-0700EB149798}.Release|Any CPU.Build.0 = Release|Any CPU
+		{315C5CC9-8E7B-412B-A00A-F79D3D1CEAD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{315C5CC9-8E7B-412B-A00A-F79D3D1CEAD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{315C5CC9-8E7B-412B-A00A-F79D3D1CEAD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{315C5CC9-8E7B-412B-A00A-F79D3D1CEAD8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

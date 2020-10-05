@@ -13,7 +13,6 @@
     <PackageReference Include="ProxyKit" Version="2.3.3" />
     <ProjectReference Include="..\..\EDennis.NetApp.Base\EDennis.NetApp.Base.csproj" />
     <ProjectReference Include="..\..\EDennis.NetStandard.Base\EDennis.NetStandard.Base.csproj" />
-    <ProjectReference Include="..\Client\EDennis.Samples.ColorApp.Client.csproj" />
     <ProjectReference Include="..\Shared\EDennis.Samples.ColorApp.Shared.csproj" />
     <PackageReference Include="Serilog" Version="2.10.0" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />

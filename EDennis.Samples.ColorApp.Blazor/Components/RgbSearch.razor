@@ -1,0 +1,110 @@
+﻿@page "/Rgb/Search"
+@using EDennis.NetStandard.Base
+@inherits RgbSearchBase
+<h3>RGB Search</h3>
+@if (this.Data == null) {
+    <p><em>Loading...</em></p>
+} else {
+    <div class="container">
+        <EditForm Model="SearchTable" OnSubmit="@OnSearchAsync" class="form">
+            <div class="form-group row filter-row">
+                <div class="col-sm-3 px-0">
+                    <InputSelect class="form-control" @bind-Value="SearchTable[0].FieldName">
+                        <option value=""></option>
+                        <option value="Id">Id</option>
+                        <option value="Name">Name</option>
+                        <option value="Red">Red</option>
+                        <option value="Green">Green</option>
+                        <option value="Blue">Blue</option>
+                    </InputSelect>
+                </div>
+                <div class="col-sm-3 px-0">
+                    <InputSelect class="form-control " @bind-Value="SearchTable[0].Operator">
+                        <option value="@ComparisonOperator.Equals" title="equals">Equals</option>
+                        <option value="@ComparisonOperator.NotEquals" title="does not equal">Not Equals</option>
+                        <option value="@ComparisonOperator.In" title="in comma-delimited list">In  a,b,c ...</option>
+                        <option value="@ComparisonOperator.NotIn" title="not in comma-delimited list">Not In  a,b,c ...</option>
+                        <option value="@ComparisonOperator.LessThan" title="less than">Less Than</option>
+                        <option value="@ComparisonOperator.LessOrEqual" title="less than or equal to">Less Than or Equal</option>
+                        <option value="@ComparisonOperator.GreaterThan" title="greater than">Greater Than</option>
+                        <option value="@ComparisonOperator.GreaterOrEqual" title="greater than or equal to">Greater Than or Equal</option>
+                        <option value="@ComparisonOperator.StartsWith" title="starts with">Starts With</option>
+                        <option value="@ComparisonOperator.EndsWith" title="ends with">Ends With</option>
+                        <option value="@ComparisonOperator.Contains" title="contains">Contains</option>
+                        <option value="@ComparisonOperator.Like" title="like (use % wildcard)">Like</option>
+                    </InputSelect>
+                </div>
+                <div class="col-sm-6 px-0">
+                    <InputText class="form-control form-control" @bind-Value="@SearchTable[0].FieldValue"></InputText>
+                </div>
+            </div>
+            <div class="form-group row filter-row">
+                <div class="col-sm-3 px-0">
+                    <InputSelect class="form-control form-control-sm-3" @bind-Value="SearchTable[1].FieldName">
+                        <option value=""></option>
+                        <option value="Id">Id</option>
+                        <option value="Name">Name</option>
+                        <option value="Red">Red</option>
+                        <option value="Green">Green</option>
+                        <option value="Blue">Blue</option>
+                    </InputSelect>
+                </div>
+                <div class="col-sm-3 px-0">
+                    <InputSelect class="form-control form-control-sm-3" @bind-Value="SearchTable[1].Operator">
+                        <option value="@ComparisonOperator.Equals" title="equals">Equals</option>
+                        <option value="@ComparisonOperator.NotEquals" title="does not equal">Not Equals</option>
+                        <option value="@ComparisonOperator.In" title="in comma-delimited list">In  a,b,c ...</option>
+                        <option value="@ComparisonOperator.NotIn" title="not in comma-delimited list">Not In  a,b,c ...</option>
+                        <option value="@ComparisonOperator.LessThan" title="less than">Less Than</option>
+                        <option value="@ComparisonOperator.LessOrEqual" title="less than or equal to">Less Than or Equal</option>
+                        <option value="@ComparisonOperator.GreaterThan" title="greater than">Greater Than</option>
+                        <option value="@ComparisonOperator.GreaterOrEqual" title="greater than or equal to">Greater Than or Equal</option>
+                        <option value="@ComparisonOperator.StartsWith" title="starts with">Starts With</option>
+                        <option value="@ComparisonOperator.EndsWith" title="ends with">Ends With</option>
+                        <option value="@ComparisonOperator.Contains" title="contains">Contains</option>
+                        <option value="@ComparisonOperator.Like" title="like (use % wildcard)">Like</option>
+                    </InputSelect>
+                </div>
+                <div class="col-sm-6 px-0">
+                    <InputText class="form-control form-control-sm-6" @bind-Value="@SearchTable[1].FieldValue"></InputText>
+                </div>
+            </div>
+            <div class="form-group row filter-row">
+                <div class="col-sm-2 offset-sm-5 button-column">
+                    <input type="submit" value="Search" class="btn btn-secondary btn-block" />
+                </div>
+            </div>
+
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Red</th>
+                        <th>Green</th>
+                        <th>Blue</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Data) {
+                        <tr>
+                            <td>
+                                <a href="@($"Rgb/Details/{item.Id}?editable=true")">
+                                    <span class="oi oi-pencil" />
+                                </a>
+                            </td>
+                            <td><a href="@($"Rgb/Details/{item.Id}")">@item.Id</a></td>
+                            <td>@item.Name</td>
+                            <td>@item.Red</td>
+                            <td>@item.Green</td>
+                            <td>@item.Blue</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </EditForm>
+    </div>
+    <Pager RowCount="@RowCount" @ref="Pager" PagerChangedCallback="OnPagerChangedAsync" NewCallback="OnNewAsync" />
+}

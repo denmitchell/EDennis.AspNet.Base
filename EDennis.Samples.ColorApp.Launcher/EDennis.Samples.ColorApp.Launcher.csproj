@@ -32,7 +32,6 @@
     <ProjectReference Include="..\EDennis.AspNetIdentityServer\EDennis.AspNetIdentityServer.csproj" />
     <ProjectReference Include="..\EDennis.Samples.ColorApi\EDennis.Samples.ColorApi.csproj" />
     <ProjectReference Include="..\EDennis.Samples.ColorApp.Razor\EDennis.Samples.ColorApp.Razor.csproj" />
-    <ProjectReference Include="..\EDennis.Samples.ColorApp\Server\EDennis.Samples.ColorApp.Server.csproj" />
   </ItemGroup>
 
 </Project>

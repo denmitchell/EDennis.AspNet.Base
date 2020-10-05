@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.Extensions.Options;
+using System;
 using System.Linq;
 
 namespace EDennis.NetStandard.Base {
@@ -10,16 +11,21 @@ namespace EDennis.NetStandard.Base {
     /// Defines an Authorization message handler that configures 
     /// itself based upon AuthorizationMessageHandlerOptions found in configuration.
     /// </summary>
-    public class ConfigurableAuthorizationMessageHandler : AuthorizationMessageHandler {
+    public class ConfigurableAuthorizationMessageHandler<TApiClient> : AuthorizationMessageHandler {
         public ConfigurableAuthorizationMessageHandler(IAccessTokenProvider provider, NavigationManager navigationManager,
-            IOptionsMonitor<AuthorizationMessageHandlerOptions> options)
+            IOptionsMonitor<ApiClients> apiClients)
             : base(provider, navigationManager) {
 
-            //System.Diagnostics.Debug.WriteLine(provider.GetType().FullName);
+            if (!apiClients.CurrentValue.TryGetValue(typeof(TApiClient).Name, out ApiClient apiClient))
+                throw new ArgumentException($"{typeof(TApiClient).Name} is not found in ApiClients section of configuration");
+
+            var authorizedUrls = new string[] { apiClient.TargetUrl };
+            if (apiClient.OtherAuthorizedUrls != null)
+                authorizedUrls = authorizedUrls.Union(apiClient.OtherAuthorizedUrls).ToArray();
 
             ConfigureHandler(
-                       authorizedUrls: options.CurrentValue.AuthorizedUrls,
-                       scopes: options.CurrentValue.Scopes
+                       authorizedUrls: authorizedUrls,
+                       scopes: apiClient.Scopes
           );              
                        
         }

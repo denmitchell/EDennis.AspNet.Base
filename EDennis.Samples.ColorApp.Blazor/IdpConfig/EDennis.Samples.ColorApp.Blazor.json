@@ -2,31 +2,39 @@
   "Clients": [
     {
       "Authority": "https://localhost:5000",
-      "ClientId": "EDennis.Samples.ColorApp.Server",
+      "ClientId": "EDennis.Samples.ColorApp.Blazor",
       "PlainTextSecret": "secret",
       "AllowedGrantTypes": [
-        "authorization_code"
+        "code"
       ],
+      "RequireConsent": false,
       "RequirePkce": true,
-      "RequireClientSecret": false,
-      "ClientClaimsPrefix": "",
       "AllowOfflineAccess": true,
+      "ClientClaimsPrefix": "",
       "AllowedScopes": [
         "openid",
         "profile",
-        "role:EDennis.Samples.ColorApi",
+        "name",
+        "email",
+        "email_confirmed",
+        "offline_access",
+        "phone_number",
+        "organization",
+        "organization_confirmed",
+        "organization_admin_for",
+        "super_admin",
+        "role:EDennis.Samples.ColorApp.Blazor",
         "EDennis.Samples.ColorApi.*"
       ],
-      "AllowedCorsOrigins": [
-        "https://localhost:44336"
-      ],
       "RedirectUris": [
-        "https://localhost:44336/signin-oidc"
+        "https://localhost:44305/signin-oidc"
       ],
       "PostLogoutRedirectUris": [
-        "https://localhost:44336/signout-callback-oidc"
+        "https://localhost:44305/signout-callback-oidc"
       ],
-      "Enabled": true
+      "Applications": [
+        "EDennis.Samples.ColorApp.Razor"
+      ]
     }
   ],
   "TestUsers": [

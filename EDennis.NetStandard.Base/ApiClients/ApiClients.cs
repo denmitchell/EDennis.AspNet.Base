@@ -9,5 +9,7 @@ namespace EDennis.NetStandard.Base {
 
     public class ApiClient {
         public string TargetUrl { get; set; }
+        public string[] OtherAuthorizedUrls { get; set; }
+        public string[] Scopes { get; set; }
     }
 }

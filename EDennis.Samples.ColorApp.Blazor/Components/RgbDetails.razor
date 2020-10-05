@@ -1,0 +1,107 @@
+﻿@page "/Rgb/Details/{Id}"
+@page "/Rgb/Details"
+@inherits RgbDetailsBase
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+@if (Rgb.Id != default) {
+    <h1>Details for @Rgb.Name</h1>
+} else {
+    <h1>New Rgb Record</h1>
+}
+
+<div class="custom-control custom-switch">
+    <input type="checkbox" class="custom-control-input" id="editSwitch"
+           @bind="@Editable">
+    <label class="custom-control-label" for="editSwitch">Edit this record</label>
+</div>
+
+<EditForm Model="Rgb" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
+    @if (Editable) {
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+    }
+    <div class="form-group row">
+        <label for="id" class="col-sm-3 col-form-label">Id</label>
+        <div class="col-sm-9">
+            <InputNumber id="id"
+                         readonly class="form-control-plaintext"
+                         @bind-Value="@Rgb.Id" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="Name" class="col-sm-3 col-form-label">First name</label>
+        <div class="col-sm-9">
+            <InputText id="Name"
+                       readonly=@(!Editable) class="@InputClass"
+                       @bind-Value="@Rgb.Name"
+                       @oninput="@(()=>Dirty=true)" />
+            @if (Editable) {
+                <ValidationMessage class="offset-sm-3 col-sm-8" For="@(() => Rgb.Name)" />
+            }
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="Red" class="col-sm-3 col-form-label">Red</label>
+        <div class="col-sm-9">
+            <InputNumber id="Red"
+                         readonly=@(!Editable) class="@InputClass"
+                         @bind-Value="@Rgb.Red"
+                         @oninput="@(()=>Dirty=true)" />
+            @if (Editable) {
+                <ValidationMessage class="offset-sm-3 col-sm-8" For="@(() => Rgb.Red)" />
+            }
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="Green" class="col-sm-3 col-form-label">Green</label>
+        <div class="col-sm-9">
+            <InputNumber id="Green"
+                         readonly=@(!Editable) class="@InputClass"
+                         @bind-Value="@Rgb.Green"
+                         @oninput="@(()=>Dirty=true)" />
+            @if (Editable) {
+                <ValidationMessage class="offset-sm-3 col-sm-8" For="@(() => Rgb.Green)" />
+            }
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="Blue" class="col-sm-3 col-form-label">Blue</label>
+        <div class="col-sm-9">
+            <InputNumber id="Blue"
+                         readonly=@(!Editable) class="@InputClass"
+                         @bind-Value="@Rgb.Blue"
+                         @oninput="@(()=>Dirty=true)" />
+            @if (Editable) {
+                <ValidationMessage class="offset-sm-3 col-sm-8" For="@(() => Rgb.Blue)" />
+            }
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="sysStart" class="col-sm-3 col-form-label">Last saved on</label>
+        <div class="col-sm-9">
+            <InputDate id="sysStart"
+                       readonly="readonly" class="form-control-plaintext"
+                       @bind-Value="@Rgb.SysStart" />
+        </div>
+    </div>
+    <button type="submit" class="btn @(Dirty ? "btn-primary" : "btn-outline-secondary") edit-btn @(Dirty ? "" : "disabled")"
+            disabled=@(!Dirty)>
+        Save
+    </button>
+    <button class="btn btn-primary edit-outline-btn"
+            @onclick="@Close">
+        @(!Dirty || !Editable ? "Close" : "Cancel")
+    </button>
+    <button class="btn @(Editable && Rgb.Id != default ? "btn-danger" : "btn-outline-secondary") @(Editable && Rgb.Id != default ? "" : "disabled")"
+            disabled=@(!Editable || Rgb.Id == default)
+            @onclick="@DeleteRecord">
+        Delete
+    </button>
+</EditForm>
+@if (Saved) {
+    <div class="alert @StatusClass">@Message</div>
+}
+
+
+
