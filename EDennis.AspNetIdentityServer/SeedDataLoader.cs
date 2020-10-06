@@ -1,5 +1,6 @@
 ﻿using EDennis.NetStandard.Base;
 using IdentityServer4.EntityFramework.DbContexts;
+using E = IdentityServer4.EntityFramework.Entities;
 using IdentityServer4.EntityFramework.Mappers;
 using IdentityServer4.EntityFramework.Options;
 using IdentityServer4.Models;
@@ -175,14 +176,25 @@ namespace EDennis.AspNetIdentityServer {
 
                     foreach (var api in apis) {
                         _logger.LogInformation($"\t\tLoading {api.Name} ...");
+                        //add claims (mainly role claims) to existing ApiResources
                         var existing = cContext.ApiResources.FirstOrDefault(x => x.Name == api.Name);
                         if (existing != null) {
-                            cContext.ApiResources.Remove(existing);
-                            cContext.SaveChanges();
+                            foreach (var claim in api.UserClaims) {
+                                if (!existing.UserClaims.Any(u => u.Type == claim))
+                                    existing.UserClaims.Add(new E.ApiResourceClaim {
+                                        ApiResourceId = existing.Id,
+                                        Type = claim
+                                    });
+                                cContext.SaveChanges();
+                            }
+                            //cContext.ApiResources.Remove(existing);
+                            //cContext.SaveChanges();
                         }
                         foreach (var scope in api.Scopes)
                             if (!cContext.ApiScopes.Any(x => x.Name == scope))
                                 cContext.ApiScopes.Add(new ApiScope { Name = scope, Description = scope }.ToEntity());
+
+                        
                         cContext.ApiResources.Add(api.ToEntity());
 
                     }

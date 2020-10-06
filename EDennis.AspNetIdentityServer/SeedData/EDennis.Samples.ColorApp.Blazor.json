@@ -1,4 +1,17 @@
 {
+  "ApiResources": [
+    {
+      "Name": "EDennis.Samples.ColorApi",
+      "UserClaims": [
+        "name",
+        "email",
+        "organization",
+        "organization_admin_for",
+        "super_admin",
+        "role::EDennis.Samples.ColorApp.Blazor"
+      ]
+    }
+  ],
   "Clients": [
     {
       "Authority": "https://localhost:5000",
@@ -14,7 +27,7 @@
       "AllowedScopes": [
         "openid",
         "profile",
-        "role:EDennis.Samples.ColorApi",
+        "role:EDennis.Samples.ColorApp.Blazor",
         "EDennis.Samples.ColorApi.*"
       ],
       "RedirectUris": [
@@ -22,9 +35,6 @@
       ],
       "PostLogoutRedirectUris": [
         "https://localhost:44305/signout-callback-oidc"
-      ],
-      "Applications": [
-        "EDennis.Samples.ColorApp.Razor"
       ]
     }
   ],

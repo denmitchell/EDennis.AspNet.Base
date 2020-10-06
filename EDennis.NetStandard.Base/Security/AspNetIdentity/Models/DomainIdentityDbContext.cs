@@ -36,6 +36,7 @@ namespace EDennis.NetStandard.Base {
         public DbSet<DomainUserHistory> UserHistories { get; set; }
 
         public DbSet<SearchableDomainUser> SearchableDomainUsers { get; set; }
+        public DbSet<ChildClaim> ChildClaims { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder) {
