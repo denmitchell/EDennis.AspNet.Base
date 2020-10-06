@@ -2,44 +2,50 @@
   "ApiResources": {
     "Name": "EDennis.Samples.ColorApi",
     "Scopes": [
-      "EDennis.Samples.ColorApi.*",
-      "EDennis.Samples.ColorApi.*.Get*",
-      "EDennis.Samples.ColorApi.*.Post*",
-      "EDennis.Samples.ColorApi.*.Put*",
-      "EDennis.Samples.ColorApi.*.Patch*",
-      "EDennis.Samples.ColorApi.*.Delete*",
-      "EDennis.Samples.ColorApi.Rgb.*",
-      "EDennis.Samples.ColorApi.Rgb.Get*",
-      "EDennis.Samples.ColorApi.Rgb.Post*",
       "EDennis.Samples.ColorApi.Rgb.Put*",
+      "EDennis.Samples.ColorApi.Rgb.Post*",
+      "EDennis.Samples.ColorApi.Rgb.Get*",
+      "EDennis.Samples.ColorApi.Rgb.*",
+      "EDennis.Samples.ColorApi.*.Delete*",
+      "EDennis.Samples.ColorApi.*.Patch*",
+      "EDennis.Samples.ColorApi.*.Put*",
+      "EDennis.Samples.ColorApi.*.Post*",
+      "EDennis.Samples.ColorApi.*.Get*",
+      "EDennis.Samples.ColorApi.*",
       "EDennis.Samples.ColorApi.Rgb.Patch*",
       "EDennis.Samples.ColorApi.Rgb.Delete*",
       "EDennis.Samples.ColorApi.Rgb.Check"
     ],
     "Claims": [
-      "role:EDennis.Samples.ColorApi"
+      "role:EDennis.Samples.ColorApi",
+      "role:EDennis.Samples.ColorApp.Blazor",
+      "super_admin",
+      "organization_admin_for",
+      "organization",
+      "email",
+      "name"
     ]
   },
   "Clients": [
     {
-      "ClientId": "EDennis.Samples.ColorApp.Client",
+      "ClientId": "EDennis.Samples.ColorApp.Blazor",
       "RequireConsent": false,
       "RequirePkce": true,
       "AllowAccessTokensViaBrowser": false,
-      "AllowOfflineAccess": false,
+      "AllowOfflineAccess": true,
       "ClientClaimsPrefix": "",
       "GrantTypes": [
-        "authorization_code"
+        "code"
       ],
       "RedirectUris": [
-        "https://localhost:44336/authentication/login-callback"
+        "https://localhost:44305/signin-oidc"
       ],
       "PostLogoutRedirectUris": [
-        "https://localhost:44336/"
+        "https://localhost:44305/signout-callback-oidc"
       ],
       "Scopes": [
-        "EDennis.Samples.ColorApp.ServerAPI",
-        "role:EDennis.Samples.ColorApp.Server",
+        "EDennis.Samples.ColorApi.*",
+        "role:EDennis.Samples.ColorApp.Blazor",
         "profile",
         "openid"
       ]
@@ -82,20 +88,6 @@
       "Scopes": [
         "EDennis.Samples.ColorApi.*"
       ]
-    },
-    {
-      "ClientId": "EDennis.Samples.ColorApp.Server:API",
-      "RequireConsent": false,
-      "RequirePkce": true,
-      "AllowAccessTokensViaBrowser": false,
-      "AllowOfflineAccess": false,
-      "ClientClaimsPrefix": "",
-      "GrantTypes": [
-        "client_credentials"
-      ],
-      "Scopes": [
-        "EDennis.Samples.ColorApi.*"
-      ]
     }
   ],
   "Users": [
@@ -113,10 +105,10 @@
         "role:EDennis.Samples.ColorApi": [
           "admin"
         ],
-        "role:EDennis.Samples.ColorApp.Razor": [
+        "role:EDennis.Samples.ColorApp.Blazor": [
           "admin"
         ],
-        "role:EDennis.Samples.ColorApp.Server": [
+        "role:EDennis.Samples.ColorApp.Razor": [
           "admin"
         ]
       }
@@ -135,10 +127,10 @@
         "role:EDennis.Samples.ColorApi": [
           "user"
         ],
-        "role:EDennis.Samples.ColorApp.Razor": [
+        "role:EDennis.Samples.ColorApp.Blazor": [
           "user"
         ],
-        "role:EDennis.Samples.ColorApp.Server": [
+        "role:EDennis.Samples.ColorApp.Razor": [
           "user"
         ]
       }
@@ -157,10 +149,10 @@
         "role:EDennis.Samples.ColorApi": [
           "user"
         ],
-        "role:EDennis.Samples.ColorApp.Razor": [
+        "role:EDennis.Samples.ColorApp.Blazor": [
           "user"
         ],
-        "role:EDennis.Samples.ColorApp.Server": [
+        "role:EDennis.Samples.ColorApp.Razor": [
           "user"
         ]
       }
@@ -179,10 +171,10 @@
         "role:EDennis.Samples.ColorApi": [
           "readonly"
         ],
-        "role:EDennis.Samples.ColorApp.Razor": [
+        "role:EDennis.Samples.ColorApp.Blazor": [
           "readonly"
         ],
-        "role:EDennis.Samples.ColorApp.Server": [
+        "role:EDennis.Samples.ColorApp.Razor": [
           "readonly"
         ]
       }
@@ -201,10 +193,10 @@
         "role:EDennis.Samples.ColorApi": [
           "user"
         ],
-        "role:EDennis.Samples.ColorApp.Razor": [
+        "role:EDennis.Samples.ColorApp.Blazor": [
           "user"
         ],
-        "role:EDennis.Samples.ColorApp.Server": [
+        "role:EDennis.Samples.ColorApp.Razor": [
           "user"
         ]
       }
@@ -223,10 +215,10 @@
         "role:EDennis.Samples.ColorApi": [
           "readonly"
         ],
-        "role:EDennis.Samples.ColorApp.Razor": [
+        "role:EDennis.Samples.ColorApp.Blazor": [
           "readonly"
         ],
-        "role:EDennis.Samples.ColorApp.Server": [
+        "role:EDennis.Samples.ColorApp.Razor": [
           "readonly"
         ]
       }
@@ -261,10 +253,10 @@
         "role:EDennis.Samples.ColorApi": [
           "readonly"
         ],
-        "role:EDennis.Samples.ColorApp.Razor": [
+        "role:EDennis.Samples.ColorApp.Blazor": [
           "readonly"
         ],
-        "role:EDennis.Samples.ColorApp.Server": [
+        "role:EDennis.Samples.ColorApp.Razor": [
           "readonly"
         ]
       }

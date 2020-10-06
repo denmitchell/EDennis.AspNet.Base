@@ -59,6 +59,8 @@ namespace EDennis.Samples.ColorApi {
             services.AddHeaderToClaims(Configuration);
             services.AddCachedTransaction(Configuration);
             //services.AddHttpLogging(Configuration);
+            //for resolving parent claims to app-level child claims defined in configuration
+            services.AddChildClaimCache(Configuration);
             services.AddScopedRequestMessage(Configuration);
 
 

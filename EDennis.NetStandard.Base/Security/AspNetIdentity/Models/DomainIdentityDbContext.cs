@@ -1,13 +1,8 @@
-﻿using IdentityServer4.EntityFramework.Entities;
-using IdentityServer4.EntityFramework.Extensions;
-using IdentityServer4.EntityFramework.Interfaces;
-using IdentityServer4.EntityFramework.Options;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
 
 namespace EDennis.NetStandard.Base {
 
@@ -342,6 +337,29 @@ namespace EDennis.NetStandard.Base {
                 });
             });
 #endif
+
+
+
+            builder.Entity<ChildClaim>(e => {
+                e.ToTable("AspNetChildClaims")
+                    .HasKey(p => new {p.ParentType, p.ParentValue, p.ChildType, p.ChildValue });
+                e.Property(p => p.ParentType)
+                    .IsUnicode(false)
+                    .HasMaxLength(100);
+                e.Property(p => p.ParentValue)
+                    .IsUnicode(false)
+                    .HasMaxLength(100);
+                e.Property(p => p.ChildType)
+                    .IsUnicode(false)
+                    .HasMaxLength(100);
+                e.Property(p => p.ChildValue)
+                    .IsUnicode(false)
+                    .HasMaxLength(100);
+#if DBCONTEXT_HASDATA
+#endif
+            });
+
+
 
         }
 

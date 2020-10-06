@@ -8,7 +8,7 @@
         "organization",
         "organization_admin_for",
         "super_admin",
-        "role::EDennis.Samples.ColorApp.Blazor"
+        "role:EDennis.Samples.ColorApp.Blazor"
       ]
     }
   ],
@@ -24,6 +24,7 @@
       "RequirePkce": true,
       "AllowOfflineAccess": true,
       "ClientClaimsPrefix": "",
+      "AllowedCorsOrigins": [ "https://localhost:44305" ],
       "AllowedScopes": [
         "openid",
         "profile",
@@ -31,10 +32,10 @@
         "EDennis.Samples.ColorApi.*"
       ],
       "RedirectUris": [
-        "https://localhost:44305/signin-oidc"
+        "https://localhost:44305/authentication/login-callback"
       ],
       "PostLogoutRedirectUris": [
-        "https://localhost:44305/signout-callback-oidc"
+        "https://localhost:44305/authentication/logout-callback"
       ]
     }
   ],

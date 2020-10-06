@@ -64,7 +64,7 @@ namespace EDennis.AspNetIdentityServer {
 
         public bool HasProjects { get; set; }
 
-        private IEnumerable<string> _projects { get; set; }
+        private IEnumerable<string> _projects;
         private bool _print;
         private bool _commit;
 
@@ -185,17 +185,16 @@ namespace EDennis.AspNetIdentityServer {
                                         ApiResourceId = existing.Id,
                                         Type = claim
                                     });
-                                cContext.SaveChanges();
                             }
                             //cContext.ApiResources.Remove(existing);
                             //cContext.SaveChanges();
+                        } else {
+                            cContext.ApiResources.Add(api.ToEntity());
                         }
+
                         foreach (var scope in api.Scopes)
                             if (!cContext.ApiScopes.Any(x => x.Name == scope))
                                 cContext.ApiScopes.Add(new ApiScope { Name = scope, Description = scope }.ToEntity());
-
-                        
-                        cContext.ApiResources.Add(api.ToEntity());
 
                     }
                     cContext.SaveChanges();

@@ -86,7 +86,7 @@ namespace EDennis.AspNetIdentityServer {
             services.AddCors(options =>
             {
                 options.AddPolicy("Cors",
-                    builder => builder.WithOrigins("https://localhost:44336"));
+                    builder => builder.WithOrigins("https://localhost:44305"));
             });
 
 
