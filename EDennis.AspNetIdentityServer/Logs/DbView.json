@@ -38,10 +38,10 @@
         "code"
       ],
       "RedirectUris": [
-        "https://localhost:44305/signin-oidc"
+        "https://localhost:44305/authentication/login-callback"
       ],
       "PostLogoutRedirectUris": [
-        "https://localhost:44305/signout-callback-oidc"
+        "https://localhost:44305/authentication/logout-callback"
       ],
       "Scopes": [
         "EDennis.Samples.ColorApi.*",
