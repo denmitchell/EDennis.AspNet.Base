@@ -25,6 +25,7 @@ namespace EDennis.Samples.ColorApi {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
+            services.AddCors();
             services.AddControllers(options=>options.AddDefaultPolicies<Startup>(services,HostEnvironment,Configuration));
             services.AddAuthorization(options => {
                 IServiceCollectionExtensions_DefaultPolicies.LoadDefaultPolicies<Startup>(options, new List<string> { "scope" });
@@ -43,7 +44,7 @@ namespace EDennis.Samples.ColorApi {
             //services.AddAuthentication();
 
             //TODO: SEE WHETHER .AddJwtBearer is needed.
-            
+
             services.AddAuthentication("Bearer")
                        .AddJwtBearer("Bearer", options =>
                        {
@@ -79,34 +80,24 @@ namespace EDennis.Samples.ColorApi {
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
 
-            app.Use(async (context, next) => {
-                await next();
-            });
             app.UseMockClaimsPrincipalFor("/api/Rgb");
-            app.Use(async (context, next) => {
-                await next();
-            });
+
+            // global cors policy
+            app.UseCors(x => x
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials()); // allow credentials
+
             app.UseAuthentication();
             app.UseHeaderToClaimsFor("/api/Rgb");
-            app.Use(async (context, next) => {
-                await next();
-            });
             app.UseAuthorization();
+
             app.UseCachedTransactionFor<ColorContext>("/api/Rgb");
-            app.Use(async (context, next) => {
-                await next();
-            });
             //app.UseHttpLoggingFor("/api/Rgb");
-            app.Use(async (context, next) => {
-                await next();
-            });
             app.UseScopedRequestMessageFor("/api/Rgb");
-            app.Use(async (context, next) => {
-                await next();
-            });
 
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();

@@ -25,39 +25,81 @@ namespace EDennis.NetStandard.Base {
 
 
         public virtual ObjectResult<List<TEntity>> GetAll() {
-            return HttpClient.Get<List<TEntity>>($"{ControllerPath}");
+            var result = new ObjectResult<List<TEntity>>(default);
+            try {
+                result = HttpClient.Get<List<TEntity>>($"{ControllerPath}");
+            } catch (AccessTokenNotAvailableException exception) {
+                exception.Redirect();
+            }
+            return result;
         }
 
 
         public virtual async Task<ObjectResult<List<TEntity>>> GetAllAsync() {
-            return await HttpClient.GetAsync<List<TEntity>>($"{ControllerPath}");
+            var result = new ObjectResult<List<TEntity>>(default);
+            try {
+                result = await HttpClient.GetAsync<List<TEntity>>($"{ControllerPath}");
+            } catch (AccessTokenNotAvailableException exception) {
+                exception.Redirect();
+            }
+            return result;
         }
 
 
         public ObjectResult<DeserializableLoadResult<TEntity>> GetWithDevExtreme(string select, string include, string sort, string filter, int skip, int take, string totalSummary, string group, string groupSummary, bool requireTotalCount, bool requireGroupCount) {
-            var qString = BuildDevExtremeQueryString(select, include, sort, filter, skip, take, totalSummary, group, groupSummary, requireTotalCount, requireGroupCount);
-            return HttpClient.Get<DeserializableLoadResult<TEntity>>($"{ControllerPath}/devextreme{qString}");
+            var result = new ObjectResult<DeserializableLoadResult<TEntity>>(default);
+            try {
+                var qString = BuildDevExtremeQueryString(select, include, sort, filter, skip, take, totalSummary, group, groupSummary, requireTotalCount, requireGroupCount);
+                result = HttpClient.Get<DeserializableLoadResult<TEntity>>($"{ControllerPath}/devextreme{qString}");
+            } catch (AccessTokenNotAvailableException exception) {
+                exception.Redirect();
+            }
+            return result;
         }
 
         public async Task<ObjectResult<DeserializableLoadResult<TEntity>>> GetWithDevExtremeAsync(string select, string include, string sort, string filter, int skip, int take, string totalSummary, string group, string groupSummary, bool requireTotalCount, bool requireGroupCount) {
-            var qString = BuildDevExtremeQueryString(select, include, sort, filter, skip, take, totalSummary, group, groupSummary, requireTotalCount, requireGroupCount);
-            return await HttpClient.GetAsync<DeserializableLoadResult<TEntity>>($"{ControllerPath}/devextreme/async{qString}");
+            var result = new ObjectResult<DeserializableLoadResult<TEntity>>(default);
+            try {
+                var qString = BuildDevExtremeQueryString(select, include, sort, filter, skip, take, totalSummary, group, groupSummary, requireTotalCount, requireGroupCount);
+                result = await HttpClient.GetAsync<DeserializableLoadResult<TEntity>>($"{ControllerPath}/devextreme/async{qString}");
+            } catch (AccessTokenNotAvailableException exception) {
+                exception.Redirect();
+            }
+            return result;
         }
 
 
         public ObjectResult<DynamicLinqResult<TEntity>> GetWithDynamicLinq(string where = null, string orderBy = null, string select = null, string include = null, int? skip = null, int? take = null, int? totalRecords = null) {
-            var qString = BuildDynamicLinqQueryString(where, orderBy, select, include, skip, take, totalRecords);
-            return HttpClient.Get<DynamicLinqResult<TEntity>>($"{ControllerPath}/linq{qString}");
+            var result = new ObjectResult<DynamicLinqResult<TEntity>>(default);
+            try {
+                var qString = BuildDynamicLinqQueryString(where, orderBy, select, include, skip, take, totalRecords);
+                result = HttpClient.Get<DynamicLinqResult<TEntity>>($"{ControllerPath}/linq{qString}");
+            } catch (AccessTokenNotAvailableException exception) {
+                exception.Redirect();
+            }
+            return result;
         }
 
 
         public async Task<ObjectResult<DynamicLinqResult<TEntity>>> GetWithDynamicLinqAsync(string where = null, string orderBy = null, string select = null, string include = null, int? skip = null, int? take = null, int? totalRecords = null) {
-            var qString = BuildDynamicLinqQueryString(where, orderBy, select, include, skip, take, totalRecords);
-            return await HttpClient.GetAsync<DynamicLinqResult<TEntity>>($"{ControllerPath}/linq/async{qString}");
+            var result = new ObjectResult<DynamicLinqResult<TEntity>>(default);
+            try {
+                var qString = BuildDynamicLinqQueryString(where, orderBy, select, include, skip, take, totalRecords);
+                result = await HttpClient.GetAsync<DynamicLinqResult<TEntity>>($"{ControllerPath}/linq/async{qString}");
+            } catch (AccessTokenNotAvailableException exception) {
+                exception.Redirect();
+            }
+            return result;
         }
 
         public IEnumerable<TEntity> GetWithOData(string select, string orderBy, string filter, string expand, int skip, int top) {
-            throw new System.NotImplementedException();
+            var result = new List<TEntity>();
+            try {
+                throw new System.NotImplementedException();
+            } catch (AccessTokenNotAvailableException exception) {
+                exception.Redirect();
+            }
+            return result;
         }
 
         public virtual string ControllerPath {

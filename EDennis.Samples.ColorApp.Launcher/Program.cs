@@ -6,7 +6,7 @@ using System;
 using IdentityServer = EDennis.AspNetIdentityServer;
 using ColorApi = EDennis.Samples.ColorApi;
 using RazorApp = EDennis.Samples.ColorApp.Razor;
-using BlazorApp = EDennis.Samples.ColorApp.Server;
+using BlazorApp = EDennis.Samples.ColorApp.Blazor;
 using System.Collections.Generic;
 using System.Linq;
 using Serilog.Sinks.SystemConsole.Themes;
