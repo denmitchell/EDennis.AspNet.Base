@@ -35,7 +35,7 @@
       "AllowOfflineAccess": true,
       "ClientClaimsPrefix": "",
       "GrantTypes": [
-        "code"
+        "authorization_code"
       ],
       "RedirectUris": [
         "https://localhost:44305/authentication/login-callback"

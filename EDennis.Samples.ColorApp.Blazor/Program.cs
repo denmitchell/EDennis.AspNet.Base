@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 using EDennis.NetStandard.Base;
 using EDennis.NetStandard.Base.Extensions;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using Microsoft.AspNetCore.Components;
 
 namespace EDennis.Samples.ColorApp.Blazor {
     public class Program {
@@ -20,6 +22,7 @@ namespace EDennis.Samples.ColorApp.Blazor {
 
             //builder.AddApiClients(typeof(RgbApiClient));
             builder.Services.TryAddTransient<RgbApiClient>();
+            builder.Services.TryAddTransient<WeatherApiClient>();
 
             var apiClients = new ApiClients();
             builder.Configuration.Bind("ApiClients", apiClients);
@@ -27,8 +30,12 @@ namespace EDennis.Samples.ColorApp.Blazor {
 
 
             builder.Services.AddTransient<ConfigurableAuthorizationMessageHandler<RgbApiClient>>();
-            builder.Services.AddHttpClient(nameof(RgbApiClient), client => client.BaseAddress = new Uri("https://localhost:44341/"))
+            builder.Services.AddTransient<WeatherApiAuthorizationMessageHandler>();
+
+            builder.Services.AddHttpClient<RgbApiClient>(client => client.BaseAddress = new Uri("https://localhost:44341/"))
                 .AddHttpMessageHandler<ConfigurableAuthorizationMessageHandler<RgbApiClient>>();
+            //builder.Services.AddHttpClient(nameof(RgbApiClient), client => client.BaseAddress = new Uri("https://localhost:44341/"))
+            //    .AddHttpMessageHandler<ConfigurableAuthorizationMessageHandler<RgbApiClient>>();
             builder.Services.AddAuthorizationCore();
             builder.Services.AddOidcAuthentication(options => {
 
@@ -38,8 +45,21 @@ namespace EDennis.Samples.ColorApp.Blazor {
 
             });
 
+            builder.Services.AddHttpClient<WeatherApiClient>(client => client.BaseAddress = new Uri("https://localhost:44305/"))
+                .AddHttpMessageHandler<WeatherApiAuthorizationMessageHandler>();
+
             await builder.Build().RunAsync();
 
+        }
+    }
+
+    public class WeatherApiAuthorizationMessageHandler : AuthorizationMessageHandler {
+
+        public WeatherApiAuthorizationMessageHandler(IAccessTokenProvider provider,
+            NavigationManager navigationManager) : base(provider, navigationManager) {
+            ConfigureHandler(
+                authorizedUrls: new[] { "https://localhost:44305" }
+                );
         }
     }
 }

@@ -281,6 +281,7 @@ namespace EDennis.NetStandard.Base {
                 jw.WriteString("Authority", idpUrl);
                 jw.WriteString("ClientId", $"{project}:API");
                 jw.WriteString("PlainTextSecret", DEFAULT_SECRET);
+                jw.WriteBoolean("RequireClientSecret", true);
                 jw.WriteStartArray("AllowedGrantTypes");
                 {
                     jw.WriteStringValue("client_credentials");
@@ -308,7 +309,7 @@ namespace EDennis.NetStandard.Base {
             {
                 jw.WriteString("Authority", idpUrl);
                 jw.WriteString("ClientId", $"{project}:ID");
-                jw.WriteString("PlainTextSecret", DEFAULT_SECRET);
+                jw.WriteBoolean("RequireClientSecret", false);
                 jw.WriteStartArray("AllowedGrantTypes");
                 {
                     jw.WriteStringValue("authorization_code");

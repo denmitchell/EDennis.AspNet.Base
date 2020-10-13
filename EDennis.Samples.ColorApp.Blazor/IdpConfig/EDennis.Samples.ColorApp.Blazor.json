@@ -16,7 +16,7 @@
     {
       "Authority": "https://localhost:5000",
       "ClientId": "EDennis.Samples.ColorApp.Blazor",
-      "PlainTextSecret": "secret",
+      "RequireClientSecret": false,
       "AllowedGrantTypes": [
         "code"
       ],

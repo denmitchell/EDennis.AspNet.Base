@@ -19,6 +19,7 @@
     {
       "Authority": "https://localhost:5000",
       "ClientId": "EDennis.Samples.ColorApp.Razor:API",
+      "RequireClientSecret":  true,
       "PlainTextSecret": "secret",
       "AllowedGrantTypes": [
         "client_credentials"
@@ -31,7 +32,7 @@
     {
       "Authority": "https://localhost:5000",
       "ClientId": "EDennis.Samples.ColorApp.Razor:ID",
-      "PlainTextSecret": "secret",
+      "RequireClientSecret": false,
       "AllowedGrantTypes": [
         "authorization_code"
       ],
