@@ -42,9 +42,11 @@ namespace EDennis.Samples.ColorApp.Blazor.Components {
 
             StatusCode = result.StatusCode;
             var dlr = result.TypedValue;
-            Data = dlr.Data;
-            RowCount = dlr.RowCount;
 
+            if (dlr != null) {
+                Data = dlr.Data;
+                RowCount = dlr.RowCount;
+            }
 
         }
 

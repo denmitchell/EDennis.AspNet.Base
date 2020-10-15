@@ -85,6 +85,7 @@ namespace EDennis.NetStandard.Base {
             var result = new ObjectResult<DynamicLinqResult<TEntity>>(default);
             try {
                 var qString = BuildDynamicLinqQueryString(where, orderBy, select, include, skip, take, totalRecords);
+                var url = $"{ControllerPath}/linq/async{qString}";
                 result = await HttpClient.GetAsync<DynamicLinqResult<TEntity>>($"{ControllerPath}/linq/async{qString}");
             } catch (AccessTokenNotAvailableException exception) {
                 exception.Redirect();
