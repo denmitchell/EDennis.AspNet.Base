@@ -29,7 +29,7 @@ namespace EDennis.Samples.ColorApp.Migrations
                 {
                     table.PrimaryKey("PK_Rgb", x => x.Id);
                 });
-            //migrationBuilder.Sql(File.ReadAllText("MigrationsInserts\\Initial.sql"));
+            migrationBuilder.Sql(File.ReadAllText("MigrationsInserts\\Initial.sql"));
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
