@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
 	  <OutputType>Library</OutputType>
     <LangVersion>8.0</LangVersion>
-    <Version>1.0.0-alpha</Version>
+    <Version>1.1.0-alpha</Version>
     <Description>Pre-release of the Library.  Documentation to come.</Description>
     <Authors>Dennis Mitchell</Authors>
     <Company>edennis.com</Company>
@@ -14,9 +14,9 @@
     <RepositoryUrl>https://github.com/denmitchell/EDennis.AspNet.Base</RepositoryUrl>
     <PackageProjectUrl>https://github.com/denmitchell/EDennis.AspNet.Base</PackageProjectUrl>
     <PackageTags>ASP.NET Core, EFCore, MVC, Blazor, Testing</PackageTags>
-    <PackageReleaseNotes>Pre-release</PackageReleaseNotes>
-    <AssemblyVersion>1.0.0</AssemblyVersion>
-    <FileVersion>1.0.0</FileVersion>
+    <PackageReleaseNotes>Pre-release -- supporting PWA authentication</PackageReleaseNotes>
+    <AssemblyVersion>1.1.0</AssemblyVersion>
+    <FileVersion>1.1.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup>
